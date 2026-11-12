@@ -1,0 +1,88 @@
+{
+  "audit_id": "AUD-2026-10-29-002",
+  "date": "2026-10-29",
+  "timezone": "America/Bogota",
+  "base_commit": "e56df680e315c4de799c7c947727da5981c32fe8",
+  "purpose": "Resultados observados en esta revisión. No son cierres ni resoluciones. Los resultados históricos del repositorio no se usan como evidencia.",
+  "environment": {
+    "os": "Windows 11 Pro 10.0.26200",
+    "python": "3.14.3",
+    "numpy": "2.5.3",
+    "sqlalchemy": "2.1.4",
+    "reflex": "0.9.12",
+    "alembic": "1.20.0",
+    "psycopg": "3.3.6",
+    "boto3": "1.43.112",
+    "redis_py": "7.4.1",
+    "authlib": "1.8.0",
+    "blender": "no disponible en PATH",
+    "docker": "instalado; no se arrancó Compose"
+  },
+  "executed": {
+    "unittest": {
+      "command": ".venv/Scripts/python.exe -m unittest discover -s tests",
+      "reported": "Ran 49 tests, FAILED (errors=3, skipped=8)",
+      "interpretation": "3 de las 49 son _FailedTest de importación (aplicacion_web.test_generador_web, persistencia.test_almacen_import, persistencia.test_lotes_trabajador). 46 casos reales cargados: 38 aprobados y 8 omitidos (persistencia.test_propiedad_datos, sin base). 27 casos declarados no se cargan (13 + 6 + 8).",
+      "import_error": "ImportError: cannot import name 'ESQUEMA_NORMALIZACION' from 'web.persistence.Contratos'"
+    },
+    "import_web": {
+      "command": ".venv/Scripts/python.exe -c \"import web.GenerateModelsApp\"",
+      "result": "ImportError (misma causa, B-01)"
+    },
+    "removed_constants_usage": {
+      "command": "grep -rn -E 'ESQUEMA_PARAMETROS|ESQUEMA_NORMALIZACION|VERSION_LECTOR|VERSION_EXPORTADOR' --include=*.py .",
+      "consumers": [
+        "scripts/MigrarSubidas.py:27,92",
+        "web/services/ServicioImports.py:27,28,184",
+        "web/services/ServicioLotes.py:21,199,202",
+        "web/services/ServicioVersiones.py:18,77"
+      ],
+      "definition_history": "git show f02a184:web/persistence/Contratos.py -> ESQUEMA_PARAMETROS = 1, ESQUEMA_NORMALIZACION = 1, VERSION_LECTOR = \"LectorSuperficie-1\", VERSION_EXPORTADOR = \"GeneradorWeb.Stl-1\"; eliminadas en 7ac5834"
+    },
+    "documentation_check": {
+      "command": ".venv/Scripts/python.exe docs/Agents/Scripts/GenerarIndices.py --comprobar",
+      "result": "Desactualizado: docs/AppBackend/SIMBOLOS.md; Desactualizado: docs/Agents/INVENTARIO.md; sin descripción: .github/workflows/notion-to-issues.yml, tests/assets/blender_ejecucion.log, tests/assets/nucleo_ejecucion.log, tests/assets/zip_ejecucion.log",
+      "write_mode_executed": false,
+      "reason_not_regenerated": "Los archivos que regenera están bloqueados por AUD-2026-10-13-001."
+    },
+    "blender_zip": {
+      "method": "Comparación SHA-256 de cada miembro de GenerateModelsApp.zip con la fuente del mismo nombre",
+      "members": 27,
+      "python_json_identical": 26,
+      "leeme_matches_docs_BlenderPlugin_LEEME": false,
+      "zip_last_commit": "2026-10-05 12:34:00 -0500"
+    },
+    "core_unchanged_since_previous_audit": {
+      "command": "git diff --stat 2b74669 HEAD -- GenerateModelsApp/",
+      "result": "sin cambios"
+    },
+    "alembic_revisions": {
+      "command": "ls db/alembic/versions",
+      "result": "solo .gitkeep"
+    },
+    "ci_workflows": {
+      "command": "ls .github/workflows",
+      "result": "notion-to-issues.yml (sin jobs de prueba)"
+    },
+    "lint_type_tools": {
+      "command": "grep -i 'ruff|black|mypy|pyright|flake8' pyproject.toml .github",
+      "result": "sin coincidencias"
+    },
+    "docs_link_case": {
+      "observation": "docs/README.md:9 enlaza 'audit/README.md'; git ls-files solo tiene 'docs/Audit/README.md'."
+    },
+    "batch_mode_values": {
+      "command": "grep -rn -E '\"(batch|sweep|single|retry)\"|ModoLote\\.' web scripts tests",
+      "result": "El código usa single/sweep/retry; docs/AppBackend/CONTRATOS.md documenta batch."
+    }
+  },
+  "not_executed": [
+    "PostgreSQL, Alembic y pruebas de persistencia (no hay revisiones de migración)",
+    "Docker Compose, MinIO, Redis, proveedor OIDC",
+    "Blender e integración tests/blender/*",
+    "Navegador E2E y accesibilidad",
+    "Carga, concurrencia y medición de tiempos",
+    "Escaneo de CVE, licencias y secretos",
+    "Linters y verificación de tipos (no configurados)"
+  ]
+}
