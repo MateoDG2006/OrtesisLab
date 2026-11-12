@@ -1,6 +1,6 @@
 """Paquete del complemento de Blender y del núcleo de geometría.
 
-La aplicación Reflex está en web/GenerateModelsApp.py y no forma parte
+La aplicación Reflex está en web/OrtesisLabApp.py y no forma parte
 de este paquete. Reflex importa el núcleo sin cargar Blender.
 ``register`` y ``unregister`` solo se usan cuando Blender activa el complemento.
 """

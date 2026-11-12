@@ -243,14 +243,6 @@ Genera cascarones para la aplicación web.
 | `GeneradorWeb.Ruta` | Función/método | [366](../../apps/web/web/GeneradorWeb.py#L366) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `GeneradorWeb.RutaSuperficie` | Función/método | [377](../../apps/web/web/GeneradorWeb.py#L377) | Sin docstring; consultar el catálogo de módulos y el código. |
 
-## `apps/web/web/GenerateModelsApp.py`
-
-Aplicación Reflex de comparación de ortesis.
-
-| Símbolo | Tipo | Línea | Descripción declarada |
-|---|---|---:|---|
-| `PoolPostgres` | Función/método | [26](../../apps/web/web/GenerateModelsApp.py#L26) | Sin docstring; consultar el catálogo de módulos y el código. |
-
 ## `apps/web/web/jobs/__init__.py`
 
 Marcador de paquete.
@@ -300,6 +292,14 @@ Lectura de superficies subidas a la aplicación web.
 | `LectorSuperficie._StlBinario` | Función/método | [111](../../apps/web/web/LectorSuperficie.py#L111) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `LectorSuperficie._StlAscii` | Función/método | [128](../../apps/web/web/LectorSuperficie.py#L128) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `LectorSuperficie._Normales` | Función/método | [142](../../apps/web/web/LectorSuperficie.py#L142) | Sin docstring; consultar el catálogo de módulos y el código. |
+
+## `apps/web/web/OrtesisLabApp.py`
+
+Aplicación Reflex de comparación de ortesis.
+
+| Símbolo | Tipo | Línea | Descripción declarada |
+|---|---|---:|---|
+| `PoolPostgres` | Función/método | [26](../../apps/web/web/OrtesisLabApp.py#L26) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/PaginaComparacion.py`
 

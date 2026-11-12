@@ -92,13 +92,13 @@ Estado de /historial: filtros, cursor y comparación de hasta tres versiones.
 | `EstadoHistorial._Fila` | Función/método | [227](../../apps/web/web/EstadoHistorial.py#L227) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `EstadoHistorial._Tarjeta` | Función/método | [251](../../apps/web/web/EstadoHistorial.py#L251) | Sin docstring; consultar el catálogo de módulos y el código. |
 
-## `apps/web/web/GenerateModelsApp.py`
+## `apps/web/web/OrtesisLabApp.py`
 
 Aplicación Reflex de comparación de ortesis.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `PoolPostgres` | Función/método | [26](../../apps/web/web/GenerateModelsApp.py#L26) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PoolPostgres` | Función/método | [26](../../apps/web/web/OrtesisLabApp.py#L26) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/PaginaComparacion.py`
 

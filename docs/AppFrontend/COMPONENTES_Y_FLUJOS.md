@@ -7,7 +7,7 @@
 | [`web/PaginaComparacion.py`](../../apps/web/web/PaginaComparacion.py) | Todos los componentes visuales; `ETIQUETAS_EJE` agrega opción sin barrido a `EJES` |
 | [`web/PaginaHistorial.py`](../../apps/web/web/PaginaHistorial.py) | Página `/historial`: filtros, tabla paginada, acciones por versión y tarjetas de comparación |
 | [`web/Sesion.py`](../../apps/web/web/Sesion.py) | Barra común: navegación, nombre y botón Iniciar/Cerrar sesión |
-| [`web/GenerateModelsApp.py`](../../apps/web/web/GenerateModelsApp.py) | Páginas `/` e `/historial`, títulos y `on_load` |
+| [`web/OrtesisLabApp.py`](../../apps/web/web/OrtesisLabApp.py) | Páginas `/` e `/historial`, títulos y `on_load` |
 | [`web/EstadoApp.py`](../../apps/web/web/EstadoApp.py) | Estado/handlers de `/`; se ejecutan en backend |
 | [`web/EstadoHistorial.py`](../../apps/web/web/EstadoHistorial.py) | Estado/handlers de `/historial` |
 | [`web/GeneradorWeb.py`](../../apps/web/web/GeneradorWeb.py) | Catálogos compartidos y fichas para mostrar; no renderiza |

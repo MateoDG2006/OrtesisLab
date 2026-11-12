@@ -2,7 +2,7 @@
 
 ## Fuente y ejecución
 
-Dos páginas: `/` ([`web/PaginaComparacion.py`](../../apps/web/web/PaginaComparacion.py), estado `EstadoApp`) y `/historial` ([`web/PaginaHistorial.py`](../../apps/web/web/PaginaHistorial.py), estado `EstadoHistorial`). Ambas incluyen la barra de [`web/Sesion.py`](../../apps/web/web/Sesion.py). [`web/GenerateModelsApp.py`](../../apps/web/web/GenerateModelsApp.py) las registra en `rx.App`; [`rxconfig.py`](../../apps/web/rxconfig.py) selecciona plugins y tema. Reflex convierte ese árbol a React; el navegador no ejecuta `Model3DForPrinting` ni NumPy.
+Dos páginas: `/` ([`web/PaginaComparacion.py`](../../apps/web/web/PaginaComparacion.py), estado `EstadoApp`) y `/historial` ([`web/PaginaHistorial.py`](../../apps/web/web/PaginaHistorial.py), estado `EstadoHistorial`). Ambas incluyen la barra de [`web/Sesion.py`](../../apps/web/web/Sesion.py). [`web/OrtesisLabApp.py`](../../apps/web/web/OrtesisLabApp.py) las registra en `rx.App`; [`rxconfig.py`](../../apps/web/rxconfig.py) selecciona plugins y tema. Reflex convierte ese árbol a React; el navegador no ejecuta `Model3DForPrinting` ni NumPy.
 
 Las referencias `EstadoApp.pattern`, `EstadoApp.resultados`, etc. dentro de los componentes son expresiones reactivas. `rx.cond` decide contenido a partir del estado y `rx.foreach` genera repetidos. Los eventos `on_change`/`on_click` enlazan con métodos Python del servidor. Los arrays grandes quedan en el backend; React recibe textos, estados y `object_url` de STL. La arquitectura del framework se verifica en la [documentación oficial](https://reflex.dev/docs/advanced-onboarding/how-reflex-works/).
 

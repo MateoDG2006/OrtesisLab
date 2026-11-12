@@ -73,8 +73,8 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/web/web/EstadoApp.py](../../apps/web/web/EstadoApp.py) | Estado de la página de comparación. |
 | [apps/web/web/EstadoHistorial.py](../../apps/web/web/EstadoHistorial.py) | Estado de /historial: filtros, cursor y comparación de hasta tres versiones. |
 | [apps/web/web/GeneradorWeb.py](../../apps/web/web/GeneradorWeb.py) | Genera cascarones para la aplicación web. |
-| [apps/web/web/GenerateModelsApp.py](../../apps/web/web/GenerateModelsApp.py) | Aplicación Reflex de comparación de ortesis. |
 | [apps/web/web/LectorSuperficie.py](../../apps/web/web/LectorSuperficie.py) | Lectura de superficies subidas a la aplicación web. |
+| [apps/web/web/OrtesisLabApp.py](../../apps/web/web/OrtesisLabApp.py) | Aplicación Reflex de comparación de ortesis. |
 | [apps/web/web/PaginaComparacion.py](../../apps/web/web/PaginaComparacion.py) | Pantalla para previsualizar una ortesis o un lote de variantes. |
 | [apps/web/web/PaginaHistorial.py](../../apps/web/web/PaginaHistorial.py) | Pantalla /historial: generaciones del usuario, comparación y restauración. |
 | [apps/web/web/Sesion.py](../../apps/web/web/Sesion.py) | Barra de sesión común a la comparación y al historial. |
@@ -192,6 +192,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md](../Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md) | RES-2026-11-12-001 — Cierre de issues AUD-2026-10-13-001 (plan autorizado) |
 | [docs/Audit/resolves/2026-11-12-resolve-dotenv-raiz.md](../Audit/resolves/2026-11-12-resolve-dotenv-raiz.md) | RES-2026-11-12-003 — Cargar el .env de la raíz con python-dotenv |
 | [docs/Audit/resolves/2026-11-12-resolve-makefile.md](../Audit/resolves/2026-11-12-resolve-makefile.md) | RES-2026-11-12-006 — Objetivos de Make |
+| [docs/Audit/resolves/2026-11-12-resolve-modulo-ortesislabapp.md](../Audit/resolves/2026-11-12-resolve-modulo-ortesislabapp.md) | RES-2026-11-12-010 — El módulo Reflex se llama `OrtesisLabApp` |
 | [docs/Audit/resolves/2026-11-12-resolve-monorepo.md](../Audit/resolves/2026-11-12-resolve-monorepo.md) | RES-2026-11-12-001 — Reubicar el repositorio como monorepo |
 | [docs/Audit/resolves/2026-11-12-resolve-paquete-ortesislabplugin.md](../Audit/resolves/2026-11-12-resolve-paquete-ortesislabplugin.md) | RES-2026-11-12-008 — El núcleo se importa como `OrtesisLabPlugin` |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-autoescala.md](../Audit/resolves/2026-11-12-resolve-quitar-autoescala.md) | RES-2026-11-12-004 — Quitar el autoescalado de coordenadas |

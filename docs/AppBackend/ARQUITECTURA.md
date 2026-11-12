@@ -6,7 +6,7 @@ El servidor coordina cuentas, superficies, parámetros, versiones y lotes de gen
 
 | Pieza | Responsabilidad |
 |---|---|
-| Reflex (`web.GenerateModelsApp`) | Páginas, eventos de estado, rutas OIDC `/auth/*`, admisión de lotes y lectura del progreso |
+| Reflex (`web.OrtesisLabApp`) | Páginas, eventos de estado, rutas OIDC `/auth/*`, admisión de lotes y lectura del progreso |
 | Trabajador (`scripts/EjecutarTrabajador.py`) | Reserva ítems de la cola en PostgreSQL, construye la geometría con el núcleo NumPy, publica STL/JSON y concilia archivos |
 | PostgreSQL 17 | Fuente de verdad: usuarios, sesiones, preferencias, proyectos, imports, versiones, lotes, intentos, resultados, exports e historial |
 | Bucket S3 (MinIO) | Bytes de originales subidos, NPZ normalizados, STL y JSON de resultados; PostgreSQL guarda clave, `object_url`, tamaño y SHA-256 |
@@ -26,7 +26,7 @@ flowchart LR
 
 ## Arranque
 
-[`rxconfig.py`](../../apps/web/rxconfig.py) carga `app_module_import="web.GenerateModelsApp"`. [`web/GenerateModelsApp.py`](../../apps/web/web/GenerateModelsApp.py):
+[`rxconfig.py`](../../apps/web/rxconfig.py) carga `app_module_import="web.OrtesisLabApp"`. [`web/OrtesisLabApp.py`](../../apps/web/web/OrtesisLabApp.py):
 
 - crea `rx.App(api_transformer=AutenticacionOidc.Aplicacion())`, que monta `/auth/login`, `/auth/callback` y `/auth/logout` junto a la aplicación Reflex;
 - registra la tarea de ciclo de vida `PoolPostgres`, que abre el motor SQLAlchemy con `ORTESISLAB_DATABASE_URL` (rol `ortesislab_app`, una conexión de prueba al arrancar y hasta 4 en el pool) y lo cierra al parar; si la base no responde al arrancar, lo registra y los handlers devuelven el mensaje de persistencia no disponible;

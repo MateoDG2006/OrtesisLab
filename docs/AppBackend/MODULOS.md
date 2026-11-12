@@ -7,7 +7,7 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 | Archivo/carpeta | Responsabilidad y relación |
 |---|---|
 | [`rxconfig.py`](../../apps/web/rxconfig.py) | Selecciona el módulo web, sitemap, Tailwind V4 y tema Radix indigo/slate/medium |
-| [`web/GenerateModelsApp.py`](../../apps/web/web/GenerateModelsApp.py) | Instancia `rx.App` con el transformador OIDC, abre/cierra el motor SQLAlchemy de PostgreSQL en el ciclo de vida y registra `/` e `/historial` |
+| [`web/OrtesisLabApp.py`](../../apps/web/web/OrtesisLabApp.py) | Instancia `rx.App` con el transformador OIDC, abre/cierra el motor SQLAlchemy de PostgreSQL en el ciclo de vida y registra `/` e `/historial` |
 | [`web/Ajustes.py`](../../apps/web/web/Ajustes.py) | Única declaración y lectura de las variables `ORTESISLAB_*`: cada atributo de `Ajustes` es una `Variable(clave, defecto)`; sin defecto es obligatoria y leerla ausente o vacía lanza `RuntimeError` («Falta la variable de entorno …»); las URL de base exigen el prefijo `postgresql+psycopg://` y, si no lo tienen, lanzan `RuntimeError`. Las pruebas de persistencia leen las dos URL de prueba y, si falta alguna, se omiten con ese mensaje. `Cargar()` lee el `.env` de la raíz con python-dotenv (UTF-8, con o sin BOM) sin pisar variables que el proceso ya tenga; los valores quedan en el entorno y las referencias `$` se sustituyen |
 | [`web/__init__.py`](../../apps/web/web/__init__.py) | Marcador del paquete web; no arranca servicios |
 | [`web/ConfiguracionBackend.py`](../../apps/web/web/ConfiguracionBackend.py) | `ConfiguracionBackend.Cargar(area)` lee `config/<area>.yaml` con `yaml.safe_load` y lo guarda en caché por proceso; distinta de `OrtesisLabPlugin.util.Utilidades.Configuracion`, que lee el JSON del complemento |

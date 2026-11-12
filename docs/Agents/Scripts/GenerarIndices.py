@@ -41,7 +41,7 @@ SIN_SIMBOLOS = "| — | Sin clases/funciones | — | Declaraciones o marcador de
 SIN_DOCSTRING = "Sin docstring; consultar el catálogo de módulos y el código."
 SIN_DESCRIPCION = "Sin descripción; completar en INVENTARIO.md."
 EXCLUIDOS = re.compile(r"__pycache__/|^\.codegraph/(?!\.gitignore$)|\.log$")
-FRONTEND = re.compile(r"^apps/web/(rxconfig\.py|web/(Estado|Pagina|Sesion|GenerateModelsApp)\w*\.py)$")
+FRONTEND = re.compile(r"^apps/web/(rxconfig\.py|web/(Estado|Pagina|Sesion|OrtesisLabApp)\w*\.py)$")
 ENLACE = re.compile(r"\]\(([^)#\s]+)(#[^)]*)?\)")
 
 

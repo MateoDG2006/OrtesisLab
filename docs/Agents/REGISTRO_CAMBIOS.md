@@ -1,5 +1,15 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — El módulo Reflex es `web.OrtesisLabApp`
+
+`rxconfig.py` declara `app_name="OrtesisLabApp"` y `app_module_import="web.OrtesisLabApp"`. El archivo seguía en `apps/web/web/GenerateModelsApp.py`, así que Reflex no encontraba el módulo. Pasa a `OrtesisLabApp.py`. El complemento sigue siendo `OrtesisLabPlugin` y el ZIP conserva el nombre `GenerateModelsApp.zip`. Autorización en [RES-2026-11-12-010](../Audit/resolves/2026-11-12-resolve-modulo-ortesislabapp.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `uv run --directory apps/web python -c "import rxconfig; import web.OrtesisLabApp"`: terminó en 0 e imprimió `import-ok`.
+- `python docs/Agents/Scripts/GenerarIndices.py` y `--comprobar`: catálogos al día y enlaces correctos.
+
+No se arrancó Reflex en el navegador.
+
 ## 2026-11-12 — Sin carpeta `src`
 
 Se elimina `src/generatemodelsapp/`. Solo añadía el complemento a `sys.path` y llamaba `OrtesisLabPlugin.consola.main`. El saludo sigue en `consola.py` y se lanza con `scripts/IniciarConsola.py`. Desaparece el script `generatemodelsapp` de `pyproject.toml`. `tool.uv.package` queda en `false`: el repositorio no instala un paquete propio y `uv run` sigue trayendo las dependencias. Autorización en [RES-2026-11-12-009](../Audit/resolves/2026-11-12-resolve-quitar-src.md). Los hallazgos siguen abiertos.
