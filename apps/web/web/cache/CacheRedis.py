@@ -13,7 +13,7 @@ import time
 import numpy as np
 import redis
 
-from GenerateModelsApp.util.Utilidades import Registro
+from OrtesisLabPlugin.util.Utilidades import Registro
 from web.Ajustes import Ajustes
 from web.ConfiguracionBackend import ConfiguracionBackend
 

@@ -12,8 +12,8 @@ import numpy as np
 RAIZ = pathlib.Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(RAIZ / "apps" / "web"), str(RAIZ / "apps" / "ortesis-plugin")]
 
-from GenerateModelsApp.Cascaron import Cascaron
-from GenerateModelsApp.Excepciones import (
+from OrtesisLabPlugin.Cascaron import Cascaron
+from OrtesisLabPlugin.Excepciones import (
     AristasNoManifold,
     CeldaDemasiadoPequena,
     EntornoBlenderRequerido,
@@ -26,11 +26,11 @@ from GenerateModelsApp.Excepciones import (
     SuperficieEliminadaPorPatron,
     VerticesSueltos,
 )
-from GenerateModelsApp.Malla import AnalizadorMalla
-from GenerateModelsApp.Modeling import Model3DForPrinting
-from GenerateModelsApp.constants.Materials import PETG
-from GenerateModelsApp.constants.Paterns import Patron
-from GenerateModelsApp.util.Utilidades import Configuracion
+from OrtesisLabPlugin.Malla import AnalizadorMalla
+from OrtesisLabPlugin.Modeling import Model3DForPrinting
+from OrtesisLabPlugin.constants.Materials import PETG
+from OrtesisLabPlugin.constants.Paterns import Patron
+from OrtesisLabPlugin.util.Utilidades import Configuracion
 
 
 class ReferenciaOriginal:
@@ -235,11 +235,11 @@ class ParametrosYMaterial(unittest.TestCase):
             Model3DForPrinting().CalculateVolume()
 
     def test_el_paquete_no_exige_blender(self):
-        import GenerateModelsApp
+        import OrtesisLabPlugin
 
-        self.assertEqual(GenerateModelsApp.bl_info["name"], "OrtesisLab")
+        self.assertEqual(OrtesisLabPlugin.bl_info["name"], "OrtesisLab")
         with self.assertRaises(EntornoBlenderRequerido):
-            import GenerateModelsApp.ApiBlender  # noqa: F401
+            import OrtesisLabPlugin.ApiBlender  # noqa: F401
 
 
 if __name__ == "__main__":

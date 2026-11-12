@@ -10,7 +10,7 @@ import numpy as np
 from web.GeneradorWeb import MAXIMO_VARIANTES, GeneradorWeb
 from web.LectorSuperficie import LectorSuperficie
 from web.services.ContextoUsuario import ContextoUsuario
-from GenerateModelsApp.Excepciones import ArchivoSuperficieIlegible, GeometriaInconsistente
+from OrtesisLabPlugin.Excepciones import ArchivoSuperficieIlegible, GeometriaInconsistente
 from tests.persistencia.apoyo_persistencia import Conectar, CrearUsuario, EntornoServicios, requiere_base
 
 

@@ -14,7 +14,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from uuid import UUID
 
-from GenerateModelsApp.util.Utilidades import Registro
+from OrtesisLabPlugin.util.Utilidades import Registro
 from web.ConfiguracionBackend import ConfiguracionBackend
 from web.enums import EstadoAsset
 from web.persistence.ConexionPostgres import ConexionPostgres

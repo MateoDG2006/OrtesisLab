@@ -18,8 +18,8 @@ from pathlib import Path
 
 import numpy as np
 
-from GenerateModelsApp.Excepciones import ArchivoSuperficieNoEncontrado
-from GenerateModelsApp.RefinadorMalla import RefinadorMalla
+from OrtesisLabPlugin.Excepciones import ArchivoSuperficieNoEncontrado
+from OrtesisLabPlugin.RefinadorMalla import RefinadorMalla
 
 from .cache.CacheRedis import CacheRedis
 from .ConfiguracionBackend import ConfiguracionBackend

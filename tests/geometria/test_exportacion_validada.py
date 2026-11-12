@@ -4,8 +4,8 @@ import unittest
 
 import numpy as np
 
-from GenerateModelsApp.Excepciones import CoordenadasFueraDeFloat32
-from GenerateModelsApp.ValidacionSolido import ValidadorSolido
+from OrtesisLabPlugin.Excepciones import CoordenadasFueraDeFloat32
+from OrtesisLabPlugin.ValidacionSolido import ValidadorSolido
 from web.GeneradorWeb import GeneradorWeb
 
 

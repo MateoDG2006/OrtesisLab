@@ -4,7 +4,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
-PAQUETE = ROOT / 'apps' / 'ortesis-plugin' / 'GenerateModelsApp'
+PAQUETE = ROOT / 'apps' / 'ortesis-plugin' / 'OrtesisLabPlugin'
 ZIP = ROOT / 'apps' / 'ortesis-plugin' / 'GenerateModelsApp.zip'
 
 
@@ -17,13 +17,13 @@ def empaquetar(destino=None):
                       and not any(part in {'__pycache__', 'logs'} for part in p.relative_to(paquete).parts))
     with ZipFile(temporal, 'w', ZIP_DEFLATED) as zipfile:
         for archivo in archivos:
-            zipfile.write(archivo, 'GenerateModelsApp/' + archivo.relative_to(paquete).as_posix())
+            zipfile.write(archivo, 'OrtesisLabPlugin/' + archivo.relative_to(paquete).as_posix())
         for archivo in sorted((ROOT / 'core' / 'config').glob('*.json')):
-            zipfile.write(archivo, 'GenerateModelsApp/config/' + archivo.name)
-        zipfile.write(ROOT / 'docs' / 'BlenderPlugin' / 'LEEME.md', 'GenerateModelsApp/LEEME.md')
+            zipfile.write(archivo, 'OrtesisLabPlugin/config/' + archivo.name)
+        zipfile.write(ROOT / 'docs' / 'BlenderPlugin' / 'LEEME.md', 'OrtesisLabPlugin/LEEME.md')
     with ZipFile(temporal) as zipfile:
         assert zipfile.testzip() is None
-        assert 'GenerateModelsApp/__init__.py' in zipfile.namelist()
+        assert 'OrtesisLabPlugin/__init__.py' in zipfile.namelist()
     anterior = ROOT / 'dist' / 'GenerateModelsApp-anterior.zip'
     if destino == ZIP and destino.exists() and not anterior.exists():
         anterior.parent.mkdir(exist_ok=True)

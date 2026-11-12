@@ -11,9 +11,9 @@ import json
 import uuid
 from uuid import UUID
 
-from GenerateModelsApp.Excepciones import ParametrosNoReconocidos
-from GenerateModelsApp.constants.Materials import PETG
-from GenerateModelsApp.util.Utilidades import Configuracion
+from OrtesisLabPlugin.Excepciones import ParametrosNoReconocidos
+from OrtesisLabPlugin.constants.Materials import PETG
+from OrtesisLabPlugin.util.Utilidades import Configuracion
 from web.enums import BackendGeneracion, TipoEvento
 from web.persistence.Contratos import ESQUEMA_PARAMETROS, UsuarioAutenticado
 from web.persistence.repositorios import RepositorioHistorial, RepositorioVersiones

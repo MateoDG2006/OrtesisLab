@@ -9,9 +9,9 @@ from pathlib import Path
 
 import numpy as np
 
-from GenerateModelsApp.Excepciones import ArchivoSuperficieIlegible
-from GenerateModelsApp.Malla import AnalizadorMalla
-from GenerateModelsApp.util.Utilidades import Configuracion
+from OrtesisLabPlugin.Excepciones import ArchivoSuperficieIlegible
+from OrtesisLabPlugin.Malla import AnalizadorMalla
+from OrtesisLabPlugin.util.Utilidades import Configuracion
 
 from .ConfiguracionBackend import ConfiguracionBackend
 from .enums import ExtensionSuperficie

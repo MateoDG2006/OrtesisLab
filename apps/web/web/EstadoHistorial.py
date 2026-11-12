@@ -12,7 +12,7 @@ from datetime import date, datetime, time, timezone
 
 import reflex as rx
 
-from GenerateModelsApp.util.Utilidades import Registro
+from OrtesisLabPlugin.util.Utilidades import Registro
 
 from .ConfiguracionBackend import ConfiguracionBackend
 from .enums import EstadoExport, EstadoItem

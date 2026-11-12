@@ -6,9 +6,9 @@ Ejecutar dentro de Blender con el paquete instalado o la raíz del repositorio e
 
 ```python
 import bpy
-from GenerateModelsApp.Objeto import GeneradorObjeto
-from GenerateModelsApp.ValidacionMalla import ValidadorMalla
-from GenerateModelsApp.Exportacion import ExportadorStl
+from OrtesisLabPlugin.Objeto import GeneradorObjeto
+from OrtesisLabPlugin.ValidacionMalla import ValidadorMalla
+from OrtesisLabPlugin.Exportacion import ExportadorStl
 
 base = bpy.context.active_object  # Object Mode, MESH abierto sin espesor
 resultado = GeneradorObjeto.Crear(
@@ -41,8 +41,8 @@ No instala el paquete con un archivo suelto: son necesarias sus importaciones y 
 ## API del núcleo sin Blender
 
 ```python
-from GenerateModelsApp.Malla import AnalizadorMalla
-from GenerateModelsApp.Modeling import Model3DForPrinting
+from OrtesisLabPlugin.Malla import AnalizadorMalla
+from OrtesisLabPlugin.Modeling import Model3DForPrinting
 
 # puntos: float (N,3), triangulos: enteros (M,3), normales: float (N,3)
 p, f, n, borde = AnalizadorMalla.Preparar(

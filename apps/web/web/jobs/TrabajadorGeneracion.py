@@ -17,8 +17,8 @@ import time
 import uuid
 from pathlib import Path
 
-from GenerateModelsApp.Excepciones import OrtesisLabError
-from GenerateModelsApp.util.Utilidades import Registro
+from OrtesisLabPlugin.Excepciones import OrtesisLabError
+from OrtesisLabPlugin.util.Utilidades import Registro
 from web.ConfiguracionBackend import ConfiguracionBackend
 from web.enums import TipoAsset
 from web.persistence.Contratos import ErrorPersistencia, TrabajoReservado, UsuarioAutenticado

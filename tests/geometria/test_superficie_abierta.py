@@ -4,10 +4,10 @@ from collections import Counter
 
 import numpy as np
 
-from GenerateModelsApp.Cascaron import Cascaron
-from GenerateModelsApp.Malla import AnalizadorMalla
-from GenerateModelsApp.Modeling import Model3DForPrinting
-from GenerateModelsApp.Excepciones import SuperficieInvalida, VerticesSueltos
+from OrtesisLabPlugin.Cascaron import Cascaron
+from OrtesisLabPlugin.Malla import AnalizadorMalla
+from OrtesisLabPlugin.Modeling import Model3DForPrinting
+from OrtesisLabPlugin.Excepciones import SuperficieInvalida, VerticesSueltos
 
 
 class SuperficieAbierta(unittest.TestCase):

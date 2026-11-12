@@ -7,7 +7,7 @@ try:
 except ImportError:  # pragma: no cover
     bpy = None
 
-from GenerateModelsApp.InstantaneaExportacion import MallaEvaluada, PublicacionArchivos
+from OrtesisLabPlugin.InstantaneaExportacion import MallaEvaluada, PublicacionArchivos
 from pathlib import Path
 
 

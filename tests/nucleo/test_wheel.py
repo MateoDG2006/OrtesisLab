@@ -11,10 +11,10 @@ class EntradaConsola(unittest.TestCase):
         datos = tomllib.loads((raiz / "pyproject.toml").read_text(encoding="utf-8"))
         scripts = datos["project"]["scripts"]
         self.assertIn("ortesislab", scripts)
-        self.assertEqual(scripts["ortesislab"], "GenerateModelsApp.consola:main")
+        self.assertEqual(scripts["ortesislab"], "OrtesisLabPlugin.consola:main")
 
     def test_main_imprimible(self):
-        from GenerateModelsApp.consola import main
+        from OrtesisLabPlugin.consola import main
 
         self.assertTrue(callable(main))
 

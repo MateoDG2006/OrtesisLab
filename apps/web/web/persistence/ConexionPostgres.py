@@ -15,7 +15,7 @@ from psycopg import errors
 from sqlalchemy import Engine, create_engine, exc
 from sqlalchemy.orm import Session, sessionmaker
 
-from GenerateModelsApp.util.Utilidades import Registro
+from OrtesisLabPlugin.util.Utilidades import Registro
 from web.ConfiguracionBackend import ConfiguracionBackend
 
 from .Contratos import PersistenciaNoDisponible

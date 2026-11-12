@@ -13,8 +13,8 @@ import uuid
 
 import reflex as rx
 
-from GenerateModelsApp.Excepciones import OrtesisLabError
-from GenerateModelsApp.util.Utilidades import Configuracion, Registro
+from OrtesisLabPlugin.Excepciones import OrtesisLabError
+from OrtesisLabPlugin.util.Utilidades import Configuracion, Registro
 
 from .ConfiguracionBackend import ConfiguracionBackend
 from .enums import ITEMS_TERMINALES

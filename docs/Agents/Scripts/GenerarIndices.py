@@ -191,7 +191,7 @@ def Generados() -> dict[Path, str]:
     python = [ruta for ruta in archivos if ruta.endswith(".py")]
     backend = [r for r in python if r.startswith(("apps/web/", "scripts/", "src/"))]
     frontend = [r for r in python if FRONTEND.match(r)]
-    blender = [r for r in python if r.startswith("apps/ortesis-plugin/GenerateModelsApp/")]
+    blender = [r for r in python if r.startswith("apps/ortesis-plugin/OrtesisLabPlugin/")]
     return {
         RAIZ / "docs/AppBackend/SIMBOLOS.md": IndiceSimbolos(
             "AppBackend", backend, RAIZ / "docs/AppBackend/SIMBOLOS.md", previas

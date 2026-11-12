@@ -47,7 +47,7 @@ Para editar la forma, muestra la base desde el Outliner, modifica sus caras, vue
 
 ```python
 import bpy
-from GenerateModelsApp.Objeto import GeneradorObjeto
+from OrtesisLabPlugin.Objeto import GeneradorObjeto
 
 base = bpy.context.active_object  # superficie sin espesor, ya abierta
 modelo = GeneradorObjeto.Crear(

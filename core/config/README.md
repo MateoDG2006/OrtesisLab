@@ -4,7 +4,7 @@ Límites, tiempos, tamaños y etiquetas versionados. Las URL y los secretos no e
 
 Los YAML los carga `ConfiguracionBackend.Cargar("<area>")` al importar el módulo que los usa. Un archivo o una clave ausente tumba ese proceso. Un cambio pide reiniciar la web y el trabajador.
 
-Los JSON los lee el núcleo (`Configuracion` en el complemento). El empaquetado los copia dentro del ZIP, en `GenerateModelsApp/config/`, porque Blender no ve esta carpeta y su Python no trae PyYAML.
+Los JSON los lee el núcleo (`Configuracion` en el complemento). El empaquetado los copia dentro del ZIP, en `OrtesisLabPlugin/config/`, porque Blender no ve esta carpeta y su Python no trae PyYAML.
 
 ## YAML del backend
 

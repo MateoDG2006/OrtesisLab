@@ -4,9 +4,9 @@ import unittest
 
 import numpy as np
 
-from GenerateModelsApp.Malla import AnalizadorMalla
-from GenerateModelsApp.Modeling import Model3DForPrinting
-from GenerateModelsApp.SuavizadoBorde import SuavizadoBorde
+from OrtesisLabPlugin.Malla import AnalizadorMalla
+from OrtesisLabPlugin.Modeling import Model3DForPrinting
+from OrtesisLabPlugin.SuavizadoBorde import SuavizadoBorde
 
 
 class SuavizadoDeContorno(unittest.TestCase):

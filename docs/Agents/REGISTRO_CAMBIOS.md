@@ -1,5 +1,11 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — El núcleo se importa como `OrtesisLabPlugin`
+
+La carpeta del complemento ya era `apps/ortesis-plugin/OrtesisLabPlugin`. La web, las pruebas, los lanzadores y `pyproject.toml` seguían importando `GenerateModelsApp`, y `rxconfig.py` metía en `sys.path` la ruta `apps/apps/ortesis-plugin`. Los imports pasan a `OrtesisLabPlugin`. `rxconfig.py` añade `apps/ortesis-plugin`, que es el padre real del paquete. El ZIP sigue llamándose `GenerateModelsApp.zip`; el directorio raíz de dentro pasa a `OrtesisLabPlugin`, igual que el módulo que carga Blender. `web/GenerateModelsApp.py` no cambia de nombre: es el módulo Reflex. Autorización en [RES-2026-11-12-008](../Audit/resolves/2026-11-12-resolve-paquete-ortesislabplugin.md). Los hallazgos siguen abiertos.
+
+Documentación: README, `core/config/README.md`, AppBackend MODULOS y OPERACION_Y_PRUEBAS, BlenderPlugin ARQUITECTURA, API_Y_DATOS, LEEME, MODULOS y OPERACION_Y_PRUEBAS, Agents MANTENIMIENTO e INVENTARIO (tabla de carpetas).
+
 ## 2026-11-12 — La revisión de Alembic no la había emitido Alembic
 
 Se elimina `apps/db/alembic/versions/20261112_1200_esquema_inicial.py`. No coincide con `apps/db/alembic/script.py.mako`: no tiene `Revision ID`, `Revises` ni `Create Date`, ni `import sqlalchemy as sa`. `upgrade` crea las tablas con `Base.metadata.create_all`, no con los `op.create_table` de `alembic revision --autogenerate`. El humo `tests/persistencia/test_alembic_revision.py` solo importaba ese archivo y también se elimina. `versions/` queda con `.gitkeep`. `make migrar` sigue siendo `alembic upgrade head` y, sin revisiones, no crea tablas. La autorización está en [RES-2026-11-12-007](../Audit/resolves/2026-11-12-resolve-revision-alembic.md). El cierre histórico de B-02 no se reescribe. Los hallazgos siguen abiertos.

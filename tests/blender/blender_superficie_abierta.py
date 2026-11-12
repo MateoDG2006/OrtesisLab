@@ -15,12 +15,12 @@ from mathutils.bvhtree import BVHTree
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "apps" / "ortesis-plugin"))
-import GenerateModelsApp as addon
-from GenerateModelsApp.Objeto import GeneradorObjeto
-from GenerateModelsApp.Superficie import SuperficieInterior
-from GenerateModelsApp.ValidacionMalla import ValidadorMalla
-from GenerateModelsApp.OrtesisLab import Complemento
-from GenerateModelsApp.Excepciones import SolidoCerrado, SuperficieInvalida
+import OrtesisLabPlugin as addon
+from OrtesisLabPlugin.Objeto import GeneradorObjeto
+from OrtesisLabPlugin.Superficie import SuperficieInterior
+from OrtesisLabPlugin.ValidacionMalla import ValidadorMalla
+from OrtesisLabPlugin.OrtesisLab import Complemento
+from OrtesisLabPlugin.Excepciones import SolidoCerrado, SuperficieInvalida
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 addon.register()

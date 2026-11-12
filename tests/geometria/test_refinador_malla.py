@@ -4,9 +4,9 @@ import unittest
 
 import numpy as np
 
-from GenerateModelsApp.Modeling import Model3DForPrinting
-from GenerateModelsApp.RefinadorMalla import RefinadorMalla
-from GenerateModelsApp.util.Utilidades import Configuracion
+from OrtesisLabPlugin.Modeling import Model3DForPrinting
+from OrtesisLabPlugin.RefinadorMalla import RefinadorMalla
+from OrtesisLabPlugin.util.Utilidades import Configuracion
 
 
 class RefinamientoWeb(unittest.TestCase):

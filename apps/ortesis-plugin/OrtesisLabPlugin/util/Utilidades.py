@@ -11,7 +11,7 @@ import logging
 from pathlib import Path
 
 # El paquete guarda logs a su lado. La config del monorepo está en core/config;
-# el ZIP de Blender la copia a GenerateModelsApp/config.
+# el ZIP de Blender la copia a OrtesisLabPlugin/config.
 _PAQUETE = Path(__file__).resolve().parent.parent
 
 

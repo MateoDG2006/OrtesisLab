@@ -1,6 +1,6 @@
 # GenerateModelsApp
 
-Geometría paramétrica de una ortesis. El complemento de Blender y la aplicación Reflex son sistemas independientes: comparten el cálculo del paquete `GenerateModelsApp` y no se llaman entre sí. Blender genera y exporta. La web previsualiza el cascarón, muestra volumen, peso y precio, y puede generar varias variantes para compararlas. Cada usuario inicia sesión; sus superficies, versiones y lotes se guardan en PostgreSQL, los STL y archivos grandes en un bucket S3 (MinIO) y `/historial` permite comparar y restaurar versiones.
+Geometría paramétrica de una ortesis. El complemento de Blender y la aplicación Reflex son sistemas independientes: comparten el cálculo del paquete `OrtesisLabPlugin` y no se llaman entre sí. Blender genera y exporta. La web previsualiza el cascarón, muestra volumen, peso y precio, y puede generar varias variantes para compararlas. Cada usuario inicia sesión; sus superficies, versiones y lotes se guardan en PostgreSQL, los STL y archivos grandes en un bucket S3 (MinIO) y `/historial` permite comparar y restaurar versiones.
 
 - [Documentación completa](docs/README.md): arquitectura, inventario y estándar documental.
 - [AppBackend](docs/AppBackend/README.md): infraestructura Reflex, eventos, contratos y operación.

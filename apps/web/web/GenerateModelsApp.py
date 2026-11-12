@@ -1,6 +1,6 @@
 """Aplicación Reflex de comparación de ortesis.
 
-El paquete GenerateModelsApp sigue siendo el complemento de Blender.
+El paquete OrtesisLabPlugin sigue siendo el complemento de Blender.
 Esta página solo llama a sus funciones; el trabajo se guarda en PostgreSQL y
 los archivos en el bucket S3. Las rutas /auth las sirve el transformador OIDC.
 """
@@ -9,7 +9,7 @@ import contextlib
 
 import reflex as rx
 
-from GenerateModelsApp.util.Utilidades import Registro
+from OrtesisLabPlugin.util.Utilidades import Registro
 
 from .Ajustes import Ajustes
 from .ConfiguracionBackend import ConfiguracionBackend

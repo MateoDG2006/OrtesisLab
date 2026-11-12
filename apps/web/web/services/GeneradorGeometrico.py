@@ -11,9 +11,9 @@ from decimal import Decimal
 
 import numpy as np
 
-from GenerateModelsApp.Modeling import Model3DForPrinting
-from GenerateModelsApp.RefinadorMalla import RefinadorMalla
-from GenerateModelsApp.constants.Materials import Material
+from OrtesisLabPlugin.Modeling import Model3DForPrinting
+from OrtesisLabPlugin.RefinadorMalla import RefinadorMalla
+from OrtesisLabPlugin.constants.Materials import Material
 from web.GeneradorWeb import GeneradorWeb
 from web.enums import AlcanceGeometria, UnidadExport
 from web.persistence.Contratos import ResultadoGeometrico

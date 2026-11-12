@@ -15,9 +15,9 @@ from uuid import UUID
 
 import numpy as np
 
-from GenerateModelsApp.Excepciones import ArchivoSuperficieIlegible, OrtesisLabError
-from GenerateModelsApp.Malla import AnalizadorMalla
-from GenerateModelsApp.constants.Nombres import ARCHIVO_SUPERFICIE
+from OrtesisLabPlugin.Excepciones import ArchivoSuperficieIlegible, OrtesisLabError
+from OrtesisLabPlugin.Malla import AnalizadorMalla
+from OrtesisLabPlugin.constants.Nombres import ARCHIVO_SUPERFICIE
 from web.cache.CacheRedis import CacheRedis
 from web.enums import ExtensionSuperficie, FormatoImport, OrigenImport, TipoAsset, TipoEvento
 from web.LectorSuperficie import LectorSuperficie

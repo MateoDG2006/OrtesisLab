@@ -61,6 +61,6 @@ Los valores exactos y claves de los cuatro archivos se mantienen en [CONFIGURACI
 
 ## Scripts y distribución
 
-[`scripts/EmpaquetarBlender.py`](../../scripts/EmpaquetarBlender.py) incluye `.py` y `.json` del paquete y `docs/BlenderPlugin/LEEME.md`, excluyendo logs/cache; escribe un ZIP temporal, comprueba integridad y reemplaza el destino. No incluye Reflex, visor, pruebas ni NPZ. Si ya existe el ZIP principal, conserva una copia anterior una sola vez en `dist/GenerateModelsApp-anterior.zip`.
+[`scripts/EmpaquetarBlender.py`](../../scripts/EmpaquetarBlender.py) incluye `.py` y `.json` del paquete y `docs/BlenderPlugin/LEEME.md`, excluyendo logs/cache; escribe un ZIP temporal, comprueba integridad y reemplaza el destino. El directorio raíz dentro del ZIP es `OrtesisLabPlugin`, que es el módulo que importa Blender. No incluye Reflex, visor, pruebas ni NPZ. Si ya existe el ZIP principal, conserva una copia anterior una sola vez en `dist/GenerateModelsApp-anterior.zip`.
 
-[`scripts/EjecutarOrtesisLab.py`](../../scripts/EjecutarOrtesisLab.py) añade la raíz a `sys.path` y llama `register` dentro de Blender. `scripts/IniciarConsola.py` y `src/generatemodelsapp/__init__.py` son solo el saludo de consola. Los archivos `GenerateModelsApp.zip`, `dist/` y logs de tests son artefactos de distribución/históricos; no sustituyen a la fuente revisada.
+[`scripts/EjecutarOrtesisLab.py`](../../scripts/EjecutarOrtesisLab.py) añade `apps/ortesis-plugin` a `sys.path` y llama `register` dentro de Blender. `scripts/IniciarConsola.py` y `src/generatemodelsapp/__init__.py` son solo el saludo de consola. Los archivos `GenerateModelsApp.zip`, `dist/` y logs de tests son artefactos de distribución/históricos; no sustituyen a la fuente revisada.

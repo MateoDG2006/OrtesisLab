@@ -23,13 +23,13 @@ with nullcontext(str(test_root/'zip_verificado')) as tmp:
                        for name in archive.namelist())
         archive.extractall(tmp)
     sys.path.insert(0, tmp)
-    import GenerateModelsApp
-    assert Path(GenerateModelsApp.__file__).is_relative_to(Path(tmp))
-    assert GenerateModelsApp.bl_info['version'] == runpy.run_path(
-        str(ROOT/'apps'/'ortesis-plugin'/'GenerateModelsApp'/'__init__.py')
+    import OrtesisLabPlugin
+    assert Path(OrtesisLabPlugin.__file__).is_relative_to(Path(tmp))
+    assert OrtesisLabPlugin.bl_info['version'] == runpy.run_path(
+        str(ROOT/'apps'/'ortesis-plugin'/'OrtesisLabPlugin'/'__init__.py')
     )['bl_info']['version']
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    GenerateModelsApp.register()
+    OrtesisLabPlugin.register()
     settings = bpy.context.scene.ortesislab
     assert settings.source is None and not settings.repair
     bpy.ops.mesh.primitive_plane_add(size=30)
@@ -40,10 +40,10 @@ with nullcontext(str(test_root/'zip_verificado')) as tmp:
     assert len(base.data.vertices) == 4
     assert len(bpy.data.objects['OL_Ortesis'].data.vertices) > 8
     assert bpy.ops.ortesislab.validate() == {'FINISHED'}
-    from GenerateModelsApp.Exportacion import ExportadorStl
+    from OrtesisLabPlugin.Exportacion import ExportadorStl
     ExportadorStl.Exportar(bpy.data.objects['OL_Ortesis'], str(Path(tmp)/'pared.stl'))
     assert (Path(tmp)/'pared.stl').stat().st_size > 84
-    GenerateModelsApp.unregister()
+    OrtesisLabPlugin.unregister()
     sys.path.remove(tmp)
     logging.shutdown()  # Libera el archivo de log antes de limpiar la carpeta en Windows.
 print('PASS_ZIP: paquete aislado, panel, plano de cuatro vértices, patrón y exportación.', flush=True)

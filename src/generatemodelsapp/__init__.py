@@ -2,9 +2,9 @@ def main() -> None:
     from pathlib import Path
     import sys
 
-    raiz = Path(__file__).resolve().parents[2]
-    if str(raiz) not in sys.path:
-        sys.path.insert(0, str(raiz))
-    from GenerateModelsApp.consola import main as consola
+    plugin = Path(__file__).resolve().parents[2] / "apps" / "ortesis-plugin"
+    if str(plugin) not in sys.path:
+        sys.path.insert(0, str(plugin))
+    from OrtesisLabPlugin.consola import main as consola
 
     consola()

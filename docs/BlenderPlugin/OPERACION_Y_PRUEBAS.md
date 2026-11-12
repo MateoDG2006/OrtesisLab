@@ -53,7 +53,7 @@ Las pruebas de núcleo, geometría, web y persistencia se ejecutan con `make tes
 | Error de exportación JSON | El STL puede haberse escrito; corregir ruta/permisos y exportar otra vez |
 | Cambios de código no aparecen | Reinstalar ZIP y reiniciar módulos/Blender |
 
-El estado visible se trunca a 48 caracteres; consultar notificación completa y `GenerateModelsApp/logs/ortesislab.log`. La generación puede tardar según geometría; no hay tiempo garantizado ni mecanismo de cancelación propio.
+El estado visible se trunca a 48 caracteres; consultar notificación completa y `OrtesisLabPlugin/logs/ortesislab.log`. La generación puede tardar según geometría; no hay tiempo garantizado ni mecanismo de cancelación propio.
 
 ## Criterios para una nueva entrega
 

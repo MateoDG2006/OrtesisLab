@@ -851,8 +851,8 @@ Script del comando de consola del proyecto.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `IniciarConsola` | Clase | [10](../../scripts/IniciarConsola.py#L10) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `IniciarConsola.Ejecutar` | Función/método | [12](../../scripts/IniciarConsola.py#L12) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `IniciarConsola` | Clase | [15](../../scripts/IniciarConsola.py#L15) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `IniciarConsola.Ejecutar` | Función/método | [17](../../scripts/IniciarConsola.py#L17) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `scripts/MigrarSubidas.py`
 

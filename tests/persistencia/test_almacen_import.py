@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 from sqlalchemy import select
 
-from GenerateModelsApp.Excepciones import ArchivoSuperficieIlegible
+from OrtesisLabPlugin.Excepciones import ArchivoSuperficieIlegible
 from tests.persistencia.apoyo_persistencia import Conectar, CrearUsuario, EntornoServicios, requiere_base
 from web.GeneradorWeb import GeneradorWeb
 from web.cache.CacheRedis import CacheRedis

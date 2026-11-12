@@ -1,7 +1,7 @@
 """Script para abrir el complemento dentro de Blender.
 
 No es código de la aplicación: solo localiza el paquete y llama a register.
-Ejecutar este archivo desde disco, o instalar la carpeta GenerateModelsApp
+Ejecutar este archivo desde disco, o instalar la carpeta OrtesisLabPlugin
 como complemento. Un bloque de texto aislado no trae el resto de módulos.
 
 Ejemplo, con la raíz del repositorio como carpeta de trabajo:
@@ -15,7 +15,7 @@ from pathlib import Path
 _RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(_RAIZ / "apps" / "ortesis-plugin"))
 
-from GenerateModelsApp.OrtesisLab import register  # noqa: E402
+from OrtesisLabPlugin.OrtesisLab import register  # noqa: E402
 
 
 if __name__ == "__main__":

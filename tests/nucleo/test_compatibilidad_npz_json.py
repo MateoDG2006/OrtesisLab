@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 
-from GenerateModelsApp import contratos
+from OrtesisLabPlugin import contratos
 
 
 class CompatibilidadContratos(unittest.TestCase):

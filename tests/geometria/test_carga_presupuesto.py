@@ -9,9 +9,9 @@ import zipfile
 
 import numpy as np
 
-from GenerateModelsApp.Excepciones import ArchivoSuperficieIlegible, ConfiguracionInvalida
-from GenerateModelsApp.InspeccionNpz import InspeccionNpz
-from GenerateModelsApp.util.Utilidades import Configuracion
+from OrtesisLabPlugin.Excepciones import ArchivoSuperficieIlegible, ConfiguracionInvalida
+from OrtesisLabPlugin.InspeccionNpz import InspeccionNpz
+from OrtesisLabPlugin.util.Utilidades import Configuracion
 from web.LectorSuperficie import LectorSuperficie
 
 

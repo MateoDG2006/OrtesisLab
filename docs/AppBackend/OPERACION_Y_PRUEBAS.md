@@ -45,7 +45,7 @@ Los límites, tiempos y tamaños del backend no van en el entorno ni en el códi
 
 `GeneradorWeb.MAXIMO_VARIANTES` es `lotes.maximo_items`. Ese mismo número arma el `CHECK` de `generation_batches.total_items`. `latido_s` debe ser bastante menor que `lease_s`, o el trabajador pierde la reserva mientras construye; el código no lo comprueba.
 
-Los JSON de geometría están en `core/config/`. El ZIP de Blender los copia a `GenerateModelsApp/config/`, porque el complemento instalado no ve el monorepo. El Python de Blender no incluye PyYAML, así que esa configuración no pasa a YAML.
+Los JSON de geometría están en `core/config/`. El ZIP de Blender los copia a `OrtesisLabPlugin/config/`, porque el complemento instalado no ve el monorepo. El Python de Blender no incluye PyYAML, así que esa configuración no pasa a YAML.
 
 `ORTESISLAB_OIDC_REDIRECT_URI` debe apuntar al puerto donde responde `/auth/callback`: en desarrollo, el backend Reflex (8000); con `reflex run --env prod`, la aplicación sirve frontend y backend en un único puerto (3000). Blender no es requisito web ni del trabajador. El visor descarga Three.js desde unpkg.
 
@@ -132,7 +132,7 @@ Línea base con SQLAlchemy: **73 pruebas, 50 aprobadas y 23 omitidas, el 2026-10
 | Demora o mucha memoria | Paso, ancho de nervadura, número de caras, tamaño de celda y número de variantes |
 | `EntornoBlenderRequerido` al importar web | Importación accidental de adaptadores Blender |
 
-Logs: `ortesislab.<subsistema>`, consola INFO y archivo DEBUG `GenerateModelsApp/logs/ortesislab.log`, según `config/registro.json`.
+Logs: `ortesislab.<subsistema>`, consola INFO y archivo DEBUG `OrtesisLabPlugin/logs/ortesislab.log`, según `config/registro.json`.
 
 ## Despliegue y recuperación
 

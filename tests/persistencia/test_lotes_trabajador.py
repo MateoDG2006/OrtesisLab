@@ -9,7 +9,7 @@ from datetime import timedelta
 import redis
 from sqlalchemy import func, insert, select, update
 
-from GenerateModelsApp.util.Utilidades import Configuracion
+from OrtesisLabPlugin.util.Utilidades import Configuracion
 from tests.persistencia.apoyo_persistencia import (
     URL_TRABAJADOR,
     Conectar,

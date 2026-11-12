@@ -4,8 +4,8 @@ import io
 import unittest
 import numpy as np
 
-from GenerateModelsApp.Modeling import Model3DForPrinting
-from GenerateModelsApp.util.Utilidades import Configuracion
+from OrtesisLabPlugin.Modeling import Model3DForPrinting
+from OrtesisLabPlugin.util.Utilidades import Configuracion
 from web.cache.CacheRedis import CacheRedis
 
 

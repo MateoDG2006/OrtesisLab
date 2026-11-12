@@ -58,6 +58,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/ortesis-plugin/OrtesisLabPlugin/contratos.py](../../apps/ortesis-plugin/OrtesisLabPlugin/contratos.py) | Contratos compartidos entre núcleo, Blender y la web. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py) | Registro de mensajes y lectura de la carpeta config. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py](../../apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py) | Utilidades compartidas: registro de ejecución y lectura de JSON. |
+| [apps/web/.gitignore](../../apps/web/.gitignore) | Sin descripción; completar en INVENTARIO.md. |
 | [apps/web/assets/README.md](../../apps/web/assets/README.md) | Assets de la aplicación |
 | [apps/web/assets/favicon.ico](../../apps/web/assets/favicon.ico) | Icono del sitio. |
 | [apps/web/assets/superficie_interior_mm.npz](../../apps/web/assets/superficie_interior_mm.npz) | Superficie de ejemplo incluida para la web. |
@@ -65,6 +66,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/web/assets/visor.html](../../apps/web/assets/visor.html) | Visor Three.js que carga el STL binario desde su object_url. |
 | [apps/web/reflex.lock/bun.lock](../../apps/web/reflex.lock/bun.lock) | Resolucion de dependencias del frontend generado. |
 | [apps/web/reflex.lock/package.json](../../apps/web/reflex.lock/package.json) | Dependencias del frontend generado por Reflex. |
+| [apps/web/requirements.txt](../../apps/web/requirements.txt) | Sin descripción; completar en INVENTARIO.md. |
 | [apps/web/rxconfig.py](../../apps/web/rxconfig.py) | Marcador de paquete. |
 | [apps/web/web/Ajustes.py](../../apps/web/web/Ajustes.py) | Variables de entorno de OrtesisLab: el único lugar que las declara y las lee. |
 | [apps/web/web/ConfiguracionBackend.py](../../apps/web/web/ConfiguracionBackend.py) | Valores ajustables del backend, leídos de ``core/config/<area>.yaml``. |
@@ -191,6 +193,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-dotenv-raiz.md](../Audit/resolves/2026-11-12-resolve-dotenv-raiz.md) | RES-2026-11-12-003 — Cargar el .env de la raíz con python-dotenv |
 | [docs/Audit/resolves/2026-11-12-resolve-makefile.md](../Audit/resolves/2026-11-12-resolve-makefile.md) | RES-2026-11-12-006 — Objetivos de Make |
 | [docs/Audit/resolves/2026-11-12-resolve-monorepo.md](../Audit/resolves/2026-11-12-resolve-monorepo.md) | RES-2026-11-12-001 — Reubicar el repositorio como monorepo |
+| [docs/Audit/resolves/2026-11-12-resolve-paquete-ortesislabplugin.md](../Audit/resolves/2026-11-12-resolve-paquete-ortesislabplugin.md) | RES-2026-11-12-008 — El núcleo se importa como `OrtesisLabPlugin` |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-autoescala.md](../Audit/resolves/2026-11-12-resolve-quitar-autoescala.md) | RES-2026-11-12-004 — Quitar el autoescalado de coordenadas |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md](../Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md) | RES-2026-11-12-005 — Quitar seeds y la base de pruebas |
 | [docs/Audit/resolves/2026-11-12-resolve-revision-alembic.md](../Audit/resolves/2026-11-12-resolve-revision-alembic.md) | RES-2026-11-12-007 — Quitar la revisión de Alembic no generada por Alembic |
@@ -261,7 +264,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 |---|---|
 | `apps/web/` | Aplicación Reflex: paquete `web`, `rxconfig.py` y assets del visor |
 | `apps/db/` | PostgreSQL, Redis, MinIO, OIDC de pruebas y Alembic |
-| `apps/ortesis-plugin/` | Complemento de Blender (`GenerateModelsApp`) y su ZIP |
+| `apps/ortesis-plugin/` | Complemento de Blender (`OrtesisLabPlugin`) y su ZIP |
 | `core/config/` | YAML del backend, JSON de geometría y README de cada archivo |
 | `apps/web/web/persistence/`, `services/`, `storage/`, `cache/`, `jobs/` | Persistencia, servicios, bucket, caché Redis y trabajador |
 | `src/generatemodelsapp/` | Entrada del comando de saludo empaquetado por uv |
@@ -278,7 +281,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | `__pycache__/` | Bytecode Python regenerable; nunca fuente |
 | `.states/` | Artefactos de estado Reflex; no historial de dominio |
 | `uploaded_files/` | Subidas de la arquitectura anterior; `scripts/MigrarSubidas.py` las traslada al bucket y las borra |
-| `apps/ortesis-plugin/GenerateModelsApp/logs/` | Logs de ejecución del dominio |
+| `apps/ortesis-plugin/OrtesisLabPlugin/logs/` | Logs de ejecución del dominio |
 | `dist/` | Copias/ensayos de distribución; incluye ZIP anteriores y extracciones temporales de pruebas; no fuente vigente |
 
 ## `.web/`: árbol generado

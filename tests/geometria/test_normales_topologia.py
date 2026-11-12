@@ -6,16 +6,16 @@ import unittest
 
 import numpy as np
 
-from GenerateModelsApp.Cascaron import Cascaron
-from GenerateModelsApp.Excepciones import (
+from OrtesisLabPlugin.Cascaron import Cascaron
+from OrtesisLabPlugin.Excepciones import (
     AristasNoManifold,
     CalidadInsuficiente,
     GeometriaInconsistente,
     NormalesInvalidas,
 )
-from GenerateModelsApp.Malla import AnalizadorMalla
-from GenerateModelsApp.RefinadorMalla import RefinadorMalla
-from GenerateModelsApp.SuavizadoBorde import SuavizadoBorde
+from OrtesisLabPlugin.Malla import AnalizadorMalla
+from OrtesisLabPlugin.RefinadorMalla import RefinadorMalla
+from OrtesisLabPlugin.SuavizadoBorde import SuavizadoBorde
 
 
 class NormalesYTopologia(unittest.TestCase):
@@ -60,7 +60,7 @@ class NormalesYTopologia(unittest.TestCase):
         )
         caras = np.array([[0, 1, 2], [0, 2, 3]], dtype=np.int32)
         normales = np.tile([0.0, 0.0, 1.0], (4, 1))
-        from GenerateModelsApp.util.Utilidades import Configuracion
+        from OrtesisLabPlugin.util.Utilidades import Configuracion
 
         original = Configuracion.ValorLimite
 

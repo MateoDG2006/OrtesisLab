@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 import tempfile
 
-from GenerateModelsApp.InstantaneaExportacion import PublicacionArchivos
+from OrtesisLabPlugin.InstantaneaExportacion import PublicacionArchivos
 
 
 class PublicacionPar(unittest.TestCase):
@@ -44,7 +44,7 @@ class RollbackGeneracion(unittest.TestCase):
         bpy.ops.wm.read_factory_settings(use_empty=True)
         bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8)
         fuente = bpy.context.object
-        from GenerateModelsApp.constants.Nombres import PROP_ROL, ROL_SUPERFICIE, RESULT, SOURCE
+        from OrtesisLabPlugin.constants.Nombres import PROP_ROL, ROL_SUPERFICIE, RESULT, SOURCE
 
         fuente.name = SOURCE
         fuente[PROP_ROL] = ROL_SUPERFICIE
@@ -52,8 +52,8 @@ class RollbackGeneracion(unittest.TestCase):
         previo = bpy.context.object
         previo.name = RESULT
         previo["ol_config"] = "{}"
-        from GenerateModelsApp.Excepciones import ResolucionDemasiadoFina
-        from GenerateModelsApp.Objeto import GeneradorObjeto
+        from OrtesisLabPlugin.Excepciones import ResolucionDemasiadoFina
+        from OrtesisLabPlugin.Objeto import GeneradorObjeto
 
         with self.assertRaises(ResolucionDemasiadoFina):
             GeneradorObjeto.Crear(
