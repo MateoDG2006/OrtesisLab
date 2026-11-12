@@ -20,6 +20,9 @@ from web.persistence.repositorios import RepositorioHistorial, RepositorioVersio
 
 
 class ServicioVersiones:
+    # La web no reconstruye con voxel: comparar versiones no lista estos dos.
+    CLAVES_SOLO_VOXEL = frozenset({"repair", "resolution_mm"})
+
     @staticmethod
     def Canonico(valor) -> str:
         """JSON estable para hashes: claves ordenadas, sin espacios, sin NaN."""

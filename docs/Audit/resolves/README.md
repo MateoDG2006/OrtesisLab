@@ -29,6 +29,7 @@
 | [2026-11-12-resolve-login-local](2026-11-12-resolve-login-local.md) | EN_CURSO | Login y registro con correo y contraseña |
 | [2026-11-12-resolve-rediseno-interfaz-lotes](2026-11-12-resolve-rediseno-interfaz-lotes.md) | EN_CURSO | Rediseño de `/`, página `/lote` y miniaturas; no cierra hallazgos |
 | [2026-11-12-resolve-conflictos-merge-login-lote](2026-11-12-resolve-conflictos-merge-login-lote.md) | EN_CURSO | Merge de `/lote` con el login local; no cierra hallazgos |
+| [2026-11-12-resolve-fase0-defectos](2026-11-12-resolve-fase0-defectos.md) | EN_CURSO | D-1, D-3, D-4 y DELETE de retención; no cierra hallazgos |
 
 [RES-2026-10-13-001](2026-10-13-resolve-persistencia-postgres.md) y
 [RES-2026-10-13-002](2026-10-13-resolve-organizar-pruebas.md) siguen como

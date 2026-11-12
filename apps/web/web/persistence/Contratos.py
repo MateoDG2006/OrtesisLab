@@ -83,6 +83,7 @@ class Asset:
 @dataclass(frozen=True)
 class ImportDTO:
     id: UUID
+    user_id: UUID
     project_id: UUID
     original_asset_id: UUID
     normalized_asset_id: UUID | None

@@ -74,12 +74,12 @@ class CargaYPresupuesto(unittest.TestCase):
         with self.assertRaises(ConfiguracionInvalida):
             Configuracion._ValidarLimites(datos)
 
-    def test_limites_rechazan_minimo_mayor_que_maximo(self):
+    def test_limites_cargan_sin_claves_de_escala(self):
+        Configuracion.Recargar()
         datos = Configuracion.Limites()
-        datos["min_plausible_surface_extent_mm"] = 2000
-        datos["max_plausible_surface_extent_mm"] = 100
-        with self.assertRaises(ConfiguracionInvalida):
-            Configuracion._ValidarLimites(datos)
+        self.assertNotIn("min_plausible_surface_extent_mm", datos)
+        self.assertNotIn("max_plausible_surface_extent_mm", datos)
+        self.assertGreater(Configuracion.ValorLimite("min_cell_mm"), 0)
 
     def test_npz_valido_pasa_inspeccion(self):
         vertices = np.array([[0.0, 0.0, 0.0], [10.0, 0.0, 0.0], [0.0, 10.0, 0.0]], dtype=np.float64)

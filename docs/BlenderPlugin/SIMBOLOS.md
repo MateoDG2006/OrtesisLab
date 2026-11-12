@@ -395,15 +395,15 @@ Registro de mensajes y lectura de la carpeta config.
 | `Registro.Configurar` | Función/método | [66](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L66) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Registro.Obtener` | Función/método | [100](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L100) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Configuracion` | Clase | [106](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L106) | Carga los JSON de config y comprueba que traigan las claves esperadas. |
-| `Configuracion._Error` | Función/método | [207](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L207) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.Recargar` | Función/método | [214](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L214) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.CargarJson` | Función/método | [227](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L227) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion._ExigirClaves` | Función/método | [252](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L252) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.ParametrosDefecto` | Función/método | [262](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L262) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.Limites` | Función/método | [269](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L269) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion._ValidarLimites` | Función/método | [277](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L277) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.ValorLimite` | Función/método | [306](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L306) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.ComprobacionDeReferencia` | Función/método | [313](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L313) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion._Error` | Función/método | [205](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L205) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.Recargar` | Función/método | [212](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L212) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.CargarJson` | Función/método | [225](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L225) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion._ExigirClaves` | Función/método | [250](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L250) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.ParametrosDefecto` | Función/método | [260](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L260) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.Limites` | Función/método | [267](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L267) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion._ValidarLimites` | Función/método | [275](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L275) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.ValorLimite` | Función/método | [297](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L297) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.ComprobacionDeReferencia` | Función/método | [304](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py#L304) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py`
 

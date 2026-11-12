@@ -186,8 +186,6 @@ class Configuracion:
         "clip_connect_mm",
         "border_smooth_wavelength_mm",
         "border_smooth_max_mm",
-        "min_plausible_surface_extent_mm",
-        "max_plausible_surface_extent_mm",
     }
     # Ratios en (0, 1].
     LIMITES_RATIOS = {
@@ -294,13 +292,6 @@ class Configuracion:
             valor = float(numero)
             if not math.isfinite(valor) or valor <= 0 or valor > 1:
                 Configuracion._Error(f"El límite '{clave}' debe estar en (0, 1].")
-        minimo = float(datos["min_plausible_surface_extent_mm"])
-        maximo = float(datos["max_plausible_surface_extent_mm"])
-        if minimo > maximo:
-            Configuracion._Error(
-                "min_plausible_surface_extent_mm debe ser menor o igual que "
-                "max_plausible_surface_extent_mm."
-            )
 
     @staticmethod
     def ValorLimite(clave: str) -> float:

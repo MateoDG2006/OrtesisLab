@@ -26,6 +26,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/db/alembic/script.py.mako](../../apps/db/alembic/script.py.mako) | Plantilla con la que Alembic crea cada archivo de revisión. |
 | [apps/db/alembic/versions/.gitkeep](../../apps/db/alembic/versions/.gitkeep) | Conserva la carpeta de revisiones de Alembic. |
 | [apps/db/alembic/versions/20261112_1118_cuentas_locales.py](../../apps/db/alembic/versions/20261112_1118_cuentas_locales.py) | cuentas_locales |
+| [apps/db/alembic/versions/20261112_1135_purga_trabajador.py](../../apps/db/alembic/versions/20261112_1135_purga_trabajador.py) | purga del trabajador |
 | [apps/db/backups/.gitkeep](../../apps/db/backups/.gitkeep) | Conserva la carpeta de volcados; su contenido se ignora. |
 | [apps/db/compose.yaml](../../apps/db/compose.yaml) | PostgreSQL 17, Redis, MinIO y cliente mc. |
 | [apps/db/init/01_roles.sh](../../apps/db/init/01_roles.sh) | Crea los roles separados al inicializar el volumen de PostgreSQL. |
@@ -194,6 +195,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md](../Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md) | RES-2026-11-12-001 — Cierre de issues AUD-2026-10-13-001 (plan autorizado) |
 | [docs/Audit/resolves/2026-11-12-resolve-conflictos-merge-login-lote.md](../Audit/resolves/2026-11-12-resolve-conflictos-merge-login-lote.md) | RES-2026-11-12-013 — Resolver el merge entre `/lote` y el login local |
 | [docs/Audit/resolves/2026-11-12-resolve-dotenv-raiz.md](../Audit/resolves/2026-11-12-resolve-dotenv-raiz.md) | RES-2026-11-12-003 — Cargar el .env de la raíz con python-dotenv |
+| [docs/Audit/resolves/2026-11-12-resolve-fase0-defectos.md](../Audit/resolves/2026-11-12-resolve-fase0-defectos.md) | RES-2026-11-12-014 — Fase 0: defectos que rompen límites, conciliación y purga |
 | [docs/Audit/resolves/2026-11-12-resolve-login-local.md](../Audit/resolves/2026-11-12-resolve-login-local.md) | RES-2026-11-12-012 — Login y registro locales |
 | [docs/Audit/resolves/2026-11-12-resolve-makefile.md](../Audit/resolves/2026-11-12-resolve-makefile.md) | RES-2026-11-12-006 — Objetivos de Make |
 | [docs/Audit/resolves/2026-11-12-resolve-modulo-ortesislabapp.md](../Audit/resolves/2026-11-12-resolve-modulo-ortesislabapp.md) | RES-2026-11-12-010 — El módulo Reflex se llama `OrtesisLabApp` |

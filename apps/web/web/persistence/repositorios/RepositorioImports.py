@@ -122,6 +122,20 @@ class RepositorioImports(RepositorioBase):
             .limit(1),
         )
 
+    @classmethod
+    def ColgadosVencidos(cls, conexion, horas: int) -> list[ImportDTO]:
+        # received y validating no tienen finished_at: si siguen así, el conciliador los cierra.
+        return cls._Lista(
+            conexion,
+            select(IMPORTS)
+            .where(
+                IMPORTS.c.status.in_((EstadoImport.RECEIVED, EstadoImport.VALIDATING)),
+                IMPORTS.c.created_at < AHORA - timedelta(hours=horas),
+            )
+            .order_by(IMPORTS.c.created_at)
+            .limit(200),
+        )
+
     @staticmethod
     def ContarReady(conexion, user_id: UUID) -> int:
         return int(

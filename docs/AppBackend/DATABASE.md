@@ -286,7 +286,7 @@ erDiagram
 
 ## Lo que Alembic no genera
 
-Esos tres elementos se añaden a mano sobre el archivo que emite `alembic revision --autogenerate`. Alembic no compara `GRANT`, funciones ni triggers. `versions/` no tiene todavía esa revisión.
+Esos tres elementos se añaden a mano sobre el archivo que emite `alembic revision --autogenerate`. Alembic no compara `GRANT`, funciones ni triggers. La revisión `0ea8eb9c0ca2` ya los incluye. `b7c1d4e9a2f0` añade el `DELETE` de retención del trabajador.
 
 FK circular del intento ganador. El modelo la marca `use_alter`, pero el autogenerado la deja dentro de `create_table('batch_items')`. Hay que quitarla de ahí y crearla después de `generation_attempts`. En `downgrade`, borrarla antes de las tablas.
 
@@ -325,7 +325,7 @@ CREATE TRIGGER model_versions_comprobar_trg BEFORE INSERT ON model_versions
     FOR EACH ROW EXECUTE FUNCTION model_versions_comprobar();
 ```
 
-La aplicación no borra filas, no altera versiones y el historial es append-only. El trabajador reserva ítems y registra intentos, resultados y exports. En `downgrade`, `REVOKE ALL ON ALL TABLES IN SCHEMA ortesislab FROM ortesislab_app, ortesislab_worker`.
+La aplicación no borra filas, no altera versiones y el historial es append-only. El trabajador reserva ítems, registra intentos, resultados y exports, y borra eventos de historial y sesiones pasados de la retención. En `downgrade`, `REVOKE ALL ON ALL TABLES IN SCHEMA ortesislab FROM ortesislab_app, ortesislab_worker`.
 
 ```sql
 GRANT SELECT, INSERT, UPDATE ON app_users, user_preferences, auth_sessions, file_assets, projects, imports TO ortesislab_app;
@@ -337,7 +337,8 @@ GRANT SELECT ON app_users, projects, imports, model_versions TO ortesislab_worke
 GRANT SELECT, UPDATE ON generation_batches, batch_items TO ortesislab_worker;
 GRANT SELECT, INSERT, UPDATE ON generation_attempts, file_assets, exports TO ortesislab_worker;
 GRANT SELECT, INSERT ON generation_results TO ortesislab_worker;
-GRANT SELECT, INSERT ON history_events TO ortesislab_worker;
+GRANT SELECT, INSERT, DELETE ON history_events TO ortesislab_worker;
+GRANT DELETE ON auth_sessions TO ortesislab_worker;
 ```
 
 `tests/persistencia/test_propiedad_datos.py` depende de esos permisos, del `CHECK` `file_assets_ready_url_ck` y de las claves foráneas compuestas.

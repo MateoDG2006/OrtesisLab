@@ -1,5 +1,15 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — Límites, imports colgados y purga del trabajador
+
+`Configuracion.Limites` exigía dos claves de autoescala que `limites.json` ya no tiene, así que cualquier límite lanzaba `KeyError`. Esas claves salen de `LIMITES_POSITIVOS`. `RepositorioImports.ColgadosVencidos` cierra imports `received` o `validating` vencidos, e `ImportDTO` incluye `user_id` porque el conciliador lo usa. `ServicioVersiones.CLAVES_SOLO_VOXEL` es `repair` y `resolution_mm`. La revisión Alembic `b7c1d4e9a2f0` concede `DELETE` de `history_events` y `auth_sessions` solo a `ortesislab_worker`; la aplicación sigue sin borrar historial. `ValidarEnArranque` ya no se llama desde el merge del login. Autorización en [RES-2026-11-12-014](../Audit/resolves/2026-11-12-resolve-fase0-defectos.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `uv run python -m unittest tests.geometria.test_carga_presupuesto -v`: 5 pruebas, OK. `Limites()` carga `limites.json` sin las claves de escala.
+- Importación de `ServicioVersiones.CLAVES_SOLO_VOXEL` y `RepositorioImports.ColgadosVencidos`: imprimió `simbolos-ok`.
+
+No se aplicó `alembic upgrade head` ni se ejecutó la purga contra PostgreSQL. No se arrancó la web ni el trabajador.
+
 ## 2026-11-12 — Rediseño de la interfaz: parámetros, lotes y página de progreso
 
 Pedido del usuario ([RES-2026-11-12-011](../Audit/resolves/2026-11-12-resolve-rediseno-interfaz-lotes.md)). La página `/` separa parámetros genéricos y avanzados (casilla «Mostrar parámetros avanzados»), muestra una ayuda por parámetro (`ayudas` en `core/config/web.yaml`) y agrupa las acciones en pestañas «Una ortesis» y «Lote de variantes». El lote se arma en tres pasos con un resumen en vivo (cantidad y minutos, o el motivo por el que no es válido) y, al generarlo, redirige a la nueva página `/lote` (`web/PaginaLote.py`): cabecera con avance, conteo por estado y Cancelar lote, comparación 3D y una tarjeta por variante con miniatura. `assets/visor.html` acepta `miniatura=1`: dibuja un fotograma, lo deja como imagen y libera el contexto WebGL. `EstadoApp._Publicar` publica también las variantes en cola o en curso con su `estado`; los valores por defecto se aplican una sola vez por pestaña (botón Restaurar); Restaurar/Reintentar del historial redirigen a `/lote`.

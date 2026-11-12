@@ -401,21 +401,21 @@ DTO y errores de la persistencia. No son entidades ORM.
 | `UsuarioAutenticado` | Clase | [62](../../apps/web/web/persistence/Contratos.py#L62) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Asset` | Clase | [70](../../apps/web/web/persistence/Contratos.py#L70) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `ImportDTO` | Clase | [84](../../apps/web/web/persistence/Contratos.py#L84) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `VersionDTO` | Clase | [101](../../apps/web/web/persistence/Contratos.py#L101) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SolicitudLote` | Clase | [116](../../apps/web/web/persistence/Contratos.py#L116) | Variantes ya expandidas y validadas por ``GeneradorWeb.Combinaciones``. |
-| `LoteDTO` | Clase | [130](../../apps/web/web/persistence/Contratos.py#L130) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ResultadoDTO` | Clase | [143](../../apps/web/web/persistence/Contratos.py#L143) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ItemLote` | Clase | [162](../../apps/web/web/persistence/Contratos.py#L162) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ProgresoLote` | Clase | [176](../../apps/web/web/persistence/Contratos.py#L176) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ProgresoLote.terminados` | Función/método | [181](../../apps/web/web/persistence/Contratos.py#L181) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ProgresoLote.abierto` | Función/método | [185](../../apps/web/web/persistence/Contratos.py#L185) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `TrabajoReservado` | Clase | [190](../../apps/web/web/persistence/Contratos.py#L190) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ResultadoGeometrico` | Clase | [206](../../apps/web/web/persistence/Contratos.py#L206) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `FilaHistorial` | Clase | [224](../../apps/web/web/persistence/Contratos.py#L224) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaHistorial` | Clase | [246](../../apps/web/web/persistence/Contratos.py#L246) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `IntentoDTO` | Clase | [252](../../apps/web/web/persistence/Contratos.py#L252) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `DetalleVersion` | Clase | [269](../../apps/web/web/persistence/Contratos.py#L269) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Preferencias` | Clase | [279](../../apps/web/web/persistence/Contratos.py#L279) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `VersionDTO` | Clase | [102](../../apps/web/web/persistence/Contratos.py#L102) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SolicitudLote` | Clase | [117](../../apps/web/web/persistence/Contratos.py#L117) | Variantes ya expandidas y validadas por ``GeneradorWeb.Combinaciones``. |
+| `LoteDTO` | Clase | [131](../../apps/web/web/persistence/Contratos.py#L131) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ResultadoDTO` | Clase | [144](../../apps/web/web/persistence/Contratos.py#L144) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ItemLote` | Clase | [163](../../apps/web/web/persistence/Contratos.py#L163) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ProgresoLote` | Clase | [177](../../apps/web/web/persistence/Contratos.py#L177) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ProgresoLote.terminados` | Función/método | [182](../../apps/web/web/persistence/Contratos.py#L182) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ProgresoLote.abierto` | Función/método | [186](../../apps/web/web/persistence/Contratos.py#L186) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `TrabajoReservado` | Clase | [191](../../apps/web/web/persistence/Contratos.py#L191) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ResultadoGeometrico` | Clase | [207](../../apps/web/web/persistence/Contratos.py#L207) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `FilaHistorial` | Clase | [225](../../apps/web/web/persistence/Contratos.py#L225) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaHistorial` | Clase | [247](../../apps/web/web/persistence/Contratos.py#L247) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `IntentoDTO` | Clase | [253](../../apps/web/web/persistence/Contratos.py#L253) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `DetalleVersion` | Clase | [270](../../apps/web/web/persistence/Contratos.py#L270) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Preferencias` | Clase | [280](../../apps/web/web/persistence/Contratos.py#L280) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/persistence/Modelos.py`
 
@@ -524,8 +524,9 @@ Importaciones de superficies: original recibido y NPZ normalizado.
 | `RepositorioImports.Obtener` | Función/método | [78](../../apps/web/web/persistence/repositorios/RepositorioImports.py#L78) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `RepositorioImports.ListoPorNormalizado` | Función/método | [82](../../apps/web/web/persistence/repositorios/RepositorioImports.py#L82) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `RepositorioImports.ListoPorOriginal` | Función/método | [96](../../apps/web/web/persistence/repositorios/RepositorioImports.py#L96) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `RepositorioImports.ContarReady` | Función/método | [126](../../apps/web/web/persistence/repositorios/RepositorioImports.py#L126) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `RepositorioImports.ContarSubidasRecientes` | Función/método | [136](../../apps/web/web/persistence/repositorios/RepositorioImports.py#L136) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioImports.ColgadosVencidos` | Función/método | [126](../../apps/web/web/persistence/repositorios/RepositorioImports.py#L126) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioImports.ContarReady` | Función/método | [140](../../apps/web/web/persistence/repositorios/RepositorioImports.py#L140) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioImports.ContarSubidasRecientes` | Función/método | [150](../../apps/web/web/persistence/repositorios/RepositorioImports.py#L150) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/persistence/repositorios/RepositorioLotes.py`
 
@@ -769,11 +770,11 @@ Versiones inmutables: snapshot de parámetros, material y escala.
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
 | `ServicioVersiones` | Clase | [22](../../apps/web/web/services/ServicioVersiones.py#L22) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ServicioVersiones.Canonico` | Función/método | [24](../../apps/web/web/services/ServicioVersiones.py#L24) | JSON estable para hashes: claves ordenadas, sin espacios, sin NaN. |
-| `ServicioVersiones.Sha` | Función/método | [29](../../apps/web/web/services/ServicioVersiones.py#L29) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ServicioVersiones.Material` | Función/método | [33](../../apps/web/web/services/ServicioVersiones.py#L33) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ServicioVersiones.Parametros` | Función/método | [46](../../apps/web/web/services/ServicioVersiones.py#L46) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ServicioVersiones.Insertar` | Función/método | [56](../../apps/web/web/services/ServicioVersiones.py#L56) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ServicioVersiones.Canonico` | Función/método | [27](../../apps/web/web/services/ServicioVersiones.py#L27) | JSON estable para hashes: claves ordenadas, sin espacios, sin NaN. |
+| `ServicioVersiones.Sha` | Función/método | [32](../../apps/web/web/services/ServicioVersiones.py#L32) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ServicioVersiones.Material` | Función/método | [36](../../apps/web/web/services/ServicioVersiones.py#L36) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ServicioVersiones.Parametros` | Función/método | [49](../../apps/web/web/services/ServicioVersiones.py#L49) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ServicioVersiones.Insertar` | Función/método | [59](../../apps/web/web/services/ServicioVersiones.py#L59) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/Sesion.py`
 
