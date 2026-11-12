@@ -58,7 +58,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/ortesis-plugin/OrtesisLabPlugin/contratos.py](../../apps/ortesis-plugin/OrtesisLabPlugin/contratos.py) | Contratos compartidos entre núcleo, Blender y la web. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py) | Registro de mensajes y lectura de la carpeta config. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py](../../apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py) | Utilidades compartidas: registro de ejecución y lectura de JSON. |
-| [apps/web/.gitignore](../../apps/web/.gitignore) | Sin descripción; completar en INVENTARIO.md. |
+| [apps/web/.gitignore](../../apps/web/.gitignore) | Excluye `.web`, bytecode, bases SQLite, `.states`, `assets/external/` y `__pycache__` de la aplicación Reflex. |
 | [apps/web/assets/README.md](../../apps/web/assets/README.md) | Assets de la aplicación |
 | [apps/web/assets/favicon.ico](../../apps/web/assets/favicon.ico) | Icono del sitio. |
 | [apps/web/assets/superficie_interior_mm.npz](../../apps/web/assets/superficie_interior_mm.npz) | Superficie de ejemplo incluida para la web. |
@@ -66,7 +66,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/web/assets/visor.html](../../apps/web/assets/visor.html) | Visor Three.js que carga el STL binario desde su object_url. |
 | [apps/web/reflex.lock/bun.lock](../../apps/web/reflex.lock/bun.lock) | Resolucion de dependencias del frontend generado. |
 | [apps/web/reflex.lock/package.json](../../apps/web/reflex.lock/package.json) | Dependencias del frontend generado por Reflex. |
-| [apps/web/requirements.txt](../../apps/web/requirements.txt) | Sin descripción; completar en INVENTARIO.md. |
+| [apps/web/requirements.txt](../../apps/web/requirements.txt) | Declara Reflex 0.9.12 para la aplicación web. |
 | [apps/web/rxconfig.py](../../apps/web/rxconfig.py) | Marcador de paquete. |
 | [apps/web/web/Ajustes.py](../../apps/web/web/Ajustes.py) | Variables de entorno de OrtesisLab: el único lugar que las declara y las lee. |
 | [apps/web/web/ConfiguracionBackend.py](../../apps/web/web/ConfiguracionBackend.py) | Valores ajustables del backend, leídos de ``core/config/<area>.yaml``. |
