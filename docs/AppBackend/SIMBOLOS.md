@@ -812,13 +812,14 @@ Infraestructura local: arranque, parada, estado, respaldo y reinicio de la base.
 | `_confirmar` | Función/método | [70](../../scripts/BaseLocal.py#L70) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `_base` | Función/método | [75](../../scripts/BaseLocal.py#L75) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `_bucket` | Función/método | [79](../../scripts/BaseLocal.py#L79) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `up` | Función/método | [83](../../scripts/BaseLocal.py#L83) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `down` | Función/método | [91](../../scripts/BaseLocal.py#L91) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `estado` | Función/método | [104](../../scripts/BaseLocal.py#L104) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `respaldo` | Función/método | [125](../../scripts/BaseLocal.py#L125) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `reset` | Función/método | [153](../../scripts/BaseLocal.py#L153) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `comprobar` | Función/método | [168](../../scripts/BaseLocal.py#L168) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `main` | Función/método | [196](../../scripts/BaseLocal.py#L196) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `_salud` | Función/método | [83](../../scripts/BaseLocal.py#L83) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `up` | Función/método | [97](../../scripts/BaseLocal.py#L97) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `down` | Función/método | [105](../../scripts/BaseLocal.py#L105) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `estado` | Función/método | [118](../../scripts/BaseLocal.py#L118) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `respaldo` | Función/método | [129](../../scripts/BaseLocal.py#L129) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `reset` | Función/método | [161](../../scripts/BaseLocal.py#L161) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `comprobar` | Función/método | [176](../../scripts/BaseLocal.py#L176) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `main` | Función/método | [222](../../scripts/BaseLocal.py#L222) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `scripts/EjecutarOrtesisLab.py`
 

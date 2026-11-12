@@ -21,6 +21,7 @@
 | [resolve-aud-2026-10-29](2026-11-12-resolve-aud-2026-10-29.md) | RESUELTO | Autorización y cierre B |
 | [2026-11-12-resolve-quitar-seeds-test](2026-11-12-resolve-quitar-seeds-test.md) | EN_CURSO | Quitar fixture y base de pruebas |
 | [2026-11-12-resolve-makefile](2026-11-12-resolve-makefile.md) | EN_CURSO | Objetivos de Make; no cierra hallazgos |
+| [2026-11-12-resolve-revision-alembic](2026-11-12-resolve-revision-alembic.md) | EN_CURSO | Quitar la revisión que no generó Alembic |
 
 [RES-2026-10-13-001](2026-10-13-resolve-persistencia-postgres.md) y
 [RES-2026-10-13-002](2026-10-13-resolve-organizar-pruebas.md) siguen como

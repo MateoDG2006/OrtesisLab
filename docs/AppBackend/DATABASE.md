@@ -4,7 +4,7 @@ El esquema vigente es `Base.metadata` de [`web/persistence/Modelos.py`](../../ap
 
 El primer `make db-up` sobre un volumen nuevo ejecuta [`apps/db/init/01_roles.sh`](../../apps/db/init/01_roles.sh): crea los roles `ortesislab_migrator`, `ortesislab_app`, `ortesislab_worker` y `ortesislab_backup`, y el esquema `ortesislab` vacío. No crea tablas. En el mismo paso crea el bucket y arranca el OIDC de pruebas. `make db-reset CONFIRM=ELIMINAR` recrea `ortesislab_dev` y reaplica esos permisos con [`apps/db/preparar_base.sql`](../../apps/db/preparar_base.sql); las tablas vuelven con `make migrar`. No hay fixture ni base de pruebas en el repositorio.
 
-Alembic aplica las tablas con el rol migrador. La revisión inicial está en [`apps/db/alembic/versions/20261112_1200_esquema_inicial.py`](../../apps/db/alembic/versions/20261112_1200_esquema_inicial.py). `env.py` lee la URL de `Ajustes`, usa `-x base=test` para la base de pruebas, guarda `alembic_version` en `ortesislab` y la ignora al comparar.
+Alembic aplica las tablas con el rol migrador. [`apps/db/alembic/versions/`](../../apps/db/alembic/versions) no contiene revisiones: la primera tiene que salir de `alembic revision --autogenerate`, no de un archivo escrito aparte. `env.py` lee la URL de `Ajustes`, usa `-x base=test` para la base de pruebas, guarda `alembic_version` en `ortesislab` y la ignora al comparar.
 
 `user_preferences.auto_scale` y `model_versions.auto_scale` siguen en el esquema. La generación no las lee. Una preferencia nueva y cada versión nueva se insertan con `false`. Quitar las columnas exige una revisión de Alembic que esta entrega no incluye.
 
@@ -287,7 +287,7 @@ erDiagram
 
 ## Lo que Alembic no genera
 
-La primera revisión, y cualquier cambio posterior de estos tres elementos, se escribe a mano. Alembic no compara `GRANT`, funciones ni triggers.
+Esos tres elementos se añaden a mano sobre el archivo que emite `alembic revision --autogenerate`. Alembic no compara `GRANT`, funciones ni triggers. `versions/` no tiene todavía esa revisión.
 
 FK circular del intento ganador. El modelo la marca `use_alter`, pero el autogenerado la deja dentro de `create_table('batch_items')`. Hay que quitarla de ahí y crearla después de `generation_attempts`. En `downgrade`, borrarla antes de las tablas.
 

@@ -22,7 +22,7 @@ make worker      # otra terminal
 make web         # otra terminal
 ```
 
-Queda en `http://localhost:3000`. El backend escucha en el puerto 8000; con `--env prod` todo usa el 3000. El trabajador genera los modelos encolados. Detalle en [operación del backend](docs/AppBackend/OPERACION_Y_PRUEBAS.md).
+Queda en `http://localhost:3000`. El backend escucha en el puerto 8000; con `--env prod` todo usa el 3000. El trabajador genera los modelos encolados. `make migrar` aplica las revisiones de Alembic; `apps/db/alembic/versions/` está vacío, así que hoy no crea tablas. Detalle en [operación del backend](docs/AppBackend/OPERACION_Y_PRUEBAS.md).
 
 Pruebas, sin Blender (las de persistencia se omiten si no hay una base propia en `ORTESISLAB_TEST_*`):
 

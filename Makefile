@@ -19,25 +19,25 @@ export ACCION
 	db-up db-down db-estado db-respaldo db-reset
 
 help:
-	@echo Objetivos:
-	@echo   install                  Python 3.14, dependencias y .env de ejemplo si faltan
-	@echo   up                       db-up y alembic upgrade head
-	@echo   web                      Reflex en http://localhost:3000
-	@echo   worker                   Cola de generacion. UNA_VEZ=1 procesa y termina
-	@echo   migrar                   alembic upgrade head
-	@echo   empaquetar               ZIP del complemento de Blender
-	@echo   test                     unittest de tests/
-	@echo   test-blender             Empaqueta y ejecuta las dos pruebas de Blender
-	@echo   lint                     ruff check del repositorio
-	@echo Base de datos, cinco objetivos:
-	@echo   db-up                    PostgreSQL, MinIO, Redis, bucket y OIDC de pruebas
-	@echo   db-down                  Retira contenedores y conserva volumenes
-	@echo                            ACCION=parar los detiene; ACCION=destruir CONFIRM=ELIMINAR borra volumenes
-	@echo   db-estado                Salud de PostgreSQL, MinIO y Redis
-	@echo                            ACCION=logs  ACCION=consola
-	@echo   db-respaldo FILE=x.dump  Copia metadatos y objetos del bucket
-	@echo                            ACCION=restaurar FILE=x.dump CONFIRM=RESTAURAR los devuelve
-	@echo   db-reset CONFIRM=ELIMINAR  Recrea ortesislab_dev vacia; despues, make migrar
+	@echo "Objetivos:"
+	@echo "  install                  Python 3.14, dependencias y .env de ejemplo si faltan"
+	@echo "  up                       db-up y alembic upgrade head"
+	@echo "  web                      Reflex en http://localhost:3000"
+	@echo "  worker                   Cola de generacion. UNA_VEZ=1 procesa y termina"
+	@echo "  migrar                   alembic upgrade head"
+	@echo "  empaquetar               ZIP del complemento de Blender"
+	@echo "  test                     unittest de tests/"
+	@echo "  test-blender             Empaqueta y ejecuta las dos pruebas de Blender"
+	@echo "  lint                     ruff check del repositorio"
+	@echo "Base de datos, cinco objetivos:"
+	@echo "  db-up                    PostgreSQL, MinIO, Redis, bucket y OIDC de pruebas"
+	@echo "  db-down                  Retira contenedores y conserva volumenes"
+	@echo "                           ACCION=parar los detiene. ACCION=destruir CONFIRM=ELIMINAR borra volumenes"
+	@echo "  db-estado                Salud de PostgreSQL, MinIO y Redis"
+	@echo "                           ACCION=logs  ACCION=consola"
+	@echo "  db-respaldo FILE=x.dump  Copia metadatos y objetos del bucket"
+	@echo "                           ACCION=restaurar FILE=x.dump CONFIRM=RESTAURAR los devuelve"
+	@echo "  db-reset CONFIRM=ELIMINAR Recrea ortesislab_dev vacia. Despues, make migrar"
 
 install:
 	uv python install 3.14

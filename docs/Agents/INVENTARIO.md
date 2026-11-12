@@ -25,7 +25,6 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/db/alembic/env.py](../../apps/db/alembic/env.py) | Entorno de Alembic: migra el esquema ortesislab con el rol migrador. |
 | [apps/db/alembic/script.py.mako](../../apps/db/alembic/script.py.mako) | Plantilla con la que Alembic crea cada archivo de revisión. |
 | [apps/db/alembic/versions/.gitkeep](../../apps/db/alembic/versions/.gitkeep) | Conserva la carpeta de revisiones de Alembic. |
-| [apps/db/alembic/versions/20261112_1200_esquema_inicial.py](../../apps/db/alembic/versions/20261112_1200_esquema_inicial.py) | Esquema inicial ortesislab: tablas, trigger de versiones y GRANT. |
 | [apps/db/backups/.gitkeep](../../apps/db/backups/.gitkeep) | Conserva la carpeta de volcados; su contenido se ignora. |
 | [apps/db/compose.yaml](../../apps/db/compose.yaml) | PostgreSQL 17, Redis, MinIO, cliente mc y OIDC de pruebas. |
 | [apps/db/init/01_roles.sh](../../apps/db/init/01_roles.sh) | Crea los roles separados al inicializar el volumen de PostgreSQL. |
@@ -194,6 +193,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-monorepo.md](../Audit/resolves/2026-11-12-resolve-monorepo.md) | RES-2026-11-12-001 — Reubicar el repositorio como monorepo |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-autoescala.md](../Audit/resolves/2026-11-12-resolve-quitar-autoescala.md) | RES-2026-11-12-004 — Quitar el autoescalado de coordenadas |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md](../Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md) | RES-2026-11-12-005 — Quitar seeds y la base de pruebas |
+| [docs/Audit/resolves/2026-11-12-resolve-revision-alembic.md](../Audit/resolves/2026-11-12-resolve-revision-alembic.md) | RES-2026-11-12-007 — Quitar la revisión de Alembic no generada por Alembic |
 | [docs/Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md](../Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md) | RES-2026-11-12-001 — Lectura directa del YAML en `Cargar` |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
 | [docs/BlenderPlugin/ALGORITMOS.md](../BlenderPlugin/ALGORITMOS.md) | Algoritmos de generación y comprobación |
@@ -247,7 +247,6 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [tests/nucleo/test_wheel.py](../../tests/nucleo/test_wheel.py) | Comprueba el punto de entrada declarado en pyproject. |
 | [tests/persistencia/__init__.py](../../tests/persistencia/__init__.py) | Pruebas de PostgreSQL, bucket, Redis, lotes, trabajador y permisos. |
 | [tests/persistencia/apoyo_persistencia.py](../../tests/persistencia/apoyo_persistencia.py) | Apoyo de pruebas contra la base desechable ``ortesislab_test``. |
-| [tests/persistencia/test_alembic_revision.py](../../tests/persistencia/test_alembic_revision.py) | Humo de la revisión inicial de Alembic (sin exigir base en vivo). |
 | [tests/persistencia/test_almacen_import.py](../../tests/persistencia/test_almacen_import.py) | Import al bucket, caché Redis y migración de subidas locales. |
 | [tests/persistencia/test_cuota_almacen.py](../../tests/persistencia/test_cuota_almacen.py) | Cuotas de almacenamiento en importación (B-05). |
 | [tests/persistencia/test_import_fallo_publicar.py](../../tests/persistencia/test_import_fallo_publicar.py) | Import rechazado si falla la publicación al bucket (B-06). |

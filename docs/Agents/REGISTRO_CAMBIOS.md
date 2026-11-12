@@ -1,5 +1,23 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — La revisión de Alembic no la había emitido Alembic
+
+Se elimina `apps/db/alembic/versions/20261112_1200_esquema_inicial.py`. No coincide con `apps/db/alembic/script.py.mako`: no tiene `Revision ID`, `Revises` ni `Create Date`, ni `import sqlalchemy as sa`. `upgrade` crea las tablas con `Base.metadata.create_all`, no con los `op.create_table` de `alembic revision --autogenerate`. El humo `tests/persistencia/test_alembic_revision.py` solo importaba ese archivo y también se elimina. `versions/` queda con `.gitkeep`. `make migrar` sigue siendo `alembic upgrade head` y, sin revisiones, no crea tablas. La autorización está en [RES-2026-11-12-007](../Audit/resolves/2026-11-12-resolve-revision-alembic.md). El cierre histórico de B-02 no se reescribe. Los hallazgos siguen abiertos.
+
+No se ejecutó `alembic revision` ni `alembic upgrade`: no hay `.env` ni base en esta sesión, y una revisión nueva tiene que salir de Alembic.
+
+## 2026-11-12 — Objetivos de Make
+
+El `Makefile` instala el entorno, levanta la web y el trabajador, ejecuta unittest y ruff, y empaqueta el complemento. La infraestructura local queda en cinco objetivos (`db-up`, `db-down`, `db-estado`, `db-respaldo`, `db-reset`); el comportamiento está en `scripts/BaseLocal.py`. `db-up` arranca PostgreSQL, MinIO, Redis, el bucket y el OIDC de pruebas. `db-respaldo` copia y restaura metadatos y objetos juntos. `db-reset` sigue recreando `ortesislab_dev` vacía. La autorización está en [RES-2026-11-12-006](../Audit/resolves/2026-11-12-resolve-makefile.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `python scripts/BaseLocal.py --comprobar`.
+- `python scripts/BaseLocal.py up` sin `apps/db/.env`: termina avisando que falta el archivo.
+- `python scripts/BaseLocal.py respaldo` sin `FILE`: pide `FILE=nombre.dump`.
+- `make help` dentro de `alpine:3.20`: la primera pasada falló porque un `;` del texto de ayuda lo partía el shell. Con las líneas entre comillas, la siguiente pasada terminó en 0.
+
+No están `make`, `uv` ni `ruff` en el PATH del host. No se arrancó Docker Compose ni Reflex. No se ejecutó unittest.
+
 ## 2026-11-12 — README de core/config
 
 `core/config/README.md` explica para qué sirve cada YAML del backend y cada JSON de geometría. [OPERACION_Y_PRUEBAS.md](../AppBackend/OPERACION_Y_PRUEBAS.md) enlaza ese archivo. El catálogo de claves deja de citar `maximo_variantes`: el tope de variantes es `lotes.maximo_items`. Los enlaces de BlenderPlugin que apuntaban a `apps/ortesis-plugin/GenerateModelsApp/` pasan a `OrtesisLabPlugin/`, que es la carpeta que está en disco.

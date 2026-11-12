@@ -64,11 +64,11 @@ La infraestructura local son cinco objetivos. El detalle de cada `ACCION` sale e
 | `make db-estado` | `pg_isready`, `mc ready` y `redis-cli ping`. `ACCION=logs` muestra las últimas 200 líneas. `ACCION=consola` abre `psql` como `ortesislab_migrator` |
 | `make db-respaldo FILE=x.dump` | `pg_dump` del esquema `ortesislab` y copia del bucket en `apps/db/backups/objetos`. No sobrescribe un `.dump` ya existente. El nombre admite letras, números, punto, guion y guion bajo |
 | `make db-respaldo ACCION=restaurar FILE=x.dump CONFIRM=RESTAURAR` | Restaura ese volcado en `ortesislab_dev` y después los objetos. Exige que existan el `.dump` y `apps/db/backups/objetos`. `mc mirror` sobrescribe las claves presentes en la copia y no borra el resto del bucket |
-| `make db-reset CONFIRM=ELIMINAR` | Borra y vuelve a crear `ortesislab_dev` vacía, con el esquema y los permisos de `preparar_base.sql`. Solo esa base. Después hace falta `make migrar` |
+| `make db-reset CONFIRM=ELIMINAR` | Borra y vuelve a crear `ortesislab_dev` vacía, con el esquema y los permisos de `preparar_base.sql`. Solo esa base. Las tablas llegan cuando exista una revisión y se ejecute `make migrar` |
 
 El primer `make db-up` sobre un volumen nuevo ejecuta `apps/db/init/01_roles.sh`: roles y esquema `ortesislab` vacío, sin tablas. No hay fixture ni base de pruebas: los datos salen del uso de la aplicación. `make up` es `db-up` seguido de `make migrar` (`alembic upgrade head`).
 
-Las tablas las genera y aplica quien mantiene el esquema. La revisión inicial está en [`apps/db/alembic/versions/20261112_1200_esquema_inicial.py`](../../apps/db/alembic/versions/20261112_1200_esquema_inicial.py). Cambiar primero [`Modelos.py`](../../apps/web/web/persistence/Modelos.py) y generar la siguiente revisión contra una base en `head`:
+Las tablas las genera y aplica quien mantiene el esquema. `apps/db/alembic/versions/` no tiene revisiones, así que `make migrar` no crea tablas. Cambiar primero [`Modelos.py`](../../apps/web/web/persistence/Modelos.py) y generar la revisión contra una base cuyo esquema `ortesislab` ya existe:
 
 ```powershell
 uv run alembic revision --autogenerate -m "descripcion"
