@@ -113,7 +113,7 @@ class EstadoHistorial(rx.State):
         except (ValueError, ErrorPersistencia) as exc:
             self.mensaje = str(exc)
             return
-        return rx.redirect("/")
+        return rx.redirect("/lote")
 
     @rx.event
     async def Reintentar(self, version_id: str):
@@ -125,7 +125,7 @@ class EstadoHistorial(rx.State):
         except (ValueError, ErrorPersistencia) as exc:
             self.mensaje = str(exc)
             return
-        return rx.redirect("/")
+        return rx.redirect("/lote")
 
     @rx.event
     async def Descargar(self, fila_id: str):

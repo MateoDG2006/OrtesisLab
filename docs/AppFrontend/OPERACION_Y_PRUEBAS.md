@@ -2,7 +2,7 @@
 
 ## Inicio y fuentes editables
 
-La interfaz necesita el backend completo: PostgreSQL, bucket S3, trabajador y proveedor OIDC, según [operación del backend](../AppBackend/OPERACION_Y_PRUEBAS.md). Luego `make web` (`uv run --directory apps/web reflex run`), siguiendo las skills de proceso del repositorio, y abrir `http://localhost:3000`. Con `--env prod` frontend, backend y `/auth/*` comparten el puerto 3000. Cambios duraderos se hacen en `web/PaginaComparacion.py`, `web/PaginaHistorial.py`, `web/Sesion.py`, `web/EstadoApp.py`, `web/EstadoHistorial.py`, `rxconfig.py` o `assets/visor.html`, según responsabilidad; no en React generado.
+La interfaz necesita el backend completo: PostgreSQL, bucket S3, trabajador y proveedor OIDC, según [operación del backend](../AppBackend/OPERACION_Y_PRUEBAS.md). Luego `make web` (`uv run --directory apps/web reflex run`), siguiendo las skills de proceso del repositorio, y abrir `http://localhost:3000`. Con `--env prod` frontend, backend y `/auth/*` comparten el puerto 3000. Cambios duraderos se hacen en `web/PaginaComparacion.py`, `web/PaginaLote.py`, `web/PaginaHistorial.py`, `web/Sesion.py`, `web/EstadoApp.py`, `web/EstadoHistorial.py`, `rxconfig.py` o `assets/visor.html`, según responsabilidad; no en React generado.
 
 Antes de migrar Reflex comparar locks y documentación oficial con el código compilado actual. Esta base utiliza React Router/Vite; no describirla como una aplicación Next.js por referencias antiguas del framework. El archivo `GUIA_REFLEX.md` contiene enlaces generales, no evidencia de tecnologías utilizadas por cada versión.
 
@@ -14,14 +14,18 @@ Antes de migrar Reflex comparar locks y documentación oficial con el código co
 | Iniciar / cerrar sesión | Vuelve a `/` con nombre visible / sin datos del usuario anterior |
 | Selección de archivo | Nombre visible; no sustituye base hasta pulsar Cargar |
 | Archivo inválido o múltiple | Error visible; anterior base disponible; uploader se limpia |
-| SOLID / retícula / liner / Voronoi | Visibilidad coincide con tabla de [componentes](COMPONENTES_Y_FLUJOS.md) |
+| SOLID / retícula / liner / Voronoi / avanzados | Visibilidad coincide con tabla de [componentes](COMPONENTES_Y_FLUJOS.md); cada parámetro muestra su ayuda al pasar o enfocar el icono |
+| Volver de `/lote` a `/` | Los parámetros editados se conservan; Restaurar repone los valores por defecto |
+| Lote inválido (sin patrones, paso 0, más de 12) | Aviso rojo con el motivo y Generar lote desactivado; válido muestra cantidad y minutos |
 | Decimal con coma / no finito | Adaptación servidor admite coma; dato inválido se informa al generar |
 | Una previsualización | `En cola…`, una ficha, métricas y visor cargado desde la `object_url` |
 | Recargar durante o después de generar | El último lote reaparece y su seguimiento continúa |
-| Lote mixto con fallos | Filas válidas y erróneas; acciones de errores desactivadas; mensaje con conteo |
-| Comparación | Máximo tres, clic repetido quita, cuarta rechazada; cámaras independientes |
+| Generar lote | Redirige a `/lote?id=<lote>`; tarjetas en cola, en curso (spinner) y listas con miniatura; barra y conteo por estado |
+| Lote mixto con fallos | Tarjetas válidas y con error; acciones de errores desactivadas; mensaje con conteo |
+| Cancelar lote | Las pendientes pasan a Cancelada; la en curso termina antes |
+| Comparación (en `/lote`) | Máximo tres, clic repetido quita, cuarta rechazada; cámaras independientes |
 | Descarga | `Content-Disposition: attachment`, STL binario coherente con la ficha |
-| `/historial` | Filtrar, paginar, comparar 2–3 versiones con diferencias, restaurar y reintentar redirigen a `/` |
+| `/historial` | Filtrar, paginar, comparar 2–3 versiones con diferencias, restaurar y reintentar redirigen a `/lote` |
 | STL borrado del bucket | El visor muestra `El STL ya no está en el almacén…` |
 | Cámara | Arrastre rota; rueda acerca/aleja; resize mantiene encuadre |
 | Cambio de tema | Componentes Reflex cambian; visor mantiene fondo claro propio |

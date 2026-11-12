@@ -41,7 +41,7 @@ Los límites, tiempos y tamaños del backend no van en el entorno ni en el códi
 | [`cache.yaml`](../../core/config/cache.yaml) | `ttl_s` 604800 (7 días), `reintento_s` 30, `timeout_s` 0.5, `max_entrada_bytes` 64 MiB | `CacheRedis` |
 | [`almacen.yaml`](../../core/config/almacen.yaml) | `timeout_conexion_s` 3, `timeout_lectura_s` 30, `intentos` 3 | `StorageS3` |
 | [`sesion.yaml`](../../core/config/sesion.yaml) | `duracion_horas` 12, `intercambio_oidc_s` 600 | `ContextoUsuario`, `AutenticacionOidc` |
-| [`web.yaml`](../../core/config/web.yaml) | `intervalo_progreso_s` 1, `espera_crear_s` 600, `maximo_bytes` 50 MiB, `maximo_descomprimido_bytes` 128 MiB; `patrones` (5) y `ejes` (11): clave y etiqueta visible, en el orden de los selectores; `estados_visibles` (5): etiqueta de cada estado de ítem en `/historial`. El tope de variantes es `lotes.maximo_items` | `EstadoApp`, `GeneradorWeb`, `LectorSuperficie`, `EstadoHistorial` |
+| [`web.yaml`](../../core/config/web.yaml) | `intervalo_progreso_s` 1, `espera_crear_s` 600, `maximo_bytes` 50 MiB, `maximo_descomprimido_bytes` 128 MiB; `patrones` (5) y `ejes` (11): clave y etiqueta visible, en el orden de los selectores; `ayudas` (15): texto de ayuda de cada parámetro del formulario, con su rango; `estados_visibles` (5): etiqueta de cada estado de ítem en `/historial` y `/lote`. El tope de variantes es `lotes.maximo_items` | `EstadoApp`, `GeneradorWeb`, `LectorSuperficie`, `EstadoHistorial`, `PaginaComparacion` |
 
 `GeneradorWeb.MAXIMO_VARIANTES` es `lotes.maximo_items`. Ese mismo número arma el `CHECK` de `generation_batches.total_items`. `latido_s` debe ser bastante menor que `lease_s`, o el trabajador pierde la reserva mientras construye; el código no lo comprueba.
 

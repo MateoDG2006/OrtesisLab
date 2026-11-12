@@ -77,6 +77,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/web/web/OrtesisLabApp.py](../../apps/web/web/OrtesisLabApp.py) | Aplicación Reflex de comparación de ortesis. |
 | [apps/web/web/PaginaComparacion.py](../../apps/web/web/PaginaComparacion.py) | Pantalla para previsualizar una ortesis o un lote de variantes. |
 | [apps/web/web/PaginaHistorial.py](../../apps/web/web/PaginaHistorial.py) | Pantalla /historial: generaciones del usuario, comparación y restauración. |
+| [apps/web/web/PaginaLote.py](../../apps/web/web/PaginaLote.py) | Pantalla /lote: progreso de un lote con una miniatura por variante. |
 | [apps/web/web/Sesion.py](../../apps/web/web/Sesion.py) | Barra de sesión común a la comparación y al historial. |
 | [apps/web/web/__init__.py](../../apps/web/web/__init__.py) | Aplicación Reflex. |
 | [apps/web/web/cache/CacheRedis.py](../../apps/web/web/cache/CacheRedis.py) | Caché compartida de superficies preparadas. |
@@ -198,6 +199,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-autoescala.md](../Audit/resolves/2026-11-12-resolve-quitar-autoescala.md) | RES-2026-11-12-004 — Quitar el autoescalado de coordenadas |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md](../Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md) | RES-2026-11-12-005 — Quitar seeds y la base de pruebas |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-src.md](../Audit/resolves/2026-11-12-resolve-quitar-src.md) | RES-2026-11-12-009 — Quitar la carpeta `src` |
+| [docs/Audit/resolves/2026-11-12-resolve-rediseno-interfaz-lotes.md](../Audit/resolves/2026-11-12-resolve-rediseno-interfaz-lotes.md) | RES-2026-11-12-011 — Rediseño de la interfaz web: parámetros, lotes y progreso |
 | [docs/Audit/resolves/2026-11-12-resolve-revision-alembic.md](../Audit/resolves/2026-11-12-resolve-revision-alembic.md) | RES-2026-11-12-007 — Quitar la revisión de Alembic no generada por Alembic |
 | [docs/Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md](../Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md) | RES-2026-11-12-001 — Lectura directa del YAML en `Cargar` |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
@@ -212,6 +214,11 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/BlenderPlugin/README.md](../BlenderPlugin/README.md) | BlenderPlugin |
 | [docs/BlenderPlugin/SIMBOLOS.md](../BlenderPlugin/SIMBOLOS.md) | Índice de símbolos del paquete Blender y núcleo (instantánea). |
 | [docs/README.md](../README.md) | Documentación de OrtesisLab |
+| [docs/Simplificacion/INVESTIGACION_LIBRERIAS.md](../Simplificacion/INVESTIGACION_LIBRERIAS.md) | Investigación: librerías que pueden asumir código propio |
+| [docs/Simplificacion/PLAN_SIMPLIFICACION.md](../Simplificacion/PLAN_SIMPLIFICACION.md) | Plan de simplificación con librerías |
+| [docs/Simplificacion/README.md](../Simplificacion/README.md) | Simplificación |
+| [infra/database/backups/prueba.dump](../../infra/database/backups/prueba.dump) | Volcado de PostgreSQL en formato personalizado de `pg_dump` (cabecera `PGDMP`), del 2026-10-13; copia local de pruebas, no versionada. |
+| [infra/database/backups/verificacion-2026-10-13.dump](../../infra/database/backups/verificacion-2026-10-13.dump) | Volcado de PostgreSQL en formato personalizado de `pg_dump` (cabecera `PGDMP`) de la verificación del 2026-10-13; copia local, no versionada. |
 | [pyproject.toml](../../pyproject.toml) | Metadata Python, dependencias, build y comando de consola. |
 | [scripts/BaseLocal.py](../../scripts/BaseLocal.py) | Infraestructura local: arranque, parada, estado, respaldo y reinicio de la base. |
 | [scripts/EjecutarOrtesisLab.py](../../scripts/EjecutarOrtesisLab.py) | Script para abrir el complemento dentro de Blender. |
@@ -222,6 +229,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [skills-lock.json](../../skills-lock.json) | Procedencia y huellas de las tres skills Reflex instaladas. |
 | [tests/README.md](../../tests/README.md) | Pruebas |
 | [tests/aplicacion_web/__init__.py](../../tests/aplicacion_web/__init__.py) | Pruebas del generador web y del lector de superficies. |
+| [tests/aplicacion_web/test_estado_lote.py](../../tests/aplicacion_web/test_estado_lote.py) | La página /lote recibe todas las variantes con su estado, no solo las terminadas. |
 | [tests/aplicacion_web/test_generador_web.py](../../tests/aplicacion_web/test_generador_web.py) | Comprueba el lote y el STL sin abrir Blender ni la superficie real. |
 | [tests/aplicacion_web/test_humo_import.py](../../tests/aplicacion_web/test_humo_import.py) | Humo: la web y el trabajador deben importar sin ImportError. |
 | [tests/assets/Test.stl](../../tests/assets/Test.stl) | Superficie STL de entrada para las pruebas. |

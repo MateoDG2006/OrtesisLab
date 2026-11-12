@@ -17,6 +17,7 @@ from .EstadoApp import EstadoApp
 from .EstadoHistorial import EstadoHistorial
 from .PaginaComparacion import PaginaComparacion
 from .PaginaHistorial import PaginaHistorial
+from .PaginaLote import PaginaLote
 from .persistence.ConexionPostgres import ConexionPostgres
 from .persistence.Contratos import ErrorPersistencia
 from .services.AutenticacionOidc import AutenticacionOidc
@@ -39,4 +40,5 @@ async def PoolPostgres():
 app = rx.App(api_transformer=AutenticacionOidc.Aplicacion())
 app.register_lifespan_task(PoolPostgres)
 app.add_page(PaginaComparacion.Index, title="OrtesisLab", on_load=EstadoApp.CargarPredeterminados)
+app.add_page(PaginaLote.Index, route="/lote", title="Lote · OrtesisLab", on_load=EstadoApp.AbrirLote)
 app.add_page(PaginaHistorial.Index, route="/historial", title="Historial · OrtesisLab", on_load=EstadoHistorial.Cargar)

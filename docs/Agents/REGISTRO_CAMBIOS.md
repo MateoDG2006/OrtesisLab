@@ -1,5 +1,19 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — Rediseño de la interfaz: parámetros, lotes y página de progreso
+
+Pedido del usuario ([RES-2026-11-12-011](../Audit/resolves/2026-11-12-resolve-rediseno-interfaz-lotes.md)). La página `/` separa parámetros genéricos y avanzados (casilla «Mostrar parámetros avanzados»), muestra una ayuda por parámetro (`ayudas` en `core/config/web.yaml`) y agrupa las acciones en pestañas «Una ortesis» y «Lote de variantes». El lote se arma en tres pasos con un resumen en vivo (cantidad y minutos, o el motivo por el que no es válido) y, al generarlo, redirige a la nueva página `/lote` (`web/PaginaLote.py`): cabecera con avance, conteo por estado y Cancelar lote, comparación 3D y una tarjeta por variante con miniatura. `assets/visor.html` acepta `miniatura=1`: dibuja un fotograma, lo deja como imagen y libera el contexto WebGL. `EstadoApp._Publicar` publica también las variantes en cola o en curso con su `estado`; los valores por defecto se aplican una sola vez por pestaña (botón Restaurar); Restaurar/Reintentar del historial redirigen a `/lote`.
+
+Documentación: AppFrontend README, ARQUITECTURA, COMPONENTES_Y_FLUJOS, VISOR_3D y OPERACION_Y_PRUEBAS; AppBackend OPERACION_Y_PRUEBAS; `core/config/README.md`.
+
+Pruebas ejecutadas:
+- `.venv/Scripts/python.exe -m unittest tests.aplicacion_web.test_estado_lote -v`: 2 OK (nueva: `_Publicar` con variantes en cola, en curso y fallidas).
+- `.venv/Scripts/python.exe -m unittest tests.aplicacion_web.test_generador_web tests.aplicacion_web.test_humo_import`: 14 pruebas, 3 errores en `LectorSuperficie.Preparar` que también aparecen sin estos cambios (comprobado con `git stash`).
+- `reflex compile --dry` en `apps/web`: compiló sin errores.
+- `python docs/Agents/Scripts/GenerarIndices.py` y `--comprobar`.
+
+No se arrancó Reflex en el navegador ni se probó el flujo con PostgreSQL, trabajador y bucket; tampoco el render real de las miniaturas.
+
 ## 2026-11-12 — El módulo Reflex es `web.OrtesisLabApp`
 
 `rxconfig.py` declara `app_name="OrtesisLabApp"` y `app_module_import="web.OrtesisLabApp"`. El archivo seguía en `apps/web/web/GenerateModelsApp.py`, así que Reflex no encontraba el módulo. Pasa a `OrtesisLabApp.py`. El complemento sigue siendo `OrtesisLabPlugin` y el ZIP conserva el nombre `GenerateModelsApp.zip`. Autorización en [RES-2026-11-12-010](../Audit/resolves/2026-11-12-resolve-modulo-ortesislabapp.md). Los hallazgos siguen abiertos.

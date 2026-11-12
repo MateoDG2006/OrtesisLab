@@ -38,6 +38,7 @@ INTERVALO_PROGRESO_S = ConfiguracionBackend.Cargar("web")["intervalo_progreso_s"
 TRABAJADOR = ConfiguracionBackend.Cargar("trabajador")
 CAPACIDAD_VARIANTE_S = int(TRABAJADOR["capacidad_variante_s"])
 TERMINALES = ITEMS_TERMINALES
+ESTADOS_VISIBLES = ConfiguracionBackend.Cargar("web")["estados_visibles"]
 
 _PARAMETROS_DEFECTO = Configuracion.ParametrosDefecto()
 
@@ -73,6 +74,7 @@ class EstadoApp(rx.State):
     hasta: str = "20"
     paso: str = "5"
     ambos_revestimientos: bool = False
+    avanzados: bool = False
 
     ocupado: bool = False
     mensaje: str = (
@@ -98,6 +100,7 @@ class EstadoApp(rx.State):
     autenticado: bool = False
     usuario_nombre: str = ""
     lote_id: str = ""
+    _predeterminados: bool = False
     _trabajando: int = 0
     _solicitud: str = ""
     _propietario: str = ""
@@ -203,6 +206,10 @@ class EstadoApp(rx.State):
         self.ambos_revestimientos = valor
 
     @rx.event
+    def set_avanzados(self, valor: bool):
+        self.avanzados = valor
+
+    @rx.event
     async def CargarSuperficie(self, archivos: list[rx.UploadFile]):
         # La subida queda como import del usuario: original y NPZ en el bucket.
         if len(archivos) != 1:
@@ -260,26 +267,17 @@ class EstadoApp(rx.State):
         self.mensaje = "Superficie incluida seleccionada."
 
     @rx.event
+    def RestaurarPredeterminados(self):
+        self._AplicarPredeterminados()
+        self.mensaje = "Parámetros restaurados a los valores por defecto."
+
+    @rx.event
     async def CargarPredeterminados(self):
-        # Valores del JSON del complemento y último lote del usuario.
-        datos = Configuracion.ParametrosDefecto()
-        self.pattern = str(datos["pattern"])
-        self.cell_mm = str(datos["cell_mm"])
-        self.rib_width_mm = str(datos["rib_width_mm"])
-        self.rib_height_mm = str(datos["rib_height_mm"])
-        self.liner = bool(datos["liner"])
-        self.skin_mm = str(datos["skin_mm"])
-        self.solid_mm = str(datos["solid_mm"])
-        self.border_mm = str(datos["border_mm"])
-        self.rounding_mm = str(datos["rounding_mm"])
-        self.angle_deg = str(datos["angle_deg"])
-        self.seed = str(datos["seed"])
-        self.reinforce_y_mm = str(datos["reinforce_y_mm"])
-        self.reinforce_width_mm = str(datos["reinforce_width_mm"])
-        self.flip_normals = bool(datos["flip_normals"])
-        self.repair = bool(datos["repair"])
-        self.resolution_mm = str(datos["resolution_mm"])
-        self.surface_step_mm = str(datos["surface_step_mm"])
+        # Valores del JSON del complemento (solo la primera vez: volver de /lote conserva
+        # lo editado) y último lote del usuario.
+        if not self._predeterminados:
+            self._AplicarPredeterminados()
+            self._predeterminados = True
         usuario = await self._Usuario()
         propietario = "" if usuario is None else str(usuario.user_id)
         if propietario != self._propietario and not self.ocupado:
@@ -304,6 +302,56 @@ class EstadoApp(rx.State):
             return EstadoApp.SeguirLote
 
     @rx.event
+    async def AbrirLote(self):
+        # /lote?id=<uuid> abre ese lote; sin id, el último del usuario.
+        usuario = await self._Usuario()
+        if usuario is None:
+            self.mensaje = "Inicie sesión para ver sus lotes."
+            return
+        pedido = self.router.url.query_parameters.get("id", "")
+        try:
+            if pedido:
+                progreso = await asyncio.to_thread(ServicioLotes.Progreso, usuario, uuid.UUID(pedido))
+            else:
+                progreso = await asyncio.to_thread(ServicioLotes.Ultimo, usuario)
+        except ValueError:
+            self.mensaje = "El enlace del lote no es válido."
+            return
+        except ErrorPersistencia as exc:
+            self.mensaje = str(exc)
+            return
+        if progreso is None:
+            self.mensaje = "Todavía no hay lotes. Genere uno desde la página principal."
+            return
+        if str(progreso.lote.id) != self.lote_id:
+            self.vistas = []
+            self.archivo = ""
+        self.lote_id = str(progreso.lote.id)
+        self._Publicar(progreso)
+        if progreso.abierto:
+            return EstadoApp.SeguirLote
+
+    def _AplicarPredeterminados(self) -> None:
+        datos = Configuracion.ParametrosDefecto()
+        self.pattern = str(datos["pattern"])
+        self.cell_mm = str(datos["cell_mm"])
+        self.rib_width_mm = str(datos["rib_width_mm"])
+        self.rib_height_mm = str(datos["rib_height_mm"])
+        self.liner = bool(datos["liner"])
+        self.skin_mm = str(datos["skin_mm"])
+        self.solid_mm = str(datos["solid_mm"])
+        self.border_mm = str(datos["border_mm"])
+        self.rounding_mm = str(datos["rounding_mm"])
+        self.angle_deg = str(datos["angle_deg"])
+        self.seed = str(datos["seed"])
+        self.reinforce_y_mm = str(datos["reinforce_y_mm"])
+        self.reinforce_width_mm = str(datos["reinforce_width_mm"])
+        self.flip_normals = bool(datos["flip_normals"])
+        self.repair = bool(datos["repair"])
+        self.resolution_mm = str(datos["resolution_mm"])
+        self.surface_step_mm = str(datos["surface_step_mm"])
+
+    @rx.event
     def Previsualizar(self):
         self.modo_lote = False
         self._solicitud = uuid.uuid4().hex
@@ -326,7 +374,7 @@ class EstadoApp(rx.State):
             self.hechos = 0
             self.mensaje = "Preparando la superficie…"
             try:
-                variantes = self._Variantes()
+                variantes = self._Variantes(self.modo_lote)
             except (ValueError, OrtesisLabError) as exc:
                 self.mensaje = str(exc)
                 self.ocupado = False
@@ -385,6 +433,10 @@ class EstadoApp(rx.State):
             self.lote_id = str(lote.id)
             self._solicitud = ""
             self.mensaje = "En cola. El trabajador construye cada variante."
+            modo_lote = self.modo_lote
+        if modo_lote:
+            # El progreso de un lote se sigue en su propia página.
+            yield rx.redirect(f"/lote?id={lote.id}")
         await self._Seguir(usuario, lote.id)
 
     @rx.event(background=True)
@@ -470,6 +522,34 @@ class EstadoApp(rx.State):
             return ""
         return GeneradorWeb.Numero(total, 2)
 
+    @rx.var(cache=False)
+    def resumen_lote(self) -> str:
+        # Vista previa del lote: cuántas variantes y cuánto tardará, o por qué no es válido.
+        try:
+            cantidad = len(self._Variantes(True))
+        except (ValueError, OrtesisLabError) as exc:
+            return str(exc)
+        minutos = max(1, math.ceil(cantidad * CAPACIDAD_VARIANTE_S / 60))
+        return f"{cantidad} variante{'s' if cantidad != 1 else ''} · unos {minutos} min"
+
+    @rx.var(cache=False)
+    def lote_valido(self) -> bool:
+        try:
+            self._Variantes(True)
+        except (ValueError, OrtesisLabError):
+            return False
+        return True
+
+    @rx.var
+    def resumen_estados(self) -> str:
+        # Conteo por estado del lote abierto en /lote.
+        partes = []
+        for codigo, texto in ESTADOS_VISIBLES.items():
+            cantidad = sum(1 for ficha in self.resultados if ficha.get("estado") == codigo)
+            if cantidad:
+                partes.append(f"{cantidad} {texto.lower()}")
+        return " · ".join(partes)
+
     @rx.var
     def porcentaje(self) -> int:
         if self.total <= 0:
@@ -498,6 +578,9 @@ class EstadoApp(rx.State):
             while True:
                 progreso = await asyncio.to_thread(ServicioLotes.Progreso, usuario, lote_id)
                 async with self:
+                    if self.lote_id != str(lote_id):
+                        # La pestaña abrió otro lote en /lote; AbrirLote sigue ese.
+                        break
                     self._Publicar(progreso)
                 if not progreso.abierto:
                     break
@@ -513,7 +596,15 @@ class EstadoApp(rx.State):
                 self._trabajando = 0
 
     def _Publicar(self, progreso: ProgresoLote) -> None:
-        fichas = [GeneradorWeb._FichaDeItem(item) for item in progreso.items if item.status in TERMINALES]
+        # Todas las variantes, también en cola o en curso, para que /lote las muestre con su estado.
+        fichas = []
+        for item in progreso.items:
+            if item.status in TERMINALES:
+                ficha = GeneradorWeb._FichaDeItem(item)
+            else:
+                ficha = GeneradorWeb.Ficha(str(item.id), "", item.parameters, error="")
+            ficha["estado"] = item.status
+            fichas.append(ficha)
         self.total = progreso.lote.total_items
         self.hechos = progreso.terminados
         self.resultados = fichas
@@ -555,9 +646,9 @@ class EstadoApp(rx.State):
         self.ficha_precio = ficha["precio"]
         self.ficha_error = ficha["error"]
 
-    def _Variantes(self) -> list[dict]:
+    def _Variantes(self, lote: bool) -> list[dict]:
         base = self._Opciones()
-        if not self.modo_lote:
+        if not lote:
             return [base]
         patrones = [
             codigo

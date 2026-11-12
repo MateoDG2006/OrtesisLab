@@ -36,6 +36,7 @@ class Sesion:
         nombre = EstadoApp.usuario_nombre if nombre is None else nombre
         return rx.hstack(
             rx.link("Comparar", href="/", size="2"),
+            rx.link("Lote", href="/lote", size="2"),
             rx.link("Historial", href="/historial", size="2"),
             rx.spacer(),
             rx.cond(

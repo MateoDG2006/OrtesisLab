@@ -35,6 +35,25 @@ ejes:
   reinforce_width_mm: "Ancho de banda maciza (mm)"
   reinforce_y_mm: "Posición de banda, Y (mm)"
 
+# Ayuda que la página muestra junto a cada parámetro. Los rangos son los del
+# panel de Blender (OrtesisLabPlugin/Interfaz.py).
+ayudas:
+  pattern: "Forma de los huecos del cascarón. Macizo genera una pared continua sin huecos."
+  cell_mm: "Distancia entre huecos vecinos. Celdas grandes: menos material y más flexible. Rango 5–40 mm."
+  rib_width_mm: "Grosor de las tiras que rodean cada hueco. Más ancho: más rígido y pesado. Rango 1,2–10 mm; como mucho el 75 % de la celda."
+  rib_height_mm: "Cuánto sobresalen las nervaduras de la superficie. Sin capa interior es el espesor total. Rango 0,3–6 mm."
+  liner: "Añade una piel continua bajo la rejilla: cierra los huecos por dentro y reparte la presión sobre la piel."
+  skin_mm: "Espesor de la piel continua. Se suma a la altura de nervadura. Rango 0,3–5 mm."
+  solid_mm: "Espesor de la pared cuando el patrón es Macizo. Rango 0,5–8 mm."
+  border_mm: "Franja maciza en todo el contorno para que el borde no quede abierto. 0 la quita. Rango 0–15 mm."
+  rounding_mm: "Suaviza el encuentro entre nervadura y piel. 0 deja la arista viva. Rango 0–3 mm."
+  angle_deg: "Gira el patrón sobre la superficie. Rango −180–180°."
+  seed: "Cambia la distribución aleatoria del patrón orgánico. La misma semilla repite el mismo dibujo. Entero 0–99999."
+  reinforce_width_mm: "Ancho de una banda maciza transversal para reforzar una zona. 0 la quita. Rango 0–60 mm."
+  reinforce_y_mm: "Altura (eje Y) donde se centra la banda maciza. Rango −250–250 mm."
+  surface_step_mm: "Detalle con que se subdivide la superficie para dibujar el patrón. Menor: más fino y más lento. Rango 0,15–5 mm."
+  flip_normals: "Genera el espesor hacia el otro lado de la superficie (hacia dentro en lugar de hacia fuera)."
+
 # Etiqueta visible de cada estado de ítem en /historial. Las claves son los
 # valores de web/enums/Lotes.py EstadoItem.
 estados_visibles:

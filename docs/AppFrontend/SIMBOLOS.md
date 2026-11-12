@@ -18,53 +18,60 @@ Estado de la página de comparación.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `EstadoApp` | Clase | [45](../../apps/web/web/EstadoApp.py#L45) | Parámetros del complemento, lote en curso y fichas ya generadas. |
-| `EstadoApp.set_pattern` | Función/método | [106](../../apps/web/web/EstadoApp.py#L106) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_cell_mm` | Función/método | [110](../../apps/web/web/EstadoApp.py#L110) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_rib_width_mm` | Función/método | [114](../../apps/web/web/EstadoApp.py#L114) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_rib_height_mm` | Función/método | [118](../../apps/web/web/EstadoApp.py#L118) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_liner` | Función/método | [122](../../apps/web/web/EstadoApp.py#L122) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_skin_mm` | Función/método | [126](../../apps/web/web/EstadoApp.py#L126) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_solid_mm` | Función/método | [130](../../apps/web/web/EstadoApp.py#L130) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_border_mm` | Función/método | [134](../../apps/web/web/EstadoApp.py#L134) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_rounding_mm` | Función/método | [138](../../apps/web/web/EstadoApp.py#L138) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_angle_deg` | Función/método | [142](../../apps/web/web/EstadoApp.py#L142) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_seed` | Función/método | [146](../../apps/web/web/EstadoApp.py#L146) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_reinforce_y_mm` | Función/método | [150](../../apps/web/web/EstadoApp.py#L150) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_reinforce_width_mm` | Función/método | [154](../../apps/web/web/EstadoApp.py#L154) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_flip_normals` | Función/método | [158](../../apps/web/web/EstadoApp.py#L158) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_surface_step_mm` | Función/método | [162](../../apps/web/web/EstadoApp.py#L162) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_usar_voronoi` | Función/método | [166](../../apps/web/web/EstadoApp.py#L166) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_usar_hex` | Función/método | [170](../../apps/web/web/EstadoApp.py#L170) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_usar_diamond` | Función/método | [174](../../apps/web/web/EstadoApp.py#L174) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_usar_square` | Función/método | [178](../../apps/web/web/EstadoApp.py#L178) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_usar_solid` | Función/método | [182](../../apps/web/web/EstadoApp.py#L182) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_eje` | Función/método | [186](../../apps/web/web/EstadoApp.py#L186) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_desde` | Función/método | [190](../../apps/web/web/EstadoApp.py#L190) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_hasta` | Función/método | [194](../../apps/web/web/EstadoApp.py#L194) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_paso` | Función/método | [198](../../apps/web/web/EstadoApp.py#L198) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_ambos_revestimientos` | Función/método | [202](../../apps/web/web/EstadoApp.py#L202) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.CargarSuperficie` | Función/método | [206](../../apps/web/web/EstadoApp.py#L206) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.UsarSuperficieIncluida` | Función/método | [252](../../apps/web/web/EstadoApp.py#L252) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.CargarPredeterminados` | Función/método | [263](../../apps/web/web/EstadoApp.py#L263) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.Previsualizar` | Función/método | [307](../../apps/web/web/EstadoApp.py#L307) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.PedirLote` | Función/método | [313](../../apps/web/web/EstadoApp.py#L313) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.Generar` | Función/método | [319](../../apps/web/web/EstadoApp.py#L319) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.SeguirLote` | Función/método | [391](../../apps/web/web/EstadoApp.py#L391) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.CancelarLote` | Función/método | [411](../../apps/web/web/EstadoApp.py#L411) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.Ver` | Función/método | [423](../../apps/web/web/EstadoApp.py#L423) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.Comparar` | Función/método | [430](../../apps/web/web/EstadoApp.py#L430) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.Descargar` | Función/método | [445](../../apps/web/web/EstadoApp.py#L445) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.espesor_total` | Función/método | [465](../../apps/web/web/EstadoApp.py#L465) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.porcentaje` | Función/método | [474](../../apps/web/web/EstadoApp.py#L474) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Usuario` | Función/método | [479](../../apps/web/web/EstadoApp.py#L479) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Seguir` | Función/método | [494](../../apps/web/web/EstadoApp.py#L494) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Publicar` | Función/método | [515](../../apps/web/web/EstadoApp.py#L515) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._OlvidarTrabajo` | Función/método | [538](../../apps/web/web/EstadoApp.py#L538) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Mostrar` | Función/método | [550](../../apps/web/web/EstadoApp.py#L550) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Variantes` | Función/método | [558](../../apps/web/web/EstadoApp.py#L558) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Opciones` | Función/método | [588](../../apps/web/web/EstadoApp.py#L588) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Numero` | Función/método | [613](../../apps/web/web/EstadoApp.py#L613) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp` | Clase | [46](../../apps/web/web/EstadoApp.py#L46) | Parámetros del complemento, lote en curso y fichas ya generadas. |
+| `EstadoApp.set_pattern` | Función/método | [109](../../apps/web/web/EstadoApp.py#L109) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_cell_mm` | Función/método | [113](../../apps/web/web/EstadoApp.py#L113) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_rib_width_mm` | Función/método | [117](../../apps/web/web/EstadoApp.py#L117) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_rib_height_mm` | Función/método | [121](../../apps/web/web/EstadoApp.py#L121) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_liner` | Función/método | [125](../../apps/web/web/EstadoApp.py#L125) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_skin_mm` | Función/método | [129](../../apps/web/web/EstadoApp.py#L129) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_solid_mm` | Función/método | [133](../../apps/web/web/EstadoApp.py#L133) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_border_mm` | Función/método | [137](../../apps/web/web/EstadoApp.py#L137) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_rounding_mm` | Función/método | [141](../../apps/web/web/EstadoApp.py#L141) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_angle_deg` | Función/método | [145](../../apps/web/web/EstadoApp.py#L145) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_seed` | Función/método | [149](../../apps/web/web/EstadoApp.py#L149) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_reinforce_y_mm` | Función/método | [153](../../apps/web/web/EstadoApp.py#L153) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_reinforce_width_mm` | Función/método | [157](../../apps/web/web/EstadoApp.py#L157) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_flip_normals` | Función/método | [161](../../apps/web/web/EstadoApp.py#L161) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_surface_step_mm` | Función/método | [165](../../apps/web/web/EstadoApp.py#L165) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_usar_voronoi` | Función/método | [169](../../apps/web/web/EstadoApp.py#L169) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_usar_hex` | Función/método | [173](../../apps/web/web/EstadoApp.py#L173) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_usar_diamond` | Función/método | [177](../../apps/web/web/EstadoApp.py#L177) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_usar_square` | Función/método | [181](../../apps/web/web/EstadoApp.py#L181) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_usar_solid` | Función/método | [185](../../apps/web/web/EstadoApp.py#L185) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_eje` | Función/método | [189](../../apps/web/web/EstadoApp.py#L189) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_desde` | Función/método | [193](../../apps/web/web/EstadoApp.py#L193) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_hasta` | Función/método | [197](../../apps/web/web/EstadoApp.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_paso` | Función/método | [201](../../apps/web/web/EstadoApp.py#L201) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_ambos_revestimientos` | Función/método | [205](../../apps/web/web/EstadoApp.py#L205) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_avanzados` | Función/método | [209](../../apps/web/web/EstadoApp.py#L209) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.CargarSuperficie` | Función/método | [213](../../apps/web/web/EstadoApp.py#L213) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.UsarSuperficieIncluida` | Función/método | [259](../../apps/web/web/EstadoApp.py#L259) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.RestaurarPredeterminados` | Función/método | [270](../../apps/web/web/EstadoApp.py#L270) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.CargarPredeterminados` | Función/método | [275](../../apps/web/web/EstadoApp.py#L275) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.AbrirLote` | Función/método | [305](../../apps/web/web/EstadoApp.py#L305) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._AplicarPredeterminados` | Función/método | [334](../../apps/web/web/EstadoApp.py#L334) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.Previsualizar` | Función/método | [355](../../apps/web/web/EstadoApp.py#L355) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.PedirLote` | Función/método | [361](../../apps/web/web/EstadoApp.py#L361) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.Generar` | Función/método | [367](../../apps/web/web/EstadoApp.py#L367) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.SeguirLote` | Función/método | [443](../../apps/web/web/EstadoApp.py#L443) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.CancelarLote` | Función/método | [463](../../apps/web/web/EstadoApp.py#L463) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.Ver` | Función/método | [475](../../apps/web/web/EstadoApp.py#L475) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.Comparar` | Función/método | [482](../../apps/web/web/EstadoApp.py#L482) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.Descargar` | Función/método | [497](../../apps/web/web/EstadoApp.py#L497) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.espesor_total` | Función/método | [517](../../apps/web/web/EstadoApp.py#L517) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.resumen_lote` | Función/método | [526](../../apps/web/web/EstadoApp.py#L526) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.lote_valido` | Función/método | [536](../../apps/web/web/EstadoApp.py#L536) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.resumen_estados` | Función/método | [544](../../apps/web/web/EstadoApp.py#L544) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.porcentaje` | Función/método | [554](../../apps/web/web/EstadoApp.py#L554) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Usuario` | Función/método | [559](../../apps/web/web/EstadoApp.py#L559) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Seguir` | Función/método | [574](../../apps/web/web/EstadoApp.py#L574) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Publicar` | Función/método | [598](../../apps/web/web/EstadoApp.py#L598) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._OlvidarTrabajo` | Función/método | [629](../../apps/web/web/EstadoApp.py#L629) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Mostrar` | Función/método | [641](../../apps/web/web/EstadoApp.py#L641) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Variantes` | Función/método | [649](../../apps/web/web/EstadoApp.py#L649) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Opciones` | Función/método | [679](../../apps/web/web/EstadoApp.py#L679) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Numero` | Función/método | [704](../../apps/web/web/EstadoApp.py#L704) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/EstadoHistorial.py`
 
@@ -98,7 +105,7 @@ Aplicación Reflex de comparación de ortesis.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `PoolPostgres` | Función/método | [26](../../apps/web/web/OrtesisLabApp.py#L26) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PoolPostgres` | Función/método | [27](../../apps/web/web/OrtesisLabApp.py#L27) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/PaginaComparacion.py`
 
@@ -106,20 +113,24 @@ Pantalla para previsualizar una ortesis o un lote de variantes.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `PaginaComparacion` | Clase | [19](../../apps/web/web/PaginaComparacion.py#L19) | Formulario con los parámetros del panel y los visores del lote. |
-| `PaginaComparacion.Index` | Función/método | [23](../../apps/web/web/PaginaComparacion.py#L23) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Formulario` | Función/método | [55](../../apps/web/web/PaginaComparacion.py#L55) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Superficie` | Función/método | [134](../../apps/web/web/PaginaComparacion.py#L134) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Vista` | Función/método | [197](../../apps/web/web/PaginaComparacion.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Lote` | Función/método | [241](../../apps/web/web/PaginaComparacion.py#L241) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Fila` | Función/método | [333](../../apps/web/web/PaginaComparacion.py#L333) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Marco` | Función/método | [364](../../apps/web/web/PaginaComparacion.py#L364) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Visor` | Función/método | [368](../../apps/web/web/PaginaComparacion.py#L368) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Enlace` | Función/método | [380](../../apps/web/web/PaginaComparacion.py#L380) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Campo` | Función/método | [387](../../apps/web/web/PaginaComparacion.py#L387) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Interruptor` | Función/método | [396](../../apps/web/web/PaginaComparacion.py#L396) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Selector` | Función/método | [405](../../apps/web/web/PaginaComparacion.py#L405) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Medida` | Función/método | [422](../../apps/web/web/PaginaComparacion.py#L422) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion` | Clase | [25](../../apps/web/web/PaginaComparacion.py#L25) | Formulario de parámetros (genéricos y avanzados), vista previa y lote. |
+| `PaginaComparacion.Index` | Función/método | [29](../../apps/web/web/PaginaComparacion.py#L29) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Formulario` | Función/método | [65](../../apps/web/web/PaginaComparacion.py#L65) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Avanzados` | Función/método | [138](../../apps/web/web/PaginaComparacion.py#L138) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Acciones` | Función/método | [180](../../apps/web/web/PaginaComparacion.py#L180) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Superficie` | Función/método | [197](../../apps/web/web/PaginaComparacion.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Vista` | Función/método | [261](../../apps/web/web/PaginaComparacion.py#L261) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Lote` | Función/método | [313](../../apps/web/web/PaginaComparacion.py#L313) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Casilla` | Función/método | [392](../../apps/web/web/PaginaComparacion.py#L392) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Marco` | Función/método | [404](../../apps/web/web/PaginaComparacion.py#L404) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Visor` | Función/método | [408](../../apps/web/web/PaginaComparacion.py#L408) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Enlace` | Función/método | [422](../../apps/web/web/PaginaComparacion.py#L422) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Etiqueta` | Función/método | [430](../../apps/web/web/PaginaComparacion.py#L430) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Numero` | Función/método | [453](../../apps/web/web/PaginaComparacion.py#L453) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Campo` | Función/método | [458](../../apps/web/web/PaginaComparacion.py#L458) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Interruptor` | Función/método | [467](../../apps/web/web/PaginaComparacion.py#L467) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Selector` | Función/método | [476](../../apps/web/web/PaginaComparacion.py#L476) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Medida` | Función/método | [493](../../apps/web/web/PaginaComparacion.py#L493) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/PaginaHistorial.py`
 
@@ -135,6 +146,18 @@ Pantalla /historial: generaciones del usuario, comparación y restauración.
 | `PaginaHistorial.Fila` | Función/método | [133](../../apps/web/web/PaginaHistorial.py#L133) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `PaginaHistorial.Comparacion` | Función/método | [177](../../apps/web/web/PaginaHistorial.py#L177) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `PaginaHistorial.Tarjeta` | Función/método | [196](../../apps/web/web/PaginaHistorial.py#L196) | Sin docstring; consultar el catálogo de módulos y el código. |
+
+## `apps/web/web/PaginaLote.py`
+
+Pantalla /lote: progreso de un lote con una miniatura por variante.
+
+| Símbolo | Tipo | Línea | Descripción declarada |
+|---|---|---:|---|
+| `PaginaLote` | Clase | [24](../../apps/web/web/PaginaLote.py#L24) | Cabecera con el avance, comparación 3D y cuadrícula de miniaturas. |
+| `PaginaLote.Index` | Función/método | [28](../../apps/web/web/PaginaLote.py#L28) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaLote.Cabecera` | Función/método | [51](../../apps/web/web/PaginaLote.py#L51) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaLote.Comparacion` | Función/método | [96](../../apps/web/web/PaginaLote.py#L96) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaLote.Tarjeta` | Función/método | [123](../../apps/web/web/PaginaLote.py#L123) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/Sesion.py`
 

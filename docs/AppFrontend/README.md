@@ -1,6 +1,6 @@
 # AppFrontend
 
-**Propósito:** explicar la interfaz web declarada en Python con Reflex (`/` generador y comparación, `/historial` versiones, barra de sesión) y el visor JavaScript que carga los STL desde el bucket. El panel nativo Blender se documenta en [BlenderPlugin](../BlenderPlugin/README.md).
+**Propósito:** explicar la interfaz web declarada en Python con Reflex (`/` parámetros, previsualización y creación de lotes, `/lote` progreso con miniaturas y comparación, `/historial` versiones, barra de sesión) y el visor JavaScript que carga los STL desde el bucket. El panel nativo Blender se documenta en [BlenderPlugin](../BlenderPlugin/README.md).
 
 | Documento | Contenido |
 |---|---|
