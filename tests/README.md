@@ -9,9 +9,9 @@ uv run python -m unittest discover -s tests
 
 Ese comando encuentra los módulos `test_*.py` de las subcarpetas. Los scripts de
 `blender/` no entran en unittest: los ejecuta Blender. Las pruebas de
-`persistencia/` necesitan `ortesislab_test` creada con `make db-test-reset`,
-migrada con `uv run alembic -x base=test upgrade head`, y las variables
-`ORTESISLAB_TEST_*`; sin ellas se omiten.
+`persistencia/` se omiten si no existen las variables `ORTESISLAB_TEST_*`
+apuntando a una base que hayas preparado. Este repositorio no trae esa base
+ni un fixture de datos.
 
 | Carpeta | Qué cubre | Archivos |
 |---|---|---|
@@ -45,7 +45,7 @@ el paquete no exija Blender para importarse.
 ## persistencia
 
 `apoyo_persistencia.py` no es una prueba: abre una `Session` de SQLAlchemy por
-rol contra la base desechable `ortesislab_test` (confirma al salir del `with`),
+rol contra la base indicada en `ORTESISLAB_TEST_*` (confirma al salir del `with`),
 prepara el bucket de prueba y los usuarios, y ofrece `ErrorDeBase` para esperar
 un error concreto de PostgreSQL. Las otras tres lo usan.
 

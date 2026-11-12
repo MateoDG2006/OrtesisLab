@@ -12,11 +12,11 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 | [`web/__init__.py`](../../apps/web/web/__init__.py) | Marcador del paquete web; no arranca servicios |
 | [`web/ConfiguracionBackend.py`](../../apps/web/web/ConfiguracionBackend.py) | `ConfiguracionBackend.Cargar(area)` lee `config/<area>.yaml` con `yaml.safe_load` y lo guarda en caché por proceso; distinta de `GenerateModelsApp.util.Utilidades.Configuracion`, que lee el JSON del complemento |
 | [`config/`](../../core/config/web.yaml) | YAML de valores ajustables del backend: `persistencia`, `trabajador`, `cache`, `almacen`, `sesion` y `web`; catálogo en [OPERACION_Y_PRUEBAS.md](OPERACION_Y_PRUEBAS.md#valores-ajustables-configyaml) |
-| [`.env.example`](../../.env.example) | Plantilla de variables: URLs de base app/trabajador/migrador, bucket S3, Redis, OIDC, URL de la app y bases de prueba |
-| [`Makefile`](../../Makefile) | Envoltorio de Docker Compose y clientes PostgreSQL/MinIO. No ejecuta migraciones. `make db-help` lista los objetivos, entre ellos `db-up`, `db-seed`, `db-reset`, `db-test-reset` y `auth-dev-up` |
-| [`apps/db/`](../../apps/db/compose.yaml) | Compose con PostgreSQL 17, Redis, MinIO, cliente `mc` y proveedor OIDC de pruebas (perfil `auth-dev`); roles y esquema vacío en `init/01_roles.sh`; políticas del bucket en `minio/`; Alembic y seed en la misma carpeta |
+| [`.env.example`](../../.env.example) | Plantilla de variables: URLs de base app/trabajador/migrador, bucket S3, Redis, OIDC y URL de la app |
+| [`Makefile`](../../Makefile) | Envoltorio de Docker Compose y clientes PostgreSQL/MinIO. No ejecuta migraciones. `make db-help` lista los objetivos, entre ellos `db-up`, `db-reset` y `auth-dev-up` |
+| [`apps/db/`](../../apps/db/compose.yaml) | Compose con PostgreSQL 17, Redis, MinIO, cliente `mc` y proveedor OIDC de pruebas (perfil `auth-dev`); roles y esquema vacío en `init/01_roles.sh`; políticas del bucket en `minio/`; Alembic en la misma carpeta |
 | [`alembic.ini`](../../alembic.ini) / [`apps/db/alembic/`](../../apps/db/alembic/env.py) | Configuración de Alembic para el esquema `ortesislab` con el rol migrador; la revisión inicial está en `versions/` (ver [DATABASE.md](DATABASE.md#lo-que-alembic-no-genera)) |
-| [`apps/db/seeds/development.sql`](../../apps/db/seeds/development.sql), [`apps/db/test/preparar_base.sql`](../../apps/db/test/preparar_base.sql) | Datos de desarrollo y creación del esquema y permisos en una base vacía |
+| [`apps/db/preparar_base.sql`](../../apps/db/preparar_base.sql) | Esquema y permisos al recrear `ortesislab_dev` vacía con `make db-reset` |
 | [`pyproject.toml`](../../pyproject.toml) | Dependencias Python (incluye `sqlalchemy`, `alembic`, `psycopg[binary]`, `pyyaml`, `boto3`, `redis`, `authlib`, `itsdangerous`), versión y empaquetado |
 | [`uv.lock`](../../uv.lock) / [`.python-version`](../../.python-version) | Resolución Python y selección de intérprete |
 | `reflex.lock/` | `package.json` y `bun.lock` versionan dependencias del frontend generado |

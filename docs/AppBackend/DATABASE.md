@@ -2,7 +2,7 @@
 
 El esquema vigente es `Base.metadata` de [`web/persistence/Modelos.py`](../../apps/web/web/persistence/Modelos.py): 13 tablas, restricciones, índices y valores por defecto. El comportamiento de cuentas, cola e historial está en [ARQUITECTURA.md](ARQUITECTURA.md). Los comandos de Docker están en el `Makefile` (`make db-help`) y el arranque en [OPERACION_Y_PRUEBAS.md](OPERACION_Y_PRUEBAS.md#base-de-datos).
 
-El primer `make db-up` sobre un volumen nuevo ejecuta [`apps/db/init/01_roles.sh`](../../apps/db/init/01_roles.sh): crea los roles `ortesislab_migrator`, `ortesislab_app`, `ortesislab_worker` y `ortesislab_backup`, y el esquema `ortesislab` vacío. No crea tablas. `make db-reset` y `make db-test-reset` reaplican los permisos de una base vacía con [`apps/db/test/preparar_base.sql`](../../apps/db/test/preparar_base.sql).
+El primer `make db-up` sobre un volumen nuevo ejecuta [`apps/db/init/01_roles.sh`](../../apps/db/init/01_roles.sh): crea los roles `ortesislab_migrator`, `ortesislab_app`, `ortesislab_worker` y `ortesislab_backup`, y el esquema `ortesislab` vacío. No crea tablas. `make db-reset` recrea `ortesislab_dev` y reaplica esos permisos con [`apps/db/preparar_base.sql`](../../apps/db/preparar_base.sql). No hay fixture ni base de pruebas en el repositorio.
 
 Alembic aplica las tablas con el rol migrador. La revisión inicial está en [`apps/db/alembic/versions/20261112_1200_esquema_inicial.py`](../../apps/db/alembic/versions/20261112_1200_esquema_inicial.py). `env.py` lee la URL de `Ajustes`, usa `-x base=test` para la base de pruebas, guarda `alembic_version` en `ortesislab` y la ignora al comparar.
 

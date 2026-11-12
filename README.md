@@ -35,7 +35,7 @@ uv run --directory apps/web reflex run
 
 Queda en `http://localhost:3000`. El backend escucha en el puerto 8000; con `--env prod` todo usa el 3000. El trabajador genera los modelos encolados. Detalle en [operación del backend](docs/AppBackend/OPERACION_Y_PRUEBAS.md).
 
-Pruebas, sin Blender (las de persistencia requieren `make db-test-reset`, `uv run alembic -x base=test upgrade head` y las variables `ORTESISLAB_TEST_*`; si no, se omiten):
+Pruebas, sin Blender (las de persistencia se omiten si no hay una base propia en `ORTESISLAB_TEST_*`):
 
 ```powershell
 uv run python -m unittest discover -s tests

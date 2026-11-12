@@ -63,17 +63,16 @@ Antes de crear/modificar código Reflex o iniciar/depurar procesos, aplicar las 
 
 ## Base de datos
 
-`make` no migra. El primer `make db-up` deja `ortesislab_dev` con roles y el esquema `ortesislab` vacío. `make db-reset CONFIRM=ELIMINAR` vuelve a crear esa base vacía si el volumen ya existe. `make db-test-reset` hace lo mismo con `ortesislab_test`. El resto de objetivos está en `make db-help`.
+`make` no migra. El primer `make db-up` deja `ortesislab_dev` con roles y el esquema `ortesislab` vacío. `make db-reset CONFIRM=ELIMINAR` vuelve a crear esa base vacía si el volumen ya existe. No hay fixture ni base de pruebas: los datos salen del uso de la aplicación. El resto de objetivos está en `make db-help`.
 
 Las tablas las genera y aplica quien mantiene el esquema. La revisión inicial está en [`apps/db/alembic/versions/20261112_1200_esquema_inicial.py`](../../apps/db/alembic/versions/20261112_1200_esquema_inicial.py). Cambiar primero [`Modelos.py`](../../apps/web/web/persistence/Modelos.py) y generar la siguiente revisión contra una base en `head`:
 
 ```powershell
-uv run alembic -x base=test revision --autogenerate -m "descripcion"
+uv run alembic revision --autogenerate -m "descripcion"
 uv run alembic upgrade head
-uv run alembic -x base=test upgrade head
 ```
 
-`-x base=test` usa la URL de pruebas; sin esa opción, Alembic usa la de desarrollo. Revisar el autogenerado: la FK circular, el trigger de versiones y los `GRANT` se añaden a mano, como indica [DATABASE.md](DATABASE.md#lo-que-alembic-no-genera). Después de migrar `ortesislab_dev`, `make db-seed` carga el fixture opcional. Alembic no bloquea migraciones concurrentes: ejecutarlas desde un único operador.
+Alembic usa la URL de desarrollo. Revisar el autogenerado: la FK circular, el trigger de versiones y los `GRANT` se añaden a mano, como indica [DATABASE.md](DATABASE.md#lo-que-alembic-no-genera). Alembic no bloquea migraciones concurrentes: ejecutarlas desde un único operador.
 
 ## Comprobación funcional
 
@@ -89,7 +88,7 @@ uv run alembic -x base=test upgrade head
 
 ## Pruebas existentes y trazabilidad
 
-Las pruebas de persistencia necesitan `ortesislab_test` creada con `make db-test-reset` y migrada con `uv run alembic -x base=test upgrade head`, y las variables `ORTESISLAB_TEST_DATABASE_URL` y `ORTESISLAB_TEST_WORKER_DATABASE_URL`. Sin base, sin esquema o sin variables se omiten con un motivo explícito. Cada rol abre su propia `Session` de SQLAlchemy, que confirma al salir del `with`. Los errores de PostgreSQL se comprueban en `DBAPIError.orig`. Levantan un `ThreadedMotoServer` (API S3 por HTTP en lugar de MinIO) y usan Redis local en la base 15 si responde; si no, prueban sin caché.
+Las pruebas de persistencia se omiten si no existen `ORTESISLAB_TEST_DATABASE_URL` y `ORTESISLAB_TEST_WORKER_DATABASE_URL` apuntando a una base preparada aparte. Este repositorio no trae esa base. Sin base, sin esquema o sin variables se omiten con un motivo explícito. Cada rol abre su propia `Session` de SQLAlchemy, que confirma al salir del `with`. Los errores de PostgreSQL se comprueban en `DBAPIError.orig`. Levantan un `ThreadedMotoServer` (API S3 por HTTP en lugar de MinIO) y usan Redis local en la base 15 si responde; si no, prueban sin caché.
 
 ```powershell
 .venv\Scripts\python.exe -B -m unittest discover -s tests

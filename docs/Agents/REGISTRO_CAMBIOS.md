@@ -1,5 +1,14 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — Sin fixture ni base de pruebas
+
+Se eliminan `apps/db/seeds/development.sql`, `make db-seed` y `make db-test-reset`. El repositorio ya no crea `ortesislab_test` ni carga un usuario demo. Los datos de desarrollo salen del uso de la aplicación. `make db-reset` sigue recreando `ortesislab_dev` vacía y reaplicando esquema y permisos con `apps/db/preparar_base.sql`. La autorización está en [RES-2026-11-12-005](../Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `py -3 docs/Agents/Scripts/GenerarIndices.py --comprobar`.
+
+No se ejecutó `make` ni PostgreSQL.
+
 ## 2026-11-12 — Un commit con el monorepo y lo que traía master
 
 Los dos commits de `origin/master` quedan dentro del árbol del monorepo. Si tocaban lo mismo que la refactorización, se conserva esta: no vuelve `EscalaMalla` ni el parámetro `autoescalar`, y las rutas siguen en `apps/` y `core/`. Sí entran la revisión inicial de Alembic en `apps/db/alembic/versions/`, el flujo de cuotas de importación, los módulos nuevos del complemento, el visor con Three.js en `apps/web/assets/vendor/` y el workflow de pruebas, con `preparar_base.sql` en `apps/db/test/`.

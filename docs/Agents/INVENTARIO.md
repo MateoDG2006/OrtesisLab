@@ -11,10 +11,6 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [.agents/skills/setup-python-env/SKILL.md](../../.agents/skills/setup-python-env/SKILL.md) | Skill local Reflex: instrucciones y referencias para agentes. |
 | [.codegraph/.gitignore](../../.codegraph/.gitignore) | Excluye el índice local de CodeGraph del versionado. |
 | [.env.example](../../.env.example) | Plantilla de variables `ORTESISLAB_*` de la aplicación, el trabajador y las pruebas. |
-| [.github/scripts/README.md](../../.github/scripts/README.md) | Automatización: tareas de Notion → issues de GitHub |
-| [.github/scripts/notion_sync_issues.py](../../.github/scripts/notion_sync_issues.py) | Sincroniza tareas de Notion (base Tasksk, proyecto OrtesisLab) -> issues de GitHub. |
-| [.github/workflows/notion-to-issues.yml](../../.github/workflows/notion-to-issues.yml) | Crea una issue de GitHub por cada tarea de Notion aún sin issue y escribe la URL en la tarea. |
-| [.github/workflows/pruebas.yml](../../.github/workflows/pruebas.yml) | Pruebas unitarias, índices y, en un job aparte, PostgreSQL y Redis. |
 | [.gitignore](../../.gitignore) | Excluye entornos, compilación, estados, subidas anteriores, logs y `.env`. |
 | [.python-version](../../.python-version) | Selecciona el intérprete Python del proyecto para uv. |
 | [.vscode/settings.json](../../.vscode/settings.json) | Configuración local de editor; actualmente objeto vacío. |
@@ -36,35 +32,33 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/db/minio/inicializar.sh](../../apps/db/minio/inicializar.sh) | Crea bucket, políticas y cuenta de servicio en MinIO. |
 | [apps/db/minio/politica-aplicacion.json](../../apps/db/minio/politica-aplicacion.json) | Permisos S3 de la cuenta de servicio del backend. |
 | [apps/db/minio/politica-lectura-stl.json](../../apps/db/minio/politica-lectura-stl.json) | Lectura anónima solo de `usuarios/*/assets/*.stl`. |
-| [apps/db/seeds/development.sql](../../apps/db/seeds/development.sql) | Datos idempotentes de desarrollo para ortesislab_dev. |
-| [apps/db/test/preparar_base.sql](../../apps/db/test/preparar_base.sql) | Esquema y permisos de una base vacía antes de migrarla. |
-| [apps/ortesis-plugin/GenerateModelsApp.zip](../../apps/ortesis-plugin/GenerateModelsApp.zip) | ZIP instalable del complemento de Blender. |
-| [apps/ortesis-plugin/GenerateModelsApp/ApiBlender.py](../../apps/ortesis-plugin/GenerateModelsApp/ApiBlender.py) | API de Blender, separada del núcleo geométrico. |
-| [apps/ortesis-plugin/GenerateModelsApp/Cascaron.py](../../apps/ortesis-plugin/GenerateModelsApp/Cascaron.py) | Recorte de celdas y cascarón de espesor variable. |
-| [apps/ortesis-plugin/GenerateModelsApp/Excepciones.py](../../apps/ortesis-plugin/GenerateModelsApp/Excepciones.py) | Errores de OrtesisLab. |
-| [apps/ortesis-plugin/GenerateModelsApp/Exportacion.py](../../apps/ortesis-plugin/GenerateModelsApp/Exportacion.py) | Exporta el STL en milímetros y un JSON con parámetros y comprobación. |
-| [apps/ortesis-plugin/GenerateModelsApp/InspeccionNpz.py](../../apps/ortesis-plugin/GenerateModelsApp/InspeccionNpz.py) | Inspección de cabeceras NPY dentro de un NPZ, sin materializar arrays grandes. |
-| [apps/ortesis-plugin/GenerateModelsApp/InstantaneaExportacion.py](../../apps/ortesis-plugin/GenerateModelsApp/InstantaneaExportacion.py) | Instantánea evaluada de mallas Blender y publicación atómica de archivos. |
-| [apps/ortesis-plugin/GenerateModelsApp/Interfaz.py](../../apps/ortesis-plugin/GenerateModelsApp/Interfaz.py) | Panel N y operadores de OrtesisLab en la vista 3D. |
-| [apps/ortesis-plugin/GenerateModelsApp/Malla.py](../../apps/ortesis-plugin/GenerateModelsApp/Malla.py) | Análisis de la superficie abierta, sin Blender. |
-| [apps/ortesis-plugin/GenerateModelsApp/Modeling.py](../../apps/ortesis-plugin/GenerateModelsApp/Modeling.py) | Modelo de impresión y construcción de la geometría. |
-| [apps/ortesis-plugin/GenerateModelsApp/Objeto.py](../../apps/ortesis-plugin/GenerateModelsApp/Objeto.py) | Crea o actualiza el objeto OL_Ortesis en la escena de Blender. |
-| [apps/ortesis-plugin/GenerateModelsApp/OrtesisLab.py](../../apps/ortesis-plugin/GenerateModelsApp/OrtesisLab.py) | Complemento OrtesisLab dentro del paquete. |
-| [apps/ortesis-plugin/GenerateModelsApp/RefinadorMalla.py](../../apps/ortesis-plugin/GenerateModelsApp/RefinadorMalla.py) | Refinamiento triangular independiente de Blender para evaluar patrones. |
-| [apps/ortesis-plugin/GenerateModelsApp/ReparacionMalla.py](../../apps/ortesis-plugin/GenerateModelsApp/ReparacionMalla.py) | Limpieza segura de la superficie base dentro de Blender. |
-| [apps/ortesis-plugin/GenerateModelsApp/SuavizadoBorde.py](../../apps/ortesis-plugin/GenerateModelsApp/SuavizadoBorde.py) | Suavizado del contorno exterior antes de dar espesor. |
-| [apps/ortesis-plugin/GenerateModelsApp/Superficie.py](../../apps/ortesis-plugin/GenerateModelsApp/Superficie.py) | Carga y lectura de la superficie interior dentro de Blender. |
-| [apps/ortesis-plugin/GenerateModelsApp/ValidacionMalla.py](../../apps/ortesis-plugin/GenerateModelsApp/ValidacionMalla.py) | Comprobación geométrica de la malla ya generada. |
-| [apps/ortesis-plugin/GenerateModelsApp/ValidacionSolido.py](../../apps/ortesis-plugin/GenerateModelsApp/ValidacionSolido.py) | Validación de mallas sólidas solo con NumPy (sin Blender). |
-| [apps/ortesis-plugin/GenerateModelsApp/__init__.py](../../apps/ortesis-plugin/GenerateModelsApp/__init__.py) | Paquete del complemento de Blender y del núcleo de geometría. |
-| [apps/ortesis-plugin/GenerateModelsApp/consola.py](../../apps/ortesis-plugin/GenerateModelsApp/consola.py) | Punto de entrada de consola ``ortesislab``. |
-| [apps/ortesis-plugin/GenerateModelsApp/constants/Materials.py](../../apps/ortesis-plugin/GenerateModelsApp/constants/Materials.py) | Materiales de impresión. |
-| [apps/ortesis-plugin/GenerateModelsApp/constants/Nombres.py](../../apps/ortesis-plugin/GenerateModelsApp/constants/Nombres.py) | Nombres estables de objetos, atributos y archivos. |
-| [apps/ortesis-plugin/GenerateModelsApp/constants/Paterns.py](../../apps/ortesis-plugin/GenerateModelsApp/constants/Paterns.py) | Patrones de nervadura. |
-| [apps/ortesis-plugin/GenerateModelsApp/constants/__init__.py](../../apps/ortesis-plugin/GenerateModelsApp/constants/__init__.py) | Constantes de OrtesisLab: nombres, patrones, materiales y límites. |
-| [apps/ortesis-plugin/GenerateModelsApp/contratos.py](../../apps/ortesis-plugin/GenerateModelsApp/contratos.py) | Contratos compartidos entre núcleo, Blender y la web. |
-| [apps/ortesis-plugin/GenerateModelsApp/util/Utilidades.py](../../apps/ortesis-plugin/GenerateModelsApp/util/Utilidades.py) | Registro de mensajes y lectura de la carpeta config. |
-| [apps/ortesis-plugin/GenerateModelsApp/util/__init__.py](../../apps/ortesis-plugin/GenerateModelsApp/util/__init__.py) | Utilidades compartidas: registro de ejecución y lectura de JSON. |
+| [apps/db/preparar_base.sql](../../apps/db/preparar_base.sql) | Sin descripción; completar en INVENTARIO.md. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/ApiBlender.py](../../apps/ortesis-plugin/OrtesisLabPlugin/ApiBlender.py) | API de Blender, separada del núcleo geométrico. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py) | Recorte de celdas y cascarón de espesor variable. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/Excepciones.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Excepciones.py) | Errores de OrtesisLab. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py) | Exporta el STL en milímetros y un JSON con parámetros y comprobación. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/InspeccionNpz.py](../../apps/ortesis-plugin/OrtesisLabPlugin/InspeccionNpz.py) | Inspección de cabeceras NPY dentro de un NPZ, sin materializar arrays grandes. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/InstantaneaExportacion.py](../../apps/ortesis-plugin/OrtesisLabPlugin/InstantaneaExportacion.py) | Instantánea evaluada de mallas Blender y publicación atómica de archivos. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py) | Panel N y operadores de OrtesisLab en la vista 3D. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/Malla.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py) | Análisis de la superficie abierta, sin Blender. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py) | Modelo de impresión y construcción de la geometría. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py) | Crea o actualiza el objeto OL_Ortesis en la escena de Blender. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/OrtesisLab.py](../../apps/ortesis-plugin/OrtesisLabPlugin/OrtesisLab.py) | Complemento OrtesisLab dentro del paquete. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py) | Refinamiento triangular independiente de Blender para evaluar patrones. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/ReparacionMalla.py](../../apps/ortesis-plugin/OrtesisLabPlugin/ReparacionMalla.py) | Limpieza segura de la superficie base dentro de Blender. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py) | Suavizado del contorno exterior antes de dar espesor. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py) | Carga y lectura de la superficie interior dentro de Blender. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py) | Comprobación geométrica de la malla ya generada. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py) | Validación de mallas sólidas solo con NumPy (sin Blender). |
+| [apps/ortesis-plugin/OrtesisLabPlugin/__init__.py](../../apps/ortesis-plugin/OrtesisLabPlugin/__init__.py) | Paquete del complemento de Blender y del núcleo de geometría. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/consola.py](../../apps/ortesis-plugin/OrtesisLabPlugin/consola.py) | Punto de entrada de consola ``ortesislab``. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/constants/Materials.py](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Materials.py) | Materiales de impresión. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/constants/Nombres.py](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Nombres.py) | Nombres estables de objetos, atributos y archivos. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py) | Patrones de nervadura. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/constants/__init__.py](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/__init__.py) | Constantes de OrtesisLab: nombres, patrones, materiales y límites. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/contratos.py](../../apps/ortesis-plugin/OrtesisLabPlugin/contratos.py) | Contratos compartidos entre núcleo, Blender y la web. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py) | Registro de mensajes y lectura de la carpeta config. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py](../../apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py) | Utilidades compartidas: registro de ejecución y lectura de JSON. |
 | [apps/web/assets/README.md](../../apps/web/assets/README.md) | Assets de la aplicación |
 | [apps/web/assets/favicon.ico](../../apps/web/assets/favicon.ico) | Icono del sitio. |
 | [apps/web/assets/superficie_interior_mm.npz](../../apps/web/assets/superficie_interior_mm.npz) | Superficie de ejemplo incluida para la web. |
@@ -197,6 +191,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-dotenv-raiz.md](../Audit/resolves/2026-11-12-resolve-dotenv-raiz.md) | RES-2026-11-12-003 — Cargar el .env de la raíz con python-dotenv |
 | [docs/Audit/resolves/2026-11-12-resolve-monorepo.md](../Audit/resolves/2026-11-12-resolve-monorepo.md) | RES-2026-11-12-001 — Reubicar el repositorio como monorepo |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-autoescala.md](../Audit/resolves/2026-11-12-resolve-quitar-autoescala.md) | RES-2026-11-12-004 — Quitar el autoescalado de coordenadas |
+| [docs/Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md](../Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md) | RES-2026-11-12-005 — Quitar seeds y la base de pruebas |
 | [docs/Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md](../Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md) | RES-2026-11-12-001 — Lectura directa del YAML en `Cargar` |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
 | [docs/BlenderPlugin/ALGORITMOS.md](../BlenderPlugin/ALGORITMOS.md) | Algoritmos de generación y comprobación |
@@ -263,7 +258,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | Carpeta | Propósito y mantenimiento |
 |---|---|
 | `apps/web/` | Aplicación Reflex: paquete `web`, `rxconfig.py` y assets del visor |
-| `apps/db/` | PostgreSQL, Redis, MinIO, OIDC de pruebas, Alembic y seed |
+| `apps/db/` | PostgreSQL, Redis, MinIO, OIDC de pruebas y Alembic |
 | `apps/ortesis-plugin/` | Complemento de Blender (`GenerateModelsApp`) y su ZIP |
 | `core/config/` | YAML del backend y JSON de geometría que comparten la web y el complemento |
 | `apps/web/web/persistence/`, `services/`, `storage/`, `cache/`, `jobs/` | Persistencia, servicios, bucket, caché Redis y trabajador |

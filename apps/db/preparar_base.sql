@@ -1,6 +1,5 @@
--- Prepara una base vacía (ortesislab_dev u ortesislab_test) con los mismos
--- permisos que crea infra/database/init/01_roles.sh. Los roles ya existen porque
--- son globales del clúster. Uso: psql -v base=<nombre> -d <nombre> -f este archivo.
+-- Vuelve a crear el esquema y los permisos de ortesislab_dev después de
+-- `make db-reset`. Los roles ya existen: son globales del clúster.
 -- No crea tablas: el esquema lo aplica Alembic con el rol migrador.
 REVOKE ALL ON DATABASE :"base" FROM PUBLIC;
 GRANT CONNECT, TEMPORARY ON DATABASE :"base"

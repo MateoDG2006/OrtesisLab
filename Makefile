@@ -20,7 +20,7 @@ EXIGIR_DESARROLLO = $(if $(filter ortesislab_dev,$(DB_NAME)),,$(error Solo se pe
 EXIGIR_FILE = $(if $(FILE),,$(error Indique FILE=nombre.dump))
 
 .PHONY: db-help db-config db-up db-init-s3 db-stop db-down db-logs db-health s3-health redis-health \
-	db-seed db-shell db-backup db-restore s3-backup s3-restore db-drop db-reset db-destroy db-test-reset \
+	db-shell db-backup db-restore s3-backup s3-restore db-drop db-reset db-destroy \
 	auth-dev-up auth-dev-down
 
 db-help:
@@ -32,7 +32,6 @@ db-help:
 	@echo   db-logs                 Ultimas 200 lineas de cada servicio
 	@echo   db-health               pg_isready contra la base
 	@echo   s3-health / redis-health  Salud de MinIO y Redis
-	@echo   db-seed                 Fixture idempotente solo para ortesislab_dev
 	@echo   db-shell                psql interactivo como migrador
 	@echo   db-backup FILE=x.dump   pg_dump formato custom en apps/db/backups
 	@echo   db-restore FILE=x.dump CONFIRM=RESTAURAR  Restaura metadatos; no restaura objetos
@@ -40,7 +39,6 @@ db-help:
 	@echo   db-drop CONFIRM=ELIMINAR      Elimina la base local
 	@echo   db-reset CONFIRM=ELIMINAR     Recrea ortesislab_dev vacia; migrar despues a mano
 	@echo   db-destroy CONFIRM=ELIMINAR   Elimina volumenes de PostgreSQL y MinIO
-	@echo   db-test-reset           Recrea ortesislab_test vacia con su esquema; migrar despues a mano
 	@echo   auth-dev-up / auth-dev-down   Proveedor OIDC de pruebas en 127.0.0.1:8080
 
 db-config:
@@ -69,10 +67,6 @@ s3-health:
 
 redis-health:
 	$(COMPOSE) exec -T redis redis-cli ping
-
-db-seed:
-	$(EXIGIR_DESARROLLO)
-	$(COMPOSE) exec -T postgres psql -v ON_ERROR_STOP=1 -U ortesislab_migrator -d $(DB_NAME) -f /seeds/development.sql
 
 db-shell:
 	$(COMPOSE) exec postgres psql -U ortesislab_migrator -d $(DB_NAME)
@@ -108,16 +102,11 @@ db-reset:
 	$(if $(filter ELIMINAR,$(CONFIRM)),,$(error Confirme con CONFIRM=ELIMINAR; recrea $(DB_NAME) vacia))
 	$(COMPOSE) exec -T postgres dropdb --if-exists --force -U $(DB_ADMIN) $(DB_NAME)
 	$(COMPOSE) exec -T postgres createdb -U $(DB_ADMIN) -O ortesislab_migrator $(DB_NAME)
-	$(COMPOSE) exec -T postgres psql -v ON_ERROR_STOP=1 -q -v base=$(DB_NAME) -U $(DB_ADMIN) -d $(DB_NAME) < apps/db/test/preparar_base.sql
+	$(COMPOSE) exec -T postgres psql -v ON_ERROR_STOP=1 -q -v base=$(DB_NAME) -U $(DB_ADMIN) -d $(DB_NAME) < apps/db/preparar_base.sql
 
 db-destroy:
 	$(if $(filter ELIMINAR,$(CONFIRM)),,$(error Confirme con CONFIRM=ELIMINAR; borra los volumenes locales))
 	$(COMPOSE) down --volumes
-
-db-test-reset:
-	$(COMPOSE) exec -T postgres dropdb --if-exists --force -U $(DB_ADMIN) ortesislab_test
-	$(COMPOSE) exec -T postgres createdb -U $(DB_ADMIN) -O ortesislab_migrator ortesislab_test
-	$(COMPOSE) exec -T postgres psql -v ON_ERROR_STOP=1 -q -v base=ortesislab_test -U $(DB_ADMIN) -d ortesislab_test < apps/db/test/preparar_base.sql
 
 auth-dev-up:
 	$(COMPOSE) --profile auth-dev up -d oidc

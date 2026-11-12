@@ -19,6 +19,7 @@
 | [issue-b-cierre-parcial-a](2026-11-12-issue-b-cierre-parcial-a.md) | RESUELTO | B-05…B-13, B-15, B-19…B-22 |
 | [issue-b-cierre-parcial-b](2026-11-12-issue-b-cierre-parcial-b.md) | RESUELTO | B-01…B-04, B-14, B-16…B-18 |
 | [resolve-aud-2026-10-29](2026-11-12-resolve-aud-2026-10-29.md) | RESUELTO | Autorización y cierre B |
+| [2026-11-12-resolve-quitar-seeds-test](2026-11-12-resolve-quitar-seeds-test.md) | EN_CURSO | Quitar fixture y base de pruebas |
 
 [RES-2026-10-13-001](2026-10-13-resolve-persistencia-postgres.md) y
 [RES-2026-10-13-002](2026-10-13-resolve-organizar-pruebas.md) siguen como

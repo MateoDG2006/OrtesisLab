@@ -1,4 +1,4 @@
-"""Apoyo de pruebas contra la base desechable ``ortesislab_test``.
+"""Apoyo de pruebas contra la base indicada en ``ORTESISLAB_TEST_*``.
 
 Se omiten si no hay URL o si PostgreSQL no responde o no tiene el esquema.
 Preparar la base según ``docs/AppBackend/OPERACION_Y_PRUEBAS.md``.
