@@ -3,7 +3,8 @@
   "type": "module",
   "scripts": {
     "dev": "react-router dev --host",
-    "export": "react-router build"
+    "export": "react-router build",
+    "postinstall": "python ../../../scripts/AsegurarReactRouter.py"
   },
   "dependencies": {
     "@radix-ui/themes": "3.3.0",

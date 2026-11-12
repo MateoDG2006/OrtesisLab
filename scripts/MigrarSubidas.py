@@ -1,7 +1,7 @@
 """Traslada una sola vez ``uploaded_files/`` al bucket y registra cada objeto.
 
-Los archivos previos no tienen cuenta: quedan a nombre del usuario semilla
-``urn:ortesislab:seed`` en el proyecto «Importaciones locales previas». Cada
+Los archivos previos no tienen cuenta: quedan a nombre del usuario
+``importaciones-previas`` en el proyecto «Importaciones locales previas». Cada
 NPZ interno pasa a ser un import ``ready`` cuyo original y normalizado son el
 mismo asset; cada STL pasa a ser un asset ``result_stl`` sin resultado ni
 métricas, porque el archivo no las demuestra. La copia local se borra solo
@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import secrets
 import sys
 import uuid
 from pathlib import Path
@@ -32,11 +33,10 @@ from web.persistence.repositorios import (  # noqa: E402
     RepositorioProyectos,
     RepositorioUsuarios,
 )
+from web.services.ContextoUsuario import HashContrasena  # noqa: E402
 from web.services.ServicioImports import MEDIA_NPZ, ServicioImports  # noqa: E402
 from web.storage.AlmacenamientoPrivado import Almacen, ObjetoAusente  # noqa: E402
 
-ISSUER_SEMILLA = "urn:ortesislab:seed"
-SUJETO_SEMILLA = "subidas-locales-previas"
 PROYECTO = "Importaciones locales previas"
 NPZ = re.compile(r"superficie-[0-9a-f]{32}\.npz")
 STL = re.compile(r"ortesis-[0-9a-f]{8}\.stl")
@@ -44,7 +44,12 @@ STL = re.compile(r"ortesis-[0-9a-f]{8}\.stl")
 
 def Propietario() -> UsuarioAutenticado:
     def asegurar(conexion) -> UsuarioAutenticado:
-        user_id = RepositorioUsuarios.Upsert(conexion, ISSUER_SEMILLA, SUJETO_SEMILLA, None, "Subidas locales previas")
+        user_id = RepositorioUsuarios.Asegurar(
+            conexion,
+            "importaciones-previas",
+            "Subidas locales previas",
+            HashContrasena(secrets.token_urlsafe(16)),
+        )
         proyecto = RepositorioProyectos.PorNombre(conexion, user_id, PROYECTO)
         if proyecto is None:
             proyecto = RepositorioProyectos.Crear(conexion, user_id, PROYECTO, "Archivos de uploaded_files/ sin cuenta.")

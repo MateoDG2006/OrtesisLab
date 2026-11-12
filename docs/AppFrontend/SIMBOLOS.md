@@ -98,7 +98,7 @@ Aplicación Reflex de comparación de ortesis.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `PoolPostgres` | Función/método | [26](../../apps/web/web/OrtesisLabApp.py#L26) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PoolPostgres` | Función/método | [25](../../apps/web/web/OrtesisLabApp.py#L25) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/PaginaComparacion.py`
 
@@ -142,7 +142,7 @@ Barra de sesión común a la comparación y al historial.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `Sesion` | Clase | [8](../../apps/web/web/Sesion.py#L8) | Enlaces a las rutas OIDC del backend y navegación entre páginas. |
+| `Sesion` | Clase | [8](../../apps/web/web/Sesion.py#L8) | Enlaces al registro y al login del backend, y navegación entre páginas. |
 | `Sesion.Ruta` | Función/método | [12](../../apps/web/web/Sesion.py#L12) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Sesion.Boton` | Función/método | [17](../../apps/web/web/Sesion.py#L17) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Sesion.FormularioPost` | Función/método | [23](../../apps/web/web/Sesion.py#L23) | Sin docstring; consultar el catálogo de módulos y el código. |

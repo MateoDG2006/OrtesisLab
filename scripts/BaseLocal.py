@@ -1,6 +1,6 @@
 """Infraestructura local: arranque, parada, estado, respaldo y reinicio de la base.
 
-PostgreSQL, MinIO, Redis y el OIDC de pruebas salen de ``apps/db/compose.yaml``.
+PostgreSQL, MinIO y Redis salen de ``apps/db/compose.yaml``.
 Las cinco operaciones conservan las salvaguardas de nombre, base de desarrollo
 y confirmación. No aplica migraciones.
 """
@@ -98,27 +98,26 @@ def up() -> None:
     _correr(_compose() + ["config", "--quiet"])
     _correr(_compose() + ["up", "-d", "--wait", "postgres", "minio", "redis"])
     _correr(_compose("init") + ["run", "--rm", "minio-init"])
-    _correr(_compose("auth-dev") + ["up", "-d", "oidc"])
     _salud()
 
 
 def down() -> None:
     accion = _accion(("parar", "retirar", "destruir"), "retirar")
-    comando = _compose("auth-dev")
+    comando = _compose()
     if accion == "parar":
         _correr(comando + ["stop"])
         return
     if accion == "destruir":
         _confirmar("ELIMINAR", "Confirme con CONFIRM=ELIMINAR; borra los volumenes locales")
-        _correr(comando + ["down", "--volumes"])
+        _correr(comando + ["down", "--volumes", "--remove-orphans"])
         return
-    _correr(comando + ["down"])
+    _correr(comando + ["down", "--remove-orphans"])
 
 
 def estado() -> None:
     accion = _accion(("salud", "logs", "consola"), "salud")
     if accion == "logs":
-        _correr(_compose("auth-dev") + ["logs", "--tail", "200"])
+        _correr(_compose() + ["logs", "--tail", "200"])
         return
     if accion == "consola":
         _correr(_compose() + ["exec", "postgres", "psql", "-U", "ortesislab_migrator", "-d", _base()])

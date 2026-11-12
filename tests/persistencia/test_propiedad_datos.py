@@ -107,7 +107,10 @@ class PermisosDeRol(unittest.TestCase):
     def test_el_trabajador_no_crea_usuarios_ni_versiones(self):
         with Conectar(URL_TRABAJADOR) as conexion:
             for sentencia in (
-                "INSERT INTO app_users (id, auth_issuer, auth_subject, display_name) VALUES (gen_random_uuid(), 'i', 's', 'n')",
+                (
+                    "INSERT INTO app_users (id, username, password_hash, display_name) "
+                    "VALUES (gen_random_uuid(), 'i', 'h', 'n')"
+                ),
                 "UPDATE model_versions SET change_note = 'x'",
                 "DELETE FROM batch_items",
             ):
@@ -129,10 +132,11 @@ class SesionesDeServidor(unittest.TestCase):
         ConexionPostgres.Cerrar()
 
     def test_cookie_valida_revocada_y_ausente(self):
-        token, _expira = ContextoUsuario.IniciarSesion("urn:ortesislab:test", uuid.uuid4().hex, "a@x.test", "Ana")
+        cuenta = f"ana-{uuid.uuid4().hex[:8]}"
+        token, _expira = ContextoUsuario.Registrar(cuenta, "clave-de-prueba")
         cabecera = f"otra=1; {NOMBRE_COOKIE}={token}"
         usuario = ContextoUsuario.Requerir(cabecera)
-        self.assertEqual(usuario.display_name, "Ana")
+        self.assertEqual(usuario.display_name, cuenta)
         self.assertIsNotNone(usuario.project_id)
         with ContextoUsuario.Activar(usuario):
             self.assertEqual(ContextoUsuario.Actual(), usuario)

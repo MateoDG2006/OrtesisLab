@@ -107,15 +107,15 @@ def _Check(tabla: str, columna: str, expresion: str) -> CheckConstraint:
 class Usuario(Base):
     __tablename__ = "app_users"
     __table_args__ = (
-        UniqueConstraint("auth_issuer", "auth_subject", name="app_users_issuer_subject_uk"),
+        UniqueConstraint("username", name="app_users_username_key"),
+        _Check("app_users", "username", "char_length(username) BETWEEN 1 AND 120"),
         _Check("app_users", "display_name", "char_length(display_name) BETWEEN 1 AND 120"),
         _Valores("status", "app_users", EstadoUsuario),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
-    auth_issuer: Mapped[str]
-    auth_subject: Mapped[str]
-    email: Mapped[str | None]
+    username: Mapped[str]
+    password_hash: Mapped[str]
     display_name: Mapped[str]
     status: Mapped[str] = mapped_column(server_default=_Defecto(EstadoUsuario.ACTIVE))
     created_at: Mapped[datetime] = mapped_column(server_default=AHORA)
@@ -123,7 +123,7 @@ class Usuario(Base):
 
 
 class SesionAutenticacion(Base):
-    """Sesión de servidor tras el login OIDC; la cookie solo lleva el token."""
+    """Sesión de servidor; la cookie solo lleva el token."""
 
     __tablename__ = "auth_sessions"
     __table_args__ = (

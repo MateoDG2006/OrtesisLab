@@ -60,11 +60,6 @@ class Ajustes:
     # Vacía: la generación funciona sin caché.
     redis_url = Variable("ORTESISLAB_REDIS_URL", "")
 
-    oidc_issuer = Variable("ORTESISLAB_OIDC_ISSUER")
-    oidc_client_id = Variable("ORTESISLAB_OIDC_CLIENT_ID")
-    oidc_client_secret = Variable("ORTESISLAB_OIDC_CLIENT_SECRET")
-    oidc_redirect_uri = Variable("ORTESISLAB_OIDC_REDIRECT_URI")
-    session_secret = Variable("ORTESISLAB_SESSION_SECRET")
     app_url = Variable("ORTESISLAB_APP_URL", "http://localhost:3000")
     _cookie_secure = Variable("ORTESISLAB_COOKIE_SECURE", "false")
 

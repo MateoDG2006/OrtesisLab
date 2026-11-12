@@ -6,7 +6,7 @@ El servidor coordina cuentas, superficies, parámetros, versiones y lotes de gen
 
 | Pieza | Responsabilidad |
 |---|---|
-| Reflex (`web.OrtesisLabApp`) | Páginas, eventos de estado, rutas OIDC `/auth/*`, admisión de lotes y lectura del progreso |
+| Reflex (`web.OrtesisLabApp`) | Páginas, eventos de estado, registro e inicio de sesión en `/auth/*`, admisión de lotes y lectura del progreso |
 | Trabajador (`scripts/EjecutarTrabajador.py`) | Reserva ítems de la cola en PostgreSQL, construye la geometría con el núcleo NumPy, publica STL/JSON y concilia archivos |
 | PostgreSQL 17 | Fuente de verdad: usuarios, sesiones, preferencias, proyectos, imports, versiones, lotes, intentos, resultados, exports e historial |
 | Bucket S3 (MinIO) | Bytes de originales subidos, NPZ normalizados, STL y JSON de resultados; PostgreSQL guarda clave, `object_url`, tamaño y SHA-256 |
@@ -28,7 +28,7 @@ flowchart LR
 
 [`rxconfig.py`](../../apps/web/rxconfig.py) carga `app_module_import="web.OrtesisLabApp"`. [`web/OrtesisLabApp.py`](../../apps/web/web/OrtesisLabApp.py):
 
-- crea `rx.App(api_transformer=AutenticacionOidc.Aplicacion())`, que monta `/auth/login`, `/auth/callback` y `/auth/logout` junto a la aplicación Reflex;
+- crea `rx.App(api_transformer=Autenticacion.Aplicacion())`, que monta `/auth/registro`, `/auth/login` y `/auth/logout` junto a la aplicación Reflex;
 - registra la tarea de ciclo de vida `PoolPostgres`, que abre el motor SQLAlchemy con `ORTESISLAB_DATABASE_URL` (rol `ortesislab_app`, una conexión de prueba al arrancar y hasta 4 en el pool) y lo cierra al parar; si la base no responde al arrancar, lo registra y los handlers devuelven el mensaje de persistencia no disponible;
 - registra `/` (`PaginaComparacion.Index`, `on_load=EstadoApp.CargarPredeterminados`) y `/historial` (`PaginaHistorial.Index`, `on_load=EstadoHistorial.Cargar`).
 
@@ -41,7 +41,7 @@ flowchart TB
     I[iframe visor.html y Three.js]
   end
   subgraph Reflex
-    A[/auth OIDC/]
+    A[/auth registro y login/]
     E[EstadoApp y EstadoHistorial]
     S[Servicios: Imports, Lotes, Historial, Preferencias]
   end
@@ -53,10 +53,8 @@ flowchart TB
   DB[(PostgreSQL)]
   B[(Bucket S3)]
   RD[(Redis)]
-  IDP[Proveedor OIDC]
   R <-->|Eventos / estado| E
-  R -->|login / logout| A
-  A <--> IDP
+  R -->|registro / login / logout| A
   A --> DB
   E --> S
   S --> DB
@@ -73,7 +71,7 @@ flowchart TB
 
 ## Identidad y propiedad
 
-`/auth/callback` recibe la identidad OIDC (`iss`, `sub`), hace upsert en `app_users`, crea una fila en `auth_sessions` con el SHA-256 de un token aleatorio y fija la cookie `ortesislab_sesion` (HttpOnly, SameSite=Lax, 12 horas, `Secure` si `ORTESISLAB_COOKIE_SECURE`). Cada handler resuelve el usuario desde `self.router.headers.cookie` con `ContextoUsuario.Requerir`; el navegador nunca envía un `user_id`. Las sesiones revocadas, vencidas o de cuentas desactivadas se rechazan.
+`/auth/registro` y `/auth/login` guardan el usuario y el hash scrypt de la contraseña en `app_users`, crean una fila en `auth_sessions` con el SHA-256 de un token aleatorio y fijan la cookie `ortesislab_sesion` (HttpOnly, SameSite=Lax, 12 horas, `Secure` si `ORTESISLAB_COOKIE_SECURE`). Cada handler resuelve el usuario desde `self.router.headers.cookie` con `ContextoUsuario.Requerir`; el navegador nunca envía un `user_id`. Las sesiones revocadas, vencidas o de cuentas desactivadas se rechazan.
 
 Toda consulta filtra por `user_id` y las claves foráneas compuestas `(id, user_id)` impiden que una fila referencie recursos de otro usuario. Un recurso ajeno responde igual que uno inexistente (`AccesoDenegado`). `ContextoUsuario.Activar` fija el usuario en una `contextvar` para las funciones heredadas de `GeneradorWeb` que no reciben usuario en su firma.
 

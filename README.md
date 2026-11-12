@@ -17,7 +17,7 @@ Desde la raíz del repositorio, con Docker y `make`. `make install` instala Pyth
 
 ```powershell
 make install
-make up          # PostgreSQL, MinIO, Redis, bucket, OIDC de pruebas y alembic upgrade head
+make up          # PostgreSQL, MinIO, Redis, bucket y alembic upgrade head
 make worker      # otra terminal
 make web         # otra terminal
 ```

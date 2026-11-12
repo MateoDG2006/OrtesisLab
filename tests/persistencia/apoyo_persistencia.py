@@ -154,7 +154,8 @@ class Rol:
 
 
 def CrearUsuario(conexion, nombre: str = "Prueba") -> UsuarioAutenticado:
-    user_id = RepositorioUsuarios.Upsert(conexion, "urn:ortesislab:test", uuid.uuid4().hex, None, nombre)
+    cuenta = f"prueba-{uuid.uuid4().hex[:12]}"
+    user_id = RepositorioUsuarios.Crear(conexion, cuenta, nombre, "prueba")
     RepositorioPreferencias.Obtener(conexion, user_id)
     proyecto = RepositorioProyectos.Predeterminado(conexion, user_id)
     return UsuarioAutenticado(user_id, nombre, None, proyecto)

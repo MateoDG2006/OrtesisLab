@@ -9,7 +9,6 @@ authors = [
 requires-python = ">=3.14"
 dependencies = [
     "alembic>=1.16",
-    "authlib>=1.6",
     "boto3>=1.40",
     "itsdangerous>=2.2",
     "numpy>=2.5.3",
