@@ -13,24 +13,13 @@ Geometría paramétrica de una ortesis. El complemento de Blender y la aplicaci�
 
 Hace falta **Python 3.14** y [uv](https://docs.astral.sh/uv/). Blender 5.x solo hace falta para el complemento; la web no lo abre.
 
-Desde la raíz del repositorio:
+Desde la raíz del repositorio, con Docker y `make`. `make install` instala Python 3.14, sincroniza `uv.lock` con los grupos de desarrollo y copia `apps/db/.env.example` y `.env.example` solo si esos `.env` aún no existen. Hay que completarlos. El entorno queda con Reflex, NumPy y los clientes de PostgreSQL, S3 y Redis.
 
 ```powershell
-uv python install 3.14
-uv sync
-```
-
-`uv sync` crea `.venv` e instala Reflex, NumPy y los clientes de PostgreSQL, S3 y Redis según `uv.lock`.
-
-Aplicación web (necesita Docker y `make`; copiar antes `apps/db/.env.example` a `apps/db/.env` y `.env.example` a `.env`, y completarlos):
-
-```powershell
-make db-up
-make db-init-s3
-uv run alembic upgrade head   # requiere una revisión en apps/db/alembic/versions; ver operación del backend
-make auth-dev-up
-uv run python scripts/EjecutarTrabajador.py
-uv run --directory apps/web reflex run
+make install
+make up          # PostgreSQL, MinIO, Redis, bucket, OIDC de pruebas y alembic upgrade head
+make worker      # otra terminal
+make web         # otra terminal
 ```
 
 Queda en `http://localhost:3000`. El backend escucha en el puerto 8000; con `--env prod` todo usa el 3000. El trabajador genera los modelos encolados. Detalle en [operación del backend](docs/AppBackend/OPERACION_Y_PRUEBAS.md).
@@ -38,7 +27,8 @@ Queda en `http://localhost:3000`. El backend escucha en el puerto 8000; con `--e
 Pruebas, sin Blender (las de persistencia se omiten si no hay una base propia en `ORTESISLAB_TEST_*`):
 
 ```powershell
-uv run python -m unittest discover -s tests
+make test
+make lint
 ```
 
 Qué cubre cada carpeta está en [tests/README.md](tests/README.md).
@@ -46,7 +36,7 @@ Qué cubre cada carpeta está en [tests/README.md](tests/README.md).
 Complemento de Blender:
 
 ```powershell
-uv run python scripts/EmpaquetarBlender.py
+make empaquetar
 ```
 
 Eso regenera `GenerateModelsApp.zip`. En Blender: **Edit > Preferences > Add-ons > Install from Disk**, activa **OrtesisLab** y reinicia si había una versión anterior. El uso está en [docs/BlenderPlugin/LEEME.md](docs/BlenderPlugin/LEEME.md).
@@ -54,7 +44,7 @@ Eso regenera `GenerateModelsApp.zip`. En Blender: **Edit > Preferences > Add-ons
 La integración dentro de Blender:
 
 ```powershell
-blender --factory-startup --background --python-exit-code 1 --python tests/blender/blender_superficie_abierta.py
+make test-blender
 ```
 
 El complemento 1.3.0 parte de la **malla seleccionada sin espesor**, una sola capa de caras abierta por arriba también en el dedo. Añade espesor a las paredes sin tapar los canales y conserva la superficie base. Instala `GenerateModelsApp.zip`, selecciona la base y usa **N > Ortesis > Usar malla seleccionada**. No carga automáticamente la plantilla v5.

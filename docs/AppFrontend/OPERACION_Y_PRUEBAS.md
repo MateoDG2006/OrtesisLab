@@ -2,7 +2,7 @@
 
 ## Inicio y fuentes editables
 
-La interfaz necesita el backend completo: PostgreSQL, bucket S3, trabajador y proveedor OIDC, según [operación del backend](../AppBackend/OPERACION_Y_PRUEBAS.md). Luego `uv run reflex run`, siguiendo las skills de proceso del repositorio, y abrir `http://localhost:3000`. Con `--env prod` frontend, backend y `/auth/*` comparten el puerto 3000. Cambios duraderos se hacen en `web/PaginaComparacion.py`, `web/PaginaHistorial.py`, `web/Sesion.py`, `web/EstadoApp.py`, `web/EstadoHistorial.py`, `rxconfig.py` o `assets/visor.html`, según responsabilidad; no en React generado.
+La interfaz necesita el backend completo: PostgreSQL, bucket S3, trabajador y proveedor OIDC, según [operación del backend](../AppBackend/OPERACION_Y_PRUEBAS.md). Luego `make web` (`uv run --directory apps/web reflex run`), siguiendo las skills de proceso del repositorio, y abrir `http://localhost:3000`. Con `--env prod` frontend, backend y `/auth/*` comparten el puerto 3000. Cambios duraderos se hacen en `web/PaginaComparacion.py`, `web/PaginaHistorial.py`, `web/Sesion.py`, `web/EstadoApp.py`, `web/EstadoHistorial.py`, `rxconfig.py` o `assets/visor.html`, según responsabilidad; no en React generado.
 
 Antes de migrar Reflex comparar locks y documentación oficial con el código compilado actual. Esta base utiliza React Router/Vite; no describirla como una aplicación Next.js por referencias antiguas del framework. El archivo `GUIA_REFLEX.md` contiene enlaces generales, no evidencia de tecnologías utilizadas por cada versión.
 

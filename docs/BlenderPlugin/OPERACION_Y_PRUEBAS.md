@@ -5,7 +5,7 @@
 Desde la raíz del repositorio:
 
 ```powershell
-uv run python scripts/EmpaquetarBlender.py
+make empaquetar
 ```
 
 Instalar `GenerateModelsApp.zip` con **Edit > Preferences > Add-ons > Install from Disk** y activar OrtesisLab. Reiniciar Blender después de sustituir una versión previa evita módulos antiguos cargados. `bl_info` vigente declara 1.3.0 y Blender mínimo 5.0. La versión 0.1.0 de `pyproject.toml` corresponde al proyecto Python, no a la del complemento.
@@ -30,15 +30,14 @@ Para cambiar la forma, mostrar la base en Outliner, editar caras, volver a Objec
 Con Blender en PATH:
 
 ```powershell
-blender --factory-startup --background --python-exit-code 1 --python tests/blender/blender_superficie_abierta.py
-blender --factory-startup --background --python-exit-code 1 --python tests/blender/blender_paquete_zip.py
+make test-blender
 ```
 
 `blender_superficie_abierta.py` usa una probeta de bandeja con canal lateral de dedo, cinco patrones, con/sin capa, registro y conservación de base. Examina que no se añadan techos sobre canales y la validez de las paredes. No es un modelo anatómico nuevo ni acredita todos los escenarios posibles.
 
-`blender_paquete_zip.py` extrae el ZIP en una carpeta temporal de pruebas, confirma importación aislada, ausencia de NPZ/bytecode, versión, registro, generación desde plano y exportación. Puede usar `ORTESISLAB_ZIP` para apuntar a otro paquete. Generar el ZIP antes de ejecutarla si ha cambiado el código; probar un ZIP histórico no valida las fuentes actuales.
+`make test-blender` regenera el ZIP y ejecuta `tests/blender/blender_superficie_abierta.py` y `tests/blender/blender_paquete_zip.py`. Este último extrae el ZIP en una carpeta temporal, confirma importación aislada, ausencia de NPZ/bytecode, versión, registro, generación desde plano y exportación. Puede usar `ORTESISLAB_ZIP` para apuntar a otro paquete. Probar un ZIP histórico no valida las fuentes actuales.
 
-Las pruebas de núcleo, geometría, web y persistencia se ejecutan con `uv run python -m unittest discover -s tests`. El mapa de carpetas está en [tests/README.md](../../tests/README.md). El 2026-10-13, antes de agruparlas, pasaron 51 en la revisión documental de esta guía. Las integraciones Blender anteriores quedan como procedimientos **no ejecutados en esta revisión documental**. `tests/assets/resultado_blender.json` y los logs versionados de esa carpeta son evidencia histórica. [Registro de revisión](../Agents/REGISTRO_CAMBIOS.md).
+Las pruebas de núcleo, geometría, web y persistencia se ejecutan con `make test`. El mapa de carpetas está en [tests/README.md](../../tests/README.md). El 2026-10-13, antes de agruparlas, pasaron 51 en la revisión documental de esta guía. Las integraciones Blender anteriores quedan como procedimientos **no ejecutados en esta revisión documental**. `tests/assets/resultado_blender.json` y los logs versionados de esa carpeta son evidencia histórica. [Registro de revisión](../Agents/REGISTRO_CAMBIOS.md).
 
 ## Diagnóstico de fallos
 

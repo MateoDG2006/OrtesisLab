@@ -16,7 +16,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [.vscode/settings.json](../../.vscode/settings.json) | Configuración local de editor; actualmente objeto vacío. |
 | [AGENTS.md](../../AGENTS.md) | Instrucciones Reflex y obligación de mantenimiento documental para agentes. |
 | [CLAUDE.md](../../CLAUDE.md) | Entrada de instrucciones que remite a AGENTS.md. |
-| [Makefile](../../Makefile) | Objetivos de Compose, backups, bases local y de pruebas, y OIDC de pruebas (`make db-help`). |
+| [Makefile](../../Makefile) | Instalar, levantar, probar y lintear. Cinco objetivos de infraestructura local: `db-up`, `db-down`, `db-estado`, `db-respaldo` y `db-reset`. |
 | [README.md](../../README.md) | Presentación, instalación y entradas a documentación. |
 | [alembic.ini](../../alembic.ini) | Configuración de Alembic: carpeta `apps/db/alembic`, plantilla de revisiones y logging. La URL la aporta `env.py` desde `Ajustes`. |
 | [apps/db/.env.example](../../apps/db/.env.example) | Plantilla de secretos, usuarios y puertos de Compose. |
@@ -32,7 +32,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/db/minio/inicializar.sh](../../apps/db/minio/inicializar.sh) | Crea bucket, políticas y cuenta de servicio en MinIO. |
 | [apps/db/minio/politica-aplicacion.json](../../apps/db/minio/politica-aplicacion.json) | Permisos S3 de la cuenta de servicio del backend. |
 | [apps/db/minio/politica-lectura-stl.json](../../apps/db/minio/politica-lectura-stl.json) | Lectura anónima solo de `usuarios/*/assets/*.stl`. |
-| [apps/db/preparar_base.sql](../../apps/db/preparar_base.sql) | Sin descripción; completar en INVENTARIO.md. |
+| [apps/db/preparar_base.sql](../../apps/db/preparar_base.sql) | Tras `make db-reset`, recrea el esquema `ortesislab` y los permisos. No crea tablas. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/ApiBlender.py](../../apps/ortesis-plugin/OrtesisLabPlugin/ApiBlender.py) | API de Blender, separada del núcleo geométrico. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py) | Recorte de celdas y cascarón de espesor variable. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/Excepciones.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Excepciones.py) | Errores de OrtesisLab. |
@@ -118,6 +118,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/web/web/storage/AlmacenamientoPrivado.py](../../apps/web/web/storage/AlmacenamientoPrivado.py) | Contrato del almacén de bytes y claves de objeto. |
 | [apps/web/web/storage/StorageS3.py](../../apps/web/web/storage/StorageS3.py) | Almacén de bytes en un bucket S3 (MinIO en desarrollo). |
 | [apps/web/web/storage/__init__.py](../../apps/web/web/storage/__init__.py) | Marcador de paquete. |
+| [core/config/README.md](../../core/config/README.md) | Para qué sirve cada YAML del backend y cada JSON de geometría. |
 | [core/config/almacen.yaml](../../core/config/almacen.yaml) | Timeouts de conexion y lectura e intentos del cliente S3. |
 | [core/config/cache.yaml](../../core/config/cache.yaml) | TTL, pausa de reintento y timeout de Redis. |
 | [core/config/comprobacion_geometrica.json](../../core/config/comprobacion_geometrica.json) | Mediciones historicas de referencia, no umbrales de aceptacion. |
@@ -127,7 +128,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [core/config/registro.json](../../core/config/registro.json) | Niveles de logging y nombre de archivo. |
 | [core/config/sesion.yaml](../../core/config/sesion.yaml) | Duracion de la sesion y vigencia de la cookie del intercambio OIDC. |
 | [core/config/trabajador.yaml](../../core/config/trabajador.yaml) | Lease, latido, supervision y conciliacion del trabajador. |
-| [core/config/web.yaml](../../core/config/web.yaml) | Progreso, variantes, tamanos de subida y etiquetas de la app. |
+| [core/config/web.yaml](../../core/config/web.yaml) | Progreso, espera de creacion, tamanos de subida y etiquetas de la app. |
 | [docs/Agents/ESTANDAR_DOCUMENTACION.md](ESTANDAR_DOCUMENTACION.md) | Estándar documental |
 | [docs/Agents/GUIA_REFLEX.md](GUIA_REFLEX.md) | Reflex Documentation |
 | [docs/Agents/INVENTARIO.md](INVENTARIO.md) | Inventario de carpetas y archivos propios (instantánea). |
@@ -189,6 +190,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-aud-2026-10-29.md](../Audit/resolves/2026-11-12-resolve-aud-2026-10-29.md) | RES-2026-11-12-002 — Cierre hallazgos AUD-2026-10-29-002 (B-01…B-22) |
 | [docs/Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md](../Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md) | RES-2026-11-12-001 — Cierre de issues AUD-2026-10-13-001 (plan autorizado) |
 | [docs/Audit/resolves/2026-11-12-resolve-dotenv-raiz.md](../Audit/resolves/2026-11-12-resolve-dotenv-raiz.md) | RES-2026-11-12-003 — Cargar el .env de la raíz con python-dotenv |
+| [docs/Audit/resolves/2026-11-12-resolve-makefile.md](../Audit/resolves/2026-11-12-resolve-makefile.md) | RES-2026-11-12-006 — Objetivos de Make |
 | [docs/Audit/resolves/2026-11-12-resolve-monorepo.md](../Audit/resolves/2026-11-12-resolve-monorepo.md) | RES-2026-11-12-001 — Reubicar el repositorio como monorepo |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-autoescala.md](../Audit/resolves/2026-11-12-resolve-quitar-autoescala.md) | RES-2026-11-12-004 — Quitar el autoescalado de coordenadas |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md](../Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md) | RES-2026-11-12-005 — Quitar seeds y la base de pruebas |
@@ -206,6 +208,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/BlenderPlugin/SIMBOLOS.md](../BlenderPlugin/SIMBOLOS.md) | Índice de símbolos del paquete Blender y núcleo (instantánea). |
 | [docs/README.md](../README.md) | Documentación de OrtesisLab |
 | [pyproject.toml](../../pyproject.toml) | Metadata Python, dependencias, build y comando de consola. |
+| [scripts/BaseLocal.py](../../scripts/BaseLocal.py) | Infraestructura local: arranque, parada, estado, respaldo y reinicio de la base. |
 | [scripts/EjecutarOrtesisLab.py](../../scripts/EjecutarOrtesisLab.py) | Script para abrir el complemento dentro de Blender. |
 | [scripts/EjecutarTrabajador.py](../../scripts/EjecutarTrabajador.py) | Proceso trabajador de OrtesisLab: cola de generación y conciliación. |
 | [scripts/EmpaquetarBlender.py](../../scripts/EmpaquetarBlender.py) | Genera el ZIP instalable de Blender, sin Reflex, logs ni la base v5. |
@@ -260,7 +263,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | `apps/web/` | Aplicación Reflex: paquete `web`, `rxconfig.py` y assets del visor |
 | `apps/db/` | PostgreSQL, Redis, MinIO, OIDC de pruebas y Alembic |
 | `apps/ortesis-plugin/` | Complemento de Blender (`GenerateModelsApp`) y su ZIP |
-| `core/config/` | YAML del backend y JSON de geometría que comparten la web y el complemento |
+| `core/config/` | YAML del backend, JSON de geometría y README de cada archivo |
 | `apps/web/web/persistence/`, `services/`, `storage/`, `cache/`, `jobs/` | Persistencia, servicios, bucket, caché Redis y trabajador |
 | `src/generatemodelsapp/` | Entrada del comando de saludo empaquetado por uv |
 | `scripts/` | Lanzadores, empaquetado, trabajador y migración de subidas |

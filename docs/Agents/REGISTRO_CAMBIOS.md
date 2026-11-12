@@ -1,5 +1,11 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — README de core/config
+
+`core/config/README.md` explica para qué sirve cada YAML del backend y cada JSON de geometría. [OPERACION_Y_PRUEBAS.md](../AppBackend/OPERACION_Y_PRUEBAS.md) enlaza ese archivo. El catálogo de claves deja de citar `maximo_variantes`: el tope de variantes es `lotes.maximo_items`. Los enlaces de BlenderPlugin que apuntaban a `apps/ortesis-plugin/GenerateModelsApp/` pasan a `OrtesisLabPlugin/`, que es la carpeta que está en disco.
+
+Pruebas ejecutadas: `py -3 docs/Agents/Scripts/GenerarIndices.py` y `--comprobar`. Catálogos al día y enlaces correctos.
+
 ## 2026-11-12 — Sin fixture ni base de pruebas
 
 Se eliminan `apps/db/seeds/development.sql`, `make db-seed` y `make db-test-reset`. El repositorio ya no crea `ortesislab_test` ni carga un usuario demo. Los datos de desarrollo salen del uso de la aplicación. `make db-reset` sigue recreando `ortesislab_dev` vacía y reaplicando esquema y permisos con `apps/db/preparar_base.sql`. La autorización está en [RES-2026-11-12-005](../Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md). Los hallazgos siguen abiertos.

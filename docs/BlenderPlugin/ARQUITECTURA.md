@@ -2,7 +2,7 @@
 
 ## Capas y dependencias
 
-El paquete [`GenerateModelsApp/`](../../apps/ortesis-plugin/GenerateModelsApp/__init__.py) contiene un núcleo Python/NumPy y adaptadores de Blender. `__init__.py` declara `bl_info` y difiere las importaciones de registro: importar el paquete o el núcleo no carga `bpy`. `ApiBlender.py` concentra las importaciones `bpy`, `bmesh`, propiedades y utilidades mathutils; fuera de Blender produce `EntornoBlenderRequerido`.
+El paquete [`GenerateModelsApp/`](../../apps/ortesis-plugin/OrtesisLabPlugin/__init__.py) contiene un núcleo Python/NumPy y adaptadores de Blender. `__init__.py` declara `bl_info` y difiere las importaciones de registro: importar el paquete o el núcleo no carga `bpy`. `ApiBlender.py` concentra las importaciones `bpy`, `bmesh`, propiedades y utilidades mathutils; fuera de Blender produce `EntornoBlenderRequerido`.
 
 ```mermaid
 flowchart TB

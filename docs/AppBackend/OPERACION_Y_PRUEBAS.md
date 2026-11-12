@@ -5,16 +5,10 @@
 Desde la raíz, con uv, Docker Compose y `make` disponibles:
 
 ```powershell
-uv python install 3.14
-uv sync --locked
-copy apps\db\.env.example apps\db\.env   # completar secretos
-copy .env.example .env                                  # completar URLs y credenciales
-make db-up            # PostgreSQL 127.0.0.1:5433, MinIO :9000/:9001, Redis :6379
-make db-init-s3       # bucket, políticas (lectura anónima solo de STL) y cuenta de servicio
-# tablas: ver «Base de datos»
-make auth-dev-up      # proveedor OIDC de pruebas (opcional; ORTESISLAB_OIDC_PORT cambia el puerto local)
-uv run python scripts/EjecutarTrabajador.py
-uv run reflex run
+make install     # Python 3.14, uv sync --locked --all-groups y .env de ejemplo si faltan
+make up          # PostgreSQL :5433, MinIO :9000/:9001, Redis :6379, bucket, OIDC y alembic upgrade head
+make worker      # otra terminal
+make web         # otra terminal; http://localhost:3000
 ```
 
 Variables de la aplicación: [`.env.example`](../../.env.example). Todas se declaran en un solo lugar, la clase `Ajustes` de [`web/Ajustes.py`](../../apps/web/web/Ajustes.py), y ningún otro archivo lee el entorno. `Cargar()` lee ese `.env` con python-dotenv (UTF-8, con o sin BOM), sin pisar variables que el proceso ya tenga. Esos valores quedan en el entorno del proceso y las referencias `$` se sustituyen. Una variable sin valor por defecto es obligatoria: leerla sin definirla, o con valor vacío, lanza `RuntimeError` («Falta la variable de entorno …»). Ese es el único error de clave ausente; la comprobación ocurre al leer la variable, de modo que cada proceso solo exige las que usa.
@@ -38,20 +32,18 @@ La web exige al arrancar la base y OIDC; las variables S3 se exigen en la primer
 
 ### Valores ajustables (`config/*.yaml`)
 
-Los límites, tiempos y tamaños del backend no van en el entorno ni en el código. Están en archivos YAML versionados en [`core/config/`](../../core/config/web.yaml), uno por área, que lee `ConfiguracionBackend.Cargar("<area>")` ([`web/ConfiguracionBackend.py`](../../apps/web/web/ConfiguracionBackend.py)). Cada archivo se lee una vez por proceso, al importar el módulo que lo usa, así que un cambio exige reiniciar la web y el trabajador. Si falta un archivo o una clave, el proceso falla al importar ese módulo. Las constantes de contrato no están aquí: versiones de lector y exportador, prefijos de claves, nombre de la cookie y esquema SQL. Los estados, tipos y formatos son `StrEnum` en [`web/enums/`](../../apps/web/web/enums/__init__.py), porque deben coincidir con los `CHECK` del esquema; un YAML solo guarda sus etiquetas visibles.
+Los límites, tiempos y tamaños del backend no van en el entorno ni en el código. Están en archivos YAML versionados en [`core/config/`](../../core/config/README.md), uno por área, que lee `ConfiguracionBackend.Cargar("<area>")` ([`web/ConfiguracionBackend.py`](../../apps/web/web/ConfiguracionBackend.py)). Qué hace cada archivo está en [core/config/README.md](../../core/config/README.md). Cada archivo se lee una vez por proceso, al importar el módulo que lo usa, así que un cambio exige reiniciar la web y el trabajador. Si falta un archivo o una clave, el proceso falla al importar ese módulo. Las constantes de contrato no están aquí: versiones de lector y exportador, prefijos de claves, nombre de la cookie y esquema SQL. Los estados, tipos y formatos son `StrEnum` en [`web/enums/`](../../apps/web/web/enums/__init__.py), porque deben coincidir con los `CHECK` del esquema; un YAML solo guarda sus etiquetas visibles.
 
 | Archivo | Claves | Lo usa |
 |---|---|---|
-| [`persistencia.yaml`](../../core/config/persistencia.yaml) | `conexion`: `reintentos` 3, `pausa_reintento_s` 0.05, `espera_adquisicion_s` 5, `timeout_conexion_s` 10. `lotes`: `maximo_items` 12, `maximo_pendientes` 3, `maximo_intentos` 3, `espera_reintento_s` 5. `historial`: `limite_defecto` 25, `limite_maximo` 100, `maximo_comparacion` 3 | `ConexionPostgres`, `Contratos`, `ServicioLotes`, `ServicioHistorial` |
-| [`trabajador.yaml`](../../core/config/trabajador.yaml) | `lease_s` 120, `latido_s` 30, `supervision_s` 30, `conciliacion_s` 600. `conciliador`: `horas_staged` 24, `dias_rechazo` 30, `lote_comprobacion` 200 | `TrabajadorGeneracion`, `ConciliadorArchivos` |
-| [`cache.yaml`](../../core/config/cache.yaml) | `ttl_s` 604800 (7 días), `reintento_s` 30, `timeout_s` 0.5 | `CacheRedis` |
+| [`persistencia.yaml`](../../core/config/persistencia.yaml) | `conexion`: `reintentos` 3, `pausa_reintento_s` 0.05, `espera_adquisicion_s` 5, `timeout_conexion_s` 10. `lotes`: `maximo_items` 12, `maximo_pendientes` 3, `maximo_intentos` 3, `espera_reintento_s` 5. `historial`: `limite_defecto` 25, `limite_maximo` 100, `maximo_comparacion` 3. `cuotas`: `max_bytes_usuario` 1 GiB, `max_imports_ready` 100, `max_subidas_por_hora` 30. `retencion`: `sesiones_dias` 90, `eventos_historial_dias` 730 | `ConexionPostgres`, `Contratos`, `ServicioLotes`, `ServicioHistorial`, `ServicioImports`, `ConciliadorArchivos` |
+| [`trabajador.yaml`](../../core/config/trabajador.yaml) | `lease_s` 120, `latido_s` 30, `supervision_s` 30, `conciliacion_s` 600, `capacidad_variante_s` 20. `conciliador`: `horas_staged` 24, `dias_rechazo` 30, `lote_comprobacion` 200, `explorar_bucket` false | `TrabajadorGeneracion`, `ConciliadorArchivos`, `EstadoApp` |
+| [`cache.yaml`](../../core/config/cache.yaml) | `ttl_s` 604800 (7 días), `reintento_s` 30, `timeout_s` 0.5, `max_entrada_bytes` 64 MiB | `CacheRedis` |
 | [`almacen.yaml`](../../core/config/almacen.yaml) | `timeout_conexion_s` 3, `timeout_lectura_s` 30, `intentos` 3 | `StorageS3` |
 | [`sesion.yaml`](../../core/config/sesion.yaml) | `duracion_horas` 12, `intercambio_oidc_s` 600 | `ContextoUsuario`, `AutenticacionOidc` |
-| [`web.yaml`](../../core/config/web.yaml) | `intervalo_progreso_s` 1, `maximo_variantes` 12, `espera_crear_s` 600, `maximo_bytes` 50 MiB, `maximo_descomprimido_bytes` 128 MiB; `patrones` (5) y `ejes` (11): clave y etiqueta visible, en el orden de los selectores; `estados_visibles` (5): etiqueta de cada estado de ítem en `/historial` | `EstadoApp`, `GeneradorWeb`, `LectorSuperficie`, `EstadoHistorial` |
+| [`web.yaml`](../../core/config/web.yaml) | `intervalo_progreso_s` 1, `espera_crear_s` 600, `maximo_bytes` 50 MiB, `maximo_descomprimido_bytes` 128 MiB; `patrones` (5) y `ejes` (11): clave y etiqueta visible, en el orden de los selectores; `estados_visibles` (5): etiqueta de cada estado de ítem en `/historial`. El tope de variantes es `lotes.maximo_items` | `EstadoApp`, `GeneradorWeb`, `LectorSuperficie`, `EstadoHistorial` |
 
-Al editarlos hay que respetar dos relaciones que el código no comprueba:
-- `web.yaml` `maximo_variantes` no debe superar `persistencia.yaml` `lotes.maximo_items`; si lo supera, la admisión rechaza los lotes más grandes.
-- `latido_s` debe ser bastante menor que `lease_s`, o el trabajador pierde la reserva mientras construye.
+`GeneradorWeb.MAXIMO_VARIANTES` es `lotes.maximo_items`. Ese mismo número arma el `CHECK` de `generation_batches.total_items`. `latido_s` debe ser bastante menor que `lease_s`, o el trabajador pierde la reserva mientras construye; el código no lo comprueba.
 
 Los JSON de geometría están en `core/config/`. El ZIP de Blender los copia a `GenerateModelsApp/config/`, porque el complemento instalado no ve el monorepo. El Python de Blender no incluye PyYAML, así que esa configuración no pasa a YAML.
 
@@ -63,7 +55,18 @@ Antes de crear/modificar código Reflex o iniciar/depurar procesos, aplicar las 
 
 ## Base de datos
 
-`make` no migra. El primer `make db-up` deja `ortesislab_dev` con roles y el esquema `ortesislab` vacío. `make db-reset CONFIRM=ELIMINAR` vuelve a crear esa base vacía si el volumen ya existe. No hay fixture ni base de pruebas: los datos salen del uso de la aplicación. El resto de objetivos está en `make db-help`.
+La infraestructura local son cinco objetivos. El detalle de cada `ACCION` sale en `make help` y en [`scripts/BaseLocal.py`](../../scripts/BaseLocal.py).
+
+| Objetivo | Efecto |
+|---|---|
+| `make db-up` | Valida Compose, arranca PostgreSQL, MinIO y Redis, crea el bucket y arranca el OIDC de pruebas en `127.0.0.1:8080` (`ORTESISLAB_OIDC_PORT`). No migra |
+| `make db-down` | Retira los contenedores, incluido el OIDC, y conserva los volúmenes. `ACCION=parar` solo los detiene. `ACCION=destruir CONFIRM=ELIMINAR` borra los volúmenes; los archivos de `apps/db/backups/` se quedan |
+| `make db-estado` | `pg_isready`, `mc ready` y `redis-cli ping`. `ACCION=logs` muestra las últimas 200 líneas. `ACCION=consola` abre `psql` como `ortesislab_migrator` |
+| `make db-respaldo FILE=x.dump` | `pg_dump` del esquema `ortesislab` y copia del bucket en `apps/db/backups/objetos`. No sobrescribe un `.dump` ya existente. El nombre admite letras, números, punto, guion y guion bajo |
+| `make db-respaldo ACCION=restaurar FILE=x.dump CONFIRM=RESTAURAR` | Restaura ese volcado en `ortesislab_dev` y después los objetos. Exige que existan el `.dump` y `apps/db/backups/objetos`. `mc mirror` sobrescribe las claves presentes en la copia y no borra el resto del bucket |
+| `make db-reset CONFIRM=ELIMINAR` | Borra y vuelve a crear `ortesislab_dev` vacía, con el esquema y los permisos de `preparar_base.sql`. Solo esa base. Después hace falta `make migrar` |
+
+El primer `make db-up` sobre un volumen nuevo ejecuta `apps/db/init/01_roles.sh`: roles y esquema `ortesislab` vacío, sin tablas. No hay fixture ni base de pruebas: los datos salen del uso de la aplicación. `make up` es `db-up` seguido de `make migrar` (`alembic upgrade head`).
 
 Las tablas las genera y aplica quien mantiene el esquema. La revisión inicial está en [`apps/db/alembic/versions/20261112_1200_esquema_inicial.py`](../../apps/db/alembic/versions/20261112_1200_esquema_inicial.py). Cambiar primero [`Modelos.py`](../../apps/web/web/persistence/Modelos.py) y generar la siguiente revisión contra una base en `head`:
 
@@ -72,7 +75,7 @@ uv run alembic revision --autogenerate -m "descripcion"
 uv run alembic upgrade head
 ```
 
-Alembic usa la URL de desarrollo. Revisar el autogenerado: la FK circular, el trigger de versiones y los `GRANT` se añaden a mano, como indica [DATABASE.md](DATABASE.md#lo-que-alembic-no-genera). Alembic no bloquea migraciones concurrentes: ejecutarlas desde un único operador.
+`make migrar` aplica `upgrade head`. Alembic usa la URL de desarrollo. Revisar el autogenerado: la FK circular, el trigger de versiones y los `GRANT` se añaden a mano, como indica [DATABASE.md](DATABASE.md#lo-que-alembic-no-genera). Alembic no bloquea migraciones concurrentes: ejecutarlas desde un único operador.
 
 ## Comprobación funcional
 
@@ -84,14 +87,15 @@ Alembic usa la URL de desarrollo. Revisar el autogenerado: la FK circular, el tr
 6. Descargar: `Content-Disposition: attachment` y evento `export_downloaded`.
 7. `/historial`: filtrar, comparar versiones (diferencias de parámetros) y restaurar (versión nueva con `parent_version_id`).
 8. Cerrar sesión y entrar con otro usuario: no ve fichas, historial ni archivos del anterior.
-9. `make db-backup FILE=x.dump` y restauración en una base desechable.
+9. `make db-respaldo FILE=x.dump` y `make db-respaldo ACCION=restaurar FILE=x.dump CONFIRM=RESTAURAR` sobre `ortesislab_dev`.
 
 ## Pruebas existentes y trazabilidad
 
 Las pruebas de persistencia se omiten si no existen `ORTESISLAB_TEST_DATABASE_URL` y `ORTESISLAB_TEST_WORKER_DATABASE_URL` apuntando a una base preparada aparte. Este repositorio no trae esa base. Sin base, sin esquema o sin variables se omiten con un motivo explícito. Cada rol abre su propia `Session` de SQLAlchemy, que confirma al salir del `with`. Los errores de PostgreSQL se comprueban en `DBAPIError.orig`. Levantan un `ThreadedMotoServer` (API S3 por HTTP en lugar de MinIO) y usan Redis local en la base 15 si responde; si no, prueban sin caché.
 
 ```powershell
-.venv\Scripts\python.exe -B -m unittest discover -s tests
+make test
+make lint
 ```
 
 El detalle de cada carpeta está en [tests/README.md](../../tests/README.md).
@@ -119,8 +123,8 @@ Línea base con SQLAlchemy: **73 pruebas, 50 aprobadas y 23 omitidas, el 2026-10
 | `RuntimeError: Falta la variable de entorno …` al arrancar o en la primera subida | Definir esa variable en el entorno o en `.env` |
 | `RuntimeError: … debe empezar por postgresql+psycopg://` | Cambiar el esquema de esa URL de `postgresql://` a `postgresql+psycopg://` |
 | Lote queda `En cola…` | El trabajador no está corriendo o no alcanza la base; revisar su log |
-| Base no disponible | Motor SQLAlchemy no abierto al arrancar (log `web`); `make db-health` |
-| `relation "..." does not exist` | Base sin migrar: `uv run alembic current` y `upgrade head` |
+| Base no disponible | Motor SQLAlchemy no abierto al arrancar (log `web`); `make db-estado` |
+| `relation "..." does not exist` | Base sin migrar: `make migrar` |
 | Visor: `El STL ya no está en el almacén` | Objeto borrado o fila `missing`; volver a generar |
 | Visor: `No se pudo contactar con el almacén` | MinIO caído, `ORTESISLAB_S3_PUBLIC_URL` incorrecta o política de lectura de STL no aplicada |
 | Superficie rechazada | Debe ser abierta, orientada y conectada; un STL de una ortesis con espesor no sirve como base |
@@ -132,4 +136,4 @@ Logs: `ortesislab.<subsistema>`, consola INFO y archivo DEBUG `GenerateModelsApp
 
 ## Despliegue y recuperación
 
-El repositorio incluye Compose para desarrollo local con puertos ligados a 127.0.0.1. No hay infraestructura cloud, CI ni TLS configurados. Para varias instancias Reflex se necesita el mismo PostgreSQL, bucket y Redis; los lotes se recuperan desde la base tras reiniciar cualquier proceso y los leases vencidos vuelven a la cola. Respaldo: `make db-backup` (metadatos) y `make s3-backup` (objetos) deben tomarse juntos; `db-restore` no restaura objetos. Alembic no bloquea migraciones concurrentes: ejecutarlas desde un único operador.
+El repositorio incluye Compose para desarrollo local con puertos ligados a 127.0.0.1. No hay infraestructura cloud, CI ni TLS configurados. Para varias instancias Reflex se necesita el mismo PostgreSQL, bucket y Redis; los lotes se recuperan desde la base tras reiniciar cualquier proceso y los leases vencidos vuelven a la cola. `make db-respaldo` copia metadatos y objetos en un solo paso; la restauración devuelve los dos y solo está permitida sobre `ortesislab_dev`. Alembic no bloquea migraciones concurrentes: ejecutarlas desde un único operador.

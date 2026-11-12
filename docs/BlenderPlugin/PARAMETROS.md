@@ -2,7 +2,7 @@
 
 ## Fuentes y reglas generales
 
-Fuentes: [`OL_Settings` y panel](../../apps/ortesis-plugin/GenerateModelsApp/Interfaz.py), [`parametros_defecto.json`](../../core/config/parametros_defecto.json), [`ValidarOpciones`](../../apps/ortesis-plugin/GenerateModelsApp/Modeling.py) y [`limites.json`](../../core/config/limites.json). Los predeterminados de las propiedades Blender están declarados en código, además del JSON: no se enlazan automáticamente. La tabla refleja su coincidencia actual.
+Fuentes: [`OL_Settings` y panel](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py), [`parametros_defecto.json`](../../core/config/parametros_defecto.json), [`ValidarOpciones`](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py) y [`limites.json`](../../core/config/limites.json). Los predeterminados de las propiedades Blender están declarados en código, además del JSON: no se enlazan automáticamente. La tabla refleja su coincidencia actual.
 
 Todas las longitudes son mm en coordenadas de malla; ángulos en grados. Los **rangos UI** limitan el panel Blender; la **API** impone sus propias reglas y puede aceptar valores fuera de esos rangos. Campos ocultos siguen formando parte de las opciones y pueden ser validados. Ningún control genera mientras se arrastra: pulsar Generar / actualizar.
 

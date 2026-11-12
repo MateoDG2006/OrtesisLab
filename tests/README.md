@@ -4,10 +4,10 @@ Cada carpeta agrupa las pruebas por el código que cubren. Desde la raíz del
 repositorio:
 
 ```powershell
-uv run python -m unittest discover -s tests
+make test
 ```
 
-Ese comando encuentra los módulos `test_*.py` de las subcarpetas. Los scripts de
+Ese objetivo ejecuta `uv run python -m unittest discover -s tests -p "test_*.py"` y encuentra los módulos `test_*.py` de las subcarpetas. Los scripts de
 `blender/` no entran en unittest: los ejecuta Blender. Las pruebas de
 `persistencia/` se omiten si no existen las variables `ORTESISLAB_TEST_*`
 apuntando a una base que hayas preparado. Este repositorio no trae esa base
@@ -58,9 +58,10 @@ un error concreto de PostgreSQL. Las otras tres lo usan.
 Desde la raíz, con Blender en PATH:
 
 ```powershell
-blender --factory-startup --background --python-exit-code 1 --python tests/blender/blender_superficie_abierta.py
-blender --factory-startup --background --python-exit-code 1 --python tests/blender/blender_paquete_zip.py
+make test-blender
 ```
+
+`make test-blender` regenera el ZIP y ejecuta `tests/blender/blender_superficie_abierta.py` y `tests/blender/blender_paquete_zip.py`.
 
 `blender_superficie_abierta.py` escribe el JSON de la corrida en
 `tests/assets/resultado_blender.json`. El archivo versionado es el resultado de

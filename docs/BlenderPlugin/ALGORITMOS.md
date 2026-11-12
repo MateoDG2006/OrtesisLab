@@ -29,7 +29,7 @@ La web omite C para `SOLID`, entrega métricas/STL directamente y no ejecuta O. 
 
 ## 2. Validación, normales y distancia geodésica
 
-Fuente: [`AnalizadorMalla`](../../apps/ortesis-plugin/GenerateModelsApp/Malla.py).
+Fuente: [`AnalizadorMalla`](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py).
 
 Cada triángulo aporta tres aristas dirigidas. Al ordenar sus extremos se cuentan incidencias: una significa contorno, dos interior y más de dos es no manifold. Si no hay contorno se rechaza como sólido cerrado. Repetir una arista dirigida indica orientación inconsistente. Se detectan triángulos duplicados ordenando sus índices; se verifica área, finitud, índices y ausencia de vértices sueltos. Cada vértice del contorno debe tener grado dos de contorno. Un recorrido de adyacencia exige una sola componente.
 
@@ -39,7 +39,7 @@ Distancia `b_i`: **Dijkstra multifuente** con todos los vértices de contorno a 
 
 ## 3. Refinamiento
 
-Fuente: [`RefinadorMalla`](../../apps/ortesis-plugin/GenerateModelsApp/RefinadorMalla.py).
+Fuente: [`RefinadorMalla`](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py).
 
 Las coordenadas del archivo se usan tal como llegan. No hay corrección decimal ni cambio de tamaño para acercar el eje mayor a un rango.
 
@@ -56,7 +56,7 @@ Límites: 16 rondas y presupuesto de 500 000 vértices para añadir nuevos punto
 
 ## 4. Suavizado del contorno exterior
 
-Fuente: [`SuavizadoBorde`](../../apps/ortesis-plugin/GenerateModelsApp/SuavizadoBorde.py).
+Fuente: [`SuavizadoBorde`](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py).
 
 Se recorren aristas de contorno en bucles de al menos ocho vértices. Cada bucle se remuestrea uniformemente por longitud de arco, se transforma con `rfft` y recibe un filtro pasabajos: empieza la transición en `0.5/longitud_mm` y anula desde `1/longitud_mm`, usando transición cúbica. Se conservan los modos 0, 1 y 2 para no borrar la forma global. Después se aplica `irfft` y se interpola a la parametrización original.
 
@@ -66,7 +66,7 @@ Consecuencia: preservar la base original no implica que la copia de generación 
 
 ## 5. Proyección y algoritmos de patrón
 
-Fuente: [`Patron`](../../apps/ortesis-plugin/GenerateModelsApp/constants/Paterns.py). Se rota `p[:, :2]` con la matriz del código. La distancia `d_i` se mide en **XY**, en mm de esa proyección. No se desenrolla la superficie ni se mantiene ancho geodésico uniforme: paredes casi verticales y zonas superpuestas en XY pueden repetir/comprimir el patrón.
+Fuente: [`Patron`](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py). Se rota `p[:, :2]` con la matriz del código. La distancia `d_i` se mide en **XY**, en mm de esa proyección. No se desenrolla la superficie ni se mantiene ancho geodésico uniforme: paredes casi verticales y zonas superpuestas en XY pueden repetir/comprimir el patrón.
 
 | Código | Cálculo | Consecuencia |
 |---|---|---|
@@ -89,7 +89,7 @@ Coste peor de evaluación: `O(P*S)` con `P` puntos y `S` semillas; la memoria te
 
 ## 6. Campo de material: patrón, marco y banda
 
-Fuente: `Model3DForPrinting.ConstruirGeometria` en [`Modeling.py`](../../apps/ortesis-plugin/GenerateModelsApp/Modeling.py).
+Fuente: `Model3DForPrinting.ConstruirGeometria` en [`Modeling.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py).
 
 ```text
 s_i = rib_width_mm/2 - d_i
@@ -114,7 +114,7 @@ En celdas el espesor nominal es `skin_mm`; en nervaduras plenamente desarrollada
 
 ## 7. Recorte triangular sin capa
 
-Fuente: `Cascaron.Recortar` en [`Cascaron.py`](../../apps/ortesis-plugin/GenerateModelsApp/Cascaron.py).
+Fuente: `Cascaron.Recortar` en [`Cascaron.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py).
 
 Para cada triángulo se conserva la parte de campo positivo mediante recorte lineal por aristas. En un cruce:
 
