@@ -1,10 +1,27 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — Sin carpeta `src`
+
+Se elimina `src/generatemodelsapp/`. Solo añadía el complemento a `sys.path` y llamaba `OrtesisLabPlugin.consola.main`. El saludo sigue en `consola.py` y se lanza con `scripts/IniciarConsola.py`. Desaparece el script `generatemodelsapp` de `pyproject.toml`. `tool.uv.package` queda en `false`: el repositorio no instala un paquete propio y `uv run` sigue trayendo las dependencias. Autorización en [RES-2026-11-12-009](../Audit/resolves/2026-11-12-resolve-quitar-src.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `uv run python -c "print('uv-ok')"`: terminó en 0.
+- `python docs/Agents/Scripts/GenerarIndices.py` y `--comprobar`: catálogos al día y enlaces correctos.
+
+No se ejecutó unittest ni Reflex.
+
 ## 2026-11-12 — El núcleo se importa como `OrtesisLabPlugin`
 
 La carpeta del complemento ya era `apps/ortesis-plugin/OrtesisLabPlugin`. La web, las pruebas, los lanzadores y `pyproject.toml` seguían importando `GenerateModelsApp`, y `rxconfig.py` metía en `sys.path` la ruta `apps/apps/ortesis-plugin`. Los imports pasan a `OrtesisLabPlugin`. `rxconfig.py` añade `apps/ortesis-plugin`, que es el padre real del paquete. El ZIP sigue llamándose `GenerateModelsApp.zip`; el directorio raíz de dentro pasa a `OrtesisLabPlugin`, igual que el módulo que carga Blender. `web/GenerateModelsApp.py` no cambia de nombre: es el módulo Reflex. Autorización en [RES-2026-11-12-008](../Audit/resolves/2026-11-12-resolve-paquete-ortesislabplugin.md). Los hallazgos siguen abiertos.
 
 Documentación: README, `core/config/README.md`, AppBackend MODULOS y OPERACION_Y_PRUEBAS, BlenderPlugin ARQUITECTURA, API_Y_DATOS, LEEME, MODULOS y OPERACION_Y_PRUEBAS, Agents MANTENIMIENTO e INVENTARIO (tabla de carpetas).
+
+Pruebas ejecutadas:
+- `uv run --directory apps/web python -c "import rxconfig; import web.GenerateModelsApp"`: terminó en 0 e imprimió `import-ok`.
+- `uv run python -m unittest discover -s tests -p "test_wheel.py"`: 2 pruebas, OK.
+- `python docs/Agents/Scripts/GenerarIndices.py` y `--comprobar`: catálogos al día y enlaces correctos. Se completaron las descripciones pendientes de `apps/web/.gitignore` y `apps/web/requirements.txt`.
+
+No se arrancó `make web` hasta el navegador, ni Blender, ni el empaquetado del ZIP.
 
 ## 2026-11-12 — La revisión de Alembic no la había emitido Alembic
 

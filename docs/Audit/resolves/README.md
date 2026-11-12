@@ -23,6 +23,7 @@
 | [2026-11-12-resolve-makefile](2026-11-12-resolve-makefile.md) | EN_CURSO | Objetivos de Make; no cierra hallazgos |
 | [2026-11-12-resolve-revision-alembic](2026-11-12-resolve-revision-alembic.md) | EN_CURSO | Quitar la revisión que no generó Alembic |
 | [2026-11-12-resolve-paquete-ortesislabplugin](2026-11-12-resolve-paquete-ortesislabplugin.md) | EN_CURSO | Imports del núcleo como `OrtesisLabPlugin` |
+| [2026-11-12-resolve-quitar-src](2026-11-12-resolve-quitar-src.md) | EN_CURSO | Quitar la carpeta `src` |
 
 [RES-2026-10-13-001](2026-10-13-resolve-persistencia-postgres.md) y
 [RES-2026-10-13-002](2026-10-13-resolve-organizar-pruebas.md) siguen como

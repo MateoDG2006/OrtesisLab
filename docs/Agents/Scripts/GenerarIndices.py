@@ -189,7 +189,7 @@ def Generados() -> dict[Path, str]:
     archivos = Archivos()
     previas = DescripcionesPrevias()
     python = [ruta for ruta in archivos if ruta.endswith(".py")]
-    backend = [r for r in python if r.startswith(("apps/web/", "scripts/", "src/"))]
+    backend = [r for r in python if r.startswith(("apps/web/", "scripts/"))]
     frontend = [r for r in python if FRONTEND.match(r)]
     blender = [r for r in python if r.startswith("apps/ortesis-plugin/OrtesisLabPlugin/")]
     return {

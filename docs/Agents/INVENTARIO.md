@@ -196,6 +196,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-paquete-ortesislabplugin.md](../Audit/resolves/2026-11-12-resolve-paquete-ortesislabplugin.md) | RES-2026-11-12-008 — El núcleo se importa como `OrtesisLabPlugin` |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-autoescala.md](../Audit/resolves/2026-11-12-resolve-quitar-autoescala.md) | RES-2026-11-12-004 — Quitar el autoescalado de coordenadas |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md](../Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md) | RES-2026-11-12-005 — Quitar seeds y la base de pruebas |
+| [docs/Audit/resolves/2026-11-12-resolve-quitar-src.md](../Audit/resolves/2026-11-12-resolve-quitar-src.md) | RES-2026-11-12-009 — Quitar la carpeta `src` |
 | [docs/Audit/resolves/2026-11-12-resolve-revision-alembic.md](../Audit/resolves/2026-11-12-resolve-revision-alembic.md) | RES-2026-11-12-007 — Quitar la revisión de Alembic no generada por Alembic |
 | [docs/Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md](../Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md) | RES-2026-11-12-001 — Lectura directa del YAML en `Cargar` |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
@@ -218,7 +219,6 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [scripts/IniciarConsola.py](../../scripts/IniciarConsola.py) | Script del comando de consola del proyecto. |
 | [scripts/MigrarSubidas.py](../../scripts/MigrarSubidas.py) | Traslada una sola vez ``uploaded_files/`` al bucket y registra cada objeto. |
 | [skills-lock.json](../../skills-lock.json) | Procedencia y huellas de las tres skills Reflex instaladas. |
-| [src/generatemodelsapp/__init__.py](../../src/generatemodelsapp/__init__.py) | Marcador de paquete; ver índice de símbolos si contiene funciones. |
 | [tests/README.md](../../tests/README.md) | Pruebas |
 | [tests/aplicacion_web/__init__.py](../../tests/aplicacion_web/__init__.py) | Pruebas del generador web y del lector de superficies. |
 | [tests/aplicacion_web/test_generador_web.py](../../tests/aplicacion_web/test_generador_web.py) | Comprueba el lote y el STL sin abrir Blender ni la superficie real. |
@@ -267,7 +267,6 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | `apps/ortesis-plugin/` | Complemento de Blender (`OrtesisLabPlugin`) y su ZIP |
 | `core/config/` | YAML del backend, JSON de geometría y README de cada archivo |
 | `apps/web/web/persistence/`, `services/`, `storage/`, `cache/`, `jobs/` | Persistencia, servicios, bucket, caché Redis y trabajador |
-| `src/generatemodelsapp/` | Entrada del comando de saludo empaquetado por uv |
 | `scripts/` | Lanzadores, empaquetado, trabajador y migración de subidas |
 | `tests/` | Pruebas Python, integraciones Blender, fixture y evidencia histórica |
 | `apps/web/assets/` | Visor, favicon y superficie incluida; external/ ignorado contiene assets externos generados |

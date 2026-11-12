@@ -18,7 +18,7 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 | [`apps/db/`](../../apps/db/compose.yaml) | Compose con PostgreSQL 17, Redis, MinIO, cliente `mc` y proveedor OIDC de pruebas (perfil `auth-dev`); roles y esquema vacío en `init/01_roles.sh`; políticas del bucket en `minio/`; Alembic en la misma carpeta |
 | [`alembic.ini`](../../alembic.ini) / [`apps/db/alembic/`](../../apps/db/alembic/env.py) | Configuración de Alembic para el esquema `ortesislab` con el rol migrador. `versions/` no tiene revisiones; la primera sale de `alembic revision --autogenerate` (ver [DATABASE.md](DATABASE.md#lo-que-alembic-no-genera)) |
 | [`apps/db/preparar_base.sql`](../../apps/db/preparar_base.sql) | Esquema y permisos al recrear `ortesislab_dev` vacía con `make db-reset` |
-| [`pyproject.toml`](../../pyproject.toml) | Dependencias Python (incluye `sqlalchemy`, `alembic`, `psycopg[binary]`, `pyyaml`, `boto3`, `redis`, `authlib`, `itsdangerous`), versión y empaquetado |
+| [`pyproject.toml`](../../pyproject.toml) | Dependencias Python (incluye `sqlalchemy`, `alembic`, `psycopg[binary]`, `pyyaml`, `boto3`, `redis`, `authlib`, `itsdangerous`) y versión. `tool.uv.package = false`: no instala un paquete propio |
 | [`uv.lock`](../../uv.lock) / [`.python-version`](../../.python-version) | Resolución Python y selección de intérprete |
 | `reflex.lock/` | `package.json` y `bun.lock` versionan dependencias del frontend generado |
 | `.web/`, `.states/`, `.venv/` | Compilación frontend, artefactos de estado y entorno virtual generados; no modificar para implementar reglas |
@@ -26,7 +26,7 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 | `OrtesisLabPlugin/logs/` | Registro compartido del dominio; aparece bajo demanda y está ignorado por Git |
 | [`scripts/EjecutarTrabajador.py`](../../scripts/EjecutarTrabajador.py) | Proceso trabajador: motor del rol `ortesislab_worker`, bucle de cola y conciliación. `make worker` lo arranca; `UNA_VEZ=1` vacía la cola y termina |
 | [`scripts/MigrarSubidas.py`](../../scripts/MigrarSubidas.py) | Traslado único de `uploaded_files/` al bucket bajo el usuario semilla `subidas-locales-previas`; `--simular` solo lista; repone objetos ausentes de filas ya migradas |
-| [`src/generatemodelsapp/__init__.py`](../../src/generatemodelsapp/__init__.py) / [`scripts/IniciarConsola.py`](../../scripts/IniciarConsola.py) | Saludo de consola; no arranca Reflex |
+| [`scripts/IniciarConsola.py`](../../scripts/IniciarConsola.py) | Saludo de consola; no arranca Reflex |
 
 ## Estado de páginas
 

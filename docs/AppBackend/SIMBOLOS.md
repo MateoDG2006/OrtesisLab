@@ -865,11 +865,3 @@ Traslada una sola vez ``uploaded_files/`` al bucket y registra cada objeto.
 | `Migrar` | Función/método | [56](../../scripts/MigrarSubidas.py#L56) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Migrar.registrar` | Función/método | [85](../../scripts/MigrarSubidas.py#L85) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `main` | Función/método | [103](../../scripts/MigrarSubidas.py#L103) | Sin docstring; consultar el catálogo de módulos y el código. |
-
-## `src/generatemodelsapp/__init__.py`
-
-Marcador de paquete; ver índice de símbolos si contiene funciones.
-
-| Símbolo | Tipo | Línea | Descripción declarada |
-|---|---|---:|---|
-| `main` | Función/método | [1](../../src/generatemodelsapp/__init__.py#L1) | Sin docstring; consultar el catálogo de módulos y el código. |

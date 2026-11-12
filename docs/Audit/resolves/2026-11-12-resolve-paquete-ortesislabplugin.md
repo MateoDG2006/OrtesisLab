@@ -28,7 +28,11 @@ La carpeta del complemento ya es `apps/ortesis-plugin/OrtesisLabPlugin`. Los imp
 
 ## Verificación
 
-Se completa en el registro de cambios de esta entrega.
+- `uv run --directory apps/web python -c "import rxconfig; import web.GenerateModelsApp"` terminó en 0.
+- `uv run python -m unittest discover -s tests -p "test_wheel.py"`: 2 pruebas, OK.
+- `python docs/Agents/Scripts/GenerarIndices.py --comprobar`: catálogos al día y enlaces correctos.
+
+No se arrancó Reflex en el navegador ni Blender.
 
 ## Riesgo residual y cierre
 
