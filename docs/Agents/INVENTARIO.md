@@ -69,6 +69,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [db/alembic/env.py](../../db/alembic/env.py) | Entorno de Alembic: migra el esquema ortesislab con el rol migrador. |
 | [db/alembic/script.py.mako](../../db/alembic/script.py.mako) | Plantilla con la que Alembic crea cada archivo de revisión. |
 | [db/alembic/versions/.gitkeep](../../db/alembic/versions/.gitkeep) | Conserva la carpeta de revisiones, vacía en el repositorio. |
+| [db/alembic/versions/20261112_1200_esquema_inicial.py](../../db/alembic/versions/20261112_1200_esquema_inicial.py) | Esquema inicial ortesislab: tablas, trigger de versiones y GRANT. |
 | [db/seeds/development.sql](../../db/seeds/development.sql) | Datos idempotentes de desarrollo para `ortesislab_dev`. |
 | [db/test/preparar_base.sql](../../db/test/preparar_base.sql) | Preparación de la base `ortesislab_test` antes de migrarla. |
 | [docs/Agents/ESTANDAR_DOCUMENTACION.md](ESTANDAR_DOCUMENTACION.md) | Estándar documental |
@@ -96,6 +97,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/audits/2026-10-13-evidencias.json](../Audit/audits/2026-10-13-evidencias.json) | Archivo auxiliar versionado; revisar su contrato al modificarlo. |
 | [docs/Audit/audits/2026-10-13-export-evidence.json](../Audit/audits/2026-10-13-export-evidence.json) | Archivo auxiliar versionado; revisar su contrato al modificarlo. |
 | [docs/Audit/audits/2026-10-13-inventario.json](../Audit/audits/2026-10-13-inventario.json) | Archivo auxiliar versionado; revisar su contrato al modificarlo. |
+| [docs/Audit/audits/2026-10-29-adenda-cierre-b.md](../Audit/audits/2026-10-29-adenda-cierre-b.md) | Adenda — cierre de hallazgos B-01…B-22 |
 | [docs/Audit/audits/2026-10-29-auditoria-evaluacion.md](../Audit/audits/2026-10-29-auditoria-evaluacion.md) | AUD-2026-10-29-002 — Auditoría y evaluación del proyecto |
 | [docs/Audit/audits/2026-10-29-documentacion/README.md](../Audit/audits/2026-10-29-documentacion/README.md) | Documentación granular propuesta — AUD-2026-10-29-002 |
 | [docs/Audit/audits/2026-10-29-documentacion/backend/configuracion.md](../Audit/audits/2026-10-29-documentacion/backend/configuracion.md) | Backend · Configuración |
@@ -124,6 +126,10 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-issue-7-contratos-wheel.md](../Audit/resolves/2026-11-12-issue-7-contratos-wheel.md) | Issue #7 — Contratos y consola (A-17, A-18) |
 | [docs/Audit/resolves/2026-11-12-issue-8-tests-visor-a11y.md](../Audit/resolves/2026-11-12-issue-8-tests-visor-a11y.md) | Issue #8 — Tests, visor y accesibilidad (A-19, A-20, A-21, B-14) |
 | [docs/Audit/resolves/2026-11-12-issue-9-seguimiento.md](../Audit/resolves/2026-11-12-issue-9-seguimiento.md) | RES-2026-11-12-ISSUE-9 — Seguimiento AUD-2026-10-13-001 |
+| [docs/Audit/resolves/2026-11-12-issue-b-cierre-parcial-a.md](../Audit/resolves/2026-11-12-issue-b-cierre-parcial-a.md) | RES-2026-11-12-B-A — Cierre parcial hallazgos B (tramo A) |
+| [docs/Audit/resolves/2026-11-12-issue-b-cierre-parcial-b.md](../Audit/resolves/2026-11-12-issue-b-cierre-parcial-b.md) | RES-2026-11-12-B-B — Cierre parcial hallazgos B (tramo B) |
+| [docs/Audit/resolves/2026-11-12-issue-b-indice.md](../Audit/resolves/2026-11-12-issue-b-indice.md) | Índice de cierre — AUD-2026-10-29-002 (hallazgos B) |
+| [docs/Audit/resolves/2026-11-12-resolve-aud-2026-10-29.md](../Audit/resolves/2026-11-12-resolve-aud-2026-10-29.md) | RES-2026-11-12-002 — Cierre hallazgos AUD-2026-10-29-002 (B-01…B-22) |
 | [docs/Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md](../Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md) | RES-2026-11-12-001 — Cierre de issues AUD-2026-10-13-001 (plan autorizado) |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
 | [docs/BlenderPlugin/ALGORITMOS.md](../BlenderPlugin/ALGORITMOS.md) | Algoritmos de generación y comprobación |
@@ -189,7 +195,10 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [tests/nucleo/test_wheel.py](../../tests/nucleo/test_wheel.py) | Comprueba el punto de entrada declarado en pyproject. |
 | [tests/persistencia/__init__.py](../../tests/persistencia/__init__.py) | Pruebas de PostgreSQL, bucket, Redis, lotes, trabajador y permisos. |
 | [tests/persistencia/apoyo_persistencia.py](../../tests/persistencia/apoyo_persistencia.py) | Apoyo de pruebas contra la base desechable ``ortesislab_test``. |
+| [tests/persistencia/test_alembic_revision.py](../../tests/persistencia/test_alembic_revision.py) | Humo de la revisión inicial de Alembic (sin exigir base en vivo). |
 | [tests/persistencia/test_almacen_import.py](../../tests/persistencia/test_almacen_import.py) | Import al bucket, caché Redis y migración de subidas locales. |
+| [tests/persistencia/test_cuota_almacen.py](../../tests/persistencia/test_cuota_almacen.py) | Cuotas de almacenamiento en importación (B-05). |
+| [tests/persistencia/test_import_fallo_publicar.py](../../tests/persistencia/test_import_fallo_publicar.py) | Import rechazado si falla la publicación al bucket (B-06). |
 | [tests/persistencia/test_lotes_trabajador.py](../../tests/persistencia/test_lotes_trabajador.py) | Lotes idempotentes, trabajador con lease, aislamiento y conciliación. |
 | [tests/persistencia/test_propiedad_datos.py](../../tests/persistencia/test_propiedad_datos.py) | Propiedad de los datos y permisos de rol sobre PostgreSQL real. |
 | [tests/persistencia/test_superficie_no_estatica.py](../../tests/persistencia/test_superficie_no_estatica.py) | A-02: el import no escribe en uploaded_files/ servido por Reflex. |

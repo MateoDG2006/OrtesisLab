@@ -253,10 +253,12 @@ class EstadoHistorial(rx.State):
         resultado = next(
             (r for r in reversed(detalle.resultados) if r.stl_status == EstadoExport.READY and r.stl_url), None
         )
+        from .services.ServicioVersiones import ServicioVersiones
+
         cambios = [
             f"{clave}: {base.get(clave)} → {valor}"
             for clave, valor in sorted(version.parameters.items())
-            if base.get(clave) != valor
+            if clave not in ServicioVersiones.CLAVES_SOLO_VOXEL and base.get(clave) != valor
         ]
         ultimo = detalle.intentos[-1] if detalle.intentos else None
         return {

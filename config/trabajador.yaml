@@ -9,6 +9,11 @@ conciliacion_s: 600
 # Cálculos geométricos simultáneos en este proceso.
 max_concurrent_geometry: 1
 
+# Estimación orientativa para la UI (segundos por variante en un trabajador).
+capacidad_variante_s: 20
+# Ítems en running por usuario (cola del trabajador).
+max_items_por_usuario: 1
+
 conciliador:
   # Antigüedad a partir de la cual se borran assets staged.
   horas_staged: 24
@@ -16,3 +21,5 @@ conciliador:
   dias_rechazo: 30
   # Filas ready comprobadas contra el bucket por consulta.
   lote_comprobacion: 200
+  # Si false (defecto), no lista todo el bucket; solo reglas por filas en base.
+  explorar_bucket: false

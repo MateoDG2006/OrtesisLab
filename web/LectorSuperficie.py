@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import struct
+import threading
 import zipfile
 from pathlib import Path
 
@@ -18,6 +19,9 @@ from GenerateModelsApp.util.Utilidades import Configuracion
 from .ConfiguracionBackend import ConfiguracionBackend
 from .enums import ExtensionSuperficie
 
+_NORMALIZACIONES = int(ConfiguracionBackend.Cargar("web")["max_normalizaciones_concurrentes"])
+NORMALIZACION = threading.Semaphore(_NORMALIZACIONES)
+
 
 class LectorSuperficie:
     """Convierte STL o NPZ en los arreglos que consume el núcleo geométrico."""
@@ -31,6 +35,15 @@ class LectorSuperficie:
         nombre: str,
         contenido: bytes,
         autoescalar: bool = True,
+    ) -> tuple[tuple, dict]:
+        with NORMALIZACION:
+            return LectorSuperficie._PrepararConjunto(nombre, contenido, autoescalar)
+
+    @staticmethod
+    def _PrepararConjunto(
+        nombre: str,
+        contenido: bytes,
+        autoescalar: bool,
     ) -> tuple[tuple, dict]:
         archivo = Path(nombre).name
         extension = Path(archivo).suffix.lower()

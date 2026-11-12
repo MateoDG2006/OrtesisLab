@@ -311,13 +311,28 @@ class PaginaComparacion:
                     EstadoApp.set_ambos_revestimientos,
                     "lote-ambos-revestimientos",
                 ),
-                rx.button(
-                    "Generar lote",
-                    on_click=EstadoApp.PedirLote,
-                    loading=EstadoApp.ocupado,
-                    disabled=EstadoApp.ocupado,
-                    size="3",
-                    variant="soft",
+                rx.hstack(
+                    rx.button(
+                        "Generar lote",
+                        on_click=EstadoApp.PedirLote,
+                        loading=EstadoApp.ocupado,
+                        disabled=EstadoApp.ocupado,
+                        size="3",
+                        variant="soft",
+                    ),
+                    rx.cond(
+                        EstadoApp.ocupado & (EstadoApp.lote_id != ""),
+                        rx.button(
+                            "Cancelar lote",
+                            on_click=EstadoApp.CancelarLote,
+                            size="3",
+                            variant="outline",
+                            color_scheme="red",
+                        ),
+                        rx.box(),
+                    ),
+                    spacing="3",
+                    wrap="wrap",
                 ),
                 rx.cond(
                     EstadoApp.total > 0,

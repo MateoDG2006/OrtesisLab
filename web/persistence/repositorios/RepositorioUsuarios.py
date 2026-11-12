@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from uuid import UUID
 
-from sqlalchemy import insert, select, update
+from sqlalchemy import and_, delete, insert, or_, select, update
 from sqlalchemy.dialects.postgresql import insert as insertar_pg
 
 from web.enums import EstadoUsuario
@@ -60,6 +60,19 @@ class RepositorioUsuarios(RepositorioBase):
                 USUARIOS.c.status == EstadoUsuario.ACTIVE,
             ),
         )
+
+    @staticmethod
+    def PurgarSesionesVencidas(conexion, dias: int) -> int:
+        limite = AHORA - timedelta(days=max(1, dias))
+        resultado = conexion.execute(
+            delete(SESIONES).where(
+                or_(
+                    SESIONES.c.expires_at < limite,
+                    and_(SESIONES.c.revoked_at.is_not(None), SESIONES.c.revoked_at < limite),
+                )
+            )
+        )
+        return int(resultado.rowcount)
 
     @staticmethod
     def RevocarSesion(conexion, token_sha256: str) -> None:

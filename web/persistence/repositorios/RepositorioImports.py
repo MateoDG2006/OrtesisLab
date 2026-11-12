@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from sqlalchemy import and_, insert, select, update
+from datetime import timedelta
+
+from sqlalchemy import and_, func, insert, select, update
 
 from web.enums import EstadoAsset, EstadoImport
 
@@ -133,3 +135,35 @@ class RepositorioImports(RepositorioBase):
             .where(IMPORTS.c.user_id == user_id, IMPORTS.c.id == import_id)
         ).scalar_one_or_none()
         return nombre or ""
+
+    @staticmethod
+    def ContarReady(conexion, user_id: UUID) -> int:
+        return int(
+            conexion.execute(
+                select(func.count())
+                .select_from(IMPORTS)
+                .where(IMPORTS.c.user_id == user_id, IMPORTS.c.status == EstadoImport.READY)
+            ).scalar_one()
+        )
+
+    @staticmethod
+    def ContarSubidasRecientes(conexion, user_id: UUID, horas: int) -> int:
+        limite = AHORA - timedelta(hours=horas)
+        return int(
+            conexion.execute(
+                select(func.count())
+                .select_from(IMPORTS)
+                .where(IMPORTS.c.user_id == user_id, IMPORTS.c.created_at >= limite)
+            ).scalar_one()
+        )
+
+    @classmethod
+    def ColgadosVencidos(cls, conexion, horas: int) -> list[ImportDTO]:
+        limite = AHORA - timedelta(hours=horas)
+        return cls._Lista(
+            conexion,
+            select(IMPORTS).where(
+                IMPORTS.c.status.in_((EstadoImport.RECEIVED, EstadoImport.VALIDATING)),
+                IMPORTS.c.created_at < limite,
+            ).limit(200),
+        )

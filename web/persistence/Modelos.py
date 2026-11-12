@@ -36,6 +36,7 @@ from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.sql.elements import TextClause
 
+from web.ConfiguracionBackend import ConfiguracionBackend
 from web.enums import (
     AlcanceGeometria,
     BackendGeneracion,
@@ -58,6 +59,7 @@ from web.enums import (
 
 AHORA = text("now()")
 OBJETO_VACIO = text("'{}'::jsonb")
+_MAXIMO_ITEMS_LOTE = int(ConfiguracionBackend.Cargar("persistencia")["lotes"]["maximo_items"])
 
 
 class Base(DeclarativeBase):
@@ -358,7 +360,11 @@ class LoteGeneracion(Base):
         _Valores("mode", "generation_batches", ModoLote),
         _Objeto("definition", "generation_batches"),
         _Valores("status", "generation_batches", EstadoLote),
-        _Check("generation_batches", "total_items", "total_items BETWEEN 1 AND 12"),
+        _Check(
+            "generation_batches",
+            "total_items",
+            f"total_items BETWEEN 1 AND {_MAXIMO_ITEMS_LOTE}",
+        ),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True)

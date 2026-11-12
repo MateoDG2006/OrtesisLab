@@ -30,6 +30,7 @@ from web.storage.AlmacenamientoPrivado import Almacen
 
 from .ConciliadorArchivos import ConciliadorArchivos
 
+ConfiguracionBackend.ValidarEnArranque()
 _CONFIG = ConfiguracionBackend.Cargar("trabajador")
 LEASE_S = _CONFIG["lease_s"]
 LATIDO_S = _CONFIG["latido_s"]

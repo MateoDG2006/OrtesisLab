@@ -47,7 +47,7 @@ Los límites, tiempos y tamaños del backend no van en el entorno ni en el códi
 | [`cache.yaml`](../../config/cache.yaml) | `ttl_s` 604800 (7 días), `reintento_s` 30, `timeout_s` 0.5 | `CacheRedis` |
 | [`almacen.yaml`](../../config/almacen.yaml) | `timeout_conexion_s` 3, `timeout_lectura_s` 30, `intentos` 3 | `StorageS3` |
 | [`sesion.yaml`](../../config/sesion.yaml) | `duracion_horas` 12, `intercambio_oidc_s` 600 | `ContextoUsuario`, `AutenticacionOidc` |
-| [`web.yaml`](../../config/web.yaml) | `intervalo_progreso_s` 1, `maximo_variantes` 12, `espera_crear_s` 600, `maximo_bytes` 50 MiB, `maximo_descomprimido_bytes` 128 MiB; `patrones` (5) y `ejes` (11): clave y etiqueta visible, en el orden de los selectores; `estados_visibles` (5): etiqueta de cada estado de ítem en `/historial` | `EstadoApp`, `GeneradorWeb`, `LectorSuperficie`, `EstadoHistorial` |
+| [`web.yaml`](../../config/web.yaml) | `intervalo_progreso_s` 1, `maximo_variantes` 12, `espera_crear_s` 600, `maximo_bytes` 50 MiB, `maximo_descomprimido_bytes` 128 MiB, `max_normalizaciones_concurrentes` 2 (semáforo de `LectorSuperficie.Preparar`); `patrones` (5) y `ejes` (11): clave y etiqueta visible, en el orden de los selectores; `estados_visibles` (5): etiqueta de cada estado de ítem en `/historial` | `EstadoApp`, `GeneradorWeb`, `LectorSuperficie`, `EstadoHistorial` |
 
 Al editarlos hay que respetar dos relaciones que el código no comprueba:
 - `web.yaml` `maximo_variantes` no debe superar `persistencia.yaml` `lotes.maximo_items`; si lo supera, la admisión rechaza los lotes más grandes.
@@ -86,15 +86,23 @@ Para la base de pruebas, `make db-test-reset` borra `ortesislab_test`, la vuelve
 
 [`alembic.ini`](../../alembic.ini) apunta a [`db/alembic/`](../../db/alembic/env.py). `env.py` toma la URL del rol migrador de `Ajustes` (`ORTESISLAB_MIGRATOR_DATABASE_URL`; con `-x base=test`, `ORTESISLAB_TEST_MIGRATOR_DATABASE_URL`; cualquier otro valor de `base` usa la primera), usa `Base.metadata` de [`web/persistence/Modelos.py`](../../web/persistence/Modelos.py) como esquema objetivo, guarda `alembic_version` en `ortesislab`, ignora esa tabla en la comparación y compara tipos y defaults. Tiene un único flujo de ejecución, siempre conectado a la base: no admite el modo `--sql` de Alembic, que genera SQL sin conexión.
 
-### 3. Crear una migración
+### 3. Revisión inicial y migraciones nuevas
 
-Cambiar primero `Modelos.py` y después generar la revisión contra una base que esté en `head` (o vacía, para la primera):
+En el repositorio ya está la revisión inicial [`db/alembic/versions/20261112_1200_esquema_inicial.py`](../../db/alembic/versions/20261112_1200_esquema_inicial.py). Tras preparar la base vacía, aplicarla con:
+
+```powershell
+uv run alembic upgrade head
+# base de pruebas:
+uv run alembic -x base=test upgrade head
+```
+
+Para cambios posteriores, modificar primero `Modelos.py` y generar una revisión contra una base en `head`:
 
 ```powershell
 uv run alembic -x base=test revision --autogenerate -m "descripcion"
 ```
 
-El autogenerado debe revisarse a mano antes de aplicarlo. Alembic no genera estos elementos del esquema, que la migración inicial debe incluir con `op.execute` u operaciones explícitas (su contenido está en [DATABASE.md](DATABASE.md#12-migraciones-con-alembic)):
+El autogenerado debe revisarse a mano antes de aplicarlo. Alembic no genera estos elementos del esquema; la revisión inicial ya los incluye con `op.execute` (detalle en [DATABASE.md](DATABASE.md#12-migraciones-con-alembic)). Las revisiones nuevas que los toquen deben añadirlos a mano igualmente:
 
 - la función y el trigger `model_versions_comprobar` de `model_versions`;
 - los `GRANT` de `ortesislab_app` y `ortesislab_worker`;

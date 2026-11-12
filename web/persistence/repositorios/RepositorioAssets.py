@@ -6,7 +6,7 @@ from datetime import timedelta
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import and_, insert, select, update
+from sqlalchemy import and_, func, insert, select, update
 
 from web.enums import EstadoAsset, EstadoExport, EstadoImport
 
@@ -134,6 +134,17 @@ class RepositorioAssets(RepositorioBase):
     def ClavesRegistradas(conexion, claves: list[str]) -> set[str]:
         filas = conexion.execute(select(ASSETS.c.storage_key).where(ASSETS.c.storage_key.in_(claves))).scalars()
         return set(filas)
+
+    @staticmethod
+    def BytesUsuarioReady(conexion, user_id: UUID) -> int:
+        return int(
+            conexion.execute(
+                select(func.coalesce(func.sum(ASSETS.c.size_bytes), 0)).where(
+                    ASSETS.c.user_id == user_id,
+                    ASSETS.c.status == EstadoAsset.READY,
+                )
+            ).scalar_one()
+        )
 
     @staticmethod
     def MarcarExportsFaltantes(conexion, asset_id: UUID) -> None:

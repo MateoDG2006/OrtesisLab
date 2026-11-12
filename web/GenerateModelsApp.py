@@ -12,6 +12,7 @@ import reflex as rx
 from GenerateModelsApp.util.Utilidades import Registro
 
 from .Ajustes import Ajustes
+from .ConfiguracionBackend import ConfiguracionBackend
 from .EstadoApp import EstadoApp
 from .EstadoHistorial import EstadoHistorial
 from .PaginaComparacion import PaginaComparacion
@@ -25,6 +26,7 @@ from .services.AutenticacionOidc import AutenticacionOidc
 async def PoolPostgres():
     # Rol de aplicación, sin DDL; los handlers fallan con un mensaje si la base no está.
     try:
+        ConfiguracionBackend.ValidarEnArranque()
         ConexionPostgres.Abrir(Ajustes.Cargar().database_url, 1, 4, "backend")
     except ErrorPersistencia as exc:
         Registro.Obtener("web").error("PostgreSQL no disponible al arrancar: %s", exc)

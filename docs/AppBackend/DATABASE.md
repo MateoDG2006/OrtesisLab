@@ -607,7 +607,7 @@ Descarga y visor deben resolver `export_id`, autenticar al usuario, comprobar re
 
 Para el iframe, servir la ruta privada bajo el mismo origen mediante proxy/despliegue o configurar autenticación y CORS explícitos. No poner tokens permanentes en `src` ni en query strings. El backend puede producir URLs firmadas breves si se adopta object storage; la firma debe emitirse después de autorizar el recurso.
 
-Retención propuesta: assets listos se conservan mientras existan versiones/resultados asociados; staging huérfano, al menos 24 horas antes de limpiar; imports rechazados, 7 días por defecto configurable. El borrado solicitado de una cuenta pasa por estado deletion_pending, cancela admisión, purga referencias en orden explícito y elimina archivos privados. Los backups tienen retención propia y deben estar contemplados en ese procedimiento.
+Retención operativa (implementada): `config/persistencia.yaml` → `retencion.sesiones_dias` y `eventos_historial_dias`; el job `ConciliadorArchivos` purga `auth_sessions` vencidas/revocadas y filas antiguas de `history_events`. `imports_ready_dias` en 0 desactiva purga de imports listos (borrado de cuenta: pendiente). Assets listos se conservan mientras existan versiones/resultados asociados; staging huérfano, al menos `conciliador.horas_staged` horas; imports rechazados, `conciliador.dias_rechazo` días. El borrado solicitado de una cuenta (`deletion_pending`) sigue sin flujo completo.
 
 El backup PostgreSQL no contiene STL/NPZ. Para recuperación completa, copiar también archivos privados y un manifiesto de hashes/IDs. Probar que todos los assets ready referenciados en el backup están presentes en la copia. No anunciar recuperación completa con un `.dump` aislado.
 
@@ -769,14 +769,14 @@ La DSN de una app local usa host `127.0.0.1:5433`; la del servicio de migración
 
 ## 12. Migraciones con Alembic
 
-*Sección vigente; sustituye al diseño original con dbmate.* El esquema objetivo es `Base.metadata` de [`web/persistence/Modelos.py`](../../web/persistence/Modelos.py). Las 13 tablas declaran FK compuestas, `CHECK`, `JSONB`, `timestamptz`, índices parciales y descendentes. Las restricciones llevan los nombres que PostgreSQL asignaba al esquema original, y la convención de nombres del `MetaData` cubre las PK (`<tabla>_pkey`), las UNIQUE (`<tabla>_<columna>_key`) y las FK (`<tabla>_<columna>_fkey`) sin nombre explícito. El repositorio no contiene revisiones: `db/alembic/versions/` está vacío. Comandos e inicialización de la base en [OPERACION_Y_PRUEBAS.md](OPERACION_Y_PRUEBAS.md#base-de-datos-inicializar-y-migrar).
+*Sección vigente; sustituye al diseño original con dbmate.* El esquema objetivo es `Base.metadata` de [`web/persistence/Modelos.py`](../../web/persistence/Modelos.py). Las 13 tablas declaran FK compuestas, `CHECK`, `JSONB`, `timestamptz`, índices parciales y descendentes. Las restricciones llevan los nombres que PostgreSQL asignaba al esquema original, y la convención de nombres del `MetaData` cubre las PK (`<tabla>_pkey`), las UNIQUE (`<tabla>_<columna>_key`) y las FK (`<tabla>_<columna>_fkey`) sin nombre explícito. La revisión inicial `db/alembic/versions/20261112_1200_esquema_inicial.py` crea las tablas desde `Base.metadata`, añade el trigger `model_versions_comprobar` y los `GRANT` de `ortesislab_app` y `ortesislab_worker`. Comandos e inicialización en [OPERACION_Y_PRUEBAS.md](OPERACION_Y_PRUEBAS.md#base-de-datos-inicializar-y-migrar).
 
 | Ruta | Propósito |
 |---|---|
 | `alembic.ini` | `script_location = db/alembic`; nombres de archivo `AAAAMMDD_HHMM_<slug>` |
 | `db/alembic/env.py` | Un único flujo conectado (sin modo `--sql`); URL del rol migrador desde `Ajustes`, `-x base=test` para la base de pruebas, `version_table_schema="ortesislab"`, filtro de `alembic_version`, `compare_type` y `compare_server_default` |
 | `db/alembic/script.py.mako` | Plantilla de revisión |
-| `db/alembic/versions/` | Revisiones generadas por el responsable del esquema |
+| `db/alembic/versions/` | Revisiones; la inicial es `20261112_1200_esquema_inicial.py` (`upgrade head` / `alembic -x base=test upgrade head`) |
 | `db/test/preparar_base.sql` | Crea el esquema `ortesislab` y los permisos de base en una base vacía (variable `base`) |
 | `db/seeds/development.sql` | Fixture idempotente exclusivamente local; exige el esquema migrado |
 

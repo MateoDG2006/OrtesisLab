@@ -23,14 +23,21 @@ from web.cache.CacheRedis import CacheRedis
 from web.enums import ExtensionSuperficie, FormatoImport, OrigenImport, TipoAsset, TipoEvento
 from web.LectorSuperficie import LectorSuperficie
 from web.persistence.ConexionPostgres import ConexionPostgres
+from web.ConfiguracionBackend import ConfiguracionBackend
 from web.persistence.Contratos import (
     ESQUEMA_NORMALIZACION,
     VERSION_LECTOR,
     AccesoDenegado,
+    CuotaExcedida,
     ImportDTO,
     UsuarioAutenticado,
 )
-from web.persistence.repositorios import RepositorioAssets, RepositorioHistorial, RepositorioImports
+from web.persistence.repositorios import (
+    RepositorioAssets,
+    RepositorioHistorial,
+    RepositorioImports,
+    RepositorioLotes,
+)
 from web.storage.AlmacenamientoPrivado import Almacen
 
 PLANTILLA = Path(__file__).resolve().parents[2] / "assets" / ARCHIVO_SUPERFICIE
@@ -166,16 +173,25 @@ class ServicioImports:
     ) -> ImportDTO:
         user_id, project_id = usuario.user_id, usuario.project_id
         sha = Almacen.Sha256(contenido)
-        existente = ConexionPostgres.Ejecutar(
-            lambda conexion: RepositorioImports.ListoPorOriginal(conexion, user_id, project_id, sha, source_kind)
-        )
-        if existente is not None:
-            return existente
+        cuotas = ConfiguracionBackend.Cargar("persistencia")["cuotas"]
 
         import_id, original_id, normal_id = uuid.uuid4(), uuid.uuid4(), uuid.uuid4()
         clave_original = Almacen.Clave(user_id, original_id)
 
-        def recibir(conexion) -> None:
+        def admitir(conexion) -> ImportDTO | tuple[UUID, UUID]:
+            RepositorioLotes.BloquearUsuario(conexion, user_id)
+            existente = RepositorioImports.ListoPorOriginal(conexion, user_id, project_id, sha, source_kind)
+            if existente is not None:
+                return existente
+            if RepositorioImports.ContarReady(conexion, user_id) >= cuotas["max_imports_ready"]:
+                raise CuotaExcedida(
+                    f"Tiene {cuotas['max_imports_ready']} imports listos; elimine o espere antes de subir más."
+                )
+            if RepositorioImports.ContarSubidasRecientes(conexion, user_id, 1) >= cuotas["max_subidas_por_hora"]:
+                raise CuotaExcedida("Demasiadas subidas en la última hora. Espere un momento.")
+            bytes_listos = RepositorioAssets.BytesUsuarioReady(conexion, user_id)
+            if bytes_listos + len(contenido) > cuotas["max_bytes_usuario"]:
+                raise CuotaExcedida("Superó la cuota de almacenamiento del usuario.")
             RepositorioAssets.CrearStaged(
                 conexion, user_id, original_id, clave_original, TipoAsset.IMPORT_ORIGINAL, nombre[:255], media,
                 len(contenido), sha,
@@ -187,45 +203,63 @@ class ServicioImports:
                 conexion, user_id, project_id, TipoEvento.IMPORT_RECEIVED,
                 payload={"import_id": str(import_id), "name": nombre[:255], "size_bytes": len(contenido)},
             )
+            return import_id, original_id
 
-        ConexionPostgres.Ejecutar(recibir)
-        url_original = Almacen.Actual().Publicar(clave_original, contenido, media, sha)
+        previo = ConexionPostgres.Ejecutar(admitir)
+        if not isinstance(previo, tuple):
+            return previo
+        import_id, original_id = previo
 
-        try:
-            resultado = normalizar(contenido)
-        except (ValueError, OrtesisLabError) as exc:
-            def rechazar(conexion) -> None:
-                RepositorioAssets.MarcarListo(conexion, user_id, original_id, url_original)
-                RepositorioImports.MarcarRechazado(conexion, user_id, import_id, type(exc).__name__, str(exc))
-                RepositorioHistorial.Evento(
-                    conexion, user_id, project_id, TipoEvento.IMPORT_REJECTED,
-                    payload={"import_id": str(import_id), "error_code": type(exc).__name__},
-                )
-
-            ConexionPostgres.Ejecutar(rechazar)
-            raise
-
-        npz = ServicioImports.TuplaANpz(resultado)
-        sha_npz = Almacen.Sha256(npz)
-        clave_npz = Almacen.Clave(user_id, normal_id)
-        ConexionPostgres.Ejecutar(
-            lambda conexion: RepositorioAssets.CrearStaged(
-                conexion, user_id, normal_id, clave_npz, TipoAsset.SURFACE_NPZ, None, MEDIA_NPZ, len(npz), sha_npz
-            )
-        )
-        url_npz = Almacen.Actual().Publicar(clave_npz, npz, MEDIA_NPZ, sha_npz)
-        CacheRedis.GuardarTupla(CacheRedis.ClaveCruda(sha_npz), resultado)
-        vertices, caras = resultado[0], resultado[1]
-        dimensiones = [float(valor) for valor in np.ptp(vertices, axis=0)] if len(vertices) else [0.0, 0.0, 0.0]
-
-        def publicar(conexion) -> ImportDTO:
-            RepositorioAssets.MarcarListo(conexion, user_id, original_id, url_original)
-            RepositorioAssets.MarcarListo(conexion, user_id, normal_id, url_npz)
-            RepositorioImports.MarcarListo(conexion, user_id, import_id, normal_id, len(vertices), len(caras), dimensiones)
+        def rechazar_fallo(conexion, codigo: str, mensaje: str, url_original: str | None) -> None:
+            if url_original:
+                try:
+                    RepositorioAssets.MarcarListo(conexion, user_id, original_id, url_original)
+                except AccesoDenegado:
+                    pass
+            RepositorioImports.MarcarRechazado(conexion, user_id, import_id, codigo, mensaje)
             RepositorioHistorial.Evento(
-                conexion, user_id, project_id, TipoEvento.IMPORT_READY,
-                payload={"import_id": str(import_id), "vertices": len(vertices), "faces": len(caras)},
+                conexion, user_id, project_id, TipoEvento.IMPORT_REJECTED,
+                payload={"import_id": str(import_id), "error_code": codigo},
             )
-            return RepositorioImports.Obtener(conexion, user_id, import_id)
 
-        return ConexionPostgres.Ejecutar(publicar)
+        url_original: str | None = None
+        try:
+            url_original = Almacen.Actual().Publicar(clave_original, contenido, media, sha)
+            try:
+                resultado = normalizar(contenido)
+            except (ValueError, OrtesisLabError) as exc:
+                ConexionPostgres.Ejecutar(lambda c: rechazar_fallo(c, type(exc).__name__, str(exc), url_original))
+                raise
+
+            npz = ServicioImports.TuplaANpz(resultado)
+            sha_npz = Almacen.Sha256(npz)
+            clave_npz = Almacen.Clave(user_id, normal_id)
+            ConexionPostgres.Ejecutar(
+                lambda conexion: RepositorioAssets.CrearStaged(
+                    conexion, user_id, normal_id, clave_npz, TipoAsset.SURFACE_NPZ, None, MEDIA_NPZ, len(npz), sha_npz
+                )
+            )
+            url_npz = Almacen.Actual().Publicar(clave_npz, npz, MEDIA_NPZ, sha_npz)
+            CacheRedis.GuardarTupla(CacheRedis.ClaveCruda(sha_npz), resultado)
+            vertices, caras = resultado[0], resultado[1]
+            dimensiones = [float(valor) for valor in np.ptp(vertices, axis=0)] if len(vertices) else [0.0, 0.0, 0.0]
+
+            def publicar(conexion) -> ImportDTO:
+                RepositorioAssets.MarcarListo(conexion, user_id, original_id, url_original)
+                RepositorioAssets.MarcarListo(conexion, user_id, normal_id, url_npz)
+                RepositorioImports.MarcarListo(
+                    conexion, user_id, import_id, normal_id, len(vertices), len(caras), dimensiones
+                )
+                RepositorioHistorial.Evento(
+                    conexion, user_id, project_id, TipoEvento.IMPORT_READY,
+                    payload={"import_id": str(import_id), "vertices": len(vertices), "faces": len(caras)},
+                )
+                return RepositorioImports.Obtener(conexion, user_id, import_id)
+
+            return ConexionPostgres.Ejecutar(publicar)
+        except BaseException as exc:
+            if not isinstance(exc, (ValueError, OrtesisLabError)):
+                ConexionPostgres.Ejecutar(
+                    lambda c: rechazar_fallo(c, type(exc).__name__, str(exc)[:500], url_original)
+                )
+            raise

@@ -14,8 +14,9 @@ Variables de entorno:
 """
 import json
 import os
-import urllib.request
 import urllib.error
+import urllib.parse
+import urllib.request
 
 NOTION_VERSION = "2022-06-28"
 NOTION_TOKEN = os.environ["NOTION_TOKEN"]
@@ -76,6 +77,12 @@ def query_tasks():
     return tasks
 
 
+def issue_existente(notion_url):
+    consulta = urllib.parse.quote(f"repo:{GH_REPO} {notion_url} in:body", safe="")
+    res = github("GET", "/search/issues?q=" + consulta)
+    return int(res.get("total_count", 0)) > 0
+
+
 def first_paragraph(page_id):
     try:
         res = notion("GET", "/blocks/%s/children?page_size=5" % page_id)
@@ -107,6 +114,9 @@ def main():
             % (t["url"], prio or "-", estado, desc)
         )
         labels = [prio] if prio else []
+        if issue_existente(t["url"]):
+            print("SKIP  %s (issue ya enlazada)" % title)
+            continue
         if DRY_RUN:
             print("[dry-run] crearia issue: %s" % title)
             continue

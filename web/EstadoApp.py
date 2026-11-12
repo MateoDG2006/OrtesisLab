@@ -38,6 +38,8 @@ from .storage.AlmacenamientoPrivado import PATRON_CLAVE
 
 ID_SUBIDA_SUPERFICIE = "superficie-entrada"
 INTERVALO_PROGRESO_S = ConfiguracionBackend.Cargar("web")["intervalo_progreso_s"]
+TRABAJADOR = ConfiguracionBackend.Cargar("trabajador")
+CAPACIDAD_VARIANTE_S = int(TRABAJADOR["capacidad_variante_s"])
 TERMINALES = ITEMS_TERMINALES
 
 _PARAMETROS_DEFECTO = Configuracion.ParametrosDefecto()
@@ -76,7 +78,10 @@ class EstadoApp(rx.State):
     ambos_revestimientos: bool = False
 
     ocupado: bool = False
-    mensaje: str = "Listo para generar. Cada variante tarda cerca de 20 segundos."
+    mensaje: str = (
+        f"Listo para generar. Estime unos {CAPACIDAD_VARIANTE_S} s por variante "
+        f"(config/trabajador.yaml capacidad_variante_s)."
+    )
     hechos: int = 0
     total: int = 0
     modo_lote: bool = False
@@ -552,13 +557,16 @@ class EstadoApp(rx.State):
     async def _Seguir(self, usuario: UsuarioAutenticado, lote_id: uuid.UUID) -> None:
         # Lee el lote de la base hasta que se cierra; la página no guarda la malla.
         try:
+            espera = max(1.0, float(INTERVALO_PROGRESO_S))
             while True:
                 progreso = await asyncio.to_thread(ServicioLotes.Progreso, usuario, lote_id)
                 async with self:
                     self._Publicar(progreso)
                 if not progreso.abierto:
                     break
-                await asyncio.sleep(INTERVALO_PROGRESO_S)
+                await asyncio.sleep(espera)
+                if espera < 5.0:
+                    espera = min(espera * 2, 5.0)
         except ErrorPersistencia as exc:
             async with self:
                 self.mensaje = f"{exc} El lote sigue guardado; recargue para retomarlo."

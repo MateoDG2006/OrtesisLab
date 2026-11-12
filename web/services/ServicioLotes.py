@@ -131,13 +131,15 @@ class ServicioLotes:
         return ConexionPostgres.Ejecutar(leer)
 
     @staticmethod
-    def Esperar(usuario: UsuarioAutenticado, batch_id: UUID, limite_s: float, intervalo_s: float = 1.0) -> ProgresoLote:
+    def Esperar(usuario: UsuarioAutenticado, batch_id: UUID, limite_s: float, intervalo_s: float = 0.5) -> ProgresoLote:
         final = time.monotonic() + limite_s
+        espera = max(0.25, intervalo_s)
         while True:
             progreso = ServicioLotes.Progreso(usuario, batch_id)
             if not progreso.abierto or time.monotonic() >= final:
                 return progreso
-            time.sleep(intervalo_s)
+            time.sleep(espera)
+            espera = min(espera * 2, 5.0)
 
     @staticmethod
     def Cancelar(usuario: UsuarioAutenticado, batch_id: UUID) -> bool:
@@ -191,6 +193,11 @@ class ServicioLotes:
 
         def confirmar(conexion) -> bool:
             if not RepositorioLotes.BloquearVigente(conexion, trabajo):
+                return False
+            if RepositorioLotes.CancelacionPedida(conexion, trabajo):
+                RepositorioLotes.CerrarIntento(conexion, trabajo, EstadoIntento.CANCELLED, duracion_ms)
+                RepositorioLotes.Liberar(conexion, trabajo.user_id, trabajo.item_id, False, 0)
+                RepositorioLotes.Recalcular(conexion, trabajo.user_id, trabajo.batch_id)
                 return False
             for asset_id, url in (stl, parametros):
                 RepositorioAssets.MarcarListo(conexion, trabajo.user_id, asset_id, url)

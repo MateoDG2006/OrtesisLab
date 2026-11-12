@@ -15,7 +15,7 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 | [`.env.example`](../../.env.example) | Plantilla de variables: URLs de base app/trabajador/migrador, bucket S3, Redis, OIDC, URL de la app y bases de prueba |
 | [`Makefile`](../../Makefile) | Envoltorio de Docker Compose y clientes PostgreSQL/MinIO: `db-up`, `db-seed`, backups, `db-test-reset` (base vacía), `auth-dev-up`; no ejecuta migraciones; `make db-help` los lista |
 | [`infra/database/`](../../infra/database/compose.yaml) | Compose con PostgreSQL 17, MinIO, Redis, cliente `mc` y proveedor OIDC de pruebas (perfil `auth-dev`); roles y esquema vacío en `init/01_roles.sh`; políticas e inicialización del bucket en `minio/` |
-| [`alembic.ini`](../../alembic.ini) / [`db/alembic/`](../../db/alembic/env.py) | Configuración de Alembic para el esquema `ortesislab` con el rol migrador; `versions/` sin revisiones en el repositorio (ver [DATABASE.md](DATABASE.md#12-migraciones-con-alembic)) |
+| [`alembic.ini`](../../alembic.ini) / [`db/alembic/`](../../db/alembic/env.py) | Configuración de Alembic para el esquema `ortesislab` con el rol migrador; revisión inicial [`20261112_1200_esquema_inicial.py`](../../db/alembic/versions/20261112_1200_esquema_inicial.py) (ver [DATABASE.md](DATABASE.md#12-migraciones-con-alembic)) |
 | `db/seeds/development.sql`, `db/test/preparar_base.sql` | Datos de desarrollo y creación del esquema y permisos en una base vacía |
 | [`pyproject.toml`](../../pyproject.toml) | Dependencias Python (incluye `sqlalchemy`, `alembic`, `psycopg[binary]`, `pyyaml`, `boto3`, `redis`, `authlib`, `itsdangerous`), versión y empaquetado |
 | [`uv.lock`](../../uv.lock) / [`.python-version`](../../.python-version) | Resolución Python y selección de intérprete |
@@ -56,7 +56,7 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 
 | Métodos | Entrada → proceso → salida |
 |---|---|
-| `_Origen`, `Cruda`, `EjeMayor` | Nombre interno o vacío → SHA-256 del NPZ del usuario activo o de la plantilla → arrays originales (Redis o bucket) |
+| `_Origen`, `Cruda`, `EjeMayor` | Nombre interno o vacío → SHA-256 del NPZ del usuario activo o de la plantilla → arrays originales (caché Redis, caché por proceso de la plantilla o bucket) |
 | `Superficie`, `_SuperficieConDiagnostico`, `SuperficieRefinada`, `_SuperficieRefinadaConDiagnostico` | Escala y refinamiento; la tupla refinada y su diagnóstico se guardan en Redis por contenido, paso y autoescala |
 | `GuardarSuperficie` | Bytes → `ServicioImports.Importar` del usuario activo → `superficie-<asset hex>.npz` y metadatos |
 | `Crear` | Encola un lote `single`, espera al trabajador (600 s) y devuelve la ficha |
@@ -74,7 +74,7 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 |---|---|
 | [`ConexionPostgres.py`](../../web/persistence/ConexionPostgres.py) | Motor SQLAlchemy `postgresql+psycopg` por proceso (`pool_size`=máximo, sin overflow, espera de 5 s, `pool_pre_ping`) y `sessionmaker(expire_on_commit=False)`. `Abrir` prueba las conexiones mínimas; `Transaccion` entrega una `Session` con commit o rollback; `Ejecutar(fn)` reintenta hasta 3 veces ante deadlock o fallo de serialización (`DBAPIError.orig`). La espera agotada y los errores de conexión se convierten en `PersistenciaNoDisponible`. Recibe la URL tal como la entrega `Ajustes` |
 | [`Modelos.py`](../../web/persistence/Modelos.py) | Modelos declarativos de las 13 tablas con FK compuestas, `CHECK` con nombre, `JSONB`, `timestamptz` e índices parciales; fuente de `alembic --autogenerate`. Los `CHECK ... IN (...)`, los `server_default` de estado y los índices parciales por estado se construyen desde `web/enums`: `_Valores(columna, tabla, Enum)` recorre los miembros en orden y `_Defecto(miembro)` genera el literal |
-| [`Contratos.py`](../../web/persistence/Contratos.py) | DTO inmutables (`UsuarioAutenticado`, `Asset`, `ImportDTO`, `VersionDTO`, `SolicitudLote`, `LoteDTO`, `ItemLote`, `ProgresoLote`, `TrabajoReservado`, `ResultadoDTO`, `FilaHistorial`…), errores con mensaje visible y constantes de versión/cuota. `ProgresoLote` usa `ITEMS_TERMINALES` y `LOTES_ABIERTOS` |
+| [`Contratos.py`](../../web/persistence/Contratos.py) | DTO inmutables (`UsuarioAutenticado`, `Asset`, `ImportDTO`, `VersionDTO`, `SolicitudLote`, `LoteDTO`, `ItemLote`, `ProgresoLote`, `TrabajoReservado`, `ResultadoDTO`, `FilaHistorial`…), errores con mensaje visible y constantes `ESQUEMA_PARAMETROS`, `ESQUEMA_NORMALIZACION`, `VERSION_LECTOR`, `VERSION_EXPORTADOR`. `ProgresoLote` usa `ITEMS_TERMINALES` y `LOTES_ABIERTOS` |
 
 ## Valores cerrados: `web/enums/`
 

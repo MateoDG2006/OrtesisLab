@@ -20,6 +20,15 @@ class Sesion:
         return rx.button(enlace, as_child=True, size="1", variant=variante)
 
     @staticmethod
+    def FormularioPost(texto: str, ruta: str, variante: str) -> rx.Component:
+        return rx.el.form(
+            rx.button(texto, type="submit", size="1", variant=variante),
+            method="post",
+            action=Sesion.Ruta(ruta),
+            custom_attrs={"reloadDocument": True},
+        )
+
+    @staticmethod
     def Barra(autenticado=None, nombre=None) -> rx.Component:
         from .EstadoApp import EstadoApp
 
@@ -33,7 +42,7 @@ class Sesion:
                 autenticado,
                 rx.hstack(
                     rx.text(nombre, size="2", color_scheme="gray"),
-                    Sesion.Boton("Cerrar sesión", "/auth/logout", "soft"),
+                    Sesion.FormularioPost("Cerrar sesión", "/auth/logout", "soft"),
                     spacing="3",
                     align="center",
                 ),

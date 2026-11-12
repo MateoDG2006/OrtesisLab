@@ -14,12 +14,19 @@ from uuid import UUID
 from GenerateModelsApp.Excepciones import ParametrosNoReconocidos
 from GenerateModelsApp.constants.Materials import PETG
 from GenerateModelsApp.util.Utilidades import Configuracion
-from web.enums import BackendGeneracion, TipoEvento
+from web.enums import AlcanceGeometria, BackendGeneracion, TipoEvento
 from web.persistence.Contratos import ESQUEMA_PARAMETROS, UsuarioAutenticado
 from web.persistence.repositorios import RepositorioHistorial, RepositorioVersiones
 
 
 class ServicioVersiones:
+    CLAVES_SOLO_VOXEL = frozenset({"repair", "resolution_mm"})
+
+    @staticmethod
+    def ParametrosHuellaWeb(parametros: dict) -> dict:
+        """Parámetros que alteran la geometría web (``pre_voxel_shell``)."""
+        return {clave: parametros[clave] for clave in parametros if clave not in ServicioVersiones.CLAVES_SOLO_VOXEL}
+
     @staticmethod
     def Canonico(valor) -> str:
         """JSON estable para hashes: claves ordenadas, sin espacios, sin NaN."""
@@ -70,7 +77,12 @@ class ServicioVersiones:
             parametros = ServicioVersiones.Parametros(opciones)
             version_id = uuid.uuid4()
             huella = ServicioVersiones.Sha(
-                {"parameters": parametros, "auto_scale": bool(auto_scale), "backend": BackendGeneracion.PYTHON_CORE}
+                {
+                    "parameters": ServicioVersiones.ParametrosHuellaWeb(parametros),
+                    "auto_scale": bool(auto_scale),
+                    "backend": BackendGeneracion.PYTHON_CORE,
+                    "geometry_scope": AlcanceGeometria.PRE_VOXEL_SHELL,
+                }
             )
             RepositorioVersiones.Insertar(
                 conexion, usuario.user_id, project_id, version_id, import_id, numero, parametros,

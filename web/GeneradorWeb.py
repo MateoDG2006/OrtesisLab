@@ -48,6 +48,11 @@ def _HuellaPlantilla() -> str:
     return Almacen.Sha256(PLANTILLA.read_bytes())
 
 
+@lru_cache(maxsize=1)
+def _TuplaPlantilla() -> tuple:
+    return ServicioImports.PrepararPlantilla(PLANTILLA.read_bytes())
+
+
 class GeneradorWeb:
     """Prepara la superficie y traduce resultados persistidos a fichas de la página."""
 
@@ -55,7 +60,7 @@ class GeneradorWeb:
     def _Origen(archivo: str):
         # Hash del contenido y lector diferido. "" es la plantilla incluida.
         if not archivo:
-            return _HuellaPlantilla(), lambda: ServicioImports.PrepararPlantilla(PLANTILLA.read_bytes())
+            return _HuellaPlantilla(), _TuplaPlantilla
         asset_id = ServicioImports.AssetDeNombre(archivo)
         usuario = ContextoUsuario.Actual()
         asset = ConexionPostgres.Ejecutar(lambda conexion: RepositorioAssets.Obtener(conexion, usuario.user_id, asset_id))

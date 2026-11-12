@@ -1,5 +1,25 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — Hallazgos B-01…B-04, B-14, B-16…B-18 (tramo parcial B)
+
+Revisión Alembic inicial (`20261112_1200_esquema_inicial`), CI ampliada (`pruebas.yml`), tope de CPU web (`max_normalizaciones_concurrentes`, caché de plantilla), documentación (`DATABASE`, `OPERACION_Y_PRUEBAS`, `ARQUITECTURA`, `CONTRATOS`, `MODULOS`, enlace `Audit/`), estándares (`pyproject.toml`, Ruff, VS Code) y cierre de resolves B.
+
+Pruebas ejecutadas:
+- `.venv\Scripts\python.exe -m unittest tests.persistencia.test_alembic_revision tests.aplicacion_web.test_humo_import -v` → 3 OK
+- `.venv\Scripts\python.exe -c "…ValidarEnArranque()…"` → ok
+- `.venv\Scripts\python.exe -m unittest discover -s tests -p test_*.py -q` → 109 cargadas, OK, 28 omitidas
+- `scripts/EmpaquetarBlender.py` → ZIP actualizado
+- `GenerarIndices.py` / `--comprobar` → al día
+
+## 2026-11-12 — Hallazgos B-05…B-22 (tramo parcial A)
+
+Cuotas de importación, rechazo ante fallo de bucket, advisory lock en dedup, CHECK de lote desde YAML, validación de configuración, sondeo con retroceso, conciliador sin barrido total por defecto, purga de sesiones/eventos, logout POST, hash de versión web sin `repair`/`resolution_mm`, confirmación bajo cancelación, dedup Notion→GitHub y botón cancelar lote.
+
+Pruebas ejecutadas:
+- `.venv\Scripts\python.exe -c "from web.ConfiguracionBackend import ConfiguracionBackend; ConfiguracionBackend.ValidarEnArranque(); print('ok')"` → ok
+- `.venv\Scripts\python.exe -m unittest tests.persistencia.test_cuota_almacen tests.persistencia.test_import_fallo_publicar -v` → 2 OK
+- `.venv\Scripts\python.exe -m unittest discover -s tests/persistencia -p test_*.py -q` → 25 cargadas, 2 OK, 23 omitidas (sin base)
+
 ## 2026-11-12 — Cierre issues auditoría #1–#9
 
 Prerrequisito B-01 (constantes de contrato), presupuestos e inspección NPY (#1), `RIESGO_ACEPTADO` del STL anónimo (#2), normales/topología/escala/unidades (#3), validación de exportación (#4), rollback y par STL/JSON (#5), cachés (#6), contratos/wheel (#7), CI/visor/a11y (#8) e índice de seguimiento (#9). Resolves en `docs/Audit/resolves/2026-11-12-*.md`.

@@ -43,6 +43,8 @@ Límites: 50 × 1024 × 1024 bytes de subida (50 MiB); 128 MiB de expansión dec
 
 Las 17 claves canónicas están en [PARAMETROS.md](../BlenderPlugin/PARAMETROS.md) y `config/parametros_defecto.json`. `_Numero` admite coma decimal y rechaza NaN/infinito. `_Opciones` convierte semilla a entero no negativo. El núcleo vuelve a validar opciones; incluso los campos ocultos deben conservar valores válidos.
 
+En la web el alcance geométrico es `pre_voxel_shell`: `repair` y `resolution_mm` solo aplican al voxel de Blender. El snapshot guarda los 17 campos, pero `parameters_sha256` y la comparación en `/historial` **excluyen** esas dos claves (`ServicioVersiones.ParametrosHuellaWeb`).
+
 `superficie_archivo=""` significa plantilla incluida. Un nombre guardado usa `superficie-<32 hex>.npz`, donde el hex es el `asset_id` del NPZ normalizado del usuario. La autoescala es preferencia del usuario (`user_preferences.auto_scale_surface`) y se copia a cada versión; no es clave del JSON geométrico. En no macizo se usa `EscalaMalla.Aplicar` junto al refinamiento; en macizo web, `Resolver` sin refinamiento.
 
 ## Variantes, lotes y fichas
@@ -51,7 +53,7 @@ Rango: `desde + i*paso <= hasta`, inclusive si se alcanza exactamente. Paso > 0,
 
 Ejemplo: patrones `HEX` y `SQUARE`, celdas 10/15/20, con y sin capa → `2 × 3 × 2 = 12`. Ejes disponibles: `cell_mm`, `rib_width_mm`, `rib_height_mm`, `skin_mm`, `solid_mm`, `border_mm`, `rounding_mm`, `angle_deg`, `seed`, `reinforce_width_mm`, `reinforce_y_mm`.
 
-`SolicitudLote` contiene `import_id`, `request_id` (UUID por clic), `mode` (`single`, `batch`, `retry`), `definition`, `variantes` (máximo 12) y `auto_scale`. Repetir el mismo `request_id` con el mismo cuerpo devuelve el lote existente; con otro cuerpo falla con `SolicitudIdempotenteEnConflicto`. Un usuario puede tener 3 lotes pendientes; el cuarto falla con `CuotaExcedida`.
+`SolicitudLote` contiene `import_id`, `request_id` (UUID por clic), `mode` (`single`, `sweep`, `retry`), `definition`, `variantes` (máximo 12) y `auto_scale`. Repetir el mismo `request_id` con el mismo cuerpo devuelve el lote existente; con otro cuerpo falla con `SolicitudIdempotenteEnConflicto`. Un usuario puede tener 3 lotes pendientes; el cuarto falla con `CuotaExcedida`.
 
 | Estado | Valores |
 |---|---|

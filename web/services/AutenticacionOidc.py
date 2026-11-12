@@ -78,12 +78,16 @@ class AutenticacionOidc:
             respuesta.delete_cookie(NOMBRE_COOKIE, path="/", httponly=True, secure=ajustes.cookie_secure, samesite="lax")
             return respuesta
 
+        async def logout_get(_request: Request) -> Response:
+            return PlainTextResponse("Cierre de sesión solo por POST.", status_code=405)
+
         # La sesión de Starlette solo guarda state y nonce durante el intercambio OIDC.
         rutas = Starlette(
             routes=[
                 Route("/login", login),
                 Route("/callback", callback),
-                Route("/logout", logout),
+                Route("/logout", logout, methods=["POST"]),
+                Route("/logout", logout_get, methods=["GET"]),
             ],
             middleware=[
                 Middleware(

@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from uuid import UUID
 
-from sqlalchemy import and_, insert, select, tuple_
+from sqlalchemy import and_, delete, insert, select, tuple_
 
 from ..Contratos import FilaHistorial
 from .Consultas import (
+    AHORA,
     ASSETS,
     EVENTOS,
     EXPORTS,
@@ -24,6 +25,12 @@ from .RepositorioBase import RepositorioBase
 
 class RepositorioHistorial(RepositorioBase):
     TABLA = EVENTOS
+
+    @staticmethod
+    def PurgarAntiguos(conexion, dias: int) -> int:
+        limite = AHORA - timedelta(days=max(1, dias))
+        resultado = conexion.execute(delete(EVENTOS).where(EVENTOS.c.created_at < limite))
+        return int(resultado.rowcount)
 
     @staticmethod
     def Evento(

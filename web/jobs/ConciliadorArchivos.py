@@ -18,13 +18,14 @@ from GenerateModelsApp.util.Utilidades import Registro
 from web.ConfiguracionBackend import ConfiguracionBackend
 from web.enums import EstadoAsset
 from web.persistence.ConexionPostgres import ConexionPostgres
-from web.persistence.repositorios import RepositorioAssets
+from web.persistence.repositorios import RepositorioAssets, RepositorioHistorial, RepositorioImports, RepositorioUsuarios
 from web.storage.AlmacenamientoPrivado import Almacen
 
 _CONFIG = ConfiguracionBackend.Cargar("trabajador")["conciliador"]
 HORAS_STAGED = _CONFIG["horas_staged"]
 DIAS_RECHAZO = _CONFIG["dias_rechazo"]
 LOTE_COMPROBACION = _CONFIG["lote_comprobacion"]
+EXPLORAR_BUCKET = bool(_CONFIG["explorar_bucket"])
 
 
 class ConciliadorArchivos:
@@ -32,8 +33,17 @@ class ConciliadorArchivos:
         self._cursor: UUID | None = None
 
     def Ejecutar(self) -> dict[str, int]:
-        cuenta = {"staged": 0, "rechazados": 0, "ausentes": 0, "huerfanos": 0}
+        cuenta = {
+            "staged": 0,
+            "rechazados": 0,
+            "ausentes": 0,
+            "huerfanos": 0,
+            "imports_colgados": 0,
+            "sesiones_purgadas": 0,
+            "eventos_purgados": 0,
+        }
         almacen = Almacen.Actual()
+        self._PurgarRetencion(cuenta)
 
         for asset in ConexionPostgres.Ejecutar(lambda c: RepositorioAssets.StagedVencidos(c, HORAS_STAGED)):
             if almacen.Existe(asset.storage_key):
@@ -63,15 +73,54 @@ class ConciliadorArchivos:
             Registro.Obtener("conciliacion").warning("Objeto ausente para el asset %s.", asset.id)
             cuenta["ausentes"] += 1
 
-        limite = datetime.now(timezone.utc) - timedelta(hours=HORAS_STAGED)
-        pendientes: list[tuple[str, datetime]] = []
-        for clave, modificado in almacen.Claves("usuarios/"):
-            pendientes.append((clave, modificado))
-            if len(pendientes) >= 500:
-                cuenta["huerfanos"] += self._BorrarHuerfanos(pendientes, limite)
-                pendientes = []
-        cuenta["huerfanos"] += self._BorrarHuerfanos(pendientes, limite)
+        for colgado in ConexionPostgres.Ejecutar(
+            lambda c: RepositorioImports.ColgadosVencidos(c, HORAS_STAGED)
+        ):
+            def limpiar(conexion, imp=colgado) -> None:
+                RepositorioImports.MarcarRechazado(
+                    conexion,
+                    imp.user_id,
+                    imp.id,
+                    "import_timeout",
+                    f"Import en {imp.status} sin cerrar tras {HORAS_STAGED} h.",
+                )
+                for asset_id in (imp.original_asset_id, imp.normalized_asset_id):
+                    if asset_id is None:
+                        continue
+                    try:
+                        asset = RepositorioAssets.Obtener(conexion, imp.user_id, asset_id)
+                        if almacen.Existe(asset.storage_key):
+                            almacen.Borrar(asset.storage_key)
+                        RepositorioAssets.MarcarEstado(conexion, asset_id, EstadoAsset.DELETED)
+                    except Exception:
+                        RepositorioAssets.MarcarEstado(conexion, asset_id, EstadoAsset.DELETED)
+
+            ConexionPostgres.Ejecutar(limpiar)
+            cuenta["imports_colgados"] += 1
+
+        if EXPLORAR_BUCKET:
+            limite = datetime.now(timezone.utc) - timedelta(hours=HORAS_STAGED)
+            pendientes: list[tuple[str, datetime]] = []
+            for clave, modificado in almacen.Claves("usuarios/"):
+                pendientes.append((clave, modificado))
+                if len(pendientes) >= 500:
+                    cuenta["huerfanos"] += self._BorrarHuerfanos(pendientes, limite)
+                    pendientes = []
+            cuenta["huerfanos"] += self._BorrarHuerfanos(pendientes, limite)
         return cuenta
+
+    @staticmethod
+    def _PurgarRetencion(cuenta: dict[str, int]) -> None:
+        retencion = ConfiguracionBackend.Cargar("persistencia")["retencion"]
+
+        def purgar(conexion) -> tuple[int, int]:
+            sesiones = RepositorioUsuarios.PurgarSesionesVencidas(conexion, retencion["sesiones_dias"])
+            eventos = RepositorioHistorial.PurgarAntiguos(conexion, retencion["eventos_historial_dias"])
+            return sesiones, eventos
+
+        sesiones, eventos = ConexionPostgres.Ejecutar(purgar)
+        cuenta["sesiones_purgadas"] = sesiones
+        cuenta["eventos_purgados"] = eventos
 
     @staticmethod
     def _BorrarHuerfanos(objetos: list[tuple[str, datetime]], limite: datetime) -> int:
