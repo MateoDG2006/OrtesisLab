@@ -6,53 +6,94 @@
   <style>
     html, body { margin: 0; height: 100%; background: #eef1f4; color: #1c2024; font-family: sans-serif; }
     canvas { display: block; }
-    p { margin: 1.5rem; }
+    p { margin: 1.5rem; max-width: 40rem; line-height: 1.45; }
+    p.error { color: #8b1e1e; }
   </style>
 </head>
 <body>
 <script type="module">
-import * as THREE from "https://unpkg.com/three@0.169.0/build/three.module.js";
+import * as THREE from "/vendor/three-0.169.0.module.js";
 
+const LIMITE_BYTES = 64 * 1024 * 1024;
 const aviso = document.createElement("p");
 document.body.append(aviso);
-const origen = new URLSearchParams(location.search).get("src");
-if (!origen) {
-  aviso.textContent = "Genere una ortesis para verla aquí.";
+
+function mostrarError(texto) {
+  aviso.textContent = texto;
+  aviso.classList.add("error");
+}
+
+function origenPermitido(url) {
+  try {
+    const parsed = new URL(url, location.origin);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return false;
+    }
+    if (parsed.origin === location.origin) {
+      return true;
+    }
+    return /\/usuarios\/[0-9a-f-]{36}\/assets\/[0-9a-f-]{36}\.stl(?:\?|$)/i.test(parsed.pathname + parsed.search);
+  } catch {
+    return false;
+  }
+}
+
+const origenParam = new URLSearchParams(location.search).get("src");
+if (!origenParam) {
+  mostrarError("Genere una ortesis para verla aquí.");
   throw new Error("sin malla");
 }
-aviso.textContent = "Cargando malla…";
-
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setSize(innerWidth, innerHeight);
-document.body.append(renderer.domElement);
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xeef1f4);
-const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.1, 5000);
-scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-scene.add(new THREE.HemisphereLight(0xffffff, 0x8b95a1, 0.45));
-const luz = new THREE.DirectionalLight(0xffffff, 1.15);
-luz.position.set(0.6, 1, 1.4);
-scene.add(luz);
-
-const objetivo = new THREE.Vector3();
-let arrastre = false;
-let anterior = { x: 0, y: 0 };
-const esferica = { radio: 1, theta: 0.6, phi: 1.05 };
-
-function encuadrar() {
-  const desplazamiento = new THREE.Vector3(
-    Math.sin(esferica.phi) * Math.cos(esferica.theta),
-    Math.cos(esferica.phi),
-    Math.sin(esferica.phi) * Math.sin(esferica.theta),
-  ).multiplyScalar(esferica.radio);
-  camera.position.copy(objetivo).add(desplazamiento);
-  camera.lookAt(objetivo);
+if (!origenPermitido(origenParam)) {
+  mostrarError("La URL de la malla no está permitida.");
+  throw new Error("origen rechazado");
 }
 
-function geometria(buffer) {
-  const vista = new DataView(buffer);
+const controlador = new AbortController();
+const temporizador = setTimeout(() => controlador.abort(), 120000);
+aviso.textContent = "Cargando malla…";
+
+let respuesta;
+try {
+  respuesta = await fetch(origenParam, { signal: controlador.signal });
+} catch (error) {
+  mostrarError(controlador.signal.aborted ? "La descarga tardó demasiado." : "No se pudo contactar con el almacén de archivos.");
+  throw error;
+} finally {
+  clearTimeout(temporizador);
+}
+
+if (!respuesta.ok) {
+  mostrarError(
+    respuesta.status === 404 || respuesta.status === 403
+      ? "El STL ya no está en el almacén. Vuelva a generar esta variante."
+      : "No se pudo leer la malla generada.",
+  );
+  throw new Error(String(respuesta.status));
+}
+
+const longitud = Number(respuesta.headers.get("content-length") || 0);
+if (longitud > LIMITE_BYTES) {
+  mostrarError("El archivo supera el tamaño máximo permitido para la vista previa.");
+  throw new Error("demasiado grande");
+}
+
+const buffer = await respuesta.arrayBuffer();
+if (buffer.byteLength > LIMITE_BYTES) {
+  mostrarError("El archivo supera el tamaño máximo permitido para la vista previa.");
+  throw new Error("demasiado grande");
+}
+if (buffer.byteLength < 84) {
+  mostrarError("El archivo no parece un STL binario válido.");
+  throw new Error("stl corto");
+}
+
+function geometria(buf) {
+  const vista = new DataView(buf);
   const caras = vista.getUint32(80, true);
+  const bytesNecesarios = 84 + caras * 50;
+  if (bytesNecesarios > buf.byteLength) {
+    throw new Error("cabecera STL inconsistente");
+  }
   const posiciones = new Float32Array(caras * 9);
   let cursor = 84;
   let escrito = 0;
@@ -72,23 +113,33 @@ function geometria(buffer) {
   return malla;
 }
 
-// El STL se lee directamente de su object_url en el bucket.
-let respuesta;
+let malla;
 try {
-  respuesta = await fetch(origen);
+  malla = geometria(buffer);
 } catch (error) {
-  aviso.textContent = "No se pudo contactar con el almacén de archivos.";
+  mostrarError("El STL no se pudo interpretar.");
   throw error;
 }
-if (!respuesta.ok) {
-  aviso.textContent =
-    respuesta.status === 404 || respuesta.status === 403
-      ? "El STL ya no está en el almacén. Vuelva a generar esta variante."
-      : "No se pudo leer la malla generada.";
-  throw new Error(String(respuesta.status));
-}
-const malla = geometria(await respuesta.arrayBuffer());
+
 aviso.remove();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+document.body.append(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xeef1f4);
+const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.1, 5000);
+scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8b95a1, 0.45));
+const luz = new THREE.DirectionalLight(0xffffff, 1.15);
+luz.position.set(0.6, 1, 1.4);
+scene.add(luz);
+
+const objetivo = new THREE.Vector3();
+let arrastre = false;
+let anterior = { x: 0, y: 0 };
+const esferica = { radio: 1, theta: 0.6, phi: 1.05 };
+
 const material = new THREE.MeshStandardMaterial({
   color: 0xd5dbe3,
   metalness: 0.04,
@@ -102,6 +153,16 @@ esferica.radio = Math.max(esfera.radius * 2.4, 1);
 camera.near = esfera.radius / 100;
 camera.far = esfera.radius * 30;
 camera.updateProjectionMatrix();
+
+function encuadrar() {
+  const desplazamiento = new THREE.Vector3(
+    Math.sin(esferica.phi) * Math.cos(esferica.theta),
+    Math.cos(esferica.phi),
+    Math.sin(esferica.phi) * Math.sin(esferica.theta),
+  ).multiplyScalar(esferica.radio);
+  camera.position.copy(objetivo).add(desplazamiento);
+  camera.lookAt(objetivo);
+}
 encuadrar();
 
 renderer.domElement.addEventListener("pointerdown", (evento) => {
@@ -118,9 +179,43 @@ addEventListener("pointermove", (evento) => {
 });
 renderer.domElement.addEventListener("wheel", (evento) => {
   evento.preventDefault();
-  esferica.radio = Math.min(Math.max(esferica.radio * (evento.deltaY > 0 ? 1.08 : 0.92), esfera.radius * 0.4), esfera.radius * 12);
+  esferica.radio = Math.min(
+    Math.max(esferica.radio * (evento.deltaY > 0 ? 1.08 : 0.92), esfera.radius * 0.4),
+    esfera.radius * 12,
+  );
   encuadrar();
 }, { passive: false });
+
+addEventListener("keydown", (evento) => {
+  const paso = evento.shiftKey ? 0.03 : 0.01;
+  switch (evento.key) {
+    case "ArrowLeft":
+      esferica.theta -= paso;
+      break;
+    case "ArrowRight":
+      esferica.theta += paso;
+      break;
+    case "ArrowUp":
+      esferica.phi = Math.max(esferica.phi - paso, 0.15);
+      break;
+    case "ArrowDown":
+      esferica.phi = Math.min(esferica.phi + paso, Math.PI - 0.15);
+      break;
+    case "+":
+    case "=":
+      esferica.radio = Math.max(esferica.radio * 0.92, esfera.radius * 0.4);
+      break;
+    case "-":
+    case "_":
+      esferica.radio = Math.min(esferica.radio * 1.08, esfera.radius * 12);
+      break;
+    default:
+      return;
+  }
+  evento.preventDefault();
+  encuadrar();
+});
+
 addEventListener("resize", () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();

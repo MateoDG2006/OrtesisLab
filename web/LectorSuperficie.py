@@ -11,6 +11,7 @@ import numpy as np
 
 from GenerateModelsApp.EscalaMalla import EscalaMalla
 from GenerateModelsApp.Excepciones import ArchivoSuperficieIlegible
+from GenerateModelsApp.InspeccionNpz import InspeccionNpz
 from GenerateModelsApp.Malla import AnalizadorMalla
 from GenerateModelsApp.util.Utilidades import Configuracion
 
@@ -56,6 +57,7 @@ class LectorSuperficie:
                 archivo,
                 "La superficie contiene coordenadas no finitas.",
             )
+        InspeccionNpz.VerificarPresupuesto(vertices, caras, archivo)
 
         extension_mm = np.ptp(vertices, axis=0)
         diagnostico = EscalaMalla.Resolver(
@@ -91,13 +93,10 @@ class LectorSuperficie:
 
     @staticmethod
     def _Npz(contenido: bytes, nombre: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        InspeccionNpz.VerificarContenido(
+            contenido, nombre, LectorSuperficie.MAXIMO_DESCOMPRIMIDO_BYTES
+        )
         try:
-            with zipfile.ZipFile(io.BytesIO(contenido)) as archivo:
-                total = sum(entrada.file_size for entrada in archivo.infolist())
-                if total > LectorSuperficie.MAXIMO_DESCOMPRIMIDO_BYTES:
-                    raise ArchivoSuperficieIlegible(
-                        nombre, "El NPZ descomprimido supera el límite permitido."
-                    )
             with np.load(io.BytesIO(contenido), allow_pickle=False) as datos:
                 vertices = np.asarray(datos["vertices"], dtype=np.float64)
                 caras = np.asarray(datos["faces"])
@@ -114,7 +113,12 @@ class LectorSuperficie:
         if len(triangulos) == 0:
             raise ArchivoSuperficieIlegible(nombre, "El STL no contiene triángulos.")
 
+        # Primero se resuelven unidades; la tolerancia de soldadura actúa en mm.
         crudos = triangulos.reshape(-1, 3).astype(np.float64)
+        extension_mm = float(np.max(np.ptp(crudos, axis=0))) if len(crudos) else 0.0
+        factor = float(EscalaMalla.Resolver(extension_mm, autoescalar=True)["factor"])
+        if factor != 1.0:
+            crudos = crudos * factor
         tolerancia = Configuracion.ValorLimite("clip_snap_mm")
         claves = np.round(crudos / tolerancia)
         _claves, indices, inversa = np.unique(
@@ -125,6 +129,8 @@ class LectorSuperficie:
         )
         vertices = crudos[indices]
         caras = inversa.reshape(-1, 3).astype(np.int32)
+        if factor != 1.0:
+            vertices = vertices / factor
         normales = LectorSuperficie._Normales(vertices, caras)
         return vertices, caras, normales
 

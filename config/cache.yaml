@@ -5,3 +5,5 @@ ttl_s: 604800
 reintento_s: 30.0
 # Timeout de conexión y de lectura de cada operación.
 timeout_s: 0.5
+# Tamaño máximo de un NPZ de superficie en Redis (64 MiB).
+max_entrada_bytes: 67108864

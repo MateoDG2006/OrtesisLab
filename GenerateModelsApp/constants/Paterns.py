@@ -12,7 +12,7 @@ import math
 
 import numpy as np
 
-from ..Excepciones import PatronNoImplementado, PatronNoReconocido
+from ..Excepciones import PatronNoImplementado, PatronNoReconocido, PresupuestoExcedido
 from ..util.Utilidades import Configuracion
 
 _IMAGEN = "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
@@ -53,11 +53,19 @@ class Patron:
         """
         bajo = uv.min(0) - 3 * celda
         alto = uv.max(0) + 3 * celda
+        area = float(np.prod(np.maximum(alto - bajo, 0.0)))
+        tope_area = Configuracion.ValorLimite("max_seed_area_mm2")
+        if area > tope_area:
+            raise PresupuestoExcedido(
+                f"El área de siembra ({area:.0f} mm²) supera el máximo de {tope_area:g} mm²."
+            )
         paso_y = celda * math.sqrt(3) / 2
         generador = np.random.default_rng(semilla)
         jitter = Configuracion.ValorLimite("voronoi_jitter")
         epsilon = Configuracion.ValorLimite("seed_separation_epsilon")
         lote = int(Configuracion.ValorLimite("pattern_batch"))
+        if lote <= 0:
+            raise PresupuestoExcedido("pattern_batch debe ser un entero positivo.")
         semillas = []
         for fila, y in enumerate(np.arange(bajo[1], alto[1] + paso_y, paso_y)):
             for x in np.arange(bajo[0], alto[0] + celda, celda):

@@ -40,27 +40,29 @@ ID_SUBIDA_SUPERFICIE = "superficie-entrada"
 INTERVALO_PROGRESO_S = ConfiguracionBackend.Cargar("web")["intervalo_progreso_s"]
 TERMINALES = ITEMS_TERMINALES
 
+_PARAMETROS_DEFECTO = Configuracion.ParametrosDefecto()
+
 
 class EstadoApp(rx.State):
     """Parámetros del complemento, lote en curso y fichas ya generadas."""
 
-    pattern: str = "VORONOI"
-    cell_mm: str = "15"
-    rib_width_mm: str = "2.8"
-    rib_height_mm: str = "1.4"
-    liner: bool = True
-    skin_mm: str = "1"
-    solid_mm: str = "2.4"
-    border_mm: str = "4"
-    rounding_mm: str = "0.8"
-    angle_deg: str = "0"
-    seed: str = "7"
-    reinforce_y_mm: str = "0"
-    reinforce_width_mm: str = "0"
-    flip_normals: bool = False
-    repair: bool = False
-    resolution_mm: str = "0.3"
-    surface_step_mm: str = "1"
+    pattern: str = str(_PARAMETROS_DEFECTO["pattern"])
+    cell_mm: str = str(_PARAMETROS_DEFECTO["cell_mm"])
+    rib_width_mm: str = str(_PARAMETROS_DEFECTO["rib_width_mm"])
+    rib_height_mm: str = str(_PARAMETROS_DEFECTO["rib_height_mm"])
+    liner: bool = bool(_PARAMETROS_DEFECTO["liner"])
+    skin_mm: str = str(_PARAMETROS_DEFECTO["skin_mm"])
+    solid_mm: str = str(_PARAMETROS_DEFECTO["solid_mm"])
+    border_mm: str = str(_PARAMETROS_DEFECTO["border_mm"])
+    rounding_mm: str = str(_PARAMETROS_DEFECTO["rounding_mm"])
+    angle_deg: str = str(_PARAMETROS_DEFECTO["angle_deg"])
+    seed: str = str(_PARAMETROS_DEFECTO["seed"])
+    reinforce_y_mm: str = str(_PARAMETROS_DEFECTO["reinforce_y_mm"])
+    reinforce_width_mm: str = str(_PARAMETROS_DEFECTO["reinforce_width_mm"])
+    flip_normals: bool = bool(_PARAMETROS_DEFECTO["flip_normals"])
+    repair: bool = bool(_PARAMETROS_DEFECTO["repair"])
+    resolution_mm: str = str(_PARAMETROS_DEFECTO["resolution_mm"])
+    surface_step_mm: str = str(_PARAMETROS_DEFECTO["surface_step_mm"])
 
     usar_voronoi: bool = True
     usar_hex: bool = False

@@ -33,6 +33,8 @@ from .constants.Nombres import (
 )
 from .util.Utilidades import Configuracion, Registro
 
+_TRABAJO = "OL_Ortesis__trabajo"
+
 
 class GeneradorObjeto:
     """Escribe el cascarón en la escena y, si se pide, lo reconstruye con voxel."""
@@ -77,6 +79,57 @@ class GeneradorObjeto:
             raise ReconstruccionFallida(str(exc)) from exc
 
     @staticmethod
+    def _DescartarTrabajo(trabajo) -> None:
+        if trabajo is None:
+            return
+        malla = trabajo.data
+        bpy.data.objects.remove(trabajo, do_unlink=True)
+        if malla is not None and malla.users == 0:
+            bpy.data.meshes.remove(malla)
+
+    @staticmethod
+    def _PromoverResultado(trabajo, previo, source, cfg, paso, interiores, caras_interiores, *, eliminados=0, voxel=None):
+        # Sustituye OL_Ortesis solo al terminar con éxito; el previo conserva identidad en escena.
+        logger = Registro.Obtener("objeto")
+        if previo is None:
+            trabajo.name = RESULT
+            resultado = trabajo
+            logger.info("Objeto %s creado.", RESULT)
+        else:
+            anterior = previo.data
+            previo.data = trabajo.data
+            previo.matrix_world = trabajo.matrix_world.copy()
+            for clave in list(trabajo.keys()):
+                previo[clave] = trabajo[clave]
+            for modificador in list(previo.modifiers):
+                previo.modifiers.remove(modificador)
+            GeneradorObjeto._DescartarTrabajo(trabajo)
+            if anterior is not None and anterior.users == 0:
+                bpy.data.meshes.remove(anterior)
+            resultado = previo
+            logger.info("Objeto %s actualizado.", RESULT)
+        resultado[PROP_CONFIG] = json.dumps(cfg, ensure_ascii=False)
+        resultado[PROP_ROL] = ROL_RESULTADO
+        resultado[PROP_VERTICES] = interiores
+        resultado[PROP_CARAS] = caras_interiores
+        resultado[PROP_VALIDACION] = VALIDACION_PENDIENTE
+        resultado[PROP_ALCANCE] = ALCANCE
+        resultado["ol_source_object"] = source.name
+        resultado["ol_surface_step_mm"] = paso
+        if eliminados:
+            resultado[PROP_FRAGMENTOS] = eliminados
+        if voxel is not None:
+            resultado[PROP_RESOLUCION] = voxel
+        source.hide_set(True)
+        source.hide_render = True
+        resultado.hide_set(False)
+        resultado.hide_render = False
+        bpy.ops.object.select_all(action="DESELECT")
+        resultado.select_set(True)
+        bpy.context.view_layer.objects.active = resultado
+        return resultado
+
+    @staticmethod
     def Crear(source, **options):
         # Genera o sustituye OL_Ortesis a partir de la superficie interior.
         logger = Registro.Obtener("objeto")
@@ -97,103 +150,97 @@ class GeneradorObjeto:
         if cfg["repair"] and voxel < Configuracion.ValorLimite("min_voxel_repair_mm"):
             raise ResolucionDemasiadoFina(Configuracion.ValorLimite("min_voxel_repair_mm") * 3)
 
-        malla = bpy.data.meshes.new(MALLA_GEOMETRIA)
+        previo = bpy.data.objects.get(RESULT)
+        trabajo = None
         try:
-            malla.from_pydata(vertices, [], faces)
-            malla.update()
-        except (ValueError, RuntimeError) as exc:
-            bpy.data.meshes.remove(malla)
-            raise MallaNoConstruida(str(exc)) from exc
+            malla = bpy.data.meshes.new(MALLA_GEOMETRIA)
+            try:
+                malla.from_pydata(vertices, [], faces)
+                malla.update()
+            except (ValueError, RuntimeError) as exc:
+                bpy.data.meshes.remove(malla)
+                raise MallaNoConstruida(str(exc)) from exc
 
-        objeto = bpy.data.objects.get(RESULT)
-        if objeto is not None:
-            anterior = objeto.data
-            objeto.data = malla
-            if anterior.users == 0:
-                bpy.data.meshes.remove(anterior)
-            logger.info("Objeto %s actualizado.", RESULT)
-        else:
-            objeto = bpy.data.objects.new(RESULT, malla)
-            bpy.context.scene.collection.objects.link(objeto)
-            logger.info("Objeto %s creado.", RESULT)
+            for poligono in malla.polygons:
+                poligono.use_smooth = True
+            trabajo = bpy.data.objects.new(_TRABAJO, malla)
+            bpy.context.scene.collection.objects.link(trabajo)
+            trabajo.matrix_world = source.matrix_world.copy()
+            objeto = trabajo
 
-        objeto.matrix_world = source.matrix_world.copy()
-        for poligono in malla.polygons:
-            poligono.use_smooth = True
-        objeto[PROP_CONFIG] = json.dumps(cfg, ensure_ascii=False)
-        objeto[PROP_ROL] = ROL_RESULTADO
-        objeto[PROP_VERTICES] = interiores
-        objeto[PROP_CARAS] = caras_interiores
-        objeto[PROP_VALIDACION] = VALIDACION_PENDIENTE
-        objeto[PROP_ALCANCE] = ALCANCE
-        objeto["ol_source_object"] = source.name
-        objeto["ol_surface_step_mm"] = paso
-        source.hide_set(True)
-        source.hide_render = True
-        objeto.hide_set(False)
-        objeto.hide_render = False
-        bpy.ops.object.select_all(action="DESELECT")
-        objeto.select_set(True)
-        bpy.context.view_layer.objects.active = objeto
+            # Si un intento anterior dejó el modificador sin aplicar, se retira antes de crear otro.
+            for nombre in (MOD_RECONSTRUCCION, MOD_SUAVIZADO):
+                pendiente = objeto.modifiers.get(nombre)
+                if pendiente is not None:
+                    objeto.modifiers.remove(pendiente)
+                    logger.warning("Se retiró un modificador que había quedado sin aplicar: %s", nombre)
 
-        # Si un intento anterior dejó el modificador sin aplicar, se retira antes de crear otro.
-        for nombre in (MOD_RECONSTRUCCION, MOD_SUAVIZADO):
-            pendiente = objeto.modifiers.get(nombre)
-            if pendiente is not None:
-                objeto.modifiers.remove(pendiente)
-                logger.warning("Se retiró un modificador que había quedado sin aplicar: %s", nombre)
-
-        if not cfg["repair"]:
-            logger.info("Pared engrosada; las aberturas de la superficie se conservan sin voxel.")
-            return objeto
-
-        remesh = objeto.modifiers.new(MOD_RECONSTRUCCION, "REMESH")
-        remesh.mode = "VOXEL"
-        remesh.voxel_size = voxel
-        remesh.adaptivity = 0.0
-        remesh.use_smooth_shade = True
-        logger.info("Reconstrucción voxel a %.3f mm.", voxel)
-        try:
-            GeneradorObjeto._AplicarModificador(objeto, remesh)
-        except ReconstruccionFallida:
-            if objeto.modifiers.get(MOD_RECONSTRUCCION) is not None:
-                objeto.modifiers.remove(remesh)
-            raise
-
-        bm = bmesh.new()
-        try:
-            bm.from_mesh(objeto.data)
-            grupos = GeneradorObjeto._Componentes(bm)
-            eliminados = sum(len(grupo) for grupo in grupos[1:])
-            umbral = max(
-                Configuracion.ValorLimite("fragment_vertex_floor"),
-                len(bm.verts) * Configuracion.ValorLimite("fragment_vertex_ratio"),
-            )
-            if eliminados > umbral:
-                raise GeometriaFragmentada(eliminados, umbral)
-            if eliminados:
-                bmesh.ops.delete(
-                    bm,
-                    geom=[vertice for grupo in grupos[1:] for vertice in grupo],
-                    context="VERTS",
+            if not cfg["repair"]:
+                logger.info("Pared engrosada; las aberturas de la superficie se conservan sin voxel.")
+                return GeneradorObjeto._PromoverResultado(
+                    trabajo, previo, source, cfg, paso, interiores, caras_interiores
                 )
-                logger.info("Fragmentos residuales eliminados: %s vértices.", eliminados)
-            bm.to_mesh(objeto.data)
-        finally:
-            bm.free()
 
-        objeto[PROP_FRAGMENTOS] = eliminados
-        suavizado = objeto.modifiers.new(MOD_SUAVIZADO, "SMOOTH")
-        suavizado.factor = Configuracion.ValorLimite("smooth_factor")
-        suavizado.iterations = int(Configuracion.ValorLimite("smooth_iterations"))
-        try:
-            GeneradorObjeto._AplicarModificador(objeto, suavizado)
-        except ReconstruccionFallida:
-            if objeto.modifiers.get(MOD_SUAVIZADO) is not None:
-                objeto.modifiers.remove(suavizado)
+            remesh = objeto.modifiers.new(MOD_RECONSTRUCCION, "REMESH")
+            remesh.mode = "VOXEL"
+            remesh.voxel_size = voxel
+            remesh.adaptivity = 0.0
+            remesh.use_smooth_shade = True
+            logger.info("Reconstrucción voxel a %.3f mm.", voxel)
+            bpy.ops.object.select_all(action="DESELECT")
+            objeto.select_set(True)
+            bpy.context.view_layer.objects.active = objeto
+            try:
+                GeneradorObjeto._AplicarModificador(objeto, remesh)
+            except ReconstruccionFallida:
+                if objeto.modifiers.get(MOD_RECONSTRUCCION) is not None:
+                    objeto.modifiers.remove(remesh)
+                raise
+
+            eliminados = 0
+            bm = bmesh.new()
+            try:
+                bm.from_mesh(objeto.data)
+                grupos = GeneradorObjeto._Componentes(bm)
+                eliminados = sum(len(grupo) for grupo in grupos[1:])
+                umbral = max(
+                    Configuracion.ValorLimite("fragment_vertex_floor"),
+                    len(bm.verts) * Configuracion.ValorLimite("fragment_vertex_ratio"),
+                )
+                if eliminados > umbral:
+                    raise GeometriaFragmentada(eliminados, umbral)
+                if eliminados:
+                    bmesh.ops.delete(
+                        bm,
+                        geom=[vertice for grupo in grupos[1:] for vertice in grupo],
+                        context="VERTS",
+                    )
+                    logger.info("Fragmentos residuales eliminados: %s vértices.", eliminados)
+                bm.to_mesh(objeto.data)
+            finally:
+                bm.free()
+
+            suavizado = objeto.modifiers.new(MOD_SUAVIZADO, "SMOOTH")
+            suavizado.factor = Configuracion.ValorLimite("smooth_factor")
+            suavizado.iterations = int(Configuracion.ValorLimite("smooth_iterations"))
+            try:
+                GeneradorObjeto._AplicarModificador(objeto, suavizado)
+            except ReconstruccionFallida:
+                if objeto.modifiers.get(MOD_SUAVIZADO) is not None:
+                    objeto.modifiers.remove(suavizado)
+                raise
+            logger.info("Reconstrucción y suavizado aplicados sobre %s.", _TRABAJO)
+            return GeneradorObjeto._PromoverResultado(
+                trabajo,
+                previo,
+                source,
+                cfg,
+                paso,
+                0,
+                0,
+                eliminados=eliminados,
+                voxel=voxel,
+            )
+        except Exception:
+            GeneradorObjeto._DescartarTrabajo(trabajo)
             raise
-        objeto[PROP_RESOLUCION] = voxel
-        objeto[PROP_VERTICES] = 0
-        objeto[PROP_CARAS] = 0
-        logger.info("Reconstrucción y suavizado aplicados sobre %s.", objeto.name)
-        return objeto

@@ -138,7 +138,11 @@ class Configuracion:
         "min_rounding_width_mm",
         "normal_epsilon",
         "max_surface_vertices",
+        "max_surface_faces",
+        "max_output_vertices",
+        "max_seed_area_mm2",
         "max_refined_cache_entries",
+        "max_refined_cache_bytes",
         "surface_subdivision_iterations",
         "clip_snap_mm",
         "clip_connect_mm",
@@ -147,6 +151,44 @@ class Configuracion:
         "min_plausible_surface_extent_mm",
         "max_plausible_surface_extent_mm",
     )
+    # Enteros estrictamente positivos (no float, no cero).
+    LIMITES_ENTEROS = {
+        "fragment_vertex_floor",
+        "normal_smooth_iterations",
+        "pattern_batch",
+        "smooth_iterations",
+        "max_surface_vertices",
+        "max_surface_faces",
+        "max_output_vertices",
+        "max_seed_area_mm2",
+        "max_refined_cache_entries",
+        "max_refined_cache_bytes",
+        "surface_subdivision_iterations",
+    }
+    # Tolerancias y longitudes: float finito y > 0.
+    LIMITES_POSITIVOS = {
+        "min_cell_mm",
+        "min_voxel_repair_mm",
+        "min_normal_length",
+        "scale_tolerance",
+        "degenerate_area",
+        "voronoi_jitter",
+        "seed_separation_epsilon",
+        "min_rounding_width_mm",
+        "normal_epsilon",
+        "clip_snap_mm",
+        "clip_connect_mm",
+        "border_smooth_wavelength_mm",
+        "border_smooth_max_mm",
+        "min_plausible_surface_extent_mm",
+        "max_plausible_surface_extent_mm",
+    }
+    # Ratios en (0, 1].
+    LIMITES_RATIOS = {
+        "max_rib_width_ratio",
+        "fragment_vertex_ratio",
+        "smooth_factor",
+    }
     CLAVES_COMPROBACION = (
         "blender",
         "example_continuous_liner",
@@ -166,6 +208,13 @@ class Configuracion:
     def Recargar() -> None:
         # Olvida lo ya leído para que el siguiente acceso vuelva a disco.
         Configuracion._CACHE.clear()
+        try:
+            from ..Excepciones import EntornoBlenderRequerido
+            from ..Superficie import SuperficieInterior
+
+            SuperficieInterior.VaciarCache()
+        except EntornoBlenderRequerido:
+            pass
         Registro.Obtener("configuracion").info("Caché de configuración vaciada.")
 
     @staticmethod
@@ -215,17 +264,44 @@ class Configuracion:
         # Umbrales del algoritmo: celda mínima, voxel, fragmentos, suavizado.
         datos = Configuracion.CargarJson("limites.json")
         Configuracion._ExigirClaves(datos, Configuracion.CLAVES_LIMITES, "limites.json")
+        Configuracion._ValidarLimites(datos)
         return datos
+
+    @staticmethod
+    def _ValidarLimites(datos: dict) -> None:
+        import math
+
+        for clave in Configuracion.LIMITES_ENTEROS:
+            numero = datos[clave]
+            if isinstance(numero, bool) or not isinstance(numero, int) or numero <= 0:
+                Configuracion._Error(f"El límite '{clave}' debe ser un entero positivo.")
+        for clave in Configuracion.LIMITES_POSITIVOS:
+            numero = datos[clave]
+            if isinstance(numero, bool) or not isinstance(numero, (int, float)):
+                Configuracion._Error(f"El límite '{clave}' debe ser numérico.")
+            if not math.isfinite(float(numero)) or float(numero) <= 0:
+                Configuracion._Error(f"El límite '{clave}' debe ser finito y positivo.")
+        for clave in Configuracion.LIMITES_RATIOS:
+            numero = datos[clave]
+            if isinstance(numero, bool) or not isinstance(numero, (int, float)):
+                Configuracion._Error(f"El límite '{clave}' debe ser numérico.")
+            valor = float(numero)
+            if not math.isfinite(valor) or valor <= 0 or valor > 1:
+                Configuracion._Error(f"El límite '{clave}' debe estar en (0, 1].")
+        minimo = float(datos["min_plausible_surface_extent_mm"])
+        maximo = float(datos["max_plausible_surface_extent_mm"])
+        if minimo > maximo:
+            Configuracion._Error(
+                "min_plausible_surface_extent_mm debe ser menor o igual que "
+                "max_plausible_surface_extent_mm."
+            )
 
     @staticmethod
     def ValorLimite(clave: str) -> float:
         datos = Configuracion.Limites()
         if clave not in datos:
             Configuracion._Error(f"Falta el límite '{clave}' en limites.json.")
-        numero = datos[clave]
-        if isinstance(numero, bool) or not isinstance(numero, (int, float)):
-            Configuracion._Error(f"El límite '{clave}' debe ser numérico.")
-        return float(numero)
+        return float(datos[clave])
 
     @staticmethod
     def ComprobacionDeReferencia() -> dict:

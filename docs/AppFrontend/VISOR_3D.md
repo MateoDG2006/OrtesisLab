@@ -25,9 +25,7 @@ flowchart TD
 
 `geometria(buffer)` lee uint32 little endian en byte 80 y comienza registros en byte 84. Por triángulo omite 12 bytes de normal, copia nueve float32 de posiciones y omite dos bytes de atributo. Crea geometría **sin índices**, recalcula normales y esfera envolvente. Solo consume el STL **binario generado por el backend**; la aceptación de STL ASCII corresponde al lector de subidas, no a este visor.
 
-`src` es la `object_url` del STL en el bucket S3. La política del bucket permite su lectura anónima, por eso el iframe la descarga sin cookie ni proxy. Un fallo de red muestra `No se pudo contactar con el almacén de archivos.`; 404 o 403 muestran `El STL ya no está en el almacén. Vuelva a generar esta variante.`; otros códigos muestran `No se pudo leer la malla generada.`
-
-No valida explícitamente tamaño, contador máximo o todos los errores de formato. Si parseo/importación fallan no hay botón de reintento; la consola del iframe es parte del diagnóstico. `src` se codifica al construir la URL pero el HTML acepta la cadena que reciba; esa codificación no es una política de autorización de recursos.
+`src` es la `object_url` del STL en el bucket S3. La política del bucket permite su lectura anónima (`RIESGO_ACEPTADO` en [RES-2026-11-12-ISSUE-2](../Audit/resolves/2026-11-12-issue-2-riesgo-stl-anonimo.md)). El iframe descarga sin cookie ni proxy. Three.js 0.169.0 se sirve desde `/vendor/three-0.169.0.module.js`. Antes de reservar el `Float32Array` se comprueban longitud del buffer, cantidad de caras y finitud; hay límite de descarga, `AbortController`, órbita/zoom por teclado y mensajes de error de red o HTTP.
 
 ## Escena y cámara
 

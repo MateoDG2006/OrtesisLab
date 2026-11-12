@@ -3,7 +3,7 @@
 import unittest
 
 from GenerateModelsApp.EscalaMalla import EscalaMalla
-from GenerateModelsApp.Excepciones import SuperficieInvalida
+from GenerateModelsApp.Excepciones import CalidadInsuficiente, SuperficieInvalida
 
 
 class DiagnosticoEscala(unittest.TestCase):
@@ -39,63 +39,36 @@ class DiagnosticoEscala(unittest.TestCase):
         self.assertEqual(resultado["factor"], 0.0001)
         self.assertAlmostEqual(resultado["dimension_despues_mm"], 500)
 
-    def test_reintenta_con_una_escala_menor_si_el_paso_no_cabe(self):
-        llamadas = []
-
-        def intentar(factor):
-            llamadas.append(factor)
-            if factor == 1.0:
-                raise SuperficieInvalida(
-                    "No se alcanzó el paso de superficie. "
-                    "Aumente el paso o revise las unidades en mm."
-                )
-            return "listo"
-
-        resultado, diagnostico = EscalaMalla.Aplicar(
-            800,
-            True,
-            intentar,
-            arista_maxima=800,
-            paso_mm=1.0,
-        )
-        self.assertEqual(resultado, "listo")
-        self.assertEqual(llamadas, [1.0, 0.1])
-        self.assertEqual(diagnostico["factor"], 0.1)
-        self.assertAlmostEqual(diagnostico["dimension_despues_mm"], 80)
-
-    def test_elige_la_potencia_con_la_que_el_paso_si_cabe(self):
-        llamadas = []
-
-        def intentar(factor):
-            llamadas.append(factor)
-            return "listo"
-
-        _resultado, diagnostico = EscalaMalla.Aplicar(
-            800_000,
-            True,
-            intentar,
-            arista_maxima=800_000,
-            paso_mm=0.01,
-        )
-        self.assertEqual(llamadas, [0.0001])
-        self.assertAlmostEqual(diagnostico["dimension_despues_mm"], 80)
-
-    def test_sin_autoescala_el_paso_sigue_siendo_un_error(self):
-        def intentar(_factor):
-            raise SuperficieInvalida(
-                "No se alcanzó el paso de superficie. "
-                "Aumente el paso o revise las unidades en mm."
+    def test_no_encoge_una_base_en_mm_para_alcanzar_el_paso(self):
+        # A-14: 800 mm ya está en rango; un paso inalcanzable no baja a 80 mm.
+        with self.assertRaises(CalidadInsuficiente):
+            EscalaMalla.Aplicar(
+                800,
+                True,
+                lambda _factor: "listo",
+                arista_maxima=800,
+                paso_mm=0.001,
             )
 
-        with self.assertRaises(SuperficieInvalida) as captura:
+    def test_rechaza_si_la_escala_decimal_no_alcanza_el_paso(self):
+        with self.assertRaises(CalidadInsuficiente):
+            EscalaMalla.Aplicar(
+                800_000,
+                True,
+                lambda _factor: "listo",
+                arista_maxima=800_000,
+                paso_mm=0.01,
+            )
+
+    def test_sin_autoescala_el_paso_sigue_siendo_un_error(self):
+        with self.assertRaises(CalidadInsuficiente):
             EscalaMalla.Aplicar(
                 2_000_000,
                 False,
-                intentar,
+                lambda _factor: "listo",
                 arista_maxima=2_000_000,
                 paso_mm=1.0,
             )
-        self.assertIn("No se alcanzó el paso de superficie", str(captura.exception))
 
     def test_una_malla_ya_en_mm_no_se_encoge_por_debajo_del_rango(self):
         def intentar(_factor):

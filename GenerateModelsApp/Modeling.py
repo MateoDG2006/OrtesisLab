@@ -52,11 +52,29 @@ class Model3DForPrinting:
         self.material = material or PETG()
         self.pattern: Patron = Patron.Obtener("VORONOI")
         self.opciones = Configuracion.ParametrosDefecto()
-        self.vertices = None
-        self.faces = None
+        self._vertices = None
+        self._faces = None
         self.config = None
         self.vertices_interiores = 0
         self.caras_interiores = 0
+        self._volumen_mm3 = None
+
+    @property
+    def vertices(self):
+        return self._vertices
+
+    @vertices.setter
+    def vertices(self, value):
+        self._vertices = value
+        self._volumen_mm3 = None
+
+    @property
+    def faces(self):
+        return self._faces
+
+    @faces.setter
+    def faces(self, value):
+        self._faces = value
         self._volumen_mm3 = None
 
     @staticmethod

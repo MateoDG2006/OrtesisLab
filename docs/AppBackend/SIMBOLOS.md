@@ -42,7 +42,7 @@ Script del comando de consola del proyecto.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `IniciarConsola` | Clase | [8](../../scripts/IniciarConsola.py#L8) | Punto de entrada del saludo. El paquete no depende de este archivo. |
+| `IniciarConsola` | Clase | [10](../../scripts/IniciarConsola.py#L10) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `IniciarConsola.Ejecutar` | Función/método | [12](../../scripts/IniciarConsola.py#L12) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `scripts/MigrarSubidas.py`
@@ -115,9 +115,9 @@ Caché compartida de superficies preparadas.
 | `CacheRedis._Cliente` | Función/método | [51](../../web/cache/CacheRedis.py#L51) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `CacheRedis._Fallo` | Función/método | [63](../../web/cache/CacheRedis.py#L63) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `CacheRedis.LeerTupla` | Función/método | [69](../../web/cache/CacheRedis.py#L69) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `CacheRedis.GuardarTupla` | Función/método | [87](../../web/cache/CacheRedis.py#L87) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `CacheRedis.LeerDiagnostico` | Función/método | [99](../../web/cache/CacheRedis.py#L99) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `CacheRedis.GuardarDiagnostico` | Función/método | [111](../../web/cache/CacheRedis.py#L111) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `CacheRedis.GuardarTupla` | Función/método | [89](../../web/cache/CacheRedis.py#L89) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `CacheRedis.LeerDiagnostico` | Función/método | [111](../../web/cache/CacheRedis.py#L111) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `CacheRedis.GuardarDiagnostico` | Función/método | [123](../../web/cache/CacheRedis.py#L123) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `web/ConfiguracionBackend.py`
 
@@ -202,55 +202,55 @@ Estado de la página de comparación.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `EstadoApp` | Clase | [44](../../web/EstadoApp.py#L44) | Parámetros del complemento, lote en curso y fichas ya generadas. |
-| `EstadoApp.set_pattern` | Función/método | [105](../../web/EstadoApp.py#L105) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_cell_mm` | Función/método | [109](../../web/EstadoApp.py#L109) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_rib_width_mm` | Función/método | [113](../../web/EstadoApp.py#L113) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_rib_height_mm` | Función/método | [117](../../web/EstadoApp.py#L117) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_liner` | Función/método | [121](../../web/EstadoApp.py#L121) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_skin_mm` | Función/método | [125](../../web/EstadoApp.py#L125) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_solid_mm` | Función/método | [129](../../web/EstadoApp.py#L129) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_border_mm` | Función/método | [133](../../web/EstadoApp.py#L133) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_rounding_mm` | Función/método | [137](../../web/EstadoApp.py#L137) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_angle_deg` | Función/método | [141](../../web/EstadoApp.py#L141) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_seed` | Función/método | [145](../../web/EstadoApp.py#L145) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_reinforce_y_mm` | Función/método | [149](../../web/EstadoApp.py#L149) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_reinforce_width_mm` | Función/método | [153](../../web/EstadoApp.py#L153) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_flip_normals` | Función/método | [157](../../web/EstadoApp.py#L157) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_surface_step_mm` | Función/método | [161](../../web/EstadoApp.py#L161) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_autoescalar_superficie` | Función/método | [165](../../web/EstadoApp.py#L165) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_usar_voronoi` | Función/método | [185](../../web/EstadoApp.py#L185) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_usar_hex` | Función/método | [189](../../web/EstadoApp.py#L189) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_usar_diamond` | Función/método | [193](../../web/EstadoApp.py#L193) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_usar_square` | Función/método | [197](../../web/EstadoApp.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_usar_solid` | Función/método | [201](../../web/EstadoApp.py#L201) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_eje` | Función/método | [205](../../web/EstadoApp.py#L205) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_desde` | Función/método | [209](../../web/EstadoApp.py#L209) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_hasta` | Función/método | [213](../../web/EstadoApp.py#L213) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_paso` | Función/método | [217](../../web/EstadoApp.py#L217) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.set_ambos_revestimientos` | Función/método | [221](../../web/EstadoApp.py#L221) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.CargarSuperficie` | Función/método | [225](../../web/EstadoApp.py#L225) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.UsarSuperficieIncluida` | Función/método | [275](../../web/EstadoApp.py#L275) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.CargarPredeterminados` | Función/método | [287](../../web/EstadoApp.py#L287) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.Previsualizar` | Función/método | [336](../../web/EstadoApp.py#L336) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.PedirLote` | Función/método | [342](../../web/EstadoApp.py#L342) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.Generar` | Función/método | [348](../../web/EstadoApp.py#L348) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.SeguirLote` | Función/método | [422](../../web/EstadoApp.py#L422) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.CancelarLote` | Función/método | [442](../../web/EstadoApp.py#L442) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.Ver` | Función/método | [454](../../web/EstadoApp.py#L454) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.Comparar` | Función/método | [461](../../web/EstadoApp.py#L461) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.Descargar` | Función/método | [476](../../web/EstadoApp.py#L476) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.aviso_escala` | Función/método | [496](../../web/EstadoApp.py#L496) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.espesor_total` | Función/método | [521](../../web/EstadoApp.py#L521) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.porcentaje` | Función/método | [530](../../web/EstadoApp.py#L530) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Usuario` | Función/método | [535](../../web/EstadoApp.py#L535) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Seguir` | Función/método | [550](../../web/EstadoApp.py#L550) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Publicar` | Función/método | [568](../../web/EstadoApp.py#L568) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._OlvidarTrabajo` | Función/método | [591](../../web/EstadoApp.py#L591) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Mostrar` | Función/método | [603](../../web/EstadoApp.py#L603) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Variantes` | Función/método | [611](../../web/EstadoApp.py#L611) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Opciones` | Función/método | [641](../../web/EstadoApp.py#L641) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Numero` | Función/método | [666](../../web/EstadoApp.py#L666) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp` | Clase | [46](../../web/EstadoApp.py#L46) | Parámetros del complemento, lote en curso y fichas ya generadas. |
+| `EstadoApp.set_pattern` | Función/método | [107](../../web/EstadoApp.py#L107) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_cell_mm` | Función/método | [111](../../web/EstadoApp.py#L111) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_rib_width_mm` | Función/método | [115](../../web/EstadoApp.py#L115) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_rib_height_mm` | Función/método | [119](../../web/EstadoApp.py#L119) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_liner` | Función/método | [123](../../web/EstadoApp.py#L123) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_skin_mm` | Función/método | [127](../../web/EstadoApp.py#L127) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_solid_mm` | Función/método | [131](../../web/EstadoApp.py#L131) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_border_mm` | Función/método | [135](../../web/EstadoApp.py#L135) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_rounding_mm` | Función/método | [139](../../web/EstadoApp.py#L139) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_angle_deg` | Función/método | [143](../../web/EstadoApp.py#L143) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_seed` | Función/método | [147](../../web/EstadoApp.py#L147) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_reinforce_y_mm` | Función/método | [151](../../web/EstadoApp.py#L151) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_reinforce_width_mm` | Función/método | [155](../../web/EstadoApp.py#L155) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_flip_normals` | Función/método | [159](../../web/EstadoApp.py#L159) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_surface_step_mm` | Función/método | [163](../../web/EstadoApp.py#L163) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_autoescalar_superficie` | Función/método | [167](../../web/EstadoApp.py#L167) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_usar_voronoi` | Función/método | [187](../../web/EstadoApp.py#L187) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_usar_hex` | Función/método | [191](../../web/EstadoApp.py#L191) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_usar_diamond` | Función/método | [195](../../web/EstadoApp.py#L195) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_usar_square` | Función/método | [199](../../web/EstadoApp.py#L199) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_usar_solid` | Función/método | [203](../../web/EstadoApp.py#L203) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_eje` | Función/método | [207](../../web/EstadoApp.py#L207) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_desde` | Función/método | [211](../../web/EstadoApp.py#L211) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_hasta` | Función/método | [215](../../web/EstadoApp.py#L215) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_paso` | Función/método | [219](../../web/EstadoApp.py#L219) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.set_ambos_revestimientos` | Función/método | [223](../../web/EstadoApp.py#L223) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.CargarSuperficie` | Función/método | [227](../../web/EstadoApp.py#L227) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.UsarSuperficieIncluida` | Función/método | [277](../../web/EstadoApp.py#L277) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.CargarPredeterminados` | Función/método | [289](../../web/EstadoApp.py#L289) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.Previsualizar` | Función/método | [338](../../web/EstadoApp.py#L338) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.PedirLote` | Función/método | [344](../../web/EstadoApp.py#L344) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.Generar` | Función/método | [350](../../web/EstadoApp.py#L350) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.SeguirLote` | Función/método | [424](../../web/EstadoApp.py#L424) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.CancelarLote` | Función/método | [444](../../web/EstadoApp.py#L444) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.Ver` | Función/método | [456](../../web/EstadoApp.py#L456) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.Comparar` | Función/método | [463](../../web/EstadoApp.py#L463) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.Descargar` | Función/método | [478](../../web/EstadoApp.py#L478) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.aviso_escala` | Función/método | [498](../../web/EstadoApp.py#L498) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.espesor_total` | Función/método | [523](../../web/EstadoApp.py#L523) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.porcentaje` | Función/método | [532](../../web/EstadoApp.py#L532) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Usuario` | Función/método | [537](../../web/EstadoApp.py#L537) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Seguir` | Función/método | [552](../../web/EstadoApp.py#L552) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Publicar` | Función/método | [570](../../web/EstadoApp.py#L570) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._OlvidarTrabajo` | Función/método | [593](../../web/EstadoApp.py#L593) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Mostrar` | Función/método | [605](../../web/EstadoApp.py#L605) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Variantes` | Función/método | [613](../../web/EstadoApp.py#L613) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Opciones` | Función/método | [643](../../web/EstadoApp.py#L643) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Numero` | Función/método | [668](../../web/EstadoApp.py#L668) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `web/EstadoHistorial.py`
 
@@ -303,11 +303,11 @@ Genera cascarones para la aplicación web.
 | `GeneradorWeb.Combinaciones` | Función/método | [270](../../web/GeneradorWeb.py#L270) | Entrada: patrones, rango y paso. Proceso: acota el barrido antes de |
 | `GeneradorWeb.Numero` | Función/método | [345](../../web/GeneradorWeb.py#L345) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `GeneradorWeb.Stl` | Función/método | [351](../../web/GeneradorWeb.py#L351) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorWeb.Triangulos` | Función/método | [370](../../web/GeneradorWeb.py#L370) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorWeb.Escribir` | Función/método | [382](../../web/GeneradorWeb.py#L382) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorWeb.Leer` | Función/método | [393](../../web/GeneradorWeb.py#L393) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorWeb.Ruta` | Función/método | [400](../../web/GeneradorWeb.py#L400) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorWeb.RutaSuperficie` | Función/método | [411](../../web/GeneradorWeb.py#L411) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorWeb.Triangulos` | Función/método | [379](../../web/GeneradorWeb.py#L379) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorWeb.Escribir` | Función/método | [391](../../web/GeneradorWeb.py#L391) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorWeb.Leer` | Función/método | [402](../../web/GeneradorWeb.py#L402) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorWeb.Ruta` | Función/método | [409](../../web/GeneradorWeb.py#L409) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorWeb.RutaSuperficie` | Función/método | [420](../../web/GeneradorWeb.py#L420) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `web/GenerateModelsApp.py`
 
@@ -342,14 +342,14 @@ Trabajador de generación: un ítem a la vez, con lease y latido.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `_Revision` | Función/método | [40](../../web/jobs/TrabajadorGeneracion.py#L40) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `TrabajadorGeneracion` | Clase | [51](../../web/jobs/TrabajadorGeneracion.py#L51) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `TrabajadorGeneracion.__init__` | Función/método | [52](../../web/jobs/TrabajadorGeneracion.py#L52) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `TrabajadorGeneracion.Ciclo` | Función/método | [58](../../web/jobs/TrabajadorGeneracion.py#L58) | Procesa un ítem si hay alguno disponible. Devuelve si procesó. |
-| `TrabajadorGeneracion.Procesar` | Función/método | [66](../../web/jobs/TrabajadorGeneracion.py#L66) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `TrabajadorGeneracion.Procesar.latir` | Función/método | [71](../../web/jobs/TrabajadorGeneracion.py#L71) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `TrabajadorGeneracion._FallarSinPerder` | Función/método | [126](../../web/jobs/TrabajadorGeneracion.py#L126) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `TrabajadorGeneracion.Ejecutar` | Función/método | [133](../../web/jobs/TrabajadorGeneracion.py#L133) | Bucle principal: supervisa leases, concilia archivos y procesa la cola. |
+| `_Revision` | Función/método | [41](../../web/jobs/TrabajadorGeneracion.py#L41) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `TrabajadorGeneracion` | Clase | [52](../../web/jobs/TrabajadorGeneracion.py#L52) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `TrabajadorGeneracion.__init__` | Función/método | [53](../../web/jobs/TrabajadorGeneracion.py#L53) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `TrabajadorGeneracion.Ciclo` | Función/método | [59](../../web/jobs/TrabajadorGeneracion.py#L59) | Procesa un ítem si hay alguno disponible. Devuelve si procesó. |
+| `TrabajadorGeneracion.Procesar` | Función/método | [67](../../web/jobs/TrabajadorGeneracion.py#L67) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `TrabajadorGeneracion.Procesar.latir` | Función/método | [72](../../web/jobs/TrabajadorGeneracion.py#L72) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `TrabajadorGeneracion._FallarSinPerder` | Función/método | [129](../../web/jobs/TrabajadorGeneracion.py#L129) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `TrabajadorGeneracion.Ejecutar` | Función/método | [136](../../web/jobs/TrabajadorGeneracion.py#L136) | Bucle principal: supervisa leases, concilia archivos y procesa la cola. |
 
 ## `web/LectorSuperficie.py`
 
@@ -357,13 +357,13 @@ Lectura de superficies subidas a la aplicación web.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `LectorSuperficie` | Clase | [21](../../web/LectorSuperficie.py#L21) | Convierte STL o NPZ en los arreglos que consume el núcleo geométrico. |
-| `LectorSuperficie.Preparar` | Función/método | [29](../../web/LectorSuperficie.py#L29) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `LectorSuperficie._Npz` | Función/método | [93](../../web/LectorSuperficie.py#L93) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `LectorSuperficie._Stl` | Función/método | [110](../../web/LectorSuperficie.py#L110) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `LectorSuperficie._StlBinario` | Función/método | [132](../../web/LectorSuperficie.py#L132) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `LectorSuperficie._StlAscii` | Función/método | [149](../../web/LectorSuperficie.py#L149) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `LectorSuperficie._Normales` | Función/método | [163](../../web/LectorSuperficie.py#L163) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `LectorSuperficie` | Clase | [22](../../web/LectorSuperficie.py#L22) | Convierte STL o NPZ en los arreglos que consume el núcleo geométrico. |
+| `LectorSuperficie.Preparar` | Función/método | [30](../../web/LectorSuperficie.py#L30) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `LectorSuperficie._Npz` | Función/método | [95](../../web/LectorSuperficie.py#L95) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `LectorSuperficie._Stl` | Función/método | [109](../../web/LectorSuperficie.py#L109) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `LectorSuperficie._StlBinario` | Función/método | [138](../../web/LectorSuperficie.py#L138) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `LectorSuperficie._StlAscii` | Función/método | [155](../../web/LectorSuperficie.py#L155) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `LectorSuperficie._Normales` | Función/método | [169](../../web/LectorSuperficie.py#L169) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `web/PaginaComparacion.py`
 
@@ -374,17 +374,17 @@ Pantalla para previsualizar una ortesis o un lote de variantes.
 | `PaginaComparacion` | Clase | [19](../../web/PaginaComparacion.py#L19) | Formulario con los parámetros del panel y los visores del lote. |
 | `PaginaComparacion.Index` | Función/método | [23](../../web/PaginaComparacion.py#L23) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `PaginaComparacion.Formulario` | Función/método | [55](../../web/PaginaComparacion.py#L55) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Superficie` | Función/método | [134](../../web/PaginaComparacion.py#L134) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Vista` | Función/método | [203](../../web/PaginaComparacion.py#L203) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Lote` | Función/método | [247](../../web/PaginaComparacion.py#L247) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Fila` | Función/método | [339](../../web/PaginaComparacion.py#L339) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Marco` | Función/método | [370](../../web/PaginaComparacion.py#L370) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Visor` | Función/método | [374](../../web/PaginaComparacion.py#L374) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Enlace` | Función/método | [386](../../web/PaginaComparacion.py#L386) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Campo` | Función/método | [393](../../web/PaginaComparacion.py#L393) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Interruptor` | Función/método | [402](../../web/PaginaComparacion.py#L402) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Selector` | Función/método | [411](../../web/PaginaComparacion.py#L411) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Medida` | Función/método | [428](../../web/PaginaComparacion.py#L428) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Superficie` | Función/método | [160](../../web/PaginaComparacion.py#L160) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Vista` | Función/método | [230](../../web/PaginaComparacion.py#L230) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Lote` | Función/método | [274](../../web/PaginaComparacion.py#L274) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Fila` | Función/método | [369](../../web/PaginaComparacion.py#L369) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Marco` | Función/método | [400](../../web/PaginaComparacion.py#L400) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Visor` | Función/método | [404](../../web/PaginaComparacion.py#L404) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Enlace` | Función/método | [416](../../web/PaginaComparacion.py#L416) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Campo` | Función/método | [423](../../web/PaginaComparacion.py#L423) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Interruptor` | Función/método | [432](../../web/PaginaComparacion.py#L432) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Selector` | Función/método | [441](../../web/PaginaComparacion.py#L441) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Medida` | Función/método | [458](../../web/PaginaComparacion.py#L458) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `web/PaginaHistorial.py`
 
@@ -428,35 +428,35 @@ DTO y errores de la persistencia. No son entidades ORM.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `ErrorPersistencia` | Clase | [28](../../web/persistence/Contratos.py#L28) | Error previsto con un mensaje que se puede mostrar. |
-| `PersistenciaNoDisponible` | Clase | [32](../../web/persistence/Contratos.py#L32) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SesionInvalida` | Clase | [36](../../web/persistence/Contratos.py#L36) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SesionInvalida.__init__` | Función/método | [37](../../web/persistence/Contratos.py#L37) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `AccesoDenegado` | Clase | [41](../../web/persistence/Contratos.py#L41) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `AccesoDenegado.__init__` | Función/método | [42](../../web/persistence/Contratos.py#L42) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SolicitudIdempotenteEnConflicto` | Clase | [46](../../web/persistence/Contratos.py#L46) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SolicitudIdempotenteEnConflicto.__init__` | Función/método | [47](../../web/persistence/Contratos.py#L47) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ConflictoRevision` | Clase | [51](../../web/persistence/Contratos.py#L51) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ConflictoRevision.__init__` | Función/método | [52](../../web/persistence/Contratos.py#L52) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `CuotaExcedida` | Clase | [56](../../web/persistence/Contratos.py#L56) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `UsuarioAutenticado` | Clase | [61](../../web/persistence/Contratos.py#L61) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Asset` | Clase | [69](../../web/persistence/Contratos.py#L69) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ImportDTO` | Clase | [83](../../web/persistence/Contratos.py#L83) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `VersionDTO` | Clase | [100](../../web/persistence/Contratos.py#L100) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SolicitudLote` | Clase | [116](../../web/persistence/Contratos.py#L116) | Variantes ya expandidas y validadas por ``GeneradorWeb.Combinaciones``. |
-| `LoteDTO` | Clase | [131](../../web/persistence/Contratos.py#L131) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ResultadoDTO` | Clase | [144](../../web/persistence/Contratos.py#L144) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ItemLote` | Clase | [163](../../web/persistence/Contratos.py#L163) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ProgresoLote` | Clase | [177](../../web/persistence/Contratos.py#L177) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ProgresoLote.terminados` | Función/método | [182](../../web/persistence/Contratos.py#L182) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ProgresoLote.abierto` | Función/método | [186](../../web/persistence/Contratos.py#L186) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `TrabajoReservado` | Clase | [191](../../web/persistence/Contratos.py#L191) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ResultadoGeometrico` | Clase | [208](../../web/persistence/Contratos.py#L208) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `FilaHistorial` | Clase | [226](../../web/persistence/Contratos.py#L226) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaHistorial` | Clase | [248](../../web/persistence/Contratos.py#L248) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `IntentoDTO` | Clase | [254](../../web/persistence/Contratos.py#L254) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `DetalleVersion` | Clase | [271](../../web/persistence/Contratos.py#L271) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Preferencias` | Clase | [281](../../web/persistence/Contratos.py#L281) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ErrorPersistencia` | Clase | [29](../../web/persistence/Contratos.py#L29) | Error previsto con un mensaje que se puede mostrar. |
+| `PersistenciaNoDisponible` | Clase | [33](../../web/persistence/Contratos.py#L33) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SesionInvalida` | Clase | [37](../../web/persistence/Contratos.py#L37) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SesionInvalida.__init__` | Función/método | [38](../../web/persistence/Contratos.py#L38) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `AccesoDenegado` | Clase | [42](../../web/persistence/Contratos.py#L42) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `AccesoDenegado.__init__` | Función/método | [43](../../web/persistence/Contratos.py#L43) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SolicitudIdempotenteEnConflicto` | Clase | [47](../../web/persistence/Contratos.py#L47) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SolicitudIdempotenteEnConflicto.__init__` | Función/método | [48](../../web/persistence/Contratos.py#L48) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ConflictoRevision` | Clase | [52](../../web/persistence/Contratos.py#L52) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ConflictoRevision.__init__` | Función/método | [53](../../web/persistence/Contratos.py#L53) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `CuotaExcedida` | Clase | [57](../../web/persistence/Contratos.py#L57) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `UsuarioAutenticado` | Clase | [62](../../web/persistence/Contratos.py#L62) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Asset` | Clase | [70](../../web/persistence/Contratos.py#L70) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ImportDTO` | Clase | [84](../../web/persistence/Contratos.py#L84) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `VersionDTO` | Clase | [101](../../web/persistence/Contratos.py#L101) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SolicitudLote` | Clase | [117](../../web/persistence/Contratos.py#L117) | Variantes ya expandidas y validadas por ``GeneradorWeb.Combinaciones``. |
+| `LoteDTO` | Clase | [132](../../web/persistence/Contratos.py#L132) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ResultadoDTO` | Clase | [145](../../web/persistence/Contratos.py#L145) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ItemLote` | Clase | [164](../../web/persistence/Contratos.py#L164) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ProgresoLote` | Clase | [178](../../web/persistence/Contratos.py#L178) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ProgresoLote.terminados` | Función/método | [183](../../web/persistence/Contratos.py#L183) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ProgresoLote.abierto` | Función/método | [187](../../web/persistence/Contratos.py#L187) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `TrabajoReservado` | Clase | [192](../../web/persistence/Contratos.py#L192) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ResultadoGeometrico` | Clase | [209](../../web/persistence/Contratos.py#L209) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `FilaHistorial` | Clase | [227](../../web/persistence/Contratos.py#L227) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaHistorial` | Clase | [249](../../web/persistence/Contratos.py#L249) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `IntentoDTO` | Clase | [255](../../web/persistence/Contratos.py#L255) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `DetalleVersion` | Clase | [272](../../web/persistence/Contratos.py#L272) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Preferencias` | Clase | [282](../../web/persistence/Contratos.py#L282) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `web/persistence/Modelos.py`
 
@@ -701,9 +701,10 @@ Construcción numérica de una versión: métricas, STL y JSON de parámetros.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `GeneradorGeometrico` | Clase | [26](../../web/services/GeneradorGeometrico.py#L26) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorGeometrico.MaterialDe` | Función/método | [28](../../web/services/GeneradorGeometrico.py#L28) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorGeometrico.Construir` | Función/método | [39](../../web/services/GeneradorGeometrico.py#L39) | Salida: resultado numérico, STL binario y JSON canónico de parámetros. |
+| `GeneradorGeometrico` | Clase | [33](../../web/services/GeneradorGeometrico.py#L33) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorGeometrico.MaterialDe` | Función/método | [35](../../web/services/GeneradorGeometrico.py#L35) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorGeometrico._ComprobarCancelacion` | Función/método | [46](../../web/services/GeneradorGeometrico.py#L46) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorGeometrico.Construir` | Función/método | [51](../../web/services/GeneradorGeometrico.py#L51) | Salida: resultado numérico, STL binario y JSON canónico de parámetros. |
 
 ## `web/services/ServicioHistorial.py`
 

@@ -6,6 +6,8 @@ latido_s: 30
 # Cada cuánto se devuelven a la cola los ítems con lease vencido.
 supervision_s: 30
 conciliacion_s: 600
+# Cálculos geométricos simultáneos en este proceso.
+max_concurrent_geometry: 1
 
 conciliador:
   # Antigüedad a partir de la cual se borran assets staged.

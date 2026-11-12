@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from .Excepciones import NormalesInvalidas, SuperficieInvalida
+from .Excepciones import CalidadInsuficiente, NormalesInvalidas, SuperficieInvalida
 from .Malla import AnalizadorMalla
 from .util.Utilidades import Configuracion, Registro
 
@@ -116,22 +116,18 @@ class RefinadorMalla:
             [faces[:, [0, 1]], faces[:, [1, 2]], faces[:, [2, 0]]]
         )
         aristas = np.unique(np.sort(todas, axis=1), axis=0)
-        if not detenida and np.any(
-            np.linalg.norm(
-                puntos[aristas[:, 0]] - puntos[aristas[:, 1]],
-                axis=1,
-            )
-            > pasoMm * 1.001
-        ):
-            raise SuperficieInvalida(
-                "No se alcanzó el paso de superficie. "
-                "Aumente el paso o revise las unidades en mm."
-            )
-        if detenida:
-            Registro.Obtener("malla").info(
-                "Subdivisión detenida en %s vértices, por debajo del paso %.3f mm.",
-                len(puntos),
-                pasoMm,
+        longitudes = (
+            np.linalg.norm(puntos[aristas[:, 0]] - puntos[aristas[:, 1]], axis=1)
+            if len(aristas)
+            else np.array([])
+        )
+        arista_final = float(longitudes.max()) if len(longitudes) else 0.0
+        if detenida or (len(longitudes) and np.any(longitudes > pasoMm * 1.001)):
+            # El tamaño físico ya está fijado; no se publica un paso que no se alcanzó.
+            raise CalidadInsuficiente(
+                f"No se alcanzó el paso pedido de {pasoMm:.3f} mm; "
+                f"la arista mayor quedó en {arista_final:.3f} mm.",
+                detalle=f"vertices={len(puntos)}, paso_pedido={pasoMm}, arista={arista_final}",
             )
 
         Registro.Obtener("malla").info(

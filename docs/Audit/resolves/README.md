@@ -1,17 +1,24 @@
 # Resoluciones
 
-**Fecha:** 2026-10-13. **Resoluciones de cierre de esta auditoría:** ninguna.
+**Fecha:** 2026-11-12. **Cierre de `AUD-2026-10-13-001` (A-01…A-22):** ver
+[RES-2026-11-12-ISSUE-9](2026-11-12-issue-9-seguimiento.md).
 
-Este índice y la plantilla siguiente **no resuelven ni desbloquean archivos**.
-Los hallazgos de `AUD-2026-10-13-001` permanecen abiertos.
+| Resolve | Estado | Alcance |
+|---|---|---|
+| [2026-11-12-resolve-cierre-issues-auditoria](2026-11-12-resolve-cierre-issues-auditoria.md) | EN_CURSO → autorización del plan | Edición autorizada |
+| [issue-1](2026-11-12-issue-1-carga-presupuestos.md) | RESUELTO | A-01, A-03, A-11 |
+| [issue-2](2026-11-12-issue-2-riesgo-stl-anonimo.md) | RIESGO_ACEPTADO | A-02 |
+| [issue-3](2026-11-12-issue-3-normales-topologia.md) | RESUELTO | A-04…A-06, A-14, A-16, A-22 |
+| [issue-4](2026-11-12-issue-4-validacion-exportacion.md) | RESUELTO | A-07, A-08, A-15 |
+| [issue-5](2026-11-12-issue-5-rollback-stl-json.md) | RESUELTO | A-09, A-10 |
+| [issue-6](2026-11-12-issue-6-cache-metricas.md) | RESUELTO | A-12, A-13 |
+| [issue-7](2026-11-12-issue-7-contratos-wheel.md) | RESUELTO | A-17, A-18 |
+| [issue-8](2026-11-12-issue-8-tests-visor-a11y.md) | RESUELTO | A-19…A-21 |
+| [issue-9](2026-11-12-issue-9-seguimiento.md) | RESUELTO | Índice de seguimiento |
 
-El [registro de reorganización documental](2026-10-13-reorganizacion-documental.md)
-procede de trabajo concurrente autorizado por el usuario. Su alcance se limita
-a traslados y referencias; no cierra los hallazgos de código de esta auditoría.
-
-[RES-2026-10-13-002](2026-10-13-resolve-organizar-pruebas.md) autoriza el
-traslado de las pruebas a subcarpetas y de sus fixtures a `tests/assets/`.
-Sigue en curso y no cierra hallazgos.
+[RES-2026-10-13-001](2026-10-13-resolve-persistencia-postgres.md) y
+[RES-2026-10-13-002](2026-10-13-resolve-organizar-pruebas.md) siguen como
+trabajo previo `EN_CURSO` de persistencia y organización de pruebas.
 
 ## Protocolo
 

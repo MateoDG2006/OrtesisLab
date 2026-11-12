@@ -35,6 +35,7 @@ LEASE_S = _CONFIG["lease_s"]
 LATIDO_S = _CONFIG["latido_s"]
 SUPERVISION_S = _CONFIG["supervision_s"]
 CONCILIACION_S = _CONFIG["conciliacion_s"]
+GEOMETRIA = threading.Semaphore(int(_CONFIG.get("max_concurrent_geometry", 1)))
 
 
 def _Revision() -> str:
@@ -82,13 +83,15 @@ class TrabajadorGeneracion:
         duracion = lambda: int((time.monotonic() - inicio) * 1000)  # noqa: E731
         try:
             usuario = UsuarioAutenticado(trabajo.user_id, "", None, trabajo.project_id)
-            with ContextoUsuario.Activar(usuario):
-                resultado, stl, parametros = GeneradorGeometrico.Construir(
-                    trabajo.parameters,
-                    ServicioImports.NombreSuperficie(trabajo.normalized_asset_id),
-                    trabajo.auto_scale,
-                    trabajo.material_snapshot,
-                )
+            with GEOMETRIA:
+                with ContextoUsuario.Activar(usuario):
+                    resultado, stl, parametros = GeneradorGeometrico.Construir(
+                        trabajo.parameters,
+                        ServicioImports.NombreSuperficie(trabajo.normalized_asset_id),
+                        trabajo.auto_scale,
+                        trabajo.material_snapshot,
+                        cancelar=lambda: perdido.is_set() or ServicioLotes.CancelacionPedida(trabajo),
+                    )
             if perdido.is_set():
                 self.registro.warning("Lease perdido para %s; no se publica.", trabajo.item_id)
                 return

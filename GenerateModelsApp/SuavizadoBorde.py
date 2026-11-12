@@ -74,7 +74,11 @@ class SuavizadoBorde:
 
         puntos += delta
         for bucle in bucles:
-            normales_bucle = SuavizadoBorde._Pasabajos(normales_salida[bucle], longitud)
+            # A-22: el corte espacial usa el perímetro físico del contorno, no
+            # distancias entre vectores unitarios.
+            normales_bucle = SuavizadoBorde._PasabajosCampo(
+                normales_salida[bucle], puntos[bucle], longitud
+            )
             if (
                 normales_bucle.shape != normales_salida[bucle].shape
                 or not np.isfinite(normales_bucle).all()
@@ -137,28 +141,37 @@ class SuavizadoBorde:
         return bucles
 
     @staticmethod
-    def _Pasabajos(coords: np.ndarray, longitud_mm: float) -> np.ndarray:
-        # Remuestrea el bucle cerrado y elimina las ondas más cortas que longitud_mm.
-        cantidad = len(coords)
+    def _Perimetro(coords: np.ndarray) -> tuple[np.ndarray, float]:
         segmentos = np.linalg.norm(np.roll(coords, -1, axis=0) - coords, axis=1)
         acumulada = np.concatenate((np.zeros(1), np.cumsum(segmentos)))
         for posicion in range(1, len(acumulada)):
             if acumulada[posicion] <= acumulada[posicion - 1]:
                 acumulada[posicion] = acumulada[posicion - 1] + 1e-9
-        perimetro = float(acumulada[-1])
+        return acumulada, float(acumulada[-1])
+
+    @staticmethod
+    def _Pasabajos(coords: np.ndarray, longitud_mm: float) -> np.ndarray:
+        # Remuestrea el bucle cerrado y elimina las ondas más cortas que longitud_mm.
+        return SuavizadoBorde._PasabajosCampo(coords, coords, longitud_mm)
+
+    @staticmethod
+    def _PasabajosCampo(campo: np.ndarray, geometria: np.ndarray, longitud_mm: float) -> np.ndarray:
+        """Filtra ``campo`` con el perímetro físico de ``geometria`` (mm)."""
+        cantidad = len(campo)
+        acumulada, perimetro = SuavizadoBorde._Perimetro(geometria)
         if perimetro <= 1e-8:
-            return coords.copy()
+            return campo.copy()
 
         parametro = np.linspace(0.0, perimetro, cantidad, endpoint=False)
-        extendida = np.vstack((coords, coords[:1]))
+        extendida = np.vstack((campo, campo[:1]))
         uniforme = np.column_stack(
-            [np.interp(parametro, acumulada, extendida[:, eje]) for eje in range(3)]
+            [np.interp(parametro, acumulada, extendida[:, eje]) for eje in range(campo.shape[1])]
         )
         espectro = np.fft.rfft(uniforme, axis=0)
         frecuencias = np.fft.rfftfreq(cantidad, d=perimetro / cantidad)
         corte = 1.0 / longitud_mm
         inicio = 0.5 * corte
-        transicion = np.clip((frecuencias - inicio) / (corte - inicio), 0.0, 1.0)
+        transicion = np.clip((frecuencias - inicio) / max(corte - inicio, 1e-12), 0.0, 1.0)
         ganancia = 1.0 - transicion * transicion * (3.0 - 2.0 * transicion)
         # Las dos primeras vueltas describen el óvalo del contorno, no un diente.
         ganancia[np.arange(len(espectro)) <= 2] = 1.0
@@ -168,7 +181,7 @@ class SuavizadoBorde:
         suave_ext = np.vstack((suave, suave[:1]))
         eje_param = np.append(np.linspace(0.0, 1.0, cantidad, endpoint=False), 1.0)
         return np.column_stack(
-            [np.interp(fraccion, eje_param, suave_ext[:, eje]) for eje in range(3)]
+            [np.interp(fraccion, eje_param, suave_ext[:, eje]) for eje in range(campo.shape[1])]
         )
 
     @staticmethod

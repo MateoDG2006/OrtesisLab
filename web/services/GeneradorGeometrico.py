@@ -6,14 +6,21 @@ activo en ``ContextoUsuario`` porque la superficie se lee de su asset.
 
 from __future__ import annotations
 
+import json
 import struct
 from decimal import Decimal
 
 import numpy as np
 
+from collections.abc import Callable
+
+from GenerateModelsApp.Excepciones import GeneracionCancelada, MallaNoValida, PresupuestoExcedido
+from GenerateModelsApp.ValidacionSolido import ValidadorSolido
+from GenerateModelsApp.InspeccionNpz import InspeccionNpz
 from GenerateModelsApp.Modeling import Model3DForPrinting
 from GenerateModelsApp.RefinadorMalla import RefinadorMalla
 from GenerateModelsApp.constants.Materials import Material
+from GenerateModelsApp.util.Utilidades import Configuracion
 from web.GeneradorWeb import GeneradorWeb
 from web.enums import AlcanceGeometria, UnidadExport
 from web.persistence.Contratos import ResultadoGeometrico
@@ -36,11 +43,21 @@ class GeneradorGeometrico:
         )
 
     @staticmethod
+    def _ComprobarCancelacion(cancelar: Callable[[], bool] | None) -> None:
+        if cancelar is not None and cancelar():
+            raise GeneracionCancelada()
+
+    @staticmethod
     def Construir(
-        opciones: dict, superficie_archivo: str, autoescalar: bool, material: dict
+        opciones: dict,
+        superficie_archivo: str,
+        autoescalar: bool,
+        material: dict,
+        cancelar: Callable[[], bool] | None = None,
     ) -> tuple[ResultadoGeometrico, bytes, bytes]:
         """Salida: resultado numérico, STL binario y JSON canónico de parámetros.
         Errores: OrtesisLabError si la geometría o los parámetros no son válidos."""
+        GeneradorGeometrico._ComprobarCancelacion(cancelar)
         if opciones["pattern"] == "SOLID":
             paso = None
             superficie, diagnostico = GeneradorWeb._SuperficieConDiagnostico(superficie_archivo, autoescalar)
@@ -50,8 +67,19 @@ class GeneradorGeometrico:
                 superficie_archivo, paso, autoescalar
             )
         puntos, caras, normales, borde = superficie
+        InspeccionNpz.VerificarPresupuesto(puntos, caras, superficie_archivo or "plantilla")
+        GeneradorGeometrico._ComprobarCancelacion(cancelar)
         modelo = Model3DForPrinting(GeneradorGeometrico.MaterialDe(material))
         vertices, faces, cfg, _interiores, _caras = modelo.Construir(puntos, caras, normales, borde, **opciones)
+        tope = int(Configuracion.ValorLimite("max_output_vertices"))
+        if len(vertices) > tope:
+            raise PresupuestoExcedido(
+                f"El sólido generado supera el máximo de {tope} vértices."
+            )
+        GeneradorGeometrico._ComprobarCancelacion(cancelar)
+        informe = ValidadorSolido.Comprobar(vertices, faces)
+        if not informe["ok"]:
+            raise MallaNoValida(json.dumps(informe))
         volumen = float(modelo.CalculateVolume())
         peso = float(modelo.CalculateWeight())
         precio = float(modelo.CalculatePrice())

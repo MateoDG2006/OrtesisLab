@@ -11,12 +11,18 @@ import json
 
 from .ApiBlender import BVHTree, bmesh, intersect_ray_tri
 from .Excepciones import MallaNoConstruida, ModeloNoGenerado
+from .InstantaneaExportacion import MallaEvaluada
+from .ValidacionSolido import ValidadorSolido
 from .constants.Nombres import PROP_VALIDACION
 from .util.Utilidades import Configuracion, Registro
 
 
 class ValidadorMalla:
     """Informa si OL_Ortesis es una sola pieza cerrada."""
+
+    @staticmethod
+    def GuardarInforme(ob, informe: dict) -> None:
+        ob[PROP_VALIDACION] = json.dumps(informe)
 
     @staticmethod
     def _Componentes(bm) -> int:
@@ -75,36 +81,40 @@ class ValidadorMalla:
         if getattr(ob, "type", None) != "MESH" or ob.data is None:
             raise MallaNoConstruida("El objeto a comprobar no es una malla.")
 
-        bm = bmesh.new()
-        bm.from_mesh(ob.data)
         try:
-            bmesh.ops.triangulate(bm, faces=list(bm.faces))
-            bm.faces.ensure_lookup_table()
-            area_minima = Configuracion.ValorLimite("degenerate_area")
-            informe = {
-                "open_edges": sum(arista.is_boundary for arista in bm.edges),
-                "nonmanifold_edges": sum(not arista.is_manifold for arista in bm.edges),
-                "degenerate_faces": sum(cara.calc_area() < area_minima for cara in bm.faces),
-                "triangles": len(bm.faces),
-            }
-            informe["components"] = ValidadorMalla._Componentes(bm)
-            informe["triangle_crossings"] = 0
-            if intersections:
-                arbol = BVHTree.FromBMesh(bm, epsilon=0)
-                informe["triangle_crossings"] = ValidadorMalla._Cruces(bm, arbol)
+            puntos, caras = MallaEvaluada.Extraer(ob)
         except (RuntimeError, ValueError) as exc:
             raise MallaNoConstruida(str(exc)) from exc
-        finally:
-            bm.free()
 
-        informe["ok"] = (
-            not any(
-                informe[clave]
-                for clave in ("open_edges", "nonmanifold_edges", "degenerate_faces", "triangle_crossings")
+        informe_numpy = ValidadorSolido.Comprobar(puntos, caras, intersections=False)
+        informe = dict(informe_numpy)
+        informe["triangle_crossings"] = 0
+        if intersections:
+            bm = bmesh.new()
+            bm.from_mesh(ob.data)
+            try:
+                bmesh.ops.triangulate(bm, faces=list(bm.faces))
+                bm.faces.ensure_lookup_table()
+                arbol = BVHTree.FromBMesh(bm, epsilon=0)
+                informe["triangle_crossings"] = ValidadorMalla._Cruces(bm, arbol)
+            except (RuntimeError, ValueError) as exc:
+                raise MallaNoConstruida(str(exc)) from exc
+            finally:
+                bm.free()
+            informe["ok"] = (
+                not any(
+                    informe[clave]
+                    for clave in (
+                        "open_edges",
+                        "nonmanifold_edges",
+                        "nonmanifold_verts",
+                        "degenerate_faces",
+                        "triangle_crossings",
+                    )
+                )
+                and informe["components"] == 1
             )
-            and informe["components"] == 1
-        )
-        ob[PROP_VALIDACION] = json.dumps(informe)
+        ValidadorMalla.GuardarInforme(ob, informe)
         if informe["ok"]:
             logger.info("Malla cerrada y conectada: %s triángulos.", informe["triangles"])
         else:

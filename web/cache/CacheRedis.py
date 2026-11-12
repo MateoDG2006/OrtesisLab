@@ -79,7 +79,9 @@ class CacheRedis:
             return None
         try:
             with np.load(io.BytesIO(datos), allow_pickle=False) as archivo:
-                return tuple(np.asarray(archivo[f"a{indice}"]) for indice in range(len(archivo.files)))
+                return tuple(
+                    np.array(archivo[f"a{indice}"], copy=True) for indice in range(len(archivo.files))
+                )
         except (OSError, ValueError, KeyError):
             return None
 
@@ -90,8 +92,18 @@ class CacheRedis:
             return
         salida = io.BytesIO()
         np.savez(salida, **{f"a{indice}": np.asarray(valor) for indice, valor in enumerate(tupla)})
+        cuerpo = salida.getvalue()
+        maximo = int(_CONFIG.get("max_entrada_bytes", 0))
+        if maximo and len(cuerpo) > maximo:
+            Registro.Obtener("cache").warning(
+                "Entrada de caché omitida (%s bytes > %s): %s",
+                len(cuerpo),
+                maximo,
+                clave,
+            )
+            return
         try:
-            cliente.set(clave, salida.getvalue(), ex=TTL_S)
+            cliente.set(clave, cuerpo, ex=TTL_S)
         except redis.RedisError as exc:
             CacheRedis._Fallo(exc)
 

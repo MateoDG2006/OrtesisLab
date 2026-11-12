@@ -1,5 +1,22 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — Cierre issues auditoría #1–#9
+
+Prerrequisito B-01 (constantes de contrato), presupuestos e inspección NPY (#1), `RIESGO_ACEPTADO` del STL anónimo (#2), normales/topología/escala/unidades (#3), validación de exportación (#4), rollback y par STL/JSON (#5), cachés (#6), contratos/wheel (#7), CI/visor/a11y (#8) e índice de seguimiento (#9). Resolves en `docs/Audit/resolves/2026-11-12-*.md`.
+
+Pruebas ejecutadas en esta iteración:
+- `.venv\Scripts\python.exe -m unittest tests.aplicacion_web.test_humo_import -v` → 2 OK
+- `.venv\Scripts\python.exe -m unittest tests.geometria.test_carga_presupuesto tests.geometria.test_normales_topologia tests.geometria.test_escala_malla tests.geometria.test_refinador_malla tests.geometria.test_exportacion_validada -v` → OK
+- `.venv\Scripts\python.exe -m unittest tests.nucleo.test_cache_metricas tests.nucleo.test_compatibilidad_npz_json tests.nucleo.test_wheel tests.e2e.test_carga_generacion_descarga tests.blender.test_rollback_publicacion -v` → OK (omitidas sin bpy/base según caso)
+
+## 2026-11-12 — Cierre issues auditoría #4–#8
+
+Validación numérica (`ValidacionSolido`), exportación desde instantánea evaluada, rollback de generación y publicación atómica STL/JSON, endurecimiento de cachés, `contratos.py`, visor local y CI (`pruebas.yml`). Resolves en `docs/Audit/resolves/2026-11-12-issue-*.md`.
+
+Pruebas ejecutadas:
+- `.venv\Scripts\python.exe -m unittest tests.geometria.test_exportacion_validada tests.nucleo.test_cache_metricas tests.nucleo.test_compatibilidad_npz_json tests.nucleo.test_wheel tests.e2e.test_carga_generacion_descarga tests.blender.test_rollback_publicacion -v` → 16 OK, 1 omitida (bpy).
+- `.venv\Scripts\python.exe -m unittest tests.aplicacion_web.test_humo_import -v` → 2 OK.
+
 ## 2026-10-13 — Estados y tipos como `StrEnum` en `web/enums/`
 
 Los valores cerrados del dominio (estados de usuario, asset, import, lote, ítem, intento y export; tipos de asset y de evento; formatos, modos, unidades, alcance y extensiones de superficie) pasan a `StrEnum` en `web/enums/`, agrupados por dominio. `Modelos.py` construye desde ellos los `CHECK ... IN`, los `server_default` y los índices parciales por estado; desaparece `TIPOS_EVENTO`. `Contratos.ALCANCE_GEOMETRIA` se sustituye por `AlcanceGeometria.PRE_VOXEL_SHELL` y `ServicioHistorial.ESTADOS` por `EstadoItem`. Repositorios, servicios, jobs, `scripts/MigrarSubidas.py` y `EstadoHistorial` usan los miembros en lugar de literales. Las etiquetas de estado de `/historial` (`ESTADOS_VISIBLES`) pasan a `config/web.yaml`, clave `estados_visibles`.

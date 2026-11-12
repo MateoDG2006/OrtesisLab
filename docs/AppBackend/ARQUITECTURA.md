@@ -114,7 +114,7 @@ sequenceDiagram
 
 Clave de objeto: `usuarios/<user_id>/assets/<asset_id>`; los STL de resultado llevan además el sufijo `.stl`. El flujo de dos recursos es: fila `staged` → subir y verificar objeto (tamaño y SHA-256) → fila `ready` con `object_url`. Si falla la subida, la fila staged queda para el conciliador.
 
-La política del bucket concede lectura anónima solo a `usuarios/*/assets/*.stl`; originales, NPZ y JSON exigen credenciales del backend. El visor y la descarga usan la `object_url` del STL directamente. La URL contiene dos UUID aleatorios, pero quien la conozca puede leer ese STL: es una decisión de esta entrega.
+La política del bucket concede lectura anónima solo a `usuarios/*/assets/*.stl`; originales, NPZ y JSON exigen credenciales del backend. El visor y la descarga usan la `object_url` del STL directamente. La URL contiene dos UUID aleatorios, pero quien la conozca puede leer ese STL. Cierre documentado como `RIESGO_ACEPTADO` en [RES-2026-11-12-ISSUE-2](../Audit/resolves/2026-11-12-issue-2-riesgo-stl-anonimo.md), con revisión el **2027-05-12**.
 
 `CacheRedis` guarda tuplas de superficie con clave por SHA-256 del NPZ (contenido, no nombre), paso y autoescala, con TTL de 7 días. Un fallo de Redis apaga la caché 30 s y la generación lee del bucket.
 

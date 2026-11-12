@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import math
 
-from .Excepciones import SuperficieInvalida
+from .Excepciones import CalidadInsuficiente, SuperficieInvalida
 from .util.Utilidades import Configuracion, Registro
 
 
@@ -98,6 +98,8 @@ class EscalaMalla:
     @staticmethod
     def EsFalloDePaso(exc: BaseException) -> bool:
         # El paso no cupo: faltaron rondas o el detalle superó el límite de vértices.
+        if isinstance(exc, CalidadInsuficiente):
+            return True
         return isinstance(exc, SuperficieInvalida) and "paso de superficie" in str(exc)
 
     @staticmethod
@@ -110,56 +112,21 @@ class EscalaMalla:
         paso_mm: float | None = None,
         n_caras: int | None = None,
     ):
-        # Prueba la corrección decimal y, si el paso no cabe, la siguiente más pequeña.
+        """Decide la escala una sola vez y la mantiene. Un paso inalcanzable
+        no reduce el tamaño físico de una base ya expresada en mm."""
         dimension = float(dimensionMaximaMm)
         diagnostico = dict(EscalaMalla.Diagnosticar(dimension))
         candidatos = EscalaMalla.Candidatos(dimension)
-        preferidos = candidatos
-        if (
-            arista_maxima is not None
-            and paso_mm is not None
-            and candidatos
-        ):
-            alcanzables = [
-                factor
-                for factor in candidatos
-                if EscalaMalla.AlcanzaPaso(arista_maxima, float(paso_mm), factor)
-            ]
-            if alcanzables:
-                preferidos = alcanzables
-        if not preferidos:
-            preferidos = [1.0]
-
         if autoescalar:
-            preferido = preferidos[0]
-            menores = sorted(
-                (factor for factor in candidatos if factor < preferido),
-                reverse=True,
-            )
-            # Solo potencias que dejan el eje dentro del rango. Encoger por
-            # debajo de ese rango cambia el tamaño de la ortesis.
-            intentos = [preferido, *menores]
-            diagnostico["factor"] = preferido
-            diagnostico["factor_sugerido"] = preferido
-            diagnostico["dimension_despues_mm"] = dimension * preferido
-            if preferido != 1.0:
+            factor = candidatos[0] if candidatos else float(diagnostico["factor"])
+            diagnostico["factor"] = factor
+            diagnostico["factor_sugerido"] = factor
+            diagnostico["dimension_despues_mm"] = dimension * factor
+            if factor != 1.0:
                 diagnostico["advertencia"] = ""
-            if (
-                n_caras
-                and arista_maxima is not None
-                and paso_mm is not None
-                and not EscalaMalla.Presupuesto(
-                    arista_maxima, float(paso_mm), int(n_caras), preferido
-                )
-            ):
-                Registro.Obtener("escala").info(
-                    "La escala x%g puede no alcanzar el paso dentro del límite de vértices. "
-                    "Se mantiene el tamaño.",
-                    preferido,
-                )
         else:
-            sugerido = preferidos[0] if candidatos else float(diagnostico["factor"])
-            intentos = [1.0]
+            sugerido = candidatos[0] if candidatos else float(diagnostico["factor"])
+            factor = 1.0
             diagnostico["factor"] = 1.0
             diagnostico["factor_sugerido"] = sugerido
             diagnostico["dimension_despues_mm"] = dimension
@@ -170,25 +137,33 @@ class EscalaMalla:
                     f"{dimension:.2f} a {dimension * sugerido:.2f} mm."
                 )
 
-        logger = Registro.Obtener("escala")
-        for indice, factor in enumerate(intentos):
-            try:
-                resultado = operacion(factor)
-            except SuperficieInvalida as exc:
-                if not EscalaMalla.EsFalloDePaso(exc) or indice == len(intentos) - 1:
-                    raise
-                logger.info(
-                    "La escala x%g no alcanza el paso de superficie; se prueba x%g.",
-                    factor,
-                    intentos[indice + 1],
-                )
-                continue
-            diagnostico["factor"] = float(factor)
-            diagnostico["dimension_despues_mm"] = dimension * float(factor)
-            if factor != 1.0:
-                diagnostico["factor_sugerido"] = float(factor)
-                diagnostico["advertencia"] = ""
-            return resultado, diagnostico
+        if (
+            arista_maxima is not None
+            and paso_mm is not None
+            and not EscalaMalla.AlcanzaPaso(arista_maxima, float(paso_mm), factor)
+        ):
+            raise CalidadInsuficiente(
+                f"El paso {float(paso_mm):.3f} mm no se alcanza con la escala ×{factor:g}."
+            )
+        if (
+            n_caras
+            and arista_maxima is not None
+            and paso_mm is not None
+            and not EscalaMalla.Presupuesto(
+                arista_maxima, float(paso_mm), int(n_caras), factor
+            )
+        ):
+            # La escala ya está fijada. El refinador rechazará si el paso no cabe.
+            Registro.Obtener("escala").info(
+                "La escala x%g puede no alcanzar el paso dentro del límite de vértices. "
+                "Se mantiene el tamaño.",
+                factor,
+            )
+
+        resultado = operacion(factor)
+        diagnostico["factor"] = float(factor)
+        diagnostico["dimension_despues_mm"] = dimension * float(factor)
+        return resultado, diagnostico
 
     @staticmethod
     def Resolver(dimensionMaximaMm: float, autoescalar: bool = True) -> dict:

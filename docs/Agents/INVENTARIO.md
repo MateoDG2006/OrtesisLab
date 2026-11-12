@@ -11,6 +11,10 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [.agents/skills/setup-python-env/SKILL.md](../../.agents/skills/setup-python-env/SKILL.md) | Skill local Reflex: instrucciones y referencias para agentes. |
 | [.codegraph/.gitignore](../../.codegraph/.gitignore) | Excluye el índice local de CodeGraph del versionado. |
 | [.env.example](../../.env.example) | Plantilla de variables `ORTESISLAB_*` de la aplicación, el trabajador y las pruebas. |
+| [.github/scripts/README.md](../../.github/scripts/README.md) | Automatización: tareas de Notion → issues de GitHub |
+| [.github/scripts/notion_sync_issues.py](../../.github/scripts/notion_sync_issues.py) | Sincroniza tareas de Notion (base Tasksk, proyecto OrtesisLab) -> issues de GitHub. |
+| [.github/workflows/notion-to-issues.yml](../../.github/workflows/notion-to-issues.yml) | Workflow que sincroniza páginas de Notion hacia issues de GitHub. |
+| [.github/workflows/pruebas.yml](../../.github/workflows/pruebas.yml) | CI de pull request: unittest, ruff y compileall. |
 | [.gitignore](../../.gitignore) | Excluye entornos, compilación, estados, subidas anteriores, logs y `.env`. |
 | [.python-version](../../.python-version) | Selecciona el intérprete Python del proyecto para uv. |
 | [.vscode/settings.json](../../.vscode/settings.json) | Configuración local de editor; actualmente objeto vacío. |
@@ -22,6 +26,8 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [GenerateModelsApp/EscalaMalla.py](../../GenerateModelsApp/EscalaMalla.py) | Diagnóstico de unidades para una superficie de ortesis. |
 | [GenerateModelsApp/Excepciones.py](../../GenerateModelsApp/Excepciones.py) | Errores de OrtesisLab. |
 | [GenerateModelsApp/Exportacion.py](../../GenerateModelsApp/Exportacion.py) | Exporta el STL en milímetros y un JSON con parámetros y comprobación. |
+| [GenerateModelsApp/InspeccionNpz.py](../../GenerateModelsApp/InspeccionNpz.py) | Inspección de cabeceras NPY dentro de un NPZ, sin materializar arrays grandes. |
+| [GenerateModelsApp/InstantaneaExportacion.py](../../GenerateModelsApp/InstantaneaExportacion.py) | Instantánea evaluada de mallas Blender y publicación atómica de archivos. |
 | [GenerateModelsApp/Interfaz.py](../../GenerateModelsApp/Interfaz.py) | Panel N y operadores de OrtesisLab en la vista 3D. |
 | [GenerateModelsApp/Malla.py](../../GenerateModelsApp/Malla.py) | Análisis de la superficie abierta, sin Blender. |
 | [GenerateModelsApp/Modeling.py](../../GenerateModelsApp/Modeling.py) | Modelo de impresión y construcción de la geometría. |
@@ -32,15 +38,18 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [GenerateModelsApp/SuavizadoBorde.py](../../GenerateModelsApp/SuavizadoBorde.py) | Suavizado del contorno exterior antes de dar espesor. |
 | [GenerateModelsApp/Superficie.py](../../GenerateModelsApp/Superficie.py) | Carga y lectura de la superficie interior dentro de Blender. |
 | [GenerateModelsApp/ValidacionMalla.py](../../GenerateModelsApp/ValidacionMalla.py) | Comprobación geométrica de la malla ya generada. |
+| [GenerateModelsApp/ValidacionSolido.py](../../GenerateModelsApp/ValidacionSolido.py) | Validación de mallas sólidas solo con NumPy (sin Blender). |
 | [GenerateModelsApp/__init__.py](../../GenerateModelsApp/__init__.py) | Paquete del complemento de Blender y del núcleo de geometría. |
 | [GenerateModelsApp/config/comprobacion_geometrica.json](../../GenerateModelsApp/config/comprobacion_geometrica.json) | Mediciones históricas de referencia, no umbrales de aceptación. |
 | [GenerateModelsApp/config/limites.json](../../GenerateModelsApp/config/limites.json) | Umbrales, tolerancias y presupuestos de algoritmos. |
 | [GenerateModelsApp/config/parametros_defecto.json](../../GenerateModelsApp/config/parametros_defecto.json) | Valores iniciales de las 17 opciones geométricas. |
 | [GenerateModelsApp/config/registro.json](../../GenerateModelsApp/config/registro.json) | Niveles de logging y nombre de archivo. |
+| [GenerateModelsApp/consola.py](../../GenerateModelsApp/consola.py) | Punto de entrada de consola ``ortesislab``. |
 | [GenerateModelsApp/constants/Materials.py](../../GenerateModelsApp/constants/Materials.py) | Materiales de impresión. |
 | [GenerateModelsApp/constants/Nombres.py](../../GenerateModelsApp/constants/Nombres.py) | Nombres estables de objetos, atributos y archivos. |
 | [GenerateModelsApp/constants/Paterns.py](../../GenerateModelsApp/constants/Paterns.py) | Patrones de nervadura. |
 | [GenerateModelsApp/constants/__init__.py](../../GenerateModelsApp/constants/__init__.py) | Constantes de OrtesisLab: nombres, patrones, materiales y límites. |
+| [GenerateModelsApp/contratos.py](../../GenerateModelsApp/contratos.py) | Contratos compartidos entre núcleo, Blender y la web. |
 | [GenerateModelsApp/util/Utilidades.py](../../GenerateModelsApp/util/Utilidades.py) | Registro de mensajes y lectura de la carpeta config. |
 | [GenerateModelsApp/util/__init__.py](../../GenerateModelsApp/util/__init__.py) | Utilidades compartidas: registro de ejecución y lectura de JSON. |
 | [Makefile](../../Makefile) | Objetivos de Compose, dbmate, backups, base de pruebas y OIDC de pruebas (`make db-help`). |
@@ -49,6 +58,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [assets/README.md](../../assets/README.md) | Assets de la aplicación |
 | [assets/favicon.ico](../../assets/favicon.ico) | Icono del sitio. |
 | [assets/superficie_interior_mm.npz](../../assets/superficie_interior_mm.npz) | Superficie de ejemplo incluida para web y carga explícita legacy. |
+| [assets/vendor/three-0.169.0.module.js](../../assets/vendor/three-0.169.0.module.js) | Three.js 0.169.0 empaquetado para el visor HTML local. |
 | [assets/visor.html](../../assets/visor.html) | Visor Three.js que carga el STL binario desde su `object_url`, cámara e interacción WebGL. |
 | [config/almacen.yaml](../../config/almacen.yaml) | Timeouts de conexión y lectura e intentos del cliente S3. |
 | [config/cache.yaml](../../config/cache.yaml) | TTL, pausa de reintento y timeout de Redis. |
@@ -86,10 +96,35 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/audits/2026-10-13-evidencias.json](../Audit/audits/2026-10-13-evidencias.json) | Archivo auxiliar versionado; revisar su contrato al modificarlo. |
 | [docs/Audit/audits/2026-10-13-export-evidence.json](../Audit/audits/2026-10-13-export-evidence.json) | Archivo auxiliar versionado; revisar su contrato al modificarlo. |
 | [docs/Audit/audits/2026-10-13-inventario.json](../Audit/audits/2026-10-13-inventario.json) | Archivo auxiliar versionado; revisar su contrato al modificarlo. |
+| [docs/Audit/audits/2026-10-29-auditoria-evaluacion.md](../Audit/audits/2026-10-29-auditoria-evaluacion.md) | AUD-2026-10-29-002 — Auditoría y evaluación del proyecto |
+| [docs/Audit/audits/2026-10-29-documentacion/README.md](../Audit/audits/2026-10-29-documentacion/README.md) | Documentación granular propuesta — AUD-2026-10-29-002 |
+| [docs/Audit/audits/2026-10-29-documentacion/backend/configuracion.md](../Audit/audits/2026-10-29-documentacion/backend/configuracion.md) | Backend · Configuración |
+| [docs/Audit/audits/2026-10-29-documentacion/backend/integraciones.md](../Audit/audits/2026-10-29-documentacion/backend/integraciones.md) | Backend · Integraciones: bucket S3, Redis, lector de superficies, OIDC |
+| [docs/Audit/audits/2026-10-29-documentacion/backend/persistencia.md](../Audit/audits/2026-10-29-documentacion/backend/persistencia.md) | Backend · Persistencia |
+| [docs/Audit/audits/2026-10-29-documentacion/backend/servicios-y-flujos.md](../Audit/audits/2026-10-29-documentacion/backend/servicios-y-flujos.md) | Backend · Servicios, flujos y máquinas de estado |
+| [docs/Audit/audits/2026-10-29-documentacion/calidad/pruebas-y-estandares.md](../Audit/audits/2026-10-29-documentacion/calidad/pruebas-y-estandares.md) | Calidad · Pruebas y estándares |
+| [docs/Audit/audits/2026-10-29-documentacion/cobertura-fuentes.md](../Audit/audits/2026-10-29-documentacion/cobertura-fuentes.md) | Registro de cobertura fuente → documento |
+| [docs/Audit/audits/2026-10-29-documentacion/faltantes.md](../Audit/audits/2026-10-29-documentacion/faltantes.md) | Aspectos que faltan o no coinciden con el código |
+| [docs/Audit/audits/2026-10-29-documentacion/frontend/estado-paginas-visor.md](../Audit/audits/2026-10-29-documentacion/frontend/estado-paginas-visor.md) | Frontend · Estado, páginas y visor |
+| [docs/Audit/audits/2026-10-29-documentacion/identidad/proyecto.md](../Audit/audits/2026-10-29-documentacion/identidad/proyecto.md) | Identidad del proyecto |
+| [docs/Audit/audits/2026-10-29-documentacion/infraestructura/entorno-local.md](../Audit/audits/2026-10-29-documentacion/infraestructura/entorno-local.md) | Infraestructura · Entorno local, base de datos y operación |
+| [docs/Audit/audits/2026-10-29-documentacion/nucleo-blender/modulos.md](../Audit/audits/2026-10-29-documentacion/nucleo-blender/modulos.md) | Núcleo geométrico y complemento Blender · Catálogo por módulo y función |
+| [docs/Audit/audits/2026-10-29-evidencias.json](../Audit/audits/2026-10-29-evidencias.json) | Evidencias ejecutadas de la auditoría AUD-2026-10-29-002. |
+| [docs/Audit/audits/2026-10-29-inventario.json](../Audit/audits/2026-10-29-inventario.json) | Inventario congelado de archivos de AUD-2026-10-29-002. |
 | [docs/Audit/audits/README.md](../Audit/audits/README.md) | Auditorías |
 | [docs/Audit/resolves/2026-10-13-firmas-base.json](../Audit/resolves/2026-10-13-firmas-base.json) | Instantánea AST de las 69 firmas públicas de los archivos auditados. |
 | [docs/Audit/resolves/2026-10-13-resolve-organizar-pruebas.md](../Audit/resolves/2026-10-13-resolve-organizar-pruebas.md) | RES-2026-10-13-002 — Orden de pruebas y assets de prueba |
 | [docs/Audit/resolves/2026-10-13-resolve-persistencia-postgres.md](../Audit/resolves/2026-10-13-resolve-persistencia-postgres.md) | RES-2026-10-13-001 — Persistencia PostgreSQL, bucket S3 y caché Redis |
+| [docs/Audit/resolves/2026-11-12-issue-1-carga-presupuestos.md](../Audit/resolves/2026-11-12-issue-1-carga-presupuestos.md) | RES-2026-11-12-ISSUE-1 — Blindar carga y presupuestos (A-01, A-03, A-11) |
+| [docs/Audit/resolves/2026-11-12-issue-2-riesgo-stl-anonimo.md](../Audit/resolves/2026-11-12-issue-2-riesgo-stl-anonimo.md) | RES-2026-11-12-ISSUE-2 — Lectura anónima del STL (A-02 / B-14 parcial) |
+| [docs/Audit/resolves/2026-11-12-issue-3-normales-topologia.md](../Audit/resolves/2026-11-12-issue-3-normales-topologia.md) | RES-2026-11-12-ISSUE-3 — Normales, topología, unidades y resolución (A-04, A-05, A-06, A-14, A-16, A-22) |
+| [docs/Audit/resolves/2026-11-12-issue-4-validacion-exportacion.md](../Audit/resolves/2026-11-12-issue-4-validacion-exportacion.md) | Issue #4 — Validación y exportación (A-07, A-08, A-15) |
+| [docs/Audit/resolves/2026-11-12-issue-5-rollback-stl-json.md](../Audit/resolves/2026-11-12-issue-5-rollback-stl-json.md) | Issue #5 — Rollback y par STL/JSON (A-09, A-10) |
+| [docs/Audit/resolves/2026-11-12-issue-6-cache-metricas.md](../Audit/resolves/2026-11-12-issue-6-cache-metricas.md) | Issue #6 — Caché y métricas (A-12, A-13) |
+| [docs/Audit/resolves/2026-11-12-issue-7-contratos-wheel.md](../Audit/resolves/2026-11-12-issue-7-contratos-wheel.md) | Issue #7 — Contratos y consola (A-17, A-18) |
+| [docs/Audit/resolves/2026-11-12-issue-8-tests-visor-a11y.md](../Audit/resolves/2026-11-12-issue-8-tests-visor-a11y.md) | Issue #8 — Tests, visor y accesibilidad (A-19, A-20, A-21, B-14) |
+| [docs/Audit/resolves/2026-11-12-issue-9-seguimiento.md](../Audit/resolves/2026-11-12-issue-9-seguimiento.md) | RES-2026-11-12-ISSUE-9 — Seguimiento AUD-2026-10-13-001 |
+| [docs/Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md](../Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md) | RES-2026-11-12-001 — Cierre de issues AUD-2026-10-13-001 (plan autorizado) |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
 | [docs/BlenderPlugin/ALGORITMOS.md](../BlenderPlugin/ALGORITMOS.md) | Algoritmos de generación y comprobación |
 | [docs/BlenderPlugin/API_Y_DATOS.md](../BlenderPlugin/API_Y_DATOS.md) | API Python, contratos y datos de Blender |
@@ -125,23 +160,39 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [tests/README.md](../../tests/README.md) | Pruebas |
 | [tests/aplicacion_web/__init__.py](../../tests/aplicacion_web/__init__.py) | Pruebas del generador web y del lector de superficies. |
 | [tests/aplicacion_web/test_generador_web.py](../../tests/aplicacion_web/test_generador_web.py) | Comprueba el lote y el STL sin abrir Blender ni la superficie real. |
+| [tests/aplicacion_web/test_humo_import.py](../../tests/aplicacion_web/test_humo_import.py) | Humo: la web y el trabajador deben importar sin ImportError. |
 | [tests/assets/Test.stl](../../tests/assets/Test.stl) | Superficie STL de entrada para las pruebas. |
+| [tests/assets/blender_ejecucion.log](../../tests/assets/blender_ejecucion.log) | Log histórico de una corrida Blender; no es prueba actual. |
+| [tests/assets/nucleo_ejecucion.log](../../tests/assets/nucleo_ejecucion.log) | Log histórico de una corrida del núcleo; no es prueba actual. |
 | [tests/assets/resultado_blender.json](../../tests/assets/resultado_blender.json) | Resultado histórico de una ejecución en Blender; no valida la versión actual. |
+| [tests/assets/zip_ejecucion.log](../../tests/assets/zip_ejecucion.log) | Log histórico del empaquetado ZIP de Blender; no es prueba actual. |
 | [tests/blender/__init__.py](../../tests/blender/__init__.py) | Scripts de integración que ejecuta Blender; unittest no los recoge. |
 | [tests/blender/blender_paquete_zip.py](../../tests/blender/blender_paquete_zip.py) | Comprueba el paquete distribuido en aislamiento, sin assets ni Reflex. |
 | [tests/blender/blender_superficie_abierta.py](../../tests/blender/blender_superficie_abierta.py) | Ejecutar con Blender --background --factory-startup --python-exit-code 1 --python este_archivo. |
+| [tests/blender/test_instantanea_exportacion.py](../../tests/blender/test_instantanea_exportacion.py) | Contrato de instantánea evaluada para exportación Blender. |
+| [tests/blender/test_rollback_publicacion.py](../../tests/blender/test_rollback_publicacion.py) | Rollback de generación y publicación atómica de archivos. |
+| [tests/e2e/__init__.py](../../tests/e2e/__init__.py) | Pruebas de contrato extremo a extremo (pueden omitirse sin infraestructura). |
+| [tests/e2e/test_carga_generacion_descarga.py](../../tests/e2e/test_carga_generacion_descarga.py) | Contrato de lectura anónima solo para STL. |
+| [tests/e2e/test_dos_sesiones.py](../../tests/e2e/test_dos_sesiones.py) | Aislamiento de claves por usuario en el bucket. |
 | [tests/geometria/__init__.py](../../tests/geometria/__init__.py) | Pruebas de escala, refinamiento, suavizado de borde y espesor. |
+| [tests/geometria/test_carga_presupuesto.py](../../tests/geometria/test_carga_presupuesto.py) | Presupuestos de carga NPZ y validación de límites (A-01, A-03, A-11). |
 | [tests/geometria/test_escala_malla.py](../../tests/geometria/test_escala_malla.py) | Diagnóstico de unidades de una superficie antes de usar Blender. |
+| [tests/geometria/test_exportacion_validada.py](../../tests/geometria/test_exportacion_validada.py) | Validación numérica previa a STL web. |
+| [tests/geometria/test_normales_topologia.py](../../tests/geometria/test_normales_topologia.py) | Regresiones A-04, A-05, A-06, A-14, A-16 y A-22 (fixtures sintéticas). |
 | [tests/geometria/test_refinador_malla.py](../../tests/geometria/test_refinador_malla.py) | Refinamiento de patrones web sin depender de Blender. |
 | [tests/geometria/test_suavizado_borde.py](../../tests/geometria/test_suavizado_borde.py) | El contorno exterior pierde los dientes y conserva la forma general. |
 | [tests/geometria/test_superficie_abierta.py](../../tests/geometria/test_superficie_abierta.py) | Regresiones del espesor: pared cerrada, canal superior abierto. |
 | [tests/nucleo/__init__.py](../../tests/nucleo/__init__.py) | Pruebas del núcleo geométrico: validación, catálogo, volumen y material. |
+| [tests/nucleo/test_cache_metricas.py](../../tests/nucleo/test_cache_metricas.py) | Caché refinada y métricas del modelo. |
+| [tests/nucleo/test_compatibilidad_npz_json.py](../../tests/nucleo/test_compatibilidad_npz_json.py) | Contratos compartidos de superficie y sidecar. |
 | [tests/nucleo/test_nucleo.py](../../tests/nucleo/test_nucleo.py) | Comprueba que el núcleo repartido conserva la geometría del script original. |
+| [tests/nucleo/test_wheel.py](../../tests/nucleo/test_wheel.py) | Comprueba el punto de entrada declarado en pyproject. |
 | [tests/persistencia/__init__.py](../../tests/persistencia/__init__.py) | Pruebas de PostgreSQL, bucket, Redis, lotes, trabajador y permisos. |
 | [tests/persistencia/apoyo_persistencia.py](../../tests/persistencia/apoyo_persistencia.py) | Apoyo de pruebas contra la base desechable ``ortesislab_test``. |
 | [tests/persistencia/test_almacen_import.py](../../tests/persistencia/test_almacen_import.py) | Import al bucket, caché Redis y migración de subidas locales. |
 | [tests/persistencia/test_lotes_trabajador.py](../../tests/persistencia/test_lotes_trabajador.py) | Lotes idempotentes, trabajador con lease, aislamiento y conciliación. |
 | [tests/persistencia/test_propiedad_datos.py](../../tests/persistencia/test_propiedad_datos.py) | Propiedad de los datos y permisos de rol sobre PostgreSQL real. |
+| [tests/persistencia/test_superficie_no_estatica.py](../../tests/persistencia/test_superficie_no_estatica.py) | A-02: el import no escribe en uploaded_files/ servido por Reflex. |
 | [uv.lock](../../uv.lock) | Resoluciones reproducibles de dependencias Python. |
 | [web/Ajustes.py](../../web/Ajustes.py) | Configuración de servidor de la persistencia, leída del entorno. |
 | [web/ConfiguracionBackend.py](../../web/ConfiguracionBackend.py) | Valores ajustables del backend, leídos de ``config/<area>.yaml`` en la raíz. |

@@ -111,6 +111,18 @@ class AnalizadorMalla:
             raise NormalesInvalidas()
         normales_suaves = normales_suaves / longitudes[:, None]
 
+        # A-04: normales unitarias deben alinearse con la geometría de las caras.
+        geometricas = AnalizadorMalla.NormalesDeCaras(puntos, faces)
+        acuerdo = np.einsum("ij,ij->i", normales_suaves, geometricas)
+        if float(np.min(acuerdo)) < 0.5:
+            raise NormalesInvalidas(
+                detalle="Las normales no coinciden con la orientación de las caras."
+            )
+
+        # A-05: cada vértice debe tener un solo abanico de caras.
+        if AnalizadorMalla._VerticesNoManifold(faces, len(puntos)):
+            raise AristasNoManifold()
+
         # Distancia geodésica: el camino más corto por las aristas hasta el contorno.
         adyacencia = AnalizadorMalla._Adyacencia(puntos, aristas)
         pendientes = [0]
@@ -143,6 +155,43 @@ class AnalizadorMalla:
         todas = np.vstack((faces[:, [0, 1]], faces[:, [1, 2]], faces[:, [2, 0]]))
         aristas, cuentas = np.unique(np.sort(todas, axis=1), axis=0, return_counts=True)
         return AnalizadorMalla._Geodesica(puntos, aristas, aristas[cuentas == 1])
+
+    @staticmethod
+    def _VerticesNoManifold(caras: np.ndarray, n_vertices: int) -> bool:
+        """True si algún vértice no tiene un único abanico de caras (A-05)."""
+        incidentes: list[list[tuple[int, int]]] = [[] for _ in range(n_vertices)]
+        for a, b, c in caras:
+            a, b, c = int(a), int(b), int(c)
+            incidentes[a].append((b, c))
+            incidentes[b].append((c, a))
+            incidentes[c].append((a, b))
+        for enlaces in incidentes:
+            if not enlaces:
+                continue
+            # Grafo del enlace: aristas opuestas al vértice.
+            vecinos: dict[int, list[int]] = {}
+            for u, v in enlaces:
+                vecinos.setdefault(u, []).append(v)
+                vecinos.setdefault(v, []).append(u)
+            if any(len(lista) > 2 for lista in vecinos.values()):
+                return True
+            vistos: set[int] = set()
+            componentes = 0
+            for inicio in vecinos:
+                if inicio in vistos:
+                    continue
+                componentes += 1
+                pila = [inicio]
+                vistos.add(inicio)
+                while pila:
+                    actual = pila.pop()
+                    for vecino in vecinos[actual]:
+                        if vecino not in vistos:
+                            vistos.add(vecino)
+                            pila.append(vecino)
+            if componentes > 1:
+                return True
+        return False
 
     @staticmethod
     def _Adyacencia(puntos, aristas):

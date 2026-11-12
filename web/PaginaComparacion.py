@@ -58,20 +58,30 @@ class PaginaComparacion:
                 rx.heading("Una ortesis", size="5"),
                 PaginaComparacion.Superficie(),
                 rx.separator(size="4"),
-                PaginaComparacion.Selector("Patrón", EstadoApp.pattern, EstadoApp.set_pattern, list(PATRONES.items())),
+                PaginaComparacion.Selector(
+                    "Patrón", EstadoApp.pattern, EstadoApp.set_pattern, list(PATRONES.items()), "param-pattern"
+                ),
                 rx.cond(
                     EstadoApp.pattern == "SOLID",
-                    PaginaComparacion.Campo("Espesor macizo (mm)", EstadoApp.solid_mm, EstadoApp.set_solid_mm),
+                    PaginaComparacion.Campo("Espesor macizo (mm)", EstadoApp.solid_mm, EstadoApp.set_solid_mm, "param-solid-mm"),
                     rx.vstack(
-                        PaginaComparacion.Campo("Tamaño de celda (mm)", EstadoApp.cell_mm, EstadoApp.set_cell_mm),
-                        PaginaComparacion.Campo("Ancho de nervadura (mm)", EstadoApp.rib_width_mm, EstadoApp.set_rib_width_mm),
-                        PaginaComparacion.Campo("Altura de nervadura (mm)", EstadoApp.rib_height_mm, EstadoApp.set_rib_height_mm),
-                        PaginaComparacion.Interruptor("Capa interior continua", EstadoApp.liner, EstadoApp.set_liner),
+                        PaginaComparacion.Campo("Tamaño de celda (mm)", EstadoApp.cell_mm, EstadoApp.set_cell_mm, "param-cell-mm"),
+                        PaginaComparacion.Campo(
+                            "Ancho de nervadura (mm)", EstadoApp.rib_width_mm, EstadoApp.set_rib_width_mm, "param-rib-width-mm"
+                        ),
+                        PaginaComparacion.Campo(
+                            "Altura de nervadura (mm)", EstadoApp.rib_height_mm, EstadoApp.set_rib_height_mm, "param-rib-height-mm"
+                        ),
+                        PaginaComparacion.Interruptor("Capa interior continua", EstadoApp.liner, EstadoApp.set_liner, "param-liner"),
                         rx.cond(
                             EstadoApp.liner,
                             rx.vstack(
-                                PaginaComparacion.Campo("Espesor de capa interior (mm)", EstadoApp.skin_mm, EstadoApp.set_skin_mm),
-                                PaginaComparacion.Campo("Transición de nervadura (mm)", EstadoApp.rounding_mm, EstadoApp.set_rounding_mm),
+                                PaginaComparacion.Campo(
+                                    "Espesor de capa interior (mm)", EstadoApp.skin_mm, EstadoApp.set_skin_mm, "param-skin-mm"
+                                ),
+                                PaginaComparacion.Campo(
+                                    "Transición de nervadura (mm)", EstadoApp.rounding_mm, EstadoApp.set_rounding_mm, "param-rounding-mm"
+                                ),
                                 rx.text(
                                     "Espesor total en nervadura: ",
                                     EstadoApp.espesor_total,
@@ -83,15 +93,28 @@ class PaginaComparacion:
                             ),
                             rx.text("Rejilla abierta: la altura es el espesor total.", size="2"),
                         ),
-                        PaginaComparacion.Campo("Giro del patrón (grados)", EstadoApp.angle_deg, EstadoApp.set_angle_deg),
+                        PaginaComparacion.Campo(
+                            "Giro del patrón (grados)", EstadoApp.angle_deg, EstadoApp.set_angle_deg, "param-angle-deg"
+                        ),
                         rx.cond(
                             EstadoApp.pattern == "VORONOI",
-                            PaginaComparacion.Campo("Semilla del patrón orgánico", EstadoApp.seed, EstadoApp.set_seed),
+                            PaginaComparacion.Campo(
+                                "Semilla del patrón orgánico", EstadoApp.seed, EstadoApp.set_seed, "param-seed"
+                            ),
                             rx.box(),
                         ),
-                        PaginaComparacion.Campo("Ancho de marco perimetral (mm)", EstadoApp.border_mm, EstadoApp.set_border_mm),
-                        PaginaComparacion.Campo("Ancho de banda maciza (mm)", EstadoApp.reinforce_width_mm, EstadoApp.set_reinforce_width_mm),
-                        PaginaComparacion.Campo("Posición de banda, Y (mm)", EstadoApp.reinforce_y_mm, EstadoApp.set_reinforce_y_mm),
+                        PaginaComparacion.Campo(
+                            "Ancho de marco perimetral (mm)", EstadoApp.border_mm, EstadoApp.set_border_mm, "param-border-mm"
+                        ),
+                        PaginaComparacion.Campo(
+                            "Ancho de banda maciza (mm)",
+                            EstadoApp.reinforce_width_mm,
+                            EstadoApp.set_reinforce_width_mm,
+                            "param-reinforce-width-mm",
+                        ),
+                        PaginaComparacion.Campo(
+                            "Posición de banda, Y (mm)", EstadoApp.reinforce_y_mm, EstadoApp.set_reinforce_y_mm, "param-reinforce-y-mm"
+                        ),
                         spacing="3",
                         width="100%",
                     ),
@@ -102,10 +125,13 @@ class PaginaComparacion:
                         "Paso de superficie para el patrón (mm)",
                         EstadoApp.surface_step_mm,
                         EstadoApp.set_surface_step_mm,
+                        "param-surface-step-mm",
                     ),
                     rx.box(),
                 ),
-                PaginaComparacion.Interruptor("Invertir lado del espesor", EstadoApp.flip_normals, EstadoApp.set_flip_normals),
+                PaginaComparacion.Interruptor(
+                    "Invertir lado del espesor", EstadoApp.flip_normals, EstadoApp.set_flip_normals, "param-flip-normals"
+                ),
                 rx.text(
                     "La reconstrucción voxel solo está disponible en Blender y está ",
                     rx.cond(EstadoApp.repair, "activada", "desactivada"),
@@ -138,6 +164,7 @@ class PaginaComparacion:
                 "Autoescalar a milímetros",
                 EstadoApp.autoescalar_superficie,
                 EstadoApp.set_autoescalar_superficie,
+                "superficie-autoescalar",
             ),
             rx.text(EstadoApp.aviso_escala, size="1", color_scheme="gray"),
             rx.upload(
@@ -255,21 +282,23 @@ class PaginaComparacion:
                     color_scheme="gray",
                 ),
                 rx.hstack(
-                    PaginaComparacion.Interruptor("Orgánico / Voronoi", EstadoApp.usar_voronoi, EstadoApp.set_usar_voronoi),
-                    PaginaComparacion.Interruptor("Hexagonal", EstadoApp.usar_hex, EstadoApp.set_usar_hex),
-                    PaginaComparacion.Interruptor("Rombos", EstadoApp.usar_diamond, EstadoApp.set_usar_diamond),
-                    PaginaComparacion.Interruptor("Cuadrícula", EstadoApp.usar_square, EstadoApp.set_usar_square),
-                    PaginaComparacion.Interruptor("Macizo", EstadoApp.usar_solid, EstadoApp.set_usar_solid),
+                    PaginaComparacion.Interruptor(
+                        "Orgánico / Voronoi", EstadoApp.usar_voronoi, EstadoApp.set_usar_voronoi, "lote-voronoi"
+                    ),
+                    PaginaComparacion.Interruptor("Hexagonal", EstadoApp.usar_hex, EstadoApp.set_usar_hex, "lote-hex"),
+                    PaginaComparacion.Interruptor("Rombos", EstadoApp.usar_diamond, EstadoApp.set_usar_diamond, "lote-diamond"),
+                    PaginaComparacion.Interruptor("Cuadrícula", EstadoApp.usar_square, EstadoApp.set_usar_square, "lote-square"),
+                    PaginaComparacion.Interruptor("Macizo", EstadoApp.usar_solid, EstadoApp.set_usar_solid, "lote-solid"),
                     wrap="wrap",
                     spacing="4",
                 ),
-                PaginaComparacion.Selector("Parámetro a variar", EstadoApp.eje, EstadoApp.set_eje, ETIQUETAS_EJE),
+                PaginaComparacion.Selector("Parámetro a variar", EstadoApp.eje, EstadoApp.set_eje, ETIQUETAS_EJE, "lote-eje"),
                 rx.cond(
                     EstadoApp.eje != "ninguno",
                     rx.hstack(
-                        PaginaComparacion.Campo("Desde", EstadoApp.desde, EstadoApp.set_desde),
-                        PaginaComparacion.Campo("Hasta", EstadoApp.hasta, EstadoApp.set_hasta),
-                        PaginaComparacion.Campo("Cada", EstadoApp.paso, EstadoApp.set_paso),
+                        PaginaComparacion.Campo("Desde", EstadoApp.desde, EstadoApp.set_desde, "lote-desde"),
+                        PaginaComparacion.Campo("Hasta", EstadoApp.hasta, EstadoApp.set_hasta, "lote-hasta"),
+                        PaginaComparacion.Campo("Cada", EstadoApp.paso, EstadoApp.set_paso, "lote-paso"),
                         spacing="3",
                         width="100%",
                         align="start",
@@ -280,6 +309,7 @@ class PaginaComparacion:
                     "Probar con capa continua y sin ella",
                     EstadoApp.ambos_revestimientos,
                     EstadoApp.set_ambos_revestimientos,
+                    "lote-ambos-revestimientos",
                 ),
                 rx.button(
                     "Generar lote",
@@ -390,29 +420,29 @@ class PaginaComparacion:
         return Var(_js_expr=expresion, _var_type=str, _var_data=url._get_all_var_data())
 
     @staticmethod
-    def Campo(etiqueta: str, valor, cambio) -> rx.Component:
+    def Campo(etiqueta: str, valor, cambio, control_id: str) -> rx.Component:
         return rx.vstack(
-            rx.text(etiqueta, size="2", weight="medium", as_="label"),
-            rx.input(value=valor, on_change=cambio, type="number", width="100%"),
+            rx.el.label(etiqueta, size="2", font_weight="500", html_for=control_id),
+            rx.input(id=control_id, value=valor, on_change=cambio, type="number", width="100%"),
             spacing="1",
             width="100%",
         )
 
     @staticmethod
-    def Interruptor(etiqueta: str, valor, cambio) -> rx.Component:
+    def Interruptor(etiqueta: str, valor, cambio, control_id: str) -> rx.Component:
         return rx.hstack(
-            rx.switch(checked=valor, on_change=cambio),
-            rx.text(etiqueta, size="2"),
+            rx.switch(id=control_id, checked=valor, on_change=cambio),
+            rx.el.label(etiqueta, size="2", html_for=control_id),
             spacing="2",
             align="center",
         )
 
     @staticmethod
-    def Selector(etiqueta: str, valor, cambio, opciones: list[tuple[str, str]]) -> rx.Component:
+    def Selector(etiqueta: str, valor, cambio, opciones: list[tuple[str, str]], control_id: str) -> rx.Component:
         return rx.vstack(
-            rx.text(etiqueta, size="2", weight="medium"),
+            rx.el.label(etiqueta, size="2", font_weight="500", html_for=control_id),
             rx.select.root(
-                rx.select.trigger(width="100%"),
+                rx.select.trigger(id=control_id, width="100%"),
                 rx.select.content(
                     *[rx.select.item(texto, value=codigo) for codigo, texto in opciones],
                 ),

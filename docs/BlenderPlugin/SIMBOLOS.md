@@ -33,8 +33,16 @@ Recorte de celdas y cascarón de espesor variable.
 | `Cascaron.Recortar.verticeOriginal` | Función/método | [48](../../GenerateModelsApp/Cascaron.py#L48) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Cascaron.Recortar.cruce` | Función/método | [56](../../GenerateModelsApp/Cascaron.py#L56) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Cascaron.Engrosar` | Función/método | [102](../../GenerateModelsApp/Cascaron.py#L102) | Añade espesor a las caras existentes; nunca rellena una abertura. |
-| `Cascaron.Cerrar` | Función/método | [150](../../GenerateModelsApp/Cascaron.py#L150) | Alias compatible: cerrar el espesor no significa tapar el canal. |
-| `Cascaron.VolumenMm3` | Función/método | [155](../../GenerateModelsApp/Cascaron.py#L155) | Entrada: vértices y caras del cascarón en mm. Proceso: triangula |
+| `Cascaron.Cerrar` | Función/método | [157](../../GenerateModelsApp/Cascaron.py#L157) | Alias compatible: cerrar el espesor no significa tapar el canal. |
+| `Cascaron.VolumenMm3` | Función/método | [162](../../GenerateModelsApp/Cascaron.py#L162) | Entrada: vértices y caras del cascarón en mm. Proceso: triangula |
+
+## `GenerateModelsApp/consola.py`
+
+Punto de entrada de consola ``ortesislab``.
+
+| Símbolo | Tipo | Línea | Descripción declarada |
+|---|---|---:|---|
+| `main` | Función/método | [6](../../GenerateModelsApp/consola.py#L6) | Inicia el saludo de consola del proyecto. |
 
 ## `GenerateModelsApp/constants/__init__.py`
 
@@ -77,28 +85,40 @@ Patrones de nervadura.
 | `Patron.RotarXy` | Función/método | [36](../../GenerateModelsApp/constants/Paterns.py#L36) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Patron.DistanciaCuadricula` | Función/método | [43](../../GenerateModelsApp/constants/Paterns.py#L43) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Patron.DistanciaSemillas` | Función/método | [48](../../GenerateModelsApp/constants/Paterns.py#L48) | Entrada: puntos XY y celda en mm. Proceso: evalúa semillas próximas |
-| `Patron._DistanciaPlanos` | Función/método | [96](../../GenerateModelsApp/constants/Paterns.py#L96) | Entrada: puntos y semillas XY. Proceso: calcula la bisectriz más |
-| `Patron.Geometricos` | Función/método | [111](../../GenerateModelsApp/constants/Paterns.py#L111) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Patron.Obtener` | Función/método | [122](../../GenerateModelsApp/constants/Paterns.py#L122) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `HoneyComb` | Clase | [136](../../GenerateModelsApp/constants/Paterns.py#L136) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `HoneyComb.__init__` | Función/método | [140](../../GenerateModelsApp/constants/Paterns.py#L140) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `HoneyComb.Distancia` | Función/método | [146](../../GenerateModelsApp/constants/Paterns.py#L146) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Square` | Clase | [150](../../GenerateModelsApp/constants/Paterns.py#L150) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Square.__init__` | Función/método | [153](../../GenerateModelsApp/constants/Paterns.py#L153) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Square.Distancia` | Función/método | [159](../../GenerateModelsApp/constants/Paterns.py#L159) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Triangle` | Clase | [163](../../GenerateModelsApp/constants/Paterns.py#L163) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Triangle.__init__` | Función/método | [165](../../GenerateModelsApp/constants/Paterns.py#L165) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Minimalistic` | Clase | [172](../../GenerateModelsApp/constants/Paterns.py#L172) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Minimalistic.__init__` | Función/método | [174](../../GenerateModelsApp/constants/Paterns.py#L174) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Diamond` | Clase | [181](../../GenerateModelsApp/constants/Paterns.py#L181) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Diamond.__init__` | Función/método | [184](../../GenerateModelsApp/constants/Paterns.py#L184) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Diamond.Distancia` | Función/método | [190](../../GenerateModelsApp/constants/Paterns.py#L190) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Voronoi` | Clase | [198](../../GenerateModelsApp/constants/Paterns.py#L198) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Voronoi.__init__` | Función/método | [201](../../GenerateModelsApp/constants/Paterns.py#L201) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Voronoi.Distancia` | Función/método | [207](../../GenerateModelsApp/constants/Paterns.py#L207) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Solid` | Clase | [211](../../GenerateModelsApp/constants/Paterns.py#L211) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Solid.__init__` | Función/método | [214](../../GenerateModelsApp/constants/Paterns.py#L214) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Solid.Distancia` | Función/método | [220](../../GenerateModelsApp/constants/Paterns.py#L220) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Patron._DistanciaPlanos` | Función/método | [104](../../GenerateModelsApp/constants/Paterns.py#L104) | Entrada: puntos y semillas XY. Proceso: calcula la bisectriz más |
+| `Patron.Geometricos` | Función/método | [119](../../GenerateModelsApp/constants/Paterns.py#L119) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Patron.Obtener` | Función/método | [130](../../GenerateModelsApp/constants/Paterns.py#L130) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `HoneyComb` | Clase | [144](../../GenerateModelsApp/constants/Paterns.py#L144) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `HoneyComb.__init__` | Función/método | [148](../../GenerateModelsApp/constants/Paterns.py#L148) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `HoneyComb.Distancia` | Función/método | [154](../../GenerateModelsApp/constants/Paterns.py#L154) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Square` | Clase | [158](../../GenerateModelsApp/constants/Paterns.py#L158) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Square.__init__` | Función/método | [161](../../GenerateModelsApp/constants/Paterns.py#L161) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Square.Distancia` | Función/método | [167](../../GenerateModelsApp/constants/Paterns.py#L167) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Triangle` | Clase | [171](../../GenerateModelsApp/constants/Paterns.py#L171) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Triangle.__init__` | Función/método | [173](../../GenerateModelsApp/constants/Paterns.py#L173) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Minimalistic` | Clase | [180](../../GenerateModelsApp/constants/Paterns.py#L180) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Minimalistic.__init__` | Función/método | [182](../../GenerateModelsApp/constants/Paterns.py#L182) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Diamond` | Clase | [189](../../GenerateModelsApp/constants/Paterns.py#L189) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Diamond.__init__` | Función/método | [192](../../GenerateModelsApp/constants/Paterns.py#L192) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Diamond.Distancia` | Función/método | [198](../../GenerateModelsApp/constants/Paterns.py#L198) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Voronoi` | Clase | [206](../../GenerateModelsApp/constants/Paterns.py#L206) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Voronoi.__init__` | Función/método | [209](../../GenerateModelsApp/constants/Paterns.py#L209) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Voronoi.Distancia` | Función/método | [215](../../GenerateModelsApp/constants/Paterns.py#L215) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Solid` | Clase | [219](../../GenerateModelsApp/constants/Paterns.py#L219) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Solid.__init__` | Función/método | [222](../../GenerateModelsApp/constants/Paterns.py#L222) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Solid.Distancia` | Función/método | [228](../../GenerateModelsApp/constants/Paterns.py#L228) | Sin docstring; consultar el catálogo de módulos y el código. |
+
+## `GenerateModelsApp/contratos.py`
+
+Contratos compartidos entre núcleo, Blender y la web.
+
+| Símbolo | Tipo | Línea | Descripción declarada |
+|---|---|---:|---|
+| `ValidarTuplaSuperficie` | Función/método | [12](../../GenerateModelsApp/contratos.py#L12) | Entrada: (vértices, caras, normales, borde). |
+| `ValidarOpciones` | Función/método | [28](../../GenerateModelsApp/contratos.py#L28) | Opciones de generación: claves reconocidas y tipos básicos. |
+| `ValidarFicha` | Función/método | [38](../../GenerateModelsApp/contratos.py#L38) | Ficha visible en la página de comparación. |
+| `ValidarInformeValidacion` | Función/método | [45](../../GenerateModelsApp/contratos.py#L45) | Informe geométrico homogéneo entre web y Blender. |
+| `ValidarSidecarStl` | Función/método | [60](../../GenerateModelsApp/contratos.py#L60) | JSON hermano de un STL exportado desde Blender. |
 
 ## `GenerateModelsApp/EscalaMalla.py`
 
@@ -112,8 +132,8 @@ Diagnóstico de unidades para una superficie de ortesis.
 | `EscalaMalla.AlcanzaPaso` | Función/método | [70](../../GenerateModelsApp/EscalaMalla.py#L70) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `EscalaMalla.Presupuesto` | Función/método | [80](../../GenerateModelsApp/EscalaMalla.py#L80) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `EscalaMalla.EsFalloDePaso` | Función/método | [99](../../GenerateModelsApp/EscalaMalla.py#L99) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EscalaMalla.Aplicar` | Función/método | [104](../../GenerateModelsApp/EscalaMalla.py#L104) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EscalaMalla.Resolver` | Función/método | [194](../../GenerateModelsApp/EscalaMalla.py#L194) | Devuelve el factor aplicado y conserva el factor sugerido para informar. |
+| `EscalaMalla.Aplicar` | Función/método | [106](../../GenerateModelsApp/EscalaMalla.py#L106) | Decide la escala una sola vez y la mantiene. Un paso inalcanzable |
+| `EscalaMalla.Resolver` | Función/método | [169](../../GenerateModelsApp/EscalaMalla.py#L169) | Devuelve el factor aplicado y conserva el factor sugerido para informar. |
 
 ## `GenerateModelsApp/Excepciones.py`
 
@@ -186,6 +206,14 @@ Errores de OrtesisLab.
 | `ModeloSinGeometria` | Clase | [224](../../GenerateModelsApp/Excepciones.py#L224) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `ModeloSinGeometria.__init__` | Función/método | [225](../../GenerateModelsApp/Excepciones.py#L225) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `MaterialInvalido` | Clase | [229](../../GenerateModelsApp/Excepciones.py#L229) | Densidad, precio o volumen incompatibles con el cálculo de material. |
+| `CalidadInsuficiente` | Clase | [233](../../GenerateModelsApp/Excepciones.py#L233) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `CalidadInsuficiente.__init__` | Función/método | [234](../../GenerateModelsApp/Excepciones.py#L234) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PresupuestoExcedido` | Clase | [238](../../GenerateModelsApp/Excepciones.py#L238) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PresupuestoExcedido.__init__` | Función/método | [239](../../GenerateModelsApp/Excepciones.py#L239) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneracionCancelada` | Clase | [243](../../GenerateModelsApp/Excepciones.py#L243) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneracionCancelada.__init__` | Función/método | [244](../../GenerateModelsApp/Excepciones.py#L244) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `CoordenadasFueraDeFloat32` | Clase | [248](../../GenerateModelsApp/Excepciones.py#L248) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `CoordenadasFueraDeFloat32.__init__` | Función/método | [249](../../GenerateModelsApp/Excepciones.py#L249) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `GenerateModelsApp/Exportacion.py`
 
@@ -193,8 +221,35 @@ Exporta el STL en milímetros y un JSON con parámetros y comprobación.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `ExportadorStl` | Clase | [15](../../GenerateModelsApp/Exportacion.py#L15) | Escribe el STL solo si la malla pasó la comprobación. |
-| `ExportadorStl.Exportar` | Función/método | [19](../../GenerateModelsApp/Exportacion.py#L19) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ExportadorStl` | Clase | [20](../../GenerateModelsApp/Exportacion.py#L20) | Escribe el STL solo si la malla pasó la comprobación. |
+| `ExportadorStl._ValidarMetadatos` | Función/método | [24](../../GenerateModelsApp/Exportacion.py#L24) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ExportadorStl._EscribirStl` | Función/método | [39](../../GenerateModelsApp/Exportacion.py#L39) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ExportadorStl.Exportar` | Función/método | [62](../../GenerateModelsApp/Exportacion.py#L62) | Sin docstring; consultar el catálogo de módulos y el código. |
+
+## `GenerateModelsApp/InspeccionNpz.py`
+
+Inspección de cabeceras NPY dentro de un NPZ, sin materializar arrays grandes.
+
+| Símbolo | Tipo | Línea | Descripción declarada |
+|---|---|---:|---|
+| `InspeccionNpz` | Clase | [20](../../GenerateModelsApp/InspeccionNpz.py#L20) | Rechaza un NPZ cuya cabecera declare más bytes de los que el ZIP contiene. |
+| `InspeccionNpz.CabeceraNpy` | Función/método | [24](../../GenerateModelsApp/InspeccionNpz.py#L24) | Entrada: bytes de un miembro ``.npy``. Proceso: lee solo la cabecera. |
+| `InspeccionNpz.VerificarContenido` | Función/método | [63](../../GenerateModelsApp/InspeccionNpz.py#L63) | Entrada: bytes NPZ y tope descomprimido. Proceso: suma tamaños ZIP e |
+| `InspeccionNpz.VerificarPresupuesto` | Función/método | [89](../../GenerateModelsApp/InspeccionNpz.py#L89) | Entrada: vértices y caras ya materializados. Proceso: compara conteos |
+| `PathStem` | Función/método | [105](../../GenerateModelsApp/InspeccionNpz.py#L105) | Sin docstring; consultar el catálogo de módulos y el código. |
+
+## `GenerateModelsApp/InstantaneaExportacion.py`
+
+Instantánea evaluada de mallas Blender y publicación atómica de archivos.
+
+| Símbolo | Tipo | Línea | Descripción declarada |
+|---|---|---:|---|
+| `MallaEvaluada` | Clase | [11](../../GenerateModelsApp/InstantaneaExportacion.py#L11) | Instantánea de la malla con modificadores y transformación aplicados. |
+| `MallaEvaluada.Extraer` | Función/método | [15](../../GenerateModelsApp/InstantaneaExportacion.py#L15) | Entrada: objeto Blender. Salida: vértices world-space y caras triangulares. |
+| `PublicacionArchivos` | Clase | [42](../../GenerateModelsApp/InstantaneaExportacion.py#L42) | Publicación atómica del par STL + JSON desde archivos temporales. |
+| `PublicacionArchivos.RutasTemporales` | Función/método | [46](../../GenerateModelsApp/InstantaneaExportacion.py#L46) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PublicacionArchivos.Confirmar` | Función/método | [51](../../GenerateModelsApp/InstantaneaExportacion.py#L51) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PublicacionArchivos.Descartar` | Función/método | [57](../../GenerateModelsApp/InstantaneaExportacion.py#L57) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `GenerateModelsApp/Interfaz.py`
 
@@ -234,9 +289,10 @@ Análisis de la superficie abierta, sin Blender.
 | `AnalizadorMalla` | Clase | [24](../../GenerateModelsApp/Malla.py#L24) | Comprueba que la base sea una superficie abierta y mide el borde. |
 | `AnalizadorMalla.NormalesDeCaras` | Función/método | [28](../../GenerateModelsApp/Malla.py#L28) | Entrada: vértices y triángulos orientados. Proceso: promedia normales |
 | `AnalizadorMalla.Preparar` | Función/método | [47](../../GenerateModelsApp/Malla.py#L47) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `AnalizadorMalla.DistanciaAlContorno` | Función/método | [136](../../GenerateModelsApp/Malla.py#L136) | Entrada: malla triangular abierta. Proceso: Dijkstra por aristas. |
-| `AnalizadorMalla._Adyacencia` | Función/método | [148](../../GenerateModelsApp/Malla.py#L148) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `AnalizadorMalla._Geodesica` | Función/método | [157](../../GenerateModelsApp/Malla.py#L157) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `AnalizadorMalla.DistanciaAlContorno` | Función/método | [148](../../GenerateModelsApp/Malla.py#L148) | Entrada: malla triangular abierta. Proceso: Dijkstra por aristas. |
+| `AnalizadorMalla._VerticesNoManifold` | Función/método | [160](../../GenerateModelsApp/Malla.py#L160) | True si algún vértice no tiene un único abanico de caras (A-05). |
+| `AnalizadorMalla._Adyacencia` | Función/método | [197](../../GenerateModelsApp/Malla.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `AnalizadorMalla._Geodesica` | Función/método | [206](../../GenerateModelsApp/Malla.py#L206) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `GenerateModelsApp/Modeling.py`
 
@@ -246,14 +302,18 @@ Modelo de impresión y construcción de la geometría.
 |---|---|---:|---|
 | `Model3DForPrinting` | Clase | [48](../../GenerateModelsApp/Modeling.py#L48) | Pieza paramétrica: geometría, volumen, peso y precio de material. |
 | `Model3DForPrinting.__init__` | Función/método | [51](../../GenerateModelsApp/Modeling.py#L51) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.ValidarOpciones` | Función/método | [63](../../GenerateModelsApp/Modeling.py#L63) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.ConstruirGeometria` | Función/método | [113](../../GenerateModelsApp/Modeling.py#L113) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.ChangePatern` | Función/método | [162](../../GenerateModelsApp/Modeling.py#L162) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.ChangePattern` | Función/método | [179](../../GenerateModelsApp/Modeling.py#L179) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.Construir` | Función/método | [183](../../GenerateModelsApp/Modeling.py#L183) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.CalculateVolume` | Función/método | [200](../../GenerateModelsApp/Modeling.py#L200) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.CalculateWeight` | Función/método | [217](../../GenerateModelsApp/Modeling.py#L217) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.CalculatePrice` | Función/método | [225](../../GenerateModelsApp/Modeling.py#L225) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.vertices` | Función/método | [63](../../GenerateModelsApp/Modeling.py#L63) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.vertices` | Función/método | [67](../../GenerateModelsApp/Modeling.py#L67) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.faces` | Función/método | [72](../../GenerateModelsApp/Modeling.py#L72) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.faces` | Función/método | [76](../../GenerateModelsApp/Modeling.py#L76) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.ValidarOpciones` | Función/método | [81](../../GenerateModelsApp/Modeling.py#L81) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.ConstruirGeometria` | Función/método | [131](../../GenerateModelsApp/Modeling.py#L131) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.ChangePatern` | Función/método | [180](../../GenerateModelsApp/Modeling.py#L180) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.ChangePattern` | Función/método | [197](../../GenerateModelsApp/Modeling.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.Construir` | Función/método | [201](../../GenerateModelsApp/Modeling.py#L201) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.CalculateVolume` | Función/método | [218](../../GenerateModelsApp/Modeling.py#L218) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.CalculateWeight` | Función/método | [235](../../GenerateModelsApp/Modeling.py#L235) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.CalculatePrice` | Función/método | [243](../../GenerateModelsApp/Modeling.py#L243) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `GenerateModelsApp/Objeto.py`
 
@@ -261,11 +321,13 @@ Crea o actualiza el objeto OL_Ortesis en la escena de Blender.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `GeneradorObjeto` | Clase | [37](../../GenerateModelsApp/Objeto.py#L37) | Escribe el cascarón en la escena y, si se pide, lo reconstruye con voxel. |
-| `GeneradorObjeto._EspesorMinimo` | Función/método | [41](../../GenerateModelsApp/Objeto.py#L41) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorObjeto._Componentes` | Función/método | [50](../../GenerateModelsApp/Objeto.py#L50) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorObjeto._AplicarModificador` | Función/método | [73](../../GenerateModelsApp/Objeto.py#L73) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorObjeto.Crear` | Función/método | [80](../../GenerateModelsApp/Objeto.py#L80) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto` | Clase | [39](../../GenerateModelsApp/Objeto.py#L39) | Escribe el cascarón en la escena y, si se pide, lo reconstruye con voxel. |
+| `GeneradorObjeto._EspesorMinimo` | Función/método | [43](../../GenerateModelsApp/Objeto.py#L43) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto._Componentes` | Función/método | [52](../../GenerateModelsApp/Objeto.py#L52) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto._AplicarModificador` | Función/método | [75](../../GenerateModelsApp/Objeto.py#L75) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto._DescartarTrabajo` | Función/método | [82](../../GenerateModelsApp/Objeto.py#L82) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto._PromoverResultado` | Función/método | [91](../../GenerateModelsApp/Objeto.py#L91) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto.Crear` | Función/método | [133](../../GenerateModelsApp/Objeto.py#L133) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `GenerateModelsApp/OrtesisLab.py`
 
@@ -313,10 +375,12 @@ Suavizado del contorno exterior antes de dar espesor.
 |---|---|---:|---|
 | `SuavizadoBorde` | Clase | [15](../../GenerateModelsApp/SuavizadoBorde.py#L15) | Aplana los dientes del contorno sin mover el interior de la superficie. |
 | `SuavizadoBorde.Aplicar` | Función/método | [19](../../GenerateModelsApp/SuavizadoBorde.py#L19) | Entrada: superficie abierta ya validada. Proceso: filtra cada bucle |
-| `SuavizadoBorde._Bucles` | Función/método | [104](../../GenerateModelsApp/SuavizadoBorde.py#L104) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuavizadoBorde._Pasabajos` | Función/método | [140](../../GenerateModelsApp/SuavizadoBorde.py#L140) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuavizadoBorde._MascaraRota` | Función/método | [175](../../GenerateModelsApp/SuavizadoBorde.py#L175) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuavizadoBorde._CarasRotas` | Función/método | [185](../../GenerateModelsApp/SuavizadoBorde.py#L185) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde._Bucles` | Función/método | [108](../../GenerateModelsApp/SuavizadoBorde.py#L108) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde._Perimetro` | Función/método | [144](../../GenerateModelsApp/SuavizadoBorde.py#L144) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde._Pasabajos` | Función/método | [153](../../GenerateModelsApp/SuavizadoBorde.py#L153) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde._PasabajosCampo` | Función/método | [158](../../GenerateModelsApp/SuavizadoBorde.py#L158) | Filtra ``campo`` con el perímetro físico de ``geometria`` (mm). |
+| `SuavizadoBorde._MascaraRota` | Función/método | [188](../../GenerateModelsApp/SuavizadoBorde.py#L188) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde._CarasRotas` | Función/método | [198](../../GenerateModelsApp/SuavizadoBorde.py#L198) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `GenerateModelsApp/Superficie.py`
 
@@ -324,12 +388,14 @@ Carga y lectura de la superficie interior dentro de Blender.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `SuperficieInterior` | Clase | [39](../../GenerateModelsApp/Superficie.py#L39) | Prepara una copia de la superficie elegida, sin cerrar sus aberturas. |
-| `SuperficieInterior._Candidatos` | Función/método | [52](../../GenerateModelsApp/Superficie.py#L52) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuperficieInterior.Cargar` | Función/método | [65](../../GenerateModelsApp/Superficie.py#L65) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuperficieInterior._CorregirUnidades` | Función/método | [109](../../GenerateModelsApp/Superficie.py#L109) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuperficieInterior.Leer` | Función/método | [129](../../GenerateModelsApp/Superficie.py#L129) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuperficieInterior.Leer.refinar` | Función/método | [170](../../GenerateModelsApp/Superficie.py#L170) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior` | Clase | [41](../../GenerateModelsApp/Superficie.py#L41) | Prepara una copia de la superficie elegida, sin cerrar sus aberturas. |
+| `SuperficieInterior._Candidatos` | Función/método | [55](../../GenerateModelsApp/Superficie.py#L55) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior.Cargar` | Función/método | [68](../../GenerateModelsApp/Superficie.py#L68) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior.VaciarCache` | Función/método | [121](../../GenerateModelsApp/Superficie.py#L121) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior._TamanoBytes` | Función/método | [126](../../GenerateModelsApp/Superficie.py#L126) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior._CorregirUnidades` | Función/método | [134](../../GenerateModelsApp/Superficie.py#L134) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior.Leer` | Función/método | [154](../../GenerateModelsApp/Superficie.py#L154) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior.Leer.refinar` | Función/método | [195](../../GenerateModelsApp/Superficie.py#L195) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `GenerateModelsApp/util/__init__.py`
 
@@ -351,14 +417,15 @@ Registro de mensajes y lectura de la carpeta config.
 | `Registro.Configurar` | Función/método | [58](../../GenerateModelsApp/util/Utilidades.py#L58) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Registro.Obtener` | Función/método | [92](../../GenerateModelsApp/util/Utilidades.py#L92) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Configuracion` | Clase | [98](../../GenerateModelsApp/util/Utilidades.py#L98) | Carga los JSON de config y comprueba que traigan las claves esperadas. |
-| `Configuracion._Error` | Función/método | [159](../../GenerateModelsApp/util/Utilidades.py#L159) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.Recargar` | Función/método | [166](../../GenerateModelsApp/util/Utilidades.py#L166) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.CargarJson` | Función/método | [172](../../GenerateModelsApp/util/Utilidades.py#L172) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion._ExigirClaves` | Función/método | [197](../../GenerateModelsApp/util/Utilidades.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.ParametrosDefecto` | Función/método | [207](../../GenerateModelsApp/util/Utilidades.py#L207) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.Limites` | Función/método | [214](../../GenerateModelsApp/util/Utilidades.py#L214) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.ValorLimite` | Función/método | [221](../../GenerateModelsApp/util/Utilidades.py#L221) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Configuracion.ComprobacionDeReferencia` | Función/método | [231](../../GenerateModelsApp/util/Utilidades.py#L231) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion._Error` | Función/método | [201](../../GenerateModelsApp/util/Utilidades.py#L201) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.Recargar` | Función/método | [208](../../GenerateModelsApp/util/Utilidades.py#L208) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.CargarJson` | Función/método | [221](../../GenerateModelsApp/util/Utilidades.py#L221) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion._ExigirClaves` | Función/método | [246](../../GenerateModelsApp/util/Utilidades.py#L246) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.ParametrosDefecto` | Función/método | [256](../../GenerateModelsApp/util/Utilidades.py#L256) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.Limites` | Función/método | [263](../../GenerateModelsApp/util/Utilidades.py#L263) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion._ValidarLimites` | Función/método | [271](../../GenerateModelsApp/util/Utilidades.py#L271) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.ValorLimite` | Función/método | [300](../../GenerateModelsApp/util/Utilidades.py#L300) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Configuracion.ComprobacionDeReferencia` | Función/método | [307](../../GenerateModelsApp/util/Utilidades.py#L307) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `GenerateModelsApp/ValidacionMalla.py`
 
@@ -366,7 +433,25 @@ Comprobación geométrica de la malla ya generada.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `ValidadorMalla` | Clase | [18](../../GenerateModelsApp/ValidacionMalla.py#L18) | Informa si OL_Ortesis es una sola pieza cerrada. |
-| `ValidadorMalla._Componentes` | Función/método | [22](../../GenerateModelsApp/ValidacionMalla.py#L22) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorMalla._Cruces` | Función/método | [42](../../GenerateModelsApp/ValidacionMalla.py#L42) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorMalla.Comprobar` | Función/método | [70](../../GenerateModelsApp/ValidacionMalla.py#L70) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorMalla` | Clase | [20](../../GenerateModelsApp/ValidacionMalla.py#L20) | Informa si OL_Ortesis es una sola pieza cerrada. |
+| `ValidadorMalla.GuardarInforme` | Función/método | [24](../../GenerateModelsApp/ValidacionMalla.py#L24) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorMalla._Componentes` | Función/método | [28](../../GenerateModelsApp/ValidacionMalla.py#L28) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorMalla._Cruces` | Función/método | [48](../../GenerateModelsApp/ValidacionMalla.py#L48) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorMalla.Comprobar` | Función/método | [76](../../GenerateModelsApp/ValidacionMalla.py#L76) | Sin docstring; consultar el catálogo de módulos y el código. |
+
+## `GenerateModelsApp/ValidacionSolido.py`
+
+Validación de mallas sólidas solo con NumPy (sin Blender).
+
+| Símbolo | Tipo | Línea | Descripción declarada |
+|---|---|---:|---|
+| `ValidadorSolido` | Clase | [19](../../GenerateModelsApp/ValidacionSolido.py#L19) | Comprueba topología de un sólido triangular antes de publicar. |
+| `ValidadorSolido._Triangulos` | Función/método | [23](../../GenerateModelsApp/ValidacionSolido.py#L23) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._ContarComponentes` | Función/método | [34](../../GenerateModelsApp/ValidacionSolido.py#L34) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._ContarComponentes.buscar` | Función/método | [39](../../GenerateModelsApp/ValidacionSolido.py#L39) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._ContarComponentes.unir` | Función/método | [45](../../GenerateModelsApp/ValidacionSolido.py#L45) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._ContarAristas` | Función/método | [57](../../GenerateModelsApp/ValidacionSolido.py#L57) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._CarasDegeneradas` | Función/método | [68](../../GenerateModelsApp/ValidacionSolido.py#L68) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._CrucesHeuristica` | Función/método | [79](../../GenerateModelsApp/ValidacionSolido.py#L79) | Heurística ligera: solo en mallas pequeñas; no sustituye BVH de Blender. |
+| `ValidadorSolido._TrianguloContiene` | Función/método | [106](../../GenerateModelsApp/ValidacionSolido.py#L106) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido.Comprobar` | Función/método | [123](../../GenerateModelsApp/ValidacionSolido.py#L123) | Salida: informe compatible con ``ValidadorMalla``. |

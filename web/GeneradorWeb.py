@@ -19,7 +19,7 @@ from pathlib import Path
 import numpy as np
 
 from GenerateModelsApp.EscalaMalla import EscalaMalla
-from GenerateModelsApp.Excepciones import ArchivoSuperficieNoEncontrado
+from GenerateModelsApp.Excepciones import ArchivoSuperficieNoEncontrado, CoordenadasFueraDeFloat32
 from GenerateModelsApp.RefinadorMalla import RefinadorMalla
 
 from .cache.CacheRedis import CacheRedis
@@ -352,6 +352,11 @@ class GeneradorWeb:
         # STL binario del cascarón, en milímetros, sin pasar por Blender.
         # Los muros del contorno llegan como cuadriláteros; el STL solo admite triángulos.
         puntos = np.asarray(vertices, dtype=np.float64)
+        if not np.all(np.isfinite(puntos)):
+            raise CoordenadasFueraDeFloat32()
+        limite = np.finfo(np.float32).max
+        if np.any(np.abs(puntos) > limite):
+            raise CoordenadasFueraDeFloat32()
         triangulos = GeneradorWeb.Triangulos(caras)
         coords = puntos[triangulos]
         arista_a = coords[:, 1] - coords[:, 0]
@@ -361,8 +366,12 @@ class GeneradorWeb:
         normal = normal / np.maximum(longitud, 1e-12)[:, None]
         registro = np.dtype([("normal", "<f4", (3,)), ("vertices", "<f4", (3, 3)), ("atributo", "<u2")])
         datos = np.zeros(len(triangulos), dtype=registro)
-        datos["normal"] = normal.astype(np.float32)
-        datos["vertices"] = coords.astype(np.float32)
+        normal32 = normal.astype(np.float32)
+        coords32 = coords.astype(np.float32)
+        if not np.all(np.isfinite(normal32)) or not np.all(np.isfinite(coords32)):
+            raise CoordenadasFueraDeFloat32()
+        datos["normal"] = normal32
+        datos["vertices"] = coords32
         cabecera = b"OrtesisLab cascaron geometrico".ljust(80, b"\0")
         return cabecera + struct.pack("<I", len(triangulos)) + datos.tobytes()
 

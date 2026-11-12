@@ -6,8 +6,10 @@ Este módulo sí depende de Blender. El análisis geométrico está en Analizado
 from __future__ import annotations
 
 import hashlib
+import io
 from collections import OrderedDict
 from pathlib import Path
+from threading import Lock
 
 import numpy as np
 
@@ -39,6 +41,7 @@ from .util.Utilidades import Configuracion, Registro
 class SuperficieInterior:
     """Prepara una copia de la superficie elegida, sin cerrar sus aberturas."""
     _refinadas: OrderedDict[tuple, tuple] = OrderedDict()
+    _bloqueo = Lock()
 
     diagnostico_escala: dict = {
         "factor": 1.0,
@@ -78,10 +81,19 @@ class SuperficieInterior:
             )
         logger.info("Cargando superficie desde %s", elegido)
         try:
-            with np.load(elegido, allow_pickle=False) as datos:
+            contenido = elegido.read_bytes()
+            from .InspeccionNpz import InspeccionNpz
+
+            InspeccionNpz.VerificarContenido(
+                contenido,
+                str(elegido),
+                134217728,
+            )
+            with np.load(io.BytesIO(contenido), allow_pickle=False) as datos:
                 vertices = datos["vertices"]
                 faces = datos["faces"]
                 normals = datos["normals"]
+            InspeccionNpz.VerificarPresupuesto(vertices, faces, str(elegido))
         except (OSError, ValueError, KeyError) as exc:
             raise ArchivoSuperficieIlegible(str(elegido), str(exc)) from exc
 
@@ -104,6 +116,19 @@ class SuperficieInterior:
             len(vertices),
         )
         return obj
+
+    @staticmethod
+    def VaciarCache() -> None:
+        with SuperficieInterior._bloqueo:
+            SuperficieInterior._refinadas.clear()
+
+    @staticmethod
+    def _TamanoBytes(cache: OrderedDict) -> int:
+        total = 0
+        for entrada in cache.values():
+            for arreglo in entrada:
+                total += int(np.asarray(arreglo).nbytes)
+        return total
 
     @staticmethod
     def _CorregirUnidades(puntos: np.ndarray, autoescalar: bool) -> tuple[np.ndarray, float]:
@@ -169,15 +194,21 @@ class SuperficieInterior:
 
         def refinar(factor):
             clave = (clave_malla, limites, float(factor), float(paso_mm))
-            cache = SuperficieInterior._refinadas
-            if clave in cache:
-                cache.move_to_end(clave)
-                return tuple(np.array(arreglo, copy=True) for arreglo in cache[clave])
-            refinada = RefinadorMalla.Refinar(puntos * factor, caras, normales, paso_mm)
-            cache[clave] = tuple(np.array(arreglo, copy=True) for arreglo in refinada)
-            while len(cache) > int(Configuracion.ValorLimite("max_refined_cache_entries")):
-                cache.popitem(last=False)
-            return refinada
+            with SuperficieInterior._bloqueo:
+                cache = SuperficieInterior._refinadas
+                if clave in cache:
+                    cache.move_to_end(clave)
+                    return tuple(np.array(arreglo, copy=True) for arreglo in cache[clave])
+                refinada = RefinadorMalla.Refinar(puntos * factor, caras, normales, paso_mm)
+                copia = tuple(np.array(arreglo, copy=True) for arreglo in refinada)
+                cache[clave] = copia
+                tope_entradas = int(Configuracion.ValorLimite("max_refined_cache_entries"))
+                tope_bytes = int(Configuracion.ValorLimite("max_refined_cache_bytes"))
+                while len(cache) > tope_entradas or SuperficieInterior._TamanoBytes(cache) > tope_bytes:
+                    if not cache:
+                        break
+                    cache.popitem(last=False)
+            return tuple(np.array(arreglo, copy=True) for arreglo in refinada)
 
         resultado, diagnostico = EscalaMalla.Aplicar(
             dimension,

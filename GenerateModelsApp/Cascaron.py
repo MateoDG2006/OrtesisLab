@@ -122,6 +122,13 @@ class Cascaron:
         # Las normales coherentes de Blender apuntan fuera de la superficie.
         # El comportamiento predeterminado debe añadir material en ese sentido.
         exterior = puntos + normales * espesor.reshape(-1, 1)
+        # A-04: espesor positivo no puede colapsar a volumen nulo (normales tangenciales).
+        if np.any(espesor > 0):
+            desplazamiento = np.linalg.norm(exterior - puntos, axis=1)
+            if float(np.max(desplazamiento)) < Configuracion.ValorLimite("degenerate_area"):
+                raise GeometriaInconsistente(
+                    "El espesor colapsó: las normales no desplazan la superficie."
+                )
         faces = [tuple(int(v) for v in cara) for cara in caras]
         completo = faces + [tuple(v + cantidad for v in cara[::-1]) for cara in faces]
         aristas = {}

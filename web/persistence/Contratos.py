@@ -19,6 +19,12 @@ MAXIMO_ITEMS_LOTE = _LOTES["maximo_items"]
 MAXIMO_LOTES_PENDIENTES = _LOTES["maximo_pendientes"]
 MAXIMO_INTENTOS = _LOTES["maximo_intentos"]
 
+# Versiones grabadas en columnas *_version. Los valores son los de f02a184.
+ESQUEMA_PARAMETROS = 1
+ESQUEMA_NORMALIZACION = 1
+VERSION_LECTOR = "LectorSuperficie-1"
+VERSION_EXPORTADOR = "GeneradorWeb.Stl-1"
+
 
 class ErrorPersistencia(Exception):
     """Error previsto con un mensaje que se puede mostrar."""

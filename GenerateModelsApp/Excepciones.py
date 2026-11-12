@@ -228,3 +228,25 @@ class ModeloSinGeometria(OrtesisLabError):
 
 class MaterialInvalido(OrtesisLabError):
     """Densidad, precio o volumen incompatibles con el cálculo de material."""
+
+
+class CalidadInsuficiente(OrtesisLabError):
+    def __init__(self, mensaje: str, *, detalle: str | None = None):
+        super().__init__(mensaje, detalle=detalle)
+
+
+class PresupuestoExcedido(OrtesisLabError):
+    def __init__(self, mensaje: str, *, detalle: str | None = None):
+        super().__init__(mensaje, detalle=detalle)
+
+
+class GeneracionCancelada(OrtesisLabError):
+    def __init__(self, mensaje: str = "La generación se canceló."):
+        super().__init__(mensaje)
+
+
+class CoordenadasFueraDeFloat32(OrtesisLabError):
+    def __init__(self):
+        super().__init__(
+            "Las coordenadas no caben en float32; reduzca la escala o el tamaño de la malla."
+        )
