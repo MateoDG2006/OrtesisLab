@@ -1,5 +1,3 @@
-# Sesión de usuario y OIDC. Leído por web/ConfiguracionBackend.py.
+# Duración de la sesión de servidor. Leído por web/ConfiguracionBackend.py.
 
 duracion_horas: 12
-# Vigencia de la cookie temporal con state y nonce durante el login OIDC.
-intercambio_oidc_s: 600

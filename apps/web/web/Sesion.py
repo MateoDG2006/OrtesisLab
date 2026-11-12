@@ -6,7 +6,7 @@ import reflex as rx
 
 
 class Sesion:
-    """Enlaces a las rutas OIDC del backend y navegación entre páginas."""
+    """Enlaces al registro y al login del backend, y navegación entre páginas."""
 
     @staticmethod
     def Ruta(ruta: str) -> str:
@@ -47,7 +47,11 @@ class Sesion:
                     spacing="3",
                     align="center",
                 ),
-                Sesion.Boton("Iniciar sesión", "/auth/login", "solid"),
+                rx.hstack(
+                    Sesion.Boton("Crear cuenta", "/auth/registro", "soft"),
+                    Sesion.Boton("Iniciar sesión", "/auth/login", "solid"),
+                    spacing="2",
+                ),
             ),
             width="100%",
             align="center",

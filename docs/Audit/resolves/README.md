@@ -25,7 +25,10 @@
 | [2026-11-12-resolve-paquete-ortesislabplugin](2026-11-12-resolve-paquete-ortesislabplugin.md) | EN_CURSO | Imports del núcleo como `OrtesisLabPlugin` |
 | [2026-11-12-resolve-quitar-src](2026-11-12-resolve-quitar-src.md) | EN_CURSO | Quitar la carpeta `src` |
 | [2026-11-12-resolve-modulo-ortesislabapp](2026-11-12-resolve-modulo-ortesislabapp.md) | EN_CURSO | Módulo Reflex `web.OrtesisLabApp` |
+| [2026-11-12-resolve-quitar-validar-arranque](2026-11-12-resolve-quitar-validar-arranque.md) | EN_CURSO | Quitar `ValidarEnArranque` del arranque |
+| [2026-11-12-resolve-login-local](2026-11-12-resolve-login-local.md) | EN_CURSO | Login y registro con correo y contraseña |
 | [2026-11-12-resolve-rediseno-interfaz-lotes](2026-11-12-resolve-rediseno-interfaz-lotes.md) | EN_CURSO | Rediseño de `/`, página `/lote` y miniaturas; no cierra hallazgos |
+| [2026-11-12-resolve-conflictos-merge-login-lote](2026-11-12-resolve-conflictos-merge-login-lote.md) | EN_CURSO | Merge de `/lote` con el login local; no cierra hallazgos |
 
 [RES-2026-10-13-001](2026-10-13-resolve-persistencia-postgres.md) y
 [RES-2026-10-13-002](2026-10-13-resolve-organizar-pruebas.md) siguen como

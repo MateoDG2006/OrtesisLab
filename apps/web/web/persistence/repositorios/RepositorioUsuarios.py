@@ -1,4 +1,4 @@
-"""Cuentas creadas desde OIDC y sus sesiones de servidor."""
+"""Cuentas locales y sus sesiones de servidor."""
 
 from __future__ import annotations
 
@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from uuid import UUID
 
 from sqlalchemy import and_, delete, insert, or_, select, update
-from sqlalchemy.dialects.postgresql import insert as insertar_pg
 
 from web.enums import EstadoUsuario
 
@@ -18,24 +17,37 @@ from .RepositorioBase import RepositorioBase
 class RepositorioUsuarios(RepositorioBase):
     TABLA = USUARIOS
 
+    @classmethod
+    def Buscar(cls, conexion, usuario: str) -> dict | None:
+        return cls._Uno(
+            conexion,
+            select(
+                USUARIOS.c.id,
+                USUARIOS.c.password_hash,
+                USUARIOS.c.status,
+                USUARIOS.c.display_name,
+            ).where(USUARIOS.c.username == usuario),
+        )
+
     @staticmethod
-    def Upsert(conexion, issuer: str, subject: str, email: str | None, nombre: str) -> UUID:
-        sentencia = insertar_pg(USUARIOS).values(
-            id=uuid.uuid4(),
-            auth_issuer=issuer,
-            auth_subject=subject,
-            email=email,
-            display_name=nombre[:120] or subject[:120],
+    def Crear(conexion, usuario: str, nombre: str, password_hash: str) -> UUID:
+        user_id = uuid.uuid4()
+        conexion.execute(
+            insert(USUARIOS).values(
+                id=user_id,
+                username=usuario,
+                password_hash=password_hash,
+                display_name=nombre[:120] or usuario[:120],
+            )
         )
-        sentencia = sentencia.on_conflict_do_update(
-            index_elements=[USUARIOS.c.auth_issuer, USUARIOS.c.auth_subject],
-            set_={
-                "email": sentencia.excluded.email,
-                "display_name": sentencia.excluded.display_name,
-                "updated_at": AHORA,
-            },
-        )
-        return conexion.execute(sentencia.returning(USUARIOS.c.id)).scalar_one()
+        return user_id
+
+    @classmethod
+    def Asegurar(cls, conexion, usuario: str, nombre: str, password_hash: str) -> UUID:
+        fila = cls.Buscar(conexion, usuario)
+        if fila is not None:
+            return fila["id"]
+        return cls.Crear(conexion, usuario, nombre, password_hash)
 
     @staticmethod
     def Estado(conexion, user_id: UUID) -> str | None:
@@ -51,7 +63,7 @@ class RepositorioUsuarios(RepositorioBase):
     def ResolverSesion(cls, conexion, token_sha256: str) -> dict | None:
         return cls._Uno(
             conexion,
-            select(USUARIOS.c.id, USUARIOS.c.display_name, USUARIOS.c.email)
+            select(USUARIOS.c.id, USUARIOS.c.display_name, USUARIOS.c.username)
             .select_from(SESIONES.join(USUARIOS, USUARIOS.c.id == SESIONES.c.user_id))
             .where(
                 SESIONES.c.token_sha256 == token_sha256,

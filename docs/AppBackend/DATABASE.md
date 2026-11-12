@@ -2,7 +2,7 @@
 
 El esquema vigente es `Base.metadata` de [`web/persistence/Modelos.py`](../../apps/web/web/persistence/Modelos.py): 13 tablas, restricciones, índices y valores por defecto. El comportamiento de cuentas, cola e historial está en [ARQUITECTURA.md](ARQUITECTURA.md). Los cinco comandos de Docker están en el `Makefile` (`make help`) y el arranque en [OPERACION_Y_PRUEBAS.md](OPERACION_Y_PRUEBAS.md#base-de-datos).
 
-El primer `make db-up` sobre un volumen nuevo ejecuta [`apps/db/init/01_roles.sh`](../../apps/db/init/01_roles.sh): crea los roles `ortesislab_migrator`, `ortesislab_app`, `ortesislab_worker` y `ortesislab_backup`, y el esquema `ortesislab` vacío. No crea tablas. En el mismo paso crea el bucket y arranca el OIDC de pruebas. `make db-reset CONFIRM=ELIMINAR` recrea `ortesislab_dev` y reaplica esos permisos con [`apps/db/preparar_base.sql`](../../apps/db/preparar_base.sql); las tablas vuelven con `make migrar`. No hay fixture ni base de pruebas en el repositorio.
+El primer `make db-up` sobre un volumen nuevo ejecuta [`apps/db/init/01_roles.sh`](../../apps/db/init/01_roles.sh): crea los roles `ortesislab_migrator`, `ortesislab_app`, `ortesislab_worker` y `ortesislab_backup`, y el esquema `ortesislab` vacío. No crea tablas. En el mismo paso crea el bucket. `make db-reset CONFIRM=ELIMINAR` recrea `ortesislab_dev` y reaplica esos permisos con [`apps/db/preparar_base.sql`](../../apps/db/preparar_base.sql); las tablas vuelven con `make migrar`. No hay fixture ni base de pruebas en el repositorio.
 
 Alembic aplica las tablas con el rol migrador. [`apps/db/alembic/versions/`](../../apps/db/alembic/versions) no contiene revisiones: la primera tiene que salir de `alembic revision --autogenerate`, no de un archivo escrito aparte. `env.py` lee la URL de `Ajustes`, usa `-x base=test` para la base de pruebas, guarda `alembic_version` en `ortesislab` y la ignora al comparar.
 
@@ -64,9 +64,8 @@ erDiagram
 | Columna | Tipo | Nulo | Clave |
 |---|---|---|---|
 | id | uuid | | PK |
-| auth_issuer | text | | Única con auth_subject |
-| auth_subject | text | | Única con auth_issuer |
-| email | text | sí | |
+| username | text | | Única |
+| password_hash | text | | |
 | display_name | text | | |
 | status | text | | |
 | created_at | timestamptz | | |

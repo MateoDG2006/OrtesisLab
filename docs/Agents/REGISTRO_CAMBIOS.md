@@ -14,6 +14,25 @@ Pruebas ejecutadas:
 
 No se arrancó Reflex en el navegador ni se probó el flujo con PostgreSQL, trabajador y bucket; tampoco el render real de las miniaturas.
 
+## 2026-11-12 — El acceso es usuario y contraseña
+
+Se quita el proveedor OIDC, el callback y el alta por emisor y sujeto. `/auth/registro` y `/auth/login` guardan `username` y el hash scrypt de la contraseña en `app_users`, y abren la misma cookie `ortesislab_sesion`. La revisión Alembic `0ea8eb9c0ca2` crea el esquema vacío, concede a la aplicación y al trabajador los permisos de [DATABASE.md](../AppBackend/DATABASE.md) y deja el trigger que exige un import `ready` al crear una versión. `make web` seguía fallando el `postinstall` del frontend porque la ruta del ajuste de React Router se resolvía desde `apps/web/.web`; queda en `../../../scripts/AsegurarReactRouter.py`. Autorización en [RES-2026-11-12-012](../Audit/resolves/2026-11-12-resolve-login-local.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `uv run python -m unittest tests.aplicacion_web.test_contrasena tests.aplicacion_web.test_humo_import`: 4 pruebas, OK.
+- `uv run alembic upgrade head`: aplicó `0ea8eb9c0ca2`.
+- Alta, entrada, clave incorrecta y usuario repetido contra PostgreSQL de desarrollo, y borrado de esa cuenta: imprimió `login-ok`.
+
+No se recorrió el formulario en el navegador: `make web` seguía reiniciando el worker por el `postinstall` con la ruta anterior.
+
+## 2026-11-12 — El frontend de Windows no se reinicia dos veces
+
+`make web` ejecuta `scripts/AsegurarReactRouter.py` antes de Reflex. En Windows, `bun install` regenera `react-router.exe` y ese binario no aplica `--conditions=development`, así que el servidor de desarrollo se relanza y choca con su propio seguro. `bin.cjs` vuelve a arrancar con el bun de Reflex y esa condición. `reflex.lock/package.json` repite el ajuste en `postinstall` por si el paquete se reinstala durante la compilación. Los hallazgos siguen abiertos.
+
+## 2026-11-12 — El arranque ya no llama a `ValidarEnArranque`
+
+`PoolPostgres` llamaba `ConfiguracionBackend.ValidarEnArranque`, que no existe: `Cargar` solo lee el YAML. El ciclo de vida abre PostgreSQL y, si no responde, deja el mensaje de persistencia no disponible. Los hallazgos siguen abiertos.
+
 ## 2026-11-12 — El módulo Reflex es `web.OrtesisLabApp`
 
 `rxconfig.py` declara `app_name="OrtesisLabApp"` y `app_module_import="web.OrtesisLabApp"`. El archivo seguía en `apps/web/web/GenerateModelsApp.py`, así que Reflex no encontraba el módulo. Pasa a `OrtesisLabApp.py`. El complemento sigue siendo `OrtesisLabPlugin` y el ZIP conserva el nombre `GenerateModelsApp.zip`. Autorización en [RES-2026-11-12-010](../Audit/resolves/2026-11-12-resolve-modulo-ortesislabapp.md). Los hallazgos siguen abiertos.

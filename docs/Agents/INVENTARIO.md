@@ -25,8 +25,9 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/db/alembic/env.py](../../apps/db/alembic/env.py) | Entorno de Alembic: migra el esquema ortesislab con el rol migrador. |
 | [apps/db/alembic/script.py.mako](../../apps/db/alembic/script.py.mako) | Plantilla con la que Alembic crea cada archivo de revisión. |
 | [apps/db/alembic/versions/.gitkeep](../../apps/db/alembic/versions/.gitkeep) | Conserva la carpeta de revisiones de Alembic. |
+| [apps/db/alembic/versions/20261112_1118_cuentas_locales.py](../../apps/db/alembic/versions/20261112_1118_cuentas_locales.py) | cuentas_locales |
 | [apps/db/backups/.gitkeep](../../apps/db/backups/.gitkeep) | Conserva la carpeta de volcados; su contenido se ignora. |
-| [apps/db/compose.yaml](../../apps/db/compose.yaml) | PostgreSQL 17, Redis, MinIO, cliente mc y OIDC de pruebas. |
+| [apps/db/compose.yaml](../../apps/db/compose.yaml) | PostgreSQL 17, Redis, MinIO y cliente mc. |
 | [apps/db/init/01_roles.sh](../../apps/db/init/01_roles.sh) | Crea los roles separados al inicializar el volumen de PostgreSQL. |
 | [apps/db/minio/inicializar.sh](../../apps/db/minio/inicializar.sh) | Crea bucket, políticas y cuenta de servicio en MinIO. |
 | [apps/db/minio/politica-aplicacion.json](../../apps/db/minio/politica-aplicacion.json) | Permisos S3 de la cuenta de servicio del backend. |
@@ -105,10 +106,10 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/web/web/persistence/repositorios/RepositorioPreferencias.py](../../apps/web/web/persistence/repositorios/RepositorioPreferencias.py) | Preferencias por usuario con control optimista de revisión. |
 | [apps/web/web/persistence/repositorios/RepositorioProyectos.py](../../apps/web/web/persistence/repositorios/RepositorioProyectos.py) | Proyectos del usuario; cada cuenta tiene uno predeterminado. |
 | [apps/web/web/persistence/repositorios/RepositorioResultados.py](../../apps/web/web/persistence/repositorios/RepositorioResultados.py) | Resultados geométricos, intentos de una versión y exports STL. |
-| [apps/web/web/persistence/repositorios/RepositorioUsuarios.py](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py) | Cuentas creadas desde OIDC y sus sesiones de servidor. |
+| [apps/web/web/persistence/repositorios/RepositorioUsuarios.py](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py) | Cuentas locales y sus sesiones de servidor. |
 | [apps/web/web/persistence/repositorios/RepositorioVersiones.py](../../apps/web/web/persistence/repositorios/RepositorioVersiones.py) | Versiones inmutables numeradas por proyecto. |
 | [apps/web/web/persistence/repositorios/__init__.py](../../apps/web/web/persistence/repositorios/__init__.py) | Repositorios SQLAlchemy, uno por archivo. Reciben una ``Session`` ya abierta y no hacen commit. |
-| [apps/web/web/services/AutenticacionOidc.py](../../apps/web/web/services/AutenticacionOidc.py) | Rutas OIDC del backend: /auth/login, /auth/callback y /auth/logout. |
+| [apps/web/web/services/Autenticacion.py](../../apps/web/web/services/Autenticacion.py) | Rutas de registro e inicio de sesión: /auth/registro, /auth/login y /auth/logout. |
 | [apps/web/web/services/ContextoUsuario.py](../../apps/web/web/services/ContextoUsuario.py) | Principal autenticado de cada operación. |
 | [apps/web/web/services/GeneradorGeometrico.py](../../apps/web/web/services/GeneradorGeometrico.py) | Construcción numérica de una versión: métricas, STL y JSON de parámetros. |
 | [apps/web/web/services/ServicioHistorial.py](../../apps/web/web/services/ServicioHistorial.py) | Historial por usuario: listado paginado, detalle, restauración y reintento. |
@@ -128,7 +129,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [core/config/parametros_defecto.json](../../core/config/parametros_defecto.json) | Valores iniciales de las 17 opciones geometricas. |
 | [core/config/persistencia.yaml](../../core/config/persistencia.yaml) | Conexion PostgreSQL, cuotas de lotes y limites del historial. |
 | [core/config/registro.json](../../core/config/registro.json) | Niveles de logging y nombre de archivo. |
-| [core/config/sesion.yaml](../../core/config/sesion.yaml) | Duracion de la sesion y vigencia de la cookie del intercambio OIDC. |
+| [core/config/sesion.yaml](../../core/config/sesion.yaml) | Duración de la sesión de servidor. |
 | [core/config/trabajador.yaml](../../core/config/trabajador.yaml) | Lease, latido, supervision y conciliacion del trabajador. |
 | [core/config/web.yaml](../../core/config/web.yaml) | Progreso, espera de creacion, tamanos de subida y etiquetas de la app. |
 | [docs/Agents/ESTANDAR_DOCUMENTACION.md](ESTANDAR_DOCUMENTACION.md) | Estándar documental |
@@ -191,7 +192,9 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-ajustes-entorno.md](../Audit/resolves/2026-11-12-resolve-ajustes-entorno.md) | RES-2026-11-12-001 — Aviso de clave ausente dentro de `Variable.__get__` |
 | [docs/Audit/resolves/2026-11-12-resolve-aud-2026-10-29.md](../Audit/resolves/2026-11-12-resolve-aud-2026-10-29.md) | RES-2026-11-12-002 — Cierre hallazgos AUD-2026-10-29-002 (B-01…B-22) |
 | [docs/Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md](../Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md) | RES-2026-11-12-001 — Cierre de issues AUD-2026-10-13-001 (plan autorizado) |
+| [docs/Audit/resolves/2026-11-12-resolve-conflictos-merge-login-lote.md](../Audit/resolves/2026-11-12-resolve-conflictos-merge-login-lote.md) | RES-2026-11-12-013 — Resolver el merge entre `/lote` y el login local |
 | [docs/Audit/resolves/2026-11-12-resolve-dotenv-raiz.md](../Audit/resolves/2026-11-12-resolve-dotenv-raiz.md) | RES-2026-11-12-003 — Cargar el .env de la raíz con python-dotenv |
+| [docs/Audit/resolves/2026-11-12-resolve-login-local.md](../Audit/resolves/2026-11-12-resolve-login-local.md) | RES-2026-11-12-012 — Login y registro locales |
 | [docs/Audit/resolves/2026-11-12-resolve-makefile.md](../Audit/resolves/2026-11-12-resolve-makefile.md) | RES-2026-11-12-006 — Objetivos de Make |
 | [docs/Audit/resolves/2026-11-12-resolve-modulo-ortesislabapp.md](../Audit/resolves/2026-11-12-resolve-modulo-ortesislabapp.md) | RES-2026-11-12-010 — El módulo Reflex se llama `OrtesisLabApp` |
 | [docs/Audit/resolves/2026-11-12-resolve-monorepo.md](../Audit/resolves/2026-11-12-resolve-monorepo.md) | RES-2026-11-12-001 — Reubicar el repositorio como monorepo |
@@ -199,6 +202,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-autoescala.md](../Audit/resolves/2026-11-12-resolve-quitar-autoescala.md) | RES-2026-11-12-004 — Quitar el autoescalado de coordenadas |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md](../Audit/resolves/2026-11-12-resolve-quitar-seeds-test.md) | RES-2026-11-12-005 — Quitar seeds y la base de pruebas |
 | [docs/Audit/resolves/2026-11-12-resolve-quitar-src.md](../Audit/resolves/2026-11-12-resolve-quitar-src.md) | RES-2026-11-12-009 — Quitar la carpeta `src` |
+| [docs/Audit/resolves/2026-11-12-resolve-quitar-validar-arranque.md](../Audit/resolves/2026-11-12-resolve-quitar-validar-arranque.md) | RES-2026-11-12-011 — Quitar `ValidarEnArranque` del arranque |
 | [docs/Audit/resolves/2026-11-12-resolve-rediseno-interfaz-lotes.md](../Audit/resolves/2026-11-12-resolve-rediseno-interfaz-lotes.md) | RES-2026-11-12-011 — Rediseño de la interfaz web: parámetros, lotes y progreso |
 | [docs/Audit/resolves/2026-11-12-resolve-revision-alembic.md](../Audit/resolves/2026-11-12-resolve-revision-alembic.md) | RES-2026-11-12-007 — Quitar la revisión de Alembic no generada por Alembic |
 | [docs/Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md](../Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md) | RES-2026-11-12-001 — Lectura directa del YAML en `Cargar` |
@@ -220,6 +224,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [infra/database/backups/prueba.dump](../../infra/database/backups/prueba.dump) | Volcado de PostgreSQL en formato personalizado de `pg_dump` (cabecera `PGDMP`), del 2026-10-13; copia local de pruebas, no versionada. |
 | [infra/database/backups/verificacion-2026-10-13.dump](../../infra/database/backups/verificacion-2026-10-13.dump) | Volcado de PostgreSQL en formato personalizado de `pg_dump` (cabecera `PGDMP`) de la verificación del 2026-10-13; copia local, no versionada. |
 | [pyproject.toml](../../pyproject.toml) | Metadata Python, dependencias, build y comando de consola. |
+| [scripts/AsegurarReactRouter.py](../../scripts/AsegurarReactRouter.py) | En Windows, react-router.exe ignora --conditions=development. |
 | [scripts/BaseLocal.py](../../scripts/BaseLocal.py) | Infraestructura local: arranque, parada, estado, respaldo y reinicio de la base. |
 | [scripts/EjecutarOrtesisLab.py](../../scripts/EjecutarOrtesisLab.py) | Script para abrir el complemento dentro de Blender. |
 | [scripts/EjecutarTrabajador.py](../../scripts/EjecutarTrabajador.py) | Proceso trabajador de OrtesisLab: cola de generación y conciliación. |
@@ -229,6 +234,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [skills-lock.json](../../skills-lock.json) | Procedencia y huellas de las tres skills Reflex instaladas. |
 | [tests/README.md](../../tests/README.md) | Pruebas |
 | [tests/aplicacion_web/__init__.py](../../tests/aplicacion_web/__init__.py) | Pruebas del generador web y del lector de superficies. |
+| [tests/aplicacion_web/test_contrasena.py](../../tests/aplicacion_web/test_contrasena.py) | Hash de contraseña: la misma clave coincide y otra no. |
 | [tests/aplicacion_web/test_estado_lote.py](../../tests/aplicacion_web/test_estado_lote.py) | La página /lote recibe todas las variantes con su estado, no solo las terminadas. |
 | [tests/aplicacion_web/test_generador_web.py](../../tests/aplicacion_web/test_generador_web.py) | Comprueba el lote y el STL sin abrir Blender ni la superficie real. |
 | [tests/aplicacion_web/test_humo_import.py](../../tests/aplicacion_web/test_humo_import.py) | Humo: la web y el trabajador deben importar sin ImportError. |
@@ -272,7 +278,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | Carpeta | Propósito y mantenimiento |
 |---|---|
 | `apps/web/` | Aplicación Reflex: paquete `web`, `rxconfig.py` y assets del visor |
-| `apps/db/` | PostgreSQL, Redis, MinIO, OIDC de pruebas y Alembic |
+| `apps/db/` | PostgreSQL, Redis, MinIO y Alembic |
 | `apps/ortesis-plugin/` | Complemento de Blender (`OrtesisLabPlugin`) y su ZIP |
 | `core/config/` | YAML del backend, JSON de geometría y README de cada archivo |
 | `apps/web/web/persistence/`, `services/`, `storage/`, `cache/`, `jobs/` | Persistencia, servicios, bucket, caché Redis y trabajador |

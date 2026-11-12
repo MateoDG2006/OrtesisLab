@@ -6,7 +6,7 @@ Desde la raíz, con uv, Docker Compose y `make` disponibles:
 
 ```powershell
 make install     # Python 3.14, uv sync --locked --all-groups y .env de ejemplo si faltan
-make up          # PostgreSQL :5433, MinIO :9000/:9001, Redis :6379, bucket, OIDC y alembic upgrade head
+make up          # PostgreSQL :5433, MinIO :9000/:9001, Redis :6379, bucket y alembic upgrade head
 make worker      # otra terminal
 make web         # otra terminal; http://localhost:3000
 ```
@@ -24,11 +24,10 @@ Variables de la aplicación: [`.env.example`](../../.env.example). Todas se decl
 | `ORTESISLAB_S3_PUBLIC_URL` | Vacía: se usa el endpoint | Base de `object_url` |
 | `ORTESISLAB_S3_BUCKET` / `ORTESISLAB_S3_REGION` | `ortesislab` / `us-east-1` | Web y trabajador |
 | `ORTESISLAB_REDIS_URL` | Vacía: sin caché | Web y trabajador |
-| `ORTESISLAB_OIDC_ISSUER`, `ORTESISLAB_OIDC_CLIENT_ID`, `ORTESISLAB_OIDC_CLIENT_SECRET`, `ORTESISLAB_OIDC_REDIRECT_URI`, `ORTESISLAB_SESSION_SECRET` | Obligatorias | Web; sin ellas no arranca |
-| `ORTESISLAB_APP_URL` | `http://localhost:3000` | Redirección tras login y logout |
+| `ORTESISLAB_APP_URL` | `http://localhost:3000` | Redirección tras registro, login y logout |
 | `ORTESISLAB_COOKIE_SECURE` | `false` | `true` añade `Secure` a las cookies |
 
-La web exige al arrancar la base y OIDC; las variables S3 se exigen en la primera operación con el bucket. El trabajador exige las S3 y la suya de base al arrancar. Para añadir una variable se declara un atributo `Variable("ORTESISLAB_…", defecto)` en `Ajustes`, se añade a `.env.example` y se lee con `Ajustes.Cargar().<atributo>`. Las seis URL de base de datos deben escribirse con el driver de SQLAlchemy, `postgresql+psycopg://usuario:clave@host:puerto/base`. Si una no empieza así, leerla lanza `RuntimeError`; el código no las convierte.
+La web abre PostgreSQL al arrancar. El alta y el acceso son usuario y contraseña en `/auth/registro` y `/auth/login`. Las variables S3 se exigen en la primera operación con el bucket. El trabajador exige las S3 y la suya de base al arrancar. Para añadir una variable se declara un atributo `Variable("ORTESISLAB_…", defecto)` en `Ajustes`, se añade a `.env.example` y se lee con `Ajustes.Cargar().<atributo>`. Las seis URL de base de datos deben escribirse con el driver de SQLAlchemy, `postgresql+psycopg://usuario:clave@host:puerto/base`. Si una no empieza así, leerla lanza `RuntimeError`; el código no las convierte.
 
 ### Valores ajustables (`config/*.yaml`)
 
@@ -40,14 +39,14 @@ Los límites, tiempos y tamaños del backend no van en el entorno ni en el códi
 | [`trabajador.yaml`](../../core/config/trabajador.yaml) | `lease_s` 120, `latido_s` 30, `supervision_s` 30, `conciliacion_s` 600, `capacidad_variante_s` 20. `conciliador`: `horas_staged` 24, `dias_rechazo` 30, `lote_comprobacion` 200, `explorar_bucket` false | `TrabajadorGeneracion`, `ConciliadorArchivos`, `EstadoApp` |
 | [`cache.yaml`](../../core/config/cache.yaml) | `ttl_s` 604800 (7 días), `reintento_s` 30, `timeout_s` 0.5, `max_entrada_bytes` 64 MiB | `CacheRedis` |
 | [`almacen.yaml`](../../core/config/almacen.yaml) | `timeout_conexion_s` 3, `timeout_lectura_s` 30, `intentos` 3 | `StorageS3` |
-| [`sesion.yaml`](../../core/config/sesion.yaml) | `duracion_horas` 12, `intercambio_oidc_s` 600 | `ContextoUsuario`, `AutenticacionOidc` |
+| [`sesion.yaml`](../../core/config/sesion.yaml) | `duracion_horas` 12 | `ContextoUsuario` |
 | [`web.yaml`](../../core/config/web.yaml) | `intervalo_progreso_s` 1, `espera_crear_s` 600, `maximo_bytes` 50 MiB, `maximo_descomprimido_bytes` 128 MiB; `patrones` (5) y `ejes` (11): clave y etiqueta visible, en el orden de los selectores; `ayudas` (15): texto de ayuda de cada parámetro del formulario, con su rango; `estados_visibles` (5): etiqueta de cada estado de ítem en `/historial` y `/lote`. El tope de variantes es `lotes.maximo_items` | `EstadoApp`, `GeneradorWeb`, `LectorSuperficie`, `EstadoHistorial`, `PaginaComparacion` |
 
 `GeneradorWeb.MAXIMO_VARIANTES` es `lotes.maximo_items`. Ese mismo número arma el `CHECK` de `generation_batches.total_items`. `latido_s` debe ser bastante menor que `lease_s`, o el trabajador pierde la reserva mientras construye; el código no lo comprueba.
 
 Los JSON de geometría están en `core/config/`. El ZIP de Blender los copia a `OrtesisLabPlugin/config/`, porque el complemento instalado no ve el monorepo. El Python de Blender no incluye PyYAML, así que esa configuración no pasa a YAML.
 
-`ORTESISLAB_OIDC_REDIRECT_URI` debe apuntar al puerto donde responde `/auth/callback`: en desarrollo, el backend Reflex (8000); con `reflex run --env prod`, la aplicación sirve frontend y backend en un único puerto (3000). Blender no es requisito web ni del trabajador. El visor descarga Three.js desde unpkg.
+En desarrollo, `/auth/registro` y `/auth/login` responden en el backend Reflex (puerto 8000). Con `reflex run --env prod`, la aplicación sirve frontend y backend en un único puerto (3000). Blender no es requisito web ni del trabajador. El visor descarga Three.js desde unpkg.
 
 Para trasladar subidas de la arquitectura anterior: `uv run python scripts/MigrarSubidas.py --simular` y después sin `--simular`. Cada archivo se borra de `uploaded_files/` solo después de verificar su objeto en el bucket.
 
@@ -59,8 +58,8 @@ La infraestructura local son cinco objetivos. El detalle de cada `ACCION` sale e
 
 | Objetivo | Efecto |
 |---|---|
-| `make db-up` | Valida Compose, arranca PostgreSQL, MinIO y Redis, crea el bucket y arranca el OIDC de pruebas en `127.0.0.1:8080` (`ORTESISLAB_OIDC_PORT`). No migra |
-| `make db-down` | Retira los contenedores, incluido el OIDC, y conserva los volúmenes. `ACCION=parar` solo los detiene. `ACCION=destruir CONFIRM=ELIMINAR` borra los volúmenes; los archivos de `apps/db/backups/` se quedan |
+| `make db-up` | Valida Compose, arranca PostgreSQL, MinIO y Redis y crea el bucket. No migra |
+| `make db-down` | Retira los contenedores y conserva los volúmenes. `ACCION=parar` solo los detiene. `ACCION=destruir CONFIRM=ELIMINAR` borra los volúmenes; los archivos de `apps/db/backups/` se quedan |
 | `make db-estado` | `pg_isready`, `mc ready` y `redis-cli ping`. `ACCION=logs` muestra las últimas 200 líneas. `ACCION=consola` abre `psql` como `ortesislab_migrator` |
 | `make db-respaldo FILE=x.dump` | `pg_dump` del esquema `ortesislab` y copia del bucket en `apps/db/backups/objetos`. No sobrescribe un `.dump` ya existente. El nombre admite letras, números, punto, guion y guion bajo |
 | `make db-respaldo ACCION=restaurar FILE=x.dump CONFIRM=RESTAURAR` | Restaura ese volcado en `ortesislab_dev` y después los objetos. Exige que existan el `.dump` y `apps/db/backups/objetos`. `mc mirror` sobrescribe las claves presentes en la copia y no borra el resto del bucket |
@@ -118,8 +117,8 @@ Línea base con SQLAlchemy: **73 pruebas, 50 aprobadas y 23 omitidas, el 2026-10
 
 | Síntoma | Revisar |
 |---|---|
-| `Inicie sesión para continuar.` con sesión iniciada | Cookie ausente o vencida (12 h), sesión revocada, `ORTESISLAB_SESSION_SECRET` cambiado |
-| `/auth/login` muestra la página 404 de la app | El enlace debe navegar con recarga completa; revisar `ORTESISLAB_OIDC_REDIRECT_URI` y el puerto del backend |
+| `Inicie sesión para continuar.` con sesión iniciada | Cookie ausente o vencida (12 h), o sesión revocada |
+| `/auth/login` muestra la página 404 de la app | El enlace debe navegar con recarga completa hasta el puerto del backend |
 | `RuntimeError: Falta la variable de entorno …` al arrancar o en la primera subida | Definir esa variable en el entorno o en `.env` |
 | `RuntimeError: … debe empezar por postgresql+psycopg://` | Cambiar el esquema de esa URL de `postgresql://` a `postgresql+psycopg://` |
 | Lote queda `En cola…` | El trabajador no está corriendo o no alcanza la base; revisar su log |

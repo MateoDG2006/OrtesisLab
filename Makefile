@@ -30,7 +30,7 @@ help:
 	@echo "  test-blender             Empaqueta y ejecuta las dos pruebas de Blender"
 	@echo "  lint                     ruff check del repositorio"
 	@echo "Base de datos, cinco objetivos:"
-	@echo "  db-up                    PostgreSQL, MinIO, Redis, bucket y OIDC de pruebas"
+	@echo "  db-up                    PostgreSQL, MinIO, Redis y bucket"
 	@echo "  db-down                  Retira contenedores y conserva volumenes"
 	@echo "                           ACCION=parar los detiene. ACCION=destruir CONFIRM=ELIMINAR borra volumenes"
 	@echo "  db-estado                Salud de PostgreSQL, MinIO y Redis"
@@ -47,6 +47,7 @@ install:
 up: db-up migrar
 
 web:
+	$(PYTHON) scripts/AsegurarReactRouter.py
 	uv run --directory apps/web reflex run
 
 worker:

@@ -7,15 +7,15 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 | Archivo/carpeta | Responsabilidad y relación |
 |---|---|
 | [`rxconfig.py`](../../apps/web/rxconfig.py) | Selecciona el módulo web, sitemap, Tailwind V4 y tema Radix indigo/slate/medium |
-| [`web/OrtesisLabApp.py`](../../apps/web/web/OrtesisLabApp.py) | Instancia `rx.App` con el transformador OIDC, abre/cierra el motor SQLAlchemy de PostgreSQL en el ciclo de vida y registra `/` e `/historial` |
+| [`web/OrtesisLabApp.py`](../../apps/web/web/OrtesisLabApp.py) | Instancia `rx.App` con el registro y el login, abre/cierra el motor SQLAlchemy de PostgreSQL en el ciclo de vida y registra `/` e `/historial` |
 | [`web/Ajustes.py`](../../apps/web/web/Ajustes.py) | Única declaración y lectura de las variables `ORTESISLAB_*`: cada atributo de `Ajustes` es una `Variable(clave, defecto)`; sin defecto es obligatoria y leerla ausente o vacía lanza `RuntimeError` («Falta la variable de entorno …»); las URL de base exigen el prefijo `postgresql+psycopg://` y, si no lo tienen, lanzan `RuntimeError`. Las pruebas de persistencia leen las dos URL de prueba y, si falta alguna, se omiten con ese mensaje. `Cargar()` lee el `.env` de la raíz con python-dotenv (UTF-8, con o sin BOM) sin pisar variables que el proceso ya tenga; los valores quedan en el entorno y las referencias `$` se sustituyen |
 | [`web/__init__.py`](../../apps/web/web/__init__.py) | Marcador del paquete web; no arranca servicios |
 | [`web/ConfiguracionBackend.py`](../../apps/web/web/ConfiguracionBackend.py) | `ConfiguracionBackend.Cargar(area)` lee `config/<area>.yaml` con `yaml.safe_load` y lo guarda en caché por proceso; distinta de `OrtesisLabPlugin.util.Utilidades.Configuracion`, que lee el JSON del complemento |
 | [`config/`](../../core/config/web.yaml) | YAML de valores ajustables del backend: `persistencia`, `trabajador`, `cache`, `almacen`, `sesion` y `web`; catálogo en [OPERACION_Y_PRUEBAS.md](OPERACION_Y_PRUEBAS.md#valores-ajustables-configyaml) |
-| [`.env.example`](../../.env.example) | Plantilla de variables: URLs de base app/trabajador/migrador, bucket S3, Redis, OIDC y URL de la app |
+| [`.env.example`](../../.env.example) | Plantilla de variables: URLs de base app/trabajador/migrador, bucket S3, Redis y URL de la app |
 | [`Makefile`](../../Makefile) | Instalar, levantar, probar y lintear. La infraestructura local son cinco objetivos (`db-up`, `db-down`, `db-estado`, `db-respaldo`, `db-reset`); no migran. `make up` y `make migrar` aplican Alembic. `make help` los lista |
 | [`scripts/BaseLocal.py`](../../scripts/BaseLocal.py) | Esas cinco operaciones: Compose, salud, respaldo conjunto de metadatos y objetos, y recreación de `ortesislab_dev` |
-| [`apps/db/`](../../apps/db/compose.yaml) | Compose con PostgreSQL 17, Redis, MinIO, cliente `mc` y proveedor OIDC de pruebas (perfil `auth-dev`); roles y esquema vacío en `init/01_roles.sh`; políticas del bucket en `minio/`; Alembic en la misma carpeta |
+| [`apps/db/`](../../apps/db/compose.yaml) | Compose con PostgreSQL 17, Redis, MinIO y cliente `mc`; roles y esquema vacío en `init/01_roles.sh`; políticas del bucket en `minio/`; Alembic en la misma carpeta |
 | [`alembic.ini`](../../alembic.ini) / [`apps/db/alembic/`](../../apps/db/alembic/env.py) | Configuración de Alembic para el esquema `ortesislab` con el rol migrador. `versions/` no tiene revisiones; la primera sale de `alembic revision --autogenerate` (ver [DATABASE.md](DATABASE.md#lo-que-alembic-no-genera)) |
 | [`apps/db/preparar_base.sql`](../../apps/db/preparar_base.sql) | Esquema y permisos al recrear `ortesislab_dev` vacía con `make db-reset` |
 | [`pyproject.toml`](../../pyproject.toml) | Dependencias Python (incluye `sqlalchemy`, `alembic`, `psycopg[binary]`, `pyyaml`, `boto3`, `redis`, `authlib`, `itsdangerous`) y versión. `tool.uv.package = false`: no instala un paquete propio |
@@ -98,8 +98,8 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 
 | Archivo | Responsabilidad |
 |---|---|
-| [`ContextoUsuario.py`](../../apps/web/web/services/ContextoUsuario.py) | Cookie de sesión, `Requerir`, `IniciarSesion`, `CerrarSesion`, `Activar`/`Actual` |
-| [`AutenticacionOidc.py`](../../apps/web/web/services/AutenticacionOidc.py) | Aplicación Starlette de `/auth/*` con authlib; las variables OIDC son obligatorias y su ausencia impide arrancar la web |
+| [`ContextoUsuario.py`](../../apps/web/web/services/ContextoUsuario.py) | Cookie de sesión, `Requerir`, `Registrar`, `Entrar`, `CerrarSesion`, `Activar`/`Actual` |
+| [`Autenticacion.py`](../../apps/web/web/services/Autenticacion.py) | Formularios Starlette de `/auth/registro`, `/auth/login` y `/auth/logout`; la contraseña se guarda con scrypt |
 | [`ServicioImports.py`](../../apps/web/web/services/ServicioImports.py) | Import con deduplicación por SHA-256 del original; staged → original → normalización → NPZ → Redis → ready; plantilla por usuario; `Resolver` de `superficie_archivo` |
 | [`ServicioVersiones.py`](../../apps/web/web/services/ServicioVersiones.py) | Parámetros canónicos, hash, instantánea de material PETG y alta de versiones numeradas |
 | [`ServicioLotes.py`](../../apps/web/web/services/ServicioLotes.py) | Admisión, progreso, último lote, espera, cancelación; del lado trabajador: reserva, latido, salidas staged, confirmación, fallo con reintento y abandono de leases vencidos |

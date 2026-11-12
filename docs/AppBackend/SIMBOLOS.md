@@ -30,9 +30,9 @@ Variables de entorno de OrtesisLab: el único lugar que las declara y las lee.
 | `Variable.__init__` | Función/método | [25](../../apps/web/web/Ajustes.py#L25) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Variable.__get__` | Función/método | [30](../../apps/web/web/Ajustes.py#L30) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Ajustes` | Clase | [43](../../apps/web/web/Ajustes.py#L43) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Ajustes.__init__` | Función/método | [71](../../apps/web/web/Ajustes.py#L71) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Ajustes.cookie_secure` | Función/método | [75](../../apps/web/web/Ajustes.py#L75) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Ajustes.Cargar` | Función/método | [80](../../apps/web/web/Ajustes.py#L80) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Ajustes.__init__` | Función/método | [66](../../apps/web/web/Ajustes.py#L66) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Ajustes.cookie_secure` | Función/método | [70](../../apps/web/web/Ajustes.py#L70) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Ajustes.Cargar` | Función/método | [75](../../apps/web/web/Ajustes.py#L75) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/cache/__init__.py`
 
@@ -306,7 +306,7 @@ Aplicación Reflex de comparación de ortesis.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `PoolPostgres` | Función/método | [27](../../apps/web/web/OrtesisLabApp.py#L27) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PoolPostgres` | Función/método | [26](../../apps/web/web/OrtesisLabApp.py#L26) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/PaginaComparacion.py`
 
@@ -430,7 +430,7 @@ Modelos declarativos de SQLAlchemy del esquema ``ortesislab``.
 | `_Objeto` | Función/método | [99](../../apps/web/web/persistence/Modelos.py#L99) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `_Check` | Función/método | [103](../../apps/web/web/persistence/Modelos.py#L103) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Usuario` | Clase | [107](../../apps/web/web/persistence/Modelos.py#L107) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SesionAutenticacion` | Clase | [125](../../apps/web/web/persistence/Modelos.py#L125) | Sesión de servidor tras el login OIDC; la cookie solo lleva el token. |
+| `SesionAutenticacion` | Clase | [125](../../apps/web/web/persistence/Modelos.py#L125) | Sesión de servidor; la cookie solo lleva el token. |
 | `PreferenciaUsuario` | Clase | [143](../../apps/web/web/persistence/Modelos.py#L143) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `ArchivoAlmacenado` | Clase | [161](../../apps/web/web/persistence/Modelos.py#L161) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Proyecto` | Clase | [196](../../apps/web/web/persistence/Modelos.py#L196) | Sin docstring; consultar el catálogo de módulos y el código. |
@@ -597,17 +597,19 @@ Resultados geométricos, intentos de una versión y exports STL.
 
 ## `apps/web/web/persistence/repositorios/RepositorioUsuarios.py`
 
-Cuentas creadas desde OIDC y sus sesiones de servidor.
+Cuentas locales y sus sesiones de servidor.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `RepositorioUsuarios` | Clase | [18](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L18) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `RepositorioUsuarios.Upsert` | Función/método | [22](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L22) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `RepositorioUsuarios.Estado` | Función/método | [41](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L41) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `RepositorioUsuarios.CrearSesion` | Función/método | [45](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L45) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `RepositorioUsuarios.ResolverSesion` | Función/método | [51](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L51) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `RepositorioUsuarios.PurgarSesionesVencidas` | Función/método | [65](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L65) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `RepositorioUsuarios.RevocarSesion` | Función/método | [78](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L78) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioUsuarios` | Clase | [17](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L17) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioUsuarios.Buscar` | Función/método | [21](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L21) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioUsuarios.Crear` | Función/método | [33](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L33) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioUsuarios.Asegurar` | Función/método | [46](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L46) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioUsuarios.Estado` | Función/método | [53](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L53) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioUsuarios.CrearSesion` | Función/método | [57](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L57) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioUsuarios.ResolverSesion` | Función/método | [63](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L63) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioUsuarios.PurgarSesionesVencidas` | Función/método | [77](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L77) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RepositorioUsuarios.RevocarSesion` | Función/método | [90](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py#L90) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/persistence/repositorios/RepositorioVersiones.py`
 
@@ -628,18 +630,23 @@ Marcador de paquete.
 |---|---|---:|---|
 | — | Sin clases/funciones | — | Declaraciones o marcador de paquete |
 
-## `apps/web/web/services/AutenticacionOidc.py`
+## `apps/web/web/services/Autenticacion.py`
 
-Rutas OIDC del backend: /auth/login, /auth/callback y /auth/logout.
+Rutas de registro e inicio de sesión: /auth/registro, /auth/login y /auth/logout.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `AutenticacionOidc` | Clase | [27](../../apps/web/web/services/AutenticacionOidc.py#L27) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `AutenticacionOidc.Aplicacion` | Función/método | [29](../../apps/web/web/services/AutenticacionOidc.py#L29) | Aplicación raíz que Reflex usa como transformador; monta /auth. |
-| `AutenticacionOidc.Aplicacion.login` | Función/método | [41](../../apps/web/web/services/AutenticacionOidc.py#L41) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `AutenticacionOidc.Aplicacion.callback` | Función/método | [44](../../apps/web/web/services/AutenticacionOidc.py#L44) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `AutenticacionOidc.Aplicacion.logout` | Función/método | [72](../../apps/web/web/services/AutenticacionOidc.py#L72) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `AutenticacionOidc.Aplicacion.logout_get` | Función/método | [81](../../apps/web/web/services/AutenticacionOidc.py#L81) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `_Campos` | Función/método | [24](../../apps/web/web/services/Autenticacion.py#L24) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `_Pagina` | Función/método | [29](../../apps/web/web/services/Autenticacion.py#L29) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `_ConCookie` | Función/método | [51](../../apps/web/web/services/Autenticacion.py#L51) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Autenticacion` | Clase | [64](../../apps/web/web/services/Autenticacion.py#L64) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Autenticacion.Aplicacion` | Función/método | [66](../../apps/web/web/services/Autenticacion.py#L66) | Aplicación raíz que Reflex usa como transformador; monta /auth. |
+| `Autenticacion.Aplicacion.login_pagina` | Función/método | [70](../../apps/web/web/services/Autenticacion.py#L70) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Autenticacion.Aplicacion.registro_pagina` | Función/método | [78](../../apps/web/web/services/Autenticacion.py#L78) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Autenticacion.Aplicacion.login` | Función/método | [86](../../apps/web/web/services/Autenticacion.py#L86) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Autenticacion.Aplicacion.registro` | Función/método | [102](../../apps/web/web/services/Autenticacion.py#L102) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Autenticacion.Aplicacion.logout` | Función/método | [120](../../apps/web/web/services/Autenticacion.py#L120) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Autenticacion.Aplicacion.logout_get` | Función/método | [131](../../apps/web/web/services/Autenticacion.py#L131) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/services/ContextoUsuario.py`
 
@@ -647,16 +654,24 @@ Principal autenticado de cada operación.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `ContextoUsuario` | Clase | [30](../../apps/web/web/services/ContextoUsuario.py#L30) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ContextoUsuario.Hash` | Función/método | [32](../../apps/web/web/services/ContextoUsuario.py#L32) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ContextoUsuario.TokenDeCookie` | Función/método | [36](../../apps/web/web/services/ContextoUsuario.py#L36) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ContextoUsuario.Requerir` | Función/método | [48](../../apps/web/web/services/ContextoUsuario.py#L48) | Entrada: cabecera Cookie. Proceso: resuelve la sesión vigente y el |
-| `ContextoUsuario.Requerir.resolver` | Función/método | [57](../../apps/web/web/services/ContextoUsuario.py#L57) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ContextoUsuario.IniciarSesion` | Función/método | [67](../../apps/web/web/services/ContextoUsuario.py#L67) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ContextoUsuario.IniciarSesion.crear` | Función/método | [72](../../apps/web/web/services/ContextoUsuario.py#L72) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ContextoUsuario.CerrarSesion` | Función/método | [84](../../apps/web/web/services/ContextoUsuario.py#L84) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ContextoUsuario.Activar` | Función/método | [92](../../apps/web/web/services/ContextoUsuario.py#L92) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ContextoUsuario.Actual` | Función/método | [101](../../apps/web/web/services/ContextoUsuario.py#L101) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `CuentaYaExiste` | Clase | [36](../../apps/web/web/services/ContextoUsuario.py#L36) | Ese usuario ya tiene una cuenta. |
+| `CredencialesInvalidas` | Clase | [40](../../apps/web/web/services/ContextoUsuario.py#L40) | El usuario o la contraseña no coinciden. |
+| `NormalizarUsuario` | Función/método | [44](../../apps/web/web/services/ContextoUsuario.py#L44) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `HashContrasena` | Función/método | [51](../../apps/web/web/services/ContextoUsuario.py#L51) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `VerificarContrasena` | Función/método | [59](../../apps/web/web/services/ContextoUsuario.py#L59) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario` | Clase | [72](../../apps/web/web/services/ContextoUsuario.py#L72) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario.Hash` | Función/método | [74](../../apps/web/web/services/ContextoUsuario.py#L74) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario.TokenDeCookie` | Función/método | [78](../../apps/web/web/services/ContextoUsuario.py#L78) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario.Requerir` | Función/método | [90](../../apps/web/web/services/ContextoUsuario.py#L90) | Entrada: cabecera Cookie. Proceso: resuelve la sesión vigente y el |
+| `ContextoUsuario.Requerir.resolver` | Función/método | [99](../../apps/web/web/services/ContextoUsuario.py#L99) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario._AbrirSesion` | Función/método | [109](../../apps/web/web/services/ContextoUsuario.py#L109) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario.Registrar` | Función/método | [117](../../apps/web/web/services/ContextoUsuario.py#L117) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario.Registrar.crear` | Función/método | [123](../../apps/web/web/services/ContextoUsuario.py#L123) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario.Entrar` | Función/método | [136](../../apps/web/web/services/ContextoUsuario.py#L136) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario.Entrar.crear` | Función/método | [141](../../apps/web/web/services/ContextoUsuario.py#L141) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario.CerrarSesion` | Función/método | [151](../../apps/web/web/services/ContextoUsuario.py#L151) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario.Activar` | Función/método | [159](../../apps/web/web/services/ContextoUsuario.py#L159) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ContextoUsuario.Actual` | Función/método | [168](../../apps/web/web/services/ContextoUsuario.py#L168) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/services/GeneradorGeometrico.py`
 
@@ -766,7 +781,7 @@ Barra de sesión común a la comparación y al historial.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `Sesion` | Clase | [8](../../apps/web/web/Sesion.py#L8) | Enlaces a las rutas OIDC del backend y navegación entre páginas. |
+| `Sesion` | Clase | [8](../../apps/web/web/Sesion.py#L8) | Enlaces al registro y al login del backend, y navegación entre páginas. |
 | `Sesion.Ruta` | Función/método | [12](../../apps/web/web/Sesion.py#L12) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Sesion.Boton` | Función/método | [17](../../apps/web/web/Sesion.py#L17) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Sesion.FormularioPost` | Función/método | [23](../../apps/web/web/Sesion.py#L23) | Sin docstring; consultar el catálogo de módulos y el código. |
@@ -820,6 +835,14 @@ Almacén de bytes en un bucket S3 (MinIO en desarrollo).
 | `StorageS3.Borrar` | Función/método | [94](../../apps/web/web/storage/StorageS3.py#L94) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `StorageS3.Claves` | Función/método | [100](../../apps/web/web/storage/StorageS3.py#L100) | Sin docstring; consultar el catálogo de módulos y el código. |
 
+## `scripts/AsegurarReactRouter.py`
+
+En Windows, react-router.exe ignora --conditions=development.
+
+| Símbolo | Tipo | Línea | Descripción declarada |
+|---|---|---:|---|
+| `main` | Función/método | [43](../../scripts/AsegurarReactRouter.py#L43) | Sin docstring; consultar el catálogo de módulos y el código. |
+
 ## `scripts/BaseLocal.py`
 
 Infraestructura local: arranque, parada, estado, respaldo y reinicio de la base.
@@ -837,12 +860,12 @@ Infraestructura local: arranque, parada, estado, respaldo y reinicio de la base.
 | `_bucket` | Función/método | [79](../../scripts/BaseLocal.py#L79) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `_salud` | Función/método | [83](../../scripts/BaseLocal.py#L83) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `up` | Función/método | [97](../../scripts/BaseLocal.py#L97) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `down` | Función/método | [105](../../scripts/BaseLocal.py#L105) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `estado` | Función/método | [118](../../scripts/BaseLocal.py#L118) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `respaldo` | Función/método | [129](../../scripts/BaseLocal.py#L129) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `reset` | Función/método | [161](../../scripts/BaseLocal.py#L161) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `comprobar` | Función/método | [176](../../scripts/BaseLocal.py#L176) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `main` | Función/método | [222](../../scripts/BaseLocal.py#L222) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `down` | Función/método | [104](../../scripts/BaseLocal.py#L104) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `estado` | Función/método | [117](../../scripts/BaseLocal.py#L117) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `respaldo` | Función/método | [128](../../scripts/BaseLocal.py#L128) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `reset` | Función/método | [160](../../scripts/BaseLocal.py#L160) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `comprobar` | Función/método | [175](../../scripts/BaseLocal.py#L175) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `main` | Función/método | [221](../../scripts/BaseLocal.py#L221) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `scripts/EjecutarOrtesisLab.py`
 
@@ -885,6 +908,6 @@ Traslada una sola vez ``uploaded_files/`` al bucket y registra cada objeto.
 |---|---|---:|---|
 | `Propietario` | Función/método | [45](../../scripts/MigrarSubidas.py#L45) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Propietario.asegurar` | Función/método | [46](../../scripts/MigrarSubidas.py#L46) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Migrar` | Función/método | [56](../../scripts/MigrarSubidas.py#L56) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Migrar.registrar` | Función/método | [85](../../scripts/MigrarSubidas.py#L85) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `main` | Función/método | [103](../../scripts/MigrarSubidas.py#L103) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Migrar` | Función/método | [61](../../scripts/MigrarSubidas.py#L61) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Migrar.registrar` | Función/método | [90](../../scripts/MigrarSubidas.py#L90) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `main` | Función/método | [108](../../scripts/MigrarSubidas.py#L108) | Sin docstring; consultar el catálogo de módulos y el código. |
