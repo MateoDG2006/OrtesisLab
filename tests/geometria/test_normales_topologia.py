@@ -7,7 +7,6 @@ import unittest
 import numpy as np
 
 from GenerateModelsApp.Cascaron import Cascaron
-from GenerateModelsApp.EscalaMalla import EscalaMalla
 from GenerateModelsApp.Excepciones import (
     AristasNoManifold,
     CalidadInsuficiente,
@@ -76,16 +75,6 @@ class NormalesYTopologia(unittest.TestCase):
                 RefinadorMalla.Refinar(vertices, caras, normales, 5.0)
         finally:
             Configuracion.ValorLimite = staticmethod(original)  # type: ignore[assignment]
-
-    def test_a14_800_mm_no_pasa_a_80(self):
-        with self.assertRaises(CalidadInsuficiente):
-            EscalaMalla.Aplicar(
-                800.0,
-                True,
-                lambda _f: "x",
-                arista_maxima=800.0,
-                paso_mm=0.001,
-            )
 
     def test_a22_filtro_usa_perimetro_fisico(self):
         # Mismo campo de normales sobre contornos escalados: el corte depende de mm.

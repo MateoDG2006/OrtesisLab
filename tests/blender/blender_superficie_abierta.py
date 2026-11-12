@@ -14,7 +14,7 @@ from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "apps" / "ortesis-plugin"))
 import GenerateModelsApp as addon
 from GenerateModelsApp.Objeto import GeneradorObjeto
 from GenerateModelsApp.Superficie import SuperficieInterior
@@ -25,7 +25,7 @@ from GenerateModelsApp.Excepciones import SolidoCerrado, SuperficieInvalida
 bpy.ops.wm.read_factory_settings(use_empty=True)
 addon.register()
 assert hasattr(bpy.context.scene.ortesislab, 'source'), 'Las propiedades RNA deben registrarse, no ser anotaciones diferidas.'
-assert bpy.context.scene.ortesislab.auto_scale
+assert not hasattr(bpy.context.scene.ortesislab, 'auto_scale')
 assert not bpy.context.scene.ortesislab.repair
 assert bpy.context.scene.ortesislab.source is None
 # Sin selección no debe cargarse el NPZ antiguo.
@@ -141,7 +141,7 @@ after = SuperficieInterior.Leer(base)[1]
 assert not np.array_equal(before, after)
 assert np.mean(SuperficieInterior.Leer(base)[2][:,2]) < 0
 
-# Generar corrige las unidades en una copia y deja la base como está.
+# Generar conserva las coordenadas de la base: una malla de ~1.6 mm no se multiplica.
 tiny_mesh = bpy.data.meshes.new('Unidades_cm')
 tiny_mesh.from_pydata([(0, 0, 0), (1.6, 0, 0), (1.6, 1, 0), (0, 1, 0)], [], [(0, 1, 2, 3)])
 tiny_mesh.update()
@@ -151,20 +151,15 @@ bpy.ops.object.select_all(action='DESELECT')
 tiny.select_set(True)
 bpy.context.view_layer.objects.active = tiny
 ajustes = bpy.context.scene.ortesislab
-ajustes.auto_scale = True
 ajustes.pattern = 'SOLID'
 ajustes.surface_step_mm = 5
 ajustes.source = tiny
 assert bpy.ops.ortesislab.generate() == {'FINISHED'}
 resultado = np.array([v.co[:] for v in bpy.data.objects['OL_Ortesis'].data.vertices])
-assert np.ptp(resultado, axis=0).max() > 100
-assert np.ptp(np.array([v.co[:] for v in tiny.data.vertices]), axis=0).max() < 2
-ajustes.auto_scale = False
-assert bpy.ops.ortesislab.generate() == {'FINISHED'}
-resultado = np.array([v.co[:] for v in bpy.data.objects['OL_Ortesis'].data.vertices])
 assert np.ptp(resultado, axis=0).max() < 10
+assert np.ptp(np.array([v.co[:] for v in tiny.data.vertices]), axis=0).max() < 2
 
-# Una arista de millones de unidades no cabe en el paso: el autoescalado la corrige.
+# Una arista enorme no se encoge para caber en el paso.
 larga_malla = bpy.data.meshes.new('Unidades_demasiado_grandes')
 larga_malla.from_pydata(
     [(0, 0, 0), (2_000_000, 0, 0), (0, 2_000_000, 0)],
@@ -174,13 +169,10 @@ larga_malla.from_pydata(
 larga_malla.update()
 larga = bpy.data.objects.new('Unidades_demasiado_grandes', larga_malla)
 bpy.context.scene.collection.objects.link(larga)
-ajustes.auto_scale = True
 ajustes.pattern = 'SOLID'
 ajustes.surface_step_mm = 1
 ajustes.source = larga
-assert bpy.ops.ortesislab.generate() == {'FINISHED'}
-resultado = np.array([v.co[:] for v in bpy.data.objects['OL_Ortesis'].data.vertices])
-assert 20 <= float(np.ptp(resultado, axis=0).max()) <= 1000
+assert bpy.ops.ortesislab.generate() == {'CANCELLED'}
 assert float(np.ptp(np.array([v.co[:] for v in larga_malla.vertices]), axis=0).max()) > 1_000_000
 
 addon.unregister(); addon.register(); addon.unregister()

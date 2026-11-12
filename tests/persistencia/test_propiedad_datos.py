@@ -77,10 +77,10 @@ class PropiedadDeRecursos(unittest.TestCase):
 
     def test_preferencias_con_revision(self):
         actual = RepositorioPreferencias.Obtener(self.conexion, self.a.user_id)
-        nueva = RepositorioPreferencias.Guardar(self.conexion, self.a.user_id, False, {}, actual.revision)
+        nueva = RepositorioPreferencias.Guardar(self.conexion, self.a.user_id, {}, actual.revision)
         self.assertEqual(nueva.revision, actual.revision + 1)
         with self.assertRaises(ConflictoRevision):
-            RepositorioPreferencias.Guardar(self.conexion, self.a.user_id, True, {}, actual.revision)
+            RepositorioPreferencias.Guardar(self.conexion, self.a.user_id, {}, actual.revision)
         self.conexion.rollback()
 
 

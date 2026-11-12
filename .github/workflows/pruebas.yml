@@ -78,6 +78,6 @@ jobs:
         env:
           PGPASSWORD: cambie-admin
         run: |
-          psql -h 127.0.0.1 -U ortesislab_admin -d ortesislab_test -v ON_ERROR_STOP=1 -v base=ortesislab_test -f db/test/preparar_base.sql
+          psql -h 127.0.0.1 -U ortesislab_admin -d ortesislab_test -v ON_ERROR_STOP=1 -v base=ortesislab_test -f apps/db/test/preparar_base.sql
       - name: Alembic upgrade
         run: uv run alembic -x base=test upgrade head

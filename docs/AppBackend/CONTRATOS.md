@@ -6,8 +6,8 @@ Todos los eventos que leen o escriben datos resuelven primero el usuario desde l
 
 | Evento | Entrada | Resultado observable / error |
 |---|---|---|
-| `CargarPredeterminados` | Carga de página | Valores JSON en formulario, mensaje `Listo para generar…`, preferencia de autoescala guardada, último lote del usuario y reanudación de su seguimiento si sigue abierto; si cambió el usuario de la pestaña, borra el trabajo anterior |
-| `set_*` | Cadena o booleano según campo | Actualiza formulario; `set_autoescalar_superficie` además guarda la preferencia y ante conflicto de revisión recarga la guardada |
+| `CargarPredeterminados` | Carga de página | Valores JSON en formulario, mensaje `Listo para generar…`, último lote del usuario y reanudación de su seguimiento si sigue abierto; si cambió el usuario de la pestaña, borra el trabajo anterior |
+| `set_*` | Cadena o booleano según campo | Actualiza el formulario |
 | `CargarSuperficie` | Lista de exactamente un `rx.UploadFile` | Import del usuario: original y NPZ en el bucket, nombre `superficie-<32 hex>.npz` y metadatos; si falla conserva la base anterior |
 | `UsarSuperficieIncluida` | Ninguna | Nombre interno vacío (plantilla), borra fichas/vistas/archivo actual |
 | `Previsualizar` / `PedirLote` | Parámetros actuales | Nuevo `request_id` y evento `Generar` en modo individual/lote |
@@ -25,7 +25,7 @@ Todos los eventos que leen o escriben datos resuelven primero el usuario desde l
 | `set_filtro_*` | Patrón, estado, desde, hasta | Guarda el filtro; se aplica con Filtrar. Fechas `AAAA-MM-DD` en UTC: `desde` a las 00:00 y `hasta` hasta el final del día |
 | `Siguiente` / `Anterior` | Ninguna | Cursor `(created_at, id)`; no usa OFFSET |
 | `Seleccionar(version_id)` | ID de versión | Alterna selección; con 2 o 3 versiones muestra tarjetas con diferencias de parámetros; la cuarta se rechaza |
-| `Restaurar(version_id)` | ID de versión | Lote `single` con una versión nueva de mismos parámetros, autoescala y `parent_version_id`; la original no cambia; redirige a `/` |
+| `Restaurar(version_id)` | ID de versión | Lote `single` con una versión nueva de los mismos parámetros y `parent_version_id`; la original no cambia; redirige a `/` |
 | `Reintentar(version_id)` | ID de versión | Lote `retry` que crea intentos nuevos para la misma versión; redirige a `/` |
 | `Descargar(fila_id)` | ID de fila | Igual que la descarga principal |
 
@@ -37,15 +37,13 @@ La tupla compartida es `(vertices, faces, normals, border)`. Coordenadas y dista
 
 Para un **NPZ externo** son obligatorias `vertices`, `faces`, `normals`. Para el **NPZ normalizado interno** se guarda además `border`. La plantilla incluida se prepara mediante `AnalizadorMalla` y se registra como import propio de cada usuario la primera vez que la usa. El lector no usa pickle. Se exigen índices enteros válidos, normales finitas y no nulas, triángulos no degenerados/duplicados, orientación consistente, contornos regulares y una sola componente abierta.
 
-Límites: 50 × 1024 × 1024 bytes de subida (50 MiB); 128 MiB de expansión declarada para NPZ. El texto de la UI dice MB. La selección cliente limita a un archivo y el servidor lo vuelve a comprobar. STL ASCII y binario se aceptan; las normales de STL se reconstruyen con áreas de triángulos. La cuantización de coincidencias usa `clip_snap_mm=0.0001` en las coordenadas que llegan, antes de la autoescala. Un mismo original (mismo SHA-256) del mismo usuario reutiliza el import existente.
+Límites: 50 × 1024 × 1024 bytes de subida (50 MiB); 128 MiB de expansión declarada para NPZ. El texto de la UI dice MB. La selección cliente limita a un archivo y el servidor lo vuelve a comprobar. STL ASCII y binario se aceptan; las normales de STL se reconstruyen con áreas de triángulos. La cuantización de coincidencias usa `clip_snap_mm=0.0001` en las coordenadas que llegan. Un mismo original (mismo SHA-256) del mismo usuario reutiliza el import existente. Las coordenadas no se multiplican.
 
 ## Opciones y escala
 
 Las 17 claves canónicas están en [PARAMETROS.md](../BlenderPlugin/PARAMETROS.md) y `config/parametros_defecto.json`. `_Numero` admite coma decimal y rechaza NaN/infinito. `_Opciones` convierte semilla a entero no negativo. El núcleo vuelve a validar opciones; incluso los campos ocultos deben conservar valores válidos.
 
-En la web el alcance geométrico es `pre_voxel_shell`: `repair` y `resolution_mm` solo aplican al voxel de Blender. El snapshot guarda los 17 campos, pero `parameters_sha256` y la comparación en `/historial` **excluyen** esas dos claves (`ServicioVersiones.ParametrosHuellaWeb`).
-
-`superficie_archivo=""` significa plantilla incluida. Un nombre guardado usa `superficie-<32 hex>.npz`, donde el hex es el `asset_id` del NPZ normalizado del usuario. La autoescala es preferencia del usuario (`user_preferences.auto_scale_surface`) y se copia a cada versión; no es clave del JSON geométrico. En no macizo se usa `EscalaMalla.Aplicar` junto al refinamiento; en macizo web, `Resolver` sin refinamiento.
+`superficie_archivo=""` significa plantilla incluida. Un nombre guardado usa `superficie-<32 hex>.npz`, donde el hex es el `asset_id` del NPZ normalizado del usuario. En no macizo se refina esa copia; en macizo web se usa sin refinar. El tamaño es el del archivo.
 
 ## Variantes, lotes y fichas
 
@@ -53,7 +51,7 @@ Rango: `desde + i*paso <= hasta`, inclusive si se alcanza exactamente. Paso > 0,
 
 Ejemplo: patrones `HEX` y `SQUARE`, celdas 10/15/20, con y sin capa → `2 × 3 × 2 = 12`. Ejes disponibles: `cell_mm`, `rib_width_mm`, `rib_height_mm`, `skin_mm`, `solid_mm`, `border_mm`, `rounding_mm`, `angle_deg`, `seed`, `reinforce_width_mm`, `reinforce_y_mm`.
 
-`SolicitudLote` contiene `import_id`, `request_id` (UUID por clic), `mode` (`single`, `sweep`, `retry`), `definition`, `variantes` (máximo 12) y `auto_scale`. Repetir el mismo `request_id` con el mismo cuerpo devuelve el lote existente; con otro cuerpo falla con `SolicitudIdempotenteEnConflicto`. Un usuario puede tener 3 lotes pendientes; el cuarto falla con `CuotaExcedida`.
+`SolicitudLote` contiene `import_id`, `request_id` (UUID por clic), `mode` (`single`, `batch`, `retry`), `definition` y `variantes` (máximo 12). Repetir el mismo `request_id` con el mismo cuerpo devuelve el lote existente; con otro cuerpo falla con `SolicitudIdempotenteEnConflicto`. Un usuario puede tener 3 lotes pendientes; el cuarto falla con `CuotaExcedida`.
 
 | Estado | Valores |
 |---|---|
@@ -83,7 +81,7 @@ Ejemplo ilustrativo de formato, no resultado medido. Todas las propiedades son c
 | Original subido | `usuarios/<user_id>/assets/<asset_id>` | Solo backend |
 | NPZ normalizado | `usuarios/<user_id>/assets/<asset_id>` | Solo backend |
 | JSON de parámetros del resultado | `usuarios/<user_id>/assets/<asset_id>` | Solo backend |
-| STL de resultado | `usuarios/<user_id>/assets/<asset_id>.stl` | Anónima por URL (`infra/database/minio/politica-lectura-stl.json`) |
+| STL de resultado | `usuarios/<user_id>/assets/<asset_id>.stl` | Anónima por URL (`apps/db/minio/politica-lectura-stl.json`) |
 
 `object_url = ORTESISLAB_S3_PUBLIC_URL/<bucket>/<clave>`. Cada objeto lleva el metadato `sha256`; el backend verifica tamaño y hash antes de marcar la fila `ready` y al leerla. `GeneradorWeb.Ruta` acepta solo una `object_url` de un STL del usuario activo.
 

@@ -12,7 +12,7 @@ El servidor coordina cuentas, superficies, parámetros, versiones y lotes de gen
 | Bucket S3 (MinIO) | Bytes de originales subidos, NPZ normalizados, STL y JSON de resultados; PostgreSQL guarda clave, `object_url`, tamaño y SHA-256 |
 | Redis | Caché por contenido de superficies crudas/refinadas y su diagnóstico de escala; si no responde, todo sigue funcionando sin caché |
 
-Reflex compila componentes Python a React y ejecuta los manejadores en su servidor ASGI. Los eventos viajan por la conexión WebSocket del framework. Referencia: [arquitectura oficial de Reflex](https://reflex.dev/docs/advanced-onboarding/how-reflex-works/). La persistencia usa SQLAlchemy 2.0 sobre psycopg 3. Los modelos de [`Modelos.py`](../../web/persistence/Modelos.py) describen el esquema y alimentan Alembic. Las consultas son sentencias SQLAlchemy dentro de los repositorios, que reciben una `Session` y devuelven DTO. No hay ejecución de Blender en ninguna pieza.
+Reflex compila componentes Python a React y ejecuta los manejadores en su servidor ASGI. Los eventos viajan por la conexión WebSocket del framework. Referencia: [arquitectura oficial de Reflex](https://reflex.dev/docs/advanced-onboarding/how-reflex-works/). La persistencia usa SQLAlchemy 2.0 sobre psycopg 3. Los modelos de [`Modelos.py`](../../apps/web/web/persistence/Modelos.py) describen el esquema y alimentan Alembic. Las consultas son sentencias SQLAlchemy dentro de los repositorios, que reciben una `Session` y devuelven DTO. No hay ejecución de Blender en ninguna pieza.
 
 ```mermaid
 flowchart LR
@@ -26,13 +26,13 @@ flowchart LR
 
 ## Arranque
 
-[`rxconfig.py`](../../rxconfig.py) carga `app_module_import="web.GenerateModelsApp"`. [`web/GenerateModelsApp.py`](../../web/GenerateModelsApp.py):
+[`rxconfig.py`](../../apps/web/rxconfig.py) carga `app_module_import="web.GenerateModelsApp"`. [`web/GenerateModelsApp.py`](../../apps/web/web/GenerateModelsApp.py):
 
 - crea `rx.App(api_transformer=AutenticacionOidc.Aplicacion())`, que monta `/auth/login`, `/auth/callback` y `/auth/logout` junto a la aplicación Reflex;
 - registra la tarea de ciclo de vida `PoolPostgres`, que abre el motor SQLAlchemy con `ORTESISLAB_DATABASE_URL` (rol `ortesislab_app`, una conexión de prueba al arrancar y hasta 4 en el pool) y lo cierra al parar; si la base no responde al arrancar, lo registra y los handlers devuelven el mensaje de persistencia no disponible;
 - registra `/` (`PaginaComparacion.Index`, `on_load=EstadoApp.CargarPredeterminados`) y `/historial` (`PaginaHistorial.Index`, `on_load=EstadoHistorial.Cargar`).
 
-El trabajador es un proceso aparte con el rol `ortesislab_worker` (máximo 2 conexiones). Ambos, igual que Alembic y las pruebas, leen la configuración solo a través de la clase `Ajustes` de [`web/Ajustes.py`](../../web/Ajustes.py): variables `ORTESISLAB_*` del entorno o del `.env` raíz (ver [`.env.example`](../../.env.example)). Una variable obligatoria ausente lanza `VariableFaltante` al leerse; no hay modos degradados por configuración incompleta, salvo Redis, cuya URL vacía desactiva la caché. Los límites, tiempos y tamaños que cita este documento (lease, latido, cuotas, TTL, plazos de conciliación, duración de sesión) son los valores actuales de [`config/*.yaml`](OPERACION_Y_PRUEBAS.md#valores-ajustables-configyaml), que lee `ConfiguracionBackend`.
+El trabajador es un proceso aparte con el rol `ortesislab_worker` (máximo 2 conexiones). Ambos, igual que Alembic y las pruebas, leen la configuración solo a través de la clase `Ajustes` de [`web/Ajustes.py`](../../apps/web/web/Ajustes.py): `Cargar()` vuelca el `.env` de la raíz al entorno del proceso con python-dotenv, sin pisar variables ya definidas (ver [`.env.example`](../../.env.example)). Una variable obligatoria ausente lanza `RuntimeError` al leerse; no hay modos degradados por configuración incompleta, salvo Redis, cuya URL vacía desactiva la caché. Los límites, tiempos y tamaños que cita este documento (lease, latido, cuotas, TTL, plazos de conciliación, duración de sesión) son los valores actuales de [`config/*.yaml`](OPERACION_Y_PRUEBAS.md#valores-ajustables-configyaml), que lee `ConfiguracionBackend`.
 
 ```mermaid
 flowchart TB
@@ -114,11 +114,9 @@ sequenceDiagram
 
 Clave de objeto: `usuarios/<user_id>/assets/<asset_id>`; los STL de resultado llevan además el sufijo `.stl`. El flujo de dos recursos es: fila `staged` → subir y verificar objeto (tamaño y SHA-256) → fila `ready` con `object_url`. Si falla la subida, la fila staged queda para el conciliador.
 
-La política del bucket concede lectura anónima solo a `usuarios/*/assets/*.stl`; originales, NPZ y JSON exigen credenciales del backend. El visor y la descarga usan la `object_url` del STL directamente. La URL contiene dos UUID aleatorios, pero quien la conozca puede leer ese STL. Cierre documentado como `RIESGO_ACEPTADO` en [RES-2026-11-12-ISSUE-2](../Audit/resolves/2026-11-12-issue-2-riesgo-stl-anonimo.md), con revisión el **2027-05-12**.
+La política del bucket concede lectura anónima solo a `usuarios/*/assets/*.stl`; originales, NPZ y JSON exigen credenciales del backend. El visor y la descarga usan la `object_url` del STL directamente. La URL contiene dos UUID aleatorios, pero quien la conozca puede leer ese STL: es una decisión de esta entrega.
 
-`CacheRedis` guarda tuplas de superficie con clave por SHA-256 del NPZ (contenido, no nombre), paso y autoescala, con TTL de 7 días. Un fallo de Redis apaga la caché 30 s y la generación lee del bucket. La plantilla incluida (`EjeMayor`/`Cruda` con `""`) usa además caché por proceso (`_TuplaPlantilla`) para no repetir `Preparar` en cada `CargarPredeterminados`.
-
-La normalización de subidas (`LectorSuperficie.Preparar`, vía `ServicioImports.Importar`) comparte un semáforo de proceso `NORMALIZACION` acotado por `config/web.yaml` → `max_normalizaciones_concurrentes` (defecto 2). Evita agotar el pool de hilos de Reflex ante muchas cargas simultáneas. Mover la normalización pesada al trabajador queda como trabajo futuro; hoy el límite está en la capa web.
+`CacheRedis` guarda tuplas de superficie con clave por SHA-256 del NPZ (contenido, no nombre) y, en la refinada, por paso, con TTL de 7 días. Un fallo de Redis apaga la caché 30 s y la generación lee del bucket.
 
 `ConciliadorArchivos` corre en el trabajador cada 600 s: borra staged de más de 24 h, imports rechazados de más de 30 días, marca `missing` las filas ready sin objeto (y sus exports) y borra objetos huérfanos de más de 24 h.
 
@@ -132,4 +130,4 @@ La normalización de subidas (`LectorSuperficie.Preparar`, vía `ServicioImports
 | Redis como caché pura | Perderlo solo cuesta tiempo de cálculo |
 | Máximo 12 variantes / 3 vistas / 3 lotes pendientes | Contiene trabajo por petición, contextos WebGL y uso de la cola |
 | SQLAlchemy con repositorios y DTO | Las firmas de repositorios y servicios no exponen modelos ORM; el estado Reflex nunca guarda una `Session` |
-| Alembic con revisión inicial versionada | La revisión `20261112_1200_esquema_inicial` incluye tablas, trigger de versiones, `GRANT` y FK circular; los cambios posteriores se generan y aplican a mano desde un único operador |
+| Alembic sin revisiones versionadas en el repositorio y sin bloqueo | Las migraciones las genera y aplica a mano el responsable del esquema desde un único operador; `GRANT`, trigger de versiones y FK circular se añaden a mano a la revisión |

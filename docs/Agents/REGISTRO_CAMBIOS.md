@@ -1,41 +1,74 @@
 # Registro de cambios documentales
 
-## 2026-11-12 — Hallazgos B-01…B-04, B-14, B-16…B-18 (tramo parcial B)
+## 2026-11-12 — Un commit con el monorepo y lo que traía master
 
-Revisión Alembic inicial (`20261112_1200_esquema_inicial`), CI ampliada (`pruebas.yml`), tope de CPU web (`max_normalizaciones_concurrentes`, caché de plantilla), documentación (`DATABASE`, `OPERACION_Y_PRUEBAS`, `ARQUITECTURA`, `CONTRATOS`, `MODULOS`, enlace `Audit/`), estándares (`pyproject.toml`, Ruff, VS Code) y cierre de resolves B.
-
-Pruebas ejecutadas:
-- `.venv\Scripts\python.exe -m unittest tests.persistencia.test_alembic_revision tests.aplicacion_web.test_humo_import -v` → 3 OK
-- `.venv\Scripts\python.exe -c "…ValidarEnArranque()…"` → ok
-- `.venv\Scripts\python.exe -m unittest discover -s tests -p test_*.py -q` → 109 cargadas, OK, 28 omitidas
-- `scripts/EmpaquetarBlender.py` → ZIP actualizado
-- `GenerarIndices.py` / `--comprobar` → al día
-
-## 2026-11-12 — Hallazgos B-05…B-22 (tramo parcial A)
-
-Cuotas de importación, rechazo ante fallo de bucket, advisory lock en dedup, CHECK de lote desde YAML, validación de configuración, sondeo con retroceso, conciliador sin barrido total por defecto, purga de sesiones/eventos, logout POST, hash de versión web sin `repair`/`resolution_mm`, confirmación bajo cancelación, dedup Notion→GitHub y botón cancelar lote.
+Los dos commits de `origin/master` quedan dentro del árbol del monorepo. Si tocaban lo mismo que la refactorización, se conserva esta: no vuelve `EscalaMalla` ni el parámetro `autoescalar`, y las rutas siguen en `apps/` y `core/`. Sí entran la revisión inicial de Alembic en `apps/db/alembic/versions/`, el flujo de cuotas de importación, los módulos nuevos del complemento, el visor con Three.js en `apps/web/assets/vendor/` y el workflow de pruebas, con `preparar_base.sql` en `apps/db/test/`.
 
 Pruebas ejecutadas:
-- `.venv\Scripts\python.exe -c "from web.ConfiguracionBackend import ConfiguracionBackend; ConfiguracionBackend.ValidarEnArranque(); print('ok')"` → ok
-- `.venv\Scripts\python.exe -m unittest tests.persistencia.test_cuota_almacen tests.persistencia.test_import_fallo_publicar -v` → 2 OK
-- `.venv\Scripts\python.exe -m unittest discover -s tests/persistencia -p test_*.py -q` → 25 cargadas, 2 OK, 23 omitidas (sin base)
+- `py -3 docs/Agents/Scripts/GenerarIndices.py --comprobar`.
 
-## 2026-11-12 — Cierre issues auditoría #1–#9
+No se ejecutó `uv sync`, Reflex, PostgreSQL ni `alembic upgrade`.
 
-Prerrequisito B-01 (constantes de contrato), presupuestos e inspección NPY (#1), `RIESGO_ACEPTADO` del STL anónimo (#2), normales/topología/escala/unidades (#3), validación de exportación (#4), rollback y par STL/JSON (#5), cachés (#6), contratos/wheel (#7), CI/visor/a11y (#8) e índice de seguimiento (#9). Resolves en `docs/Audit/resolves/2026-11-12-*.md`.
+## 2026-11-12 — Las coordenadas de entrada no se autoescalan
 
-Pruebas ejecutadas en esta iteración:
-- `.venv\Scripts\python.exe -m unittest tests.aplicacion_web.test_humo_import -v` → 2 OK
-- `.venv\Scripts\python.exe -m unittest tests.geometria.test_carga_presupuesto tests.geometria.test_normales_topologia tests.geometria.test_escala_malla tests.geometria.test_refinador_malla tests.geometria.test_exportacion_validada -v` → OK
-- `.venv\Scripts\python.exe -m unittest tests.nucleo.test_cache_metricas tests.nucleo.test_compatibilidad_npz_json tests.nucleo.test_wheel tests.e2e.test_carga_generacion_descarga tests.blender.test_rollback_publicacion -v` → OK (omitidas sin bpy/base según caso)
-
-## 2026-11-12 — Cierre issues auditoría #4–#8
-
-Validación numérica (`ValidacionSolido`), exportación desde instantánea evaluada, rollback de generación y publicación atómica STL/JSON, endurecimiento de cachés, `contratos.py`, visor local y CI (`pruebas.yml`). Resolves en `docs/Audit/resolves/2026-11-12-issue-*.md`.
+Se elimina la corrección decimal de unidades. Web, núcleo y complemento usan las coordenadas del archivo. Desaparecen la casilla, `EscalaMalla`, el aviso y los límites `min_plausible_surface_extent_mm` y `max_plausible_surface_extent_mm`. Arreglar sigue horneando la escala del objeto de Blender. Las columnas `user_preferences.auto_scale` y `model_versions.auto_scale` permanecen: una preferencia nueva y cada versión nueva se insertan con `false`, y la generación no las lee. El hash de versión y el de la solicitud ya no incluyen esa bandera. Autorización en [RES-2026-11-12-004](../Audit/resolves/2026-11-12-resolve-quitar-autoescala.md). Documentación: BlenderPlugin ALGORITMOS, MODULOS, ARQUITECTURA, API_Y_DATOS, PARAMETROS, LEEME y OPERACION_Y_PRUEBAS; AppBackend ARQUITECTURA, MODULOS, CONTRATOS, DATABASE y OPERACION_Y_PRUEBAS; AppFrontend ARQUITECTURA; `tests/README.md`.
 
 Pruebas ejecutadas:
-- `.venv\Scripts\python.exe -m unittest tests.geometria.test_exportacion_validada tests.nucleo.test_cache_metricas tests.nucleo.test_compatibilidad_npz_json tests.nucleo.test_wheel tests.e2e.test_carga_generacion_descarga tests.blender.test_rollback_publicacion -v` → 16 OK, 1 omitida (bpy).
-- `.venv\Scripts\python.exe -m unittest tests.aplicacion_web.test_humo_import -v` → 2 OK.
+- `py -3` analizó la sintaxis de los `.py` de `apps`, `tests` y `scripts`: sin errores.
+- `py -3 docs/Agents/Scripts/GenerarIndices.py` y `--comprobar`: catálogos al día y enlaces correctos.
+- `py -3 scripts/EmpaquetarBlender.py`: el ZIP ya no contiene `EscalaMalla.py` ni las claves de rango plausible.
+
+No hay `.venv` ni NumPy en el Python de esta sesión, así que no se ejecutó unittest. No se abrió Blender ni el navegador. No se aplicó una migración: las columnas `auto_scale` siguen en el esquema.
+
+## 2026-11-12 — El `.env` de la raíz lo lee python-dotenv
+
+`Ajustes.Cargar()` deja de parsear el archivo. La ruta ya es fija (`RAIZ / ".env"`, la raíz del monorepo). `load_dotenv` vuelca ese archivo al entorno del proceso sin pisar variables ya definidas, y `Cargar` guarda una copia. Siguen el UTF-8 con o sin BOM y la prioridad del entorno del proceso. Las referencias `$` del archivo ahora se sustituyen. Autorización en [RES-2026-11-12-003](../Audit/resolves/2026-11-12-resolve-dotenv-raiz.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- python-dotenv 1.2.4 en un directorio temporal: con BOM, la variable del proceso gana, una clave nueva entra, `${NUEVA}` se sustituye y el BOM no forma parte del nombre.
+- No había `.env` en la raíz. Se creó uno de prueba, `Cargar()` leyó la clave del archivo y conservó la del proceso, y se borró el archivo.
+- `py -3 docs/Agents/Scripts/GenerarIndices.py`. Una comprobación posterior volvió a marcar `docs/AppBackend/SIMBOLOS.md`: cambiaron las líneas de otros módulos mientras se medía. La ficha de `Ajustes` ya no incluye `_LeerArchivo`.
+
+No hay `.venv` ni `uv` en esta sesión. No se arrancó Reflex, el trabajador ni PostgreSQL.
+
+## 2026-11-12 — `Cargar` lee el YAML con `Path.read_text`
+
+`ConfiguracionBackend.Cargar` sigue devolviendo el `dict` de `yaml.safe_load` sobre `core/config/<area>.yaml`, con la misma caché por proceso. Desaparece el `with`/`open`: `Path.read_text` ya entrega ese texto. No cambia la firma, los llamadores ni el contrato. El archivo sigue auditado; la autorización está en [RES-2026-11-12-002](../Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md) y B-09 queda abierto.
+
+Pruebas ejecutadas:
+- `read_text` y `open` devolvieron el mismo texto en los seis YAML de `core/config/`. Un nombre ausente lanza `FileNotFoundError`.
+
+No se importó `Cargar`: en esta máquina no hay `.venv`, `uv` ni PyYAML para Python 3.15. No se regeneraron los índices: la línea del método no cambia y el contrato tampoco.
+
+## 2026-11-12 — Monorepo `apps` y `core`
+
+La web Reflex queda en `apps/web/` (el paquete Python sigue llamándose `web`). PostgreSQL, Redis y el Compose que ya incluía MinIO y el OIDC de pruebas quedan en `apps/db/`, junto con Alembic y el seed. El complemento queda entero en `apps/ortesis-plugin/GenerateModelsApp/`: Blender lo instala como una carpeta y la web importa ese mismo núcleo. Los YAML del backend y los JSON de geometría pasan a `core/config/`; el empaquetado copia los JSON dentro del ZIP. La autorización de mover archivos auditados está en [RES-2026-11-12-001](../Audit/resolves/2026-11-12-resolve-monorepo.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `py -3 docs/Agents/Scripts/GenerarIndices.py` y `--comprobar`.
+
+No se ejecutó `uv lock` ni `uv sync`: `uv` no está en el PATH de esta sesión. No se arrancó Reflex ni PostgreSQL. `uv.lock` no cambia.
+
+## 2026-11-12 — La clave ausente se avisa dentro de `Variable.__get__`
+
+`VariableFaltante`, `VariableInvalida` y `Ajustes.Faltante` salen de `apps/web/web/Ajustes.py`. Leer una variable obligatoria ausente o vacía lanza `RuntimeError` con «Falta la variable de entorno …»; un prefijo incorrecto lanza `RuntimeError` con el prefijo exigido. `cookie_secure` sigue convirtiendo `ORTESISLAB_COOKIE_SECURE` en bool. Las pruebas de persistencia capturan solo el mensaje de clave ausente para omitirse. Documentación: AppBackend MODULOS, OPERACION_Y_PRUEBAS y ARQUITECTURA. Autorización: [RES-2026-11-12-003](../Audit/resolves/2026-11-12-resolve-ajustes-entorno.md).
+
+Pruebas ejecutadas:
+- Script sobre `Ajustes({})`: clave ausente y URL ausente lanzan `RuntimeError` con «Falta la variable de entorno …»; una URL `postgresql://` lanza el mensaje del prefijo; el defecto de bucket, Redis vacío, `app_url` y `cookie_secure` (`TRUE` y ausente) salen como se declaran. No se imprimieron valores reales.
+- `python docs/Agents/Scripts/GenerarIndices.py` y `--comprobar`.
+
+No se ejecutaron las pruebas de persistencia contra PostgreSQL ni el arranque de la web.
+
+## 2026-11-12 — Base de datos: quitar el diseño obsoleto y dos métodos sin uso
+
+`docs/AppBackend/DATABASE.md` deja de conservar la propuesta de dbmate, el catálogo de objetivos que el Makefile no tiene y el plan de una implementación ya hecha. Conserva la arquitectura y el modelo entidad-relación, alineados con el código: repositorios SQLAlchemy, Alembic, bucket S3, Redis prescindible, `auth_sessions` y `file_assets.object_url`. El grafo muestra solo las relaciones; las columnas van en tablas Markdown, porque las cajas de Mermaid con todos los atributos no cabían en la vista. También quedan los roles y el SQL que Alembic no genera. `OPERACION_Y_PRUEBAS.md` sustituye el recetario de PowerShell por `make db-reset CONFIRM=ELIMINAR`, que recrea `ortesislab_dev` vacía igual que `db-test-reset` recrea la base de pruebas. Se eliminan `RepositorioImports.NombreOriginal` y `RepositorioProyectos.Listar`, que no tenían llamadores; `RepositorioProyectos` deja de heredar `RepositorioBase`.
+
+El generador de índices señaló seis archivos sin descripción previa (workflow de Notion, dos JSON de la auditoría del 2026-10-29 y tres logs de `tests/assets/`); se completaron en `INVENTARIO.md`.
+
+Pruebas ejecutadas:
+- `python docs/Agents/Scripts/GenerarIndices.py` y `--comprobar`.
+
+GNU Make no está en el PATH de esta sesión, así que `db-reset` no se ejecutó. No se ejecutaron pruebas contra PostgreSQL ni el recorrido en navegador: no cambia el esquema ni un flujo de pantalla.
 
 ## 2026-10-13 — Estados y tipos como `StrEnum` en `web/enums/`
 

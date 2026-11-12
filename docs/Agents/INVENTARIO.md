@@ -13,65 +13,127 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [.env.example](../../.env.example) | Plantilla de variables `ORTESISLAB_*` de la aplicación, el trabajador y las pruebas. |
 | [.github/scripts/README.md](../../.github/scripts/README.md) | Automatización: tareas de Notion → issues de GitHub |
 | [.github/scripts/notion_sync_issues.py](../../.github/scripts/notion_sync_issues.py) | Sincroniza tareas de Notion (base Tasksk, proyecto OrtesisLab) -> issues de GitHub. |
-| [.github/workflows/notion-to-issues.yml](../../.github/workflows/notion-to-issues.yml) | Workflow que sincroniza páginas de Notion hacia issues de GitHub. |
-| [.github/workflows/pruebas.yml](../../.github/workflows/pruebas.yml) | CI de pull request: unittest, ruff y compileall. |
+| [.github/workflows/notion-to-issues.yml](../../.github/workflows/notion-to-issues.yml) | Crea una issue de GitHub por cada tarea de Notion aún sin issue y escribe la URL en la tarea. |
+| [.github/workflows/pruebas.yml](../../.github/workflows/pruebas.yml) | Pruebas unitarias, índices y, en un job aparte, PostgreSQL y Redis. |
 | [.gitignore](../../.gitignore) | Excluye entornos, compilación, estados, subidas anteriores, logs y `.env`. |
 | [.python-version](../../.python-version) | Selecciona el intérprete Python del proyecto para uv. |
 | [.vscode/settings.json](../../.vscode/settings.json) | Configuración local de editor; actualmente objeto vacío. |
 | [AGENTS.md](../../AGENTS.md) | Instrucciones Reflex y obligación de mantenimiento documental para agentes. |
 | [CLAUDE.md](../../CLAUDE.md) | Entrada de instrucciones que remite a AGENTS.md. |
-| [GenerateModelsApp.zip](../../GenerateModelsApp.zip) | Distribución Blender; puede no coincidir con fuentes hasta reempaquetar. |
-| [GenerateModelsApp/ApiBlender.py](../../GenerateModelsApp/ApiBlender.py) | API de Blender, separada del núcleo geométrico. |
-| [GenerateModelsApp/Cascaron.py](../../GenerateModelsApp/Cascaron.py) | Recorte de celdas y cascarón de espesor variable. |
-| [GenerateModelsApp/EscalaMalla.py](../../GenerateModelsApp/EscalaMalla.py) | Diagnóstico de unidades para una superficie de ortesis. |
-| [GenerateModelsApp/Excepciones.py](../../GenerateModelsApp/Excepciones.py) | Errores de OrtesisLab. |
-| [GenerateModelsApp/Exportacion.py](../../GenerateModelsApp/Exportacion.py) | Exporta el STL en milímetros y un JSON con parámetros y comprobación. |
-| [GenerateModelsApp/InspeccionNpz.py](../../GenerateModelsApp/InspeccionNpz.py) | Inspección de cabeceras NPY dentro de un NPZ, sin materializar arrays grandes. |
-| [GenerateModelsApp/InstantaneaExportacion.py](../../GenerateModelsApp/InstantaneaExportacion.py) | Instantánea evaluada de mallas Blender y publicación atómica de archivos. |
-| [GenerateModelsApp/Interfaz.py](../../GenerateModelsApp/Interfaz.py) | Panel N y operadores de OrtesisLab en la vista 3D. |
-| [GenerateModelsApp/Malla.py](../../GenerateModelsApp/Malla.py) | Análisis de la superficie abierta, sin Blender. |
-| [GenerateModelsApp/Modeling.py](../../GenerateModelsApp/Modeling.py) | Modelo de impresión y construcción de la geometría. |
-| [GenerateModelsApp/Objeto.py](../../GenerateModelsApp/Objeto.py) | Crea o actualiza el objeto OL_Ortesis en la escena de Blender. |
-| [GenerateModelsApp/OrtesisLab.py](../../GenerateModelsApp/OrtesisLab.py) | Complemento OrtesisLab dentro del paquete. |
-| [GenerateModelsApp/RefinadorMalla.py](../../GenerateModelsApp/RefinadorMalla.py) | Refinamiento triangular independiente de Blender para evaluar patrones. |
-| [GenerateModelsApp/ReparacionMalla.py](../../GenerateModelsApp/ReparacionMalla.py) | Limpieza segura de la superficie base dentro de Blender. |
-| [GenerateModelsApp/SuavizadoBorde.py](../../GenerateModelsApp/SuavizadoBorde.py) | Suavizado del contorno exterior antes de dar espesor. |
-| [GenerateModelsApp/Superficie.py](../../GenerateModelsApp/Superficie.py) | Carga y lectura de la superficie interior dentro de Blender. |
-| [GenerateModelsApp/ValidacionMalla.py](../../GenerateModelsApp/ValidacionMalla.py) | Comprobación geométrica de la malla ya generada. |
-| [GenerateModelsApp/ValidacionSolido.py](../../GenerateModelsApp/ValidacionSolido.py) | Validación de mallas sólidas solo con NumPy (sin Blender). |
-| [GenerateModelsApp/__init__.py](../../GenerateModelsApp/__init__.py) | Paquete del complemento de Blender y del núcleo de geometría. |
-| [GenerateModelsApp/config/comprobacion_geometrica.json](../../GenerateModelsApp/config/comprobacion_geometrica.json) | Mediciones históricas de referencia, no umbrales de aceptación. |
-| [GenerateModelsApp/config/limites.json](../../GenerateModelsApp/config/limites.json) | Umbrales, tolerancias y presupuestos de algoritmos. |
-| [GenerateModelsApp/config/parametros_defecto.json](../../GenerateModelsApp/config/parametros_defecto.json) | Valores iniciales de las 17 opciones geométricas. |
-| [GenerateModelsApp/config/registro.json](../../GenerateModelsApp/config/registro.json) | Niveles de logging y nombre de archivo. |
-| [GenerateModelsApp/consola.py](../../GenerateModelsApp/consola.py) | Punto de entrada de consola ``ortesislab``. |
-| [GenerateModelsApp/constants/Materials.py](../../GenerateModelsApp/constants/Materials.py) | Materiales de impresión. |
-| [GenerateModelsApp/constants/Nombres.py](../../GenerateModelsApp/constants/Nombres.py) | Nombres estables de objetos, atributos y archivos. |
-| [GenerateModelsApp/constants/Paterns.py](../../GenerateModelsApp/constants/Paterns.py) | Patrones de nervadura. |
-| [GenerateModelsApp/constants/__init__.py](../../GenerateModelsApp/constants/__init__.py) | Constantes de OrtesisLab: nombres, patrones, materiales y límites. |
-| [GenerateModelsApp/contratos.py](../../GenerateModelsApp/contratos.py) | Contratos compartidos entre núcleo, Blender y la web. |
-| [GenerateModelsApp/util/Utilidades.py](../../GenerateModelsApp/util/Utilidades.py) | Registro de mensajes y lectura de la carpeta config. |
-| [GenerateModelsApp/util/__init__.py](../../GenerateModelsApp/util/__init__.py) | Utilidades compartidas: registro de ejecución y lectura de JSON. |
-| [Makefile](../../Makefile) | Objetivos de Compose, dbmate, backups, base de pruebas y OIDC de pruebas (`make db-help`). |
+| [Makefile](../../Makefile) | Objetivos de Compose, backups, bases local y de pruebas, y OIDC de pruebas (`make db-help`). |
 | [README.md](../../README.md) | Presentación, instalación y entradas a documentación. |
-| [alembic.ini](../../alembic.ini) | Configuración de Alembic: carpeta `db/alembic`, plantilla de revisiones y logging. La URL la aporta `env.py` desde `Ajustes`. |
-| [assets/README.md](../../assets/README.md) | Assets de la aplicación |
-| [assets/favicon.ico](../../assets/favicon.ico) | Icono del sitio. |
-| [assets/superficie_interior_mm.npz](../../assets/superficie_interior_mm.npz) | Superficie de ejemplo incluida para web y carga explícita legacy. |
-| [assets/vendor/three-0.169.0.module.js](../../assets/vendor/three-0.169.0.module.js) | Three.js 0.169.0 empaquetado para el visor HTML local. |
-| [assets/visor.html](../../assets/visor.html) | Visor Three.js que carga el STL binario desde su `object_url`, cámara e interacción WebGL. |
-| [config/almacen.yaml](../../config/almacen.yaml) | Timeouts de conexión y lectura e intentos del cliente S3. |
-| [config/cache.yaml](../../config/cache.yaml) | TTL, pausa de reintento y timeout de Redis. |
-| [config/persistencia.yaml](../../config/persistencia.yaml) | Conexión PostgreSQL (reintentos, esperas, timeout), cuotas de lotes y límites del historial. |
-| [config/sesion.yaml](../../config/sesion.yaml) | Duración de la sesión y vigencia de la cookie del intercambio OIDC. |
-| [config/trabajador.yaml](../../config/trabajador.yaml) | Lease, latido, supervisión y conciliación del trabajador. |
-| [config/web.yaml](../../config/web.yaml) | Progreso, variantes y tamaños de subida de la app; etiquetas de patrones, ejes y estados. |
-| [db/alembic/env.py](../../db/alembic/env.py) | Entorno de Alembic: migra el esquema ortesislab con el rol migrador. |
-| [db/alembic/script.py.mako](../../db/alembic/script.py.mako) | Plantilla con la que Alembic crea cada archivo de revisión. |
-| [db/alembic/versions/.gitkeep](../../db/alembic/versions/.gitkeep) | Conserva la carpeta de revisiones, vacía en el repositorio. |
-| [db/alembic/versions/20261112_1200_esquema_inicial.py](../../db/alembic/versions/20261112_1200_esquema_inicial.py) | Esquema inicial ortesislab: tablas, trigger de versiones y GRANT. |
-| [db/seeds/development.sql](../../db/seeds/development.sql) | Datos idempotentes de desarrollo para `ortesislab_dev`. |
-| [db/test/preparar_base.sql](../../db/test/preparar_base.sql) | Preparación de la base `ortesislab_test` antes de migrarla. |
+| [alembic.ini](../../alembic.ini) | Configuración de Alembic: carpeta `apps/db/alembic`, plantilla de revisiones y logging. La URL la aporta `env.py` desde `Ajustes`. |
+| [apps/db/.env.example](../../apps/db/.env.example) | Plantilla de secretos, usuarios y puertos de Compose. |
+| [apps/db/.gitattributes](../../apps/db/.gitattributes) | Fuerza LF en scripts, SQL y JSON que se ejecutan en contenedores. |
+| [apps/db/.gitignore](../../apps/db/.gitignore) | Excluye .env y volcados de backups. |
+| [apps/db/alembic/env.py](../../apps/db/alembic/env.py) | Entorno de Alembic: migra el esquema ortesislab con el rol migrador. |
+| [apps/db/alembic/script.py.mako](../../apps/db/alembic/script.py.mako) | Plantilla con la que Alembic crea cada archivo de revisión. |
+| [apps/db/alembic/versions/.gitkeep](../../apps/db/alembic/versions/.gitkeep) | Conserva la carpeta de revisiones de Alembic. |
+| [apps/db/alembic/versions/20261112_1200_esquema_inicial.py](../../apps/db/alembic/versions/20261112_1200_esquema_inicial.py) | Esquema inicial ortesislab: tablas, trigger de versiones y GRANT. |
+| [apps/db/backups/.gitkeep](../../apps/db/backups/.gitkeep) | Conserva la carpeta de volcados; su contenido se ignora. |
+| [apps/db/compose.yaml](../../apps/db/compose.yaml) | PostgreSQL 17, Redis, MinIO, cliente mc y OIDC de pruebas. |
+| [apps/db/init/01_roles.sh](../../apps/db/init/01_roles.sh) | Crea los roles separados al inicializar el volumen de PostgreSQL. |
+| [apps/db/minio/inicializar.sh](../../apps/db/minio/inicializar.sh) | Crea bucket, políticas y cuenta de servicio en MinIO. |
+| [apps/db/minio/politica-aplicacion.json](../../apps/db/minio/politica-aplicacion.json) | Permisos S3 de la cuenta de servicio del backend. |
+| [apps/db/minio/politica-lectura-stl.json](../../apps/db/minio/politica-lectura-stl.json) | Lectura anónima solo de `usuarios/*/assets/*.stl`. |
+| [apps/db/seeds/development.sql](../../apps/db/seeds/development.sql) | Datos idempotentes de desarrollo para ortesislab_dev. |
+| [apps/db/test/preparar_base.sql](../../apps/db/test/preparar_base.sql) | Esquema y permisos de una base vacía antes de migrarla. |
+| [apps/ortesis-plugin/GenerateModelsApp.zip](../../apps/ortesis-plugin/GenerateModelsApp.zip) | ZIP instalable del complemento de Blender. |
+| [apps/ortesis-plugin/GenerateModelsApp/ApiBlender.py](../../apps/ortesis-plugin/GenerateModelsApp/ApiBlender.py) | API de Blender, separada del núcleo geométrico. |
+| [apps/ortesis-plugin/GenerateModelsApp/Cascaron.py](../../apps/ortesis-plugin/GenerateModelsApp/Cascaron.py) | Recorte de celdas y cascarón de espesor variable. |
+| [apps/ortesis-plugin/GenerateModelsApp/Excepciones.py](../../apps/ortesis-plugin/GenerateModelsApp/Excepciones.py) | Errores de OrtesisLab. |
+| [apps/ortesis-plugin/GenerateModelsApp/Exportacion.py](../../apps/ortesis-plugin/GenerateModelsApp/Exportacion.py) | Exporta el STL en milímetros y un JSON con parámetros y comprobación. |
+| [apps/ortesis-plugin/GenerateModelsApp/InspeccionNpz.py](../../apps/ortesis-plugin/GenerateModelsApp/InspeccionNpz.py) | Inspección de cabeceras NPY dentro de un NPZ, sin materializar arrays grandes. |
+| [apps/ortesis-plugin/GenerateModelsApp/InstantaneaExportacion.py](../../apps/ortesis-plugin/GenerateModelsApp/InstantaneaExportacion.py) | Instantánea evaluada de mallas Blender y publicación atómica de archivos. |
+| [apps/ortesis-plugin/GenerateModelsApp/Interfaz.py](../../apps/ortesis-plugin/GenerateModelsApp/Interfaz.py) | Panel N y operadores de OrtesisLab en la vista 3D. |
+| [apps/ortesis-plugin/GenerateModelsApp/Malla.py](../../apps/ortesis-plugin/GenerateModelsApp/Malla.py) | Análisis de la superficie abierta, sin Blender. |
+| [apps/ortesis-plugin/GenerateModelsApp/Modeling.py](../../apps/ortesis-plugin/GenerateModelsApp/Modeling.py) | Modelo de impresión y construcción de la geometría. |
+| [apps/ortesis-plugin/GenerateModelsApp/Objeto.py](../../apps/ortesis-plugin/GenerateModelsApp/Objeto.py) | Crea o actualiza el objeto OL_Ortesis en la escena de Blender. |
+| [apps/ortesis-plugin/GenerateModelsApp/OrtesisLab.py](../../apps/ortesis-plugin/GenerateModelsApp/OrtesisLab.py) | Complemento OrtesisLab dentro del paquete. |
+| [apps/ortesis-plugin/GenerateModelsApp/RefinadorMalla.py](../../apps/ortesis-plugin/GenerateModelsApp/RefinadorMalla.py) | Refinamiento triangular independiente de Blender para evaluar patrones. |
+| [apps/ortesis-plugin/GenerateModelsApp/ReparacionMalla.py](../../apps/ortesis-plugin/GenerateModelsApp/ReparacionMalla.py) | Limpieza segura de la superficie base dentro de Blender. |
+| [apps/ortesis-plugin/GenerateModelsApp/SuavizadoBorde.py](../../apps/ortesis-plugin/GenerateModelsApp/SuavizadoBorde.py) | Suavizado del contorno exterior antes de dar espesor. |
+| [apps/ortesis-plugin/GenerateModelsApp/Superficie.py](../../apps/ortesis-plugin/GenerateModelsApp/Superficie.py) | Carga y lectura de la superficie interior dentro de Blender. |
+| [apps/ortesis-plugin/GenerateModelsApp/ValidacionMalla.py](../../apps/ortesis-plugin/GenerateModelsApp/ValidacionMalla.py) | Comprobación geométrica de la malla ya generada. |
+| [apps/ortesis-plugin/GenerateModelsApp/ValidacionSolido.py](../../apps/ortesis-plugin/GenerateModelsApp/ValidacionSolido.py) | Validación de mallas sólidas solo con NumPy (sin Blender). |
+| [apps/ortesis-plugin/GenerateModelsApp/__init__.py](../../apps/ortesis-plugin/GenerateModelsApp/__init__.py) | Paquete del complemento de Blender y del núcleo de geometría. |
+| [apps/ortesis-plugin/GenerateModelsApp/consola.py](../../apps/ortesis-plugin/GenerateModelsApp/consola.py) | Punto de entrada de consola ``ortesislab``. |
+| [apps/ortesis-plugin/GenerateModelsApp/constants/Materials.py](../../apps/ortesis-plugin/GenerateModelsApp/constants/Materials.py) | Materiales de impresión. |
+| [apps/ortesis-plugin/GenerateModelsApp/constants/Nombres.py](../../apps/ortesis-plugin/GenerateModelsApp/constants/Nombres.py) | Nombres estables de objetos, atributos y archivos. |
+| [apps/ortesis-plugin/GenerateModelsApp/constants/Paterns.py](../../apps/ortesis-plugin/GenerateModelsApp/constants/Paterns.py) | Patrones de nervadura. |
+| [apps/ortesis-plugin/GenerateModelsApp/constants/__init__.py](../../apps/ortesis-plugin/GenerateModelsApp/constants/__init__.py) | Constantes de OrtesisLab: nombres, patrones, materiales y límites. |
+| [apps/ortesis-plugin/GenerateModelsApp/contratos.py](../../apps/ortesis-plugin/GenerateModelsApp/contratos.py) | Contratos compartidos entre núcleo, Blender y la web. |
+| [apps/ortesis-plugin/GenerateModelsApp/util/Utilidades.py](../../apps/ortesis-plugin/GenerateModelsApp/util/Utilidades.py) | Registro de mensajes y lectura de la carpeta config. |
+| [apps/ortesis-plugin/GenerateModelsApp/util/__init__.py](../../apps/ortesis-plugin/GenerateModelsApp/util/__init__.py) | Utilidades compartidas: registro de ejecución y lectura de JSON. |
+| [apps/web/assets/README.md](../../apps/web/assets/README.md) | Assets de la aplicación |
+| [apps/web/assets/favicon.ico](../../apps/web/assets/favicon.ico) | Icono del sitio. |
+| [apps/web/assets/superficie_interior_mm.npz](../../apps/web/assets/superficie_interior_mm.npz) | Superficie de ejemplo incluida para la web. |
+| [apps/web/assets/vendor/three-0.169.0.module.js](../../apps/web/assets/vendor/three-0.169.0.module.js) | Three.js que el visor importa para dibujar el STL. |
+| [apps/web/assets/visor.html](../../apps/web/assets/visor.html) | Visor Three.js que carga el STL binario desde su object_url. |
+| [apps/web/reflex.lock/bun.lock](../../apps/web/reflex.lock/bun.lock) | Resolucion de dependencias del frontend generado. |
+| [apps/web/reflex.lock/package.json](../../apps/web/reflex.lock/package.json) | Dependencias del frontend generado por Reflex. |
+| [apps/web/rxconfig.py](../../apps/web/rxconfig.py) | Marcador de paquete. |
+| [apps/web/web/Ajustes.py](../../apps/web/web/Ajustes.py) | Variables de entorno de OrtesisLab: el único lugar que las declara y las lee. |
+| [apps/web/web/ConfiguracionBackend.py](../../apps/web/web/ConfiguracionBackend.py) | Valores ajustables del backend, leídos de ``core/config/<area>.yaml``. |
+| [apps/web/web/EstadoApp.py](../../apps/web/web/EstadoApp.py) | Estado de la página de comparación. |
+| [apps/web/web/EstadoHistorial.py](../../apps/web/web/EstadoHistorial.py) | Estado de /historial: filtros, cursor y comparación de hasta tres versiones. |
+| [apps/web/web/GeneradorWeb.py](../../apps/web/web/GeneradorWeb.py) | Genera cascarones para la aplicación web. |
+| [apps/web/web/GenerateModelsApp.py](../../apps/web/web/GenerateModelsApp.py) | Aplicación Reflex de comparación de ortesis. |
+| [apps/web/web/LectorSuperficie.py](../../apps/web/web/LectorSuperficie.py) | Lectura de superficies subidas a la aplicación web. |
+| [apps/web/web/PaginaComparacion.py](../../apps/web/web/PaginaComparacion.py) | Pantalla para previsualizar una ortesis o un lote de variantes. |
+| [apps/web/web/PaginaHistorial.py](../../apps/web/web/PaginaHistorial.py) | Pantalla /historial: generaciones del usuario, comparación y restauración. |
+| [apps/web/web/Sesion.py](../../apps/web/web/Sesion.py) | Barra de sesión común a la comparación y al historial. |
+| [apps/web/web/__init__.py](../../apps/web/web/__init__.py) | Aplicación Reflex. |
+| [apps/web/web/cache/CacheRedis.py](../../apps/web/web/cache/CacheRedis.py) | Caché compartida de superficies preparadas. |
+| [apps/web/web/cache/__init__.py](../../apps/web/web/cache/__init__.py) | Marcador de paquete. |
+| [apps/web/web/enums/Archivos.py](../../apps/web/web/enums/Archivos.py) | Tipos y estados de los objetos del bucket registrados en ``file_assets``. |
+| [apps/web/web/enums/Historial.py](../../apps/web/web/enums/Historial.py) | Tipos de evento de ``history_events``. |
+| [apps/web/web/enums/Imports.py](../../apps/web/web/enums/Imports.py) | Origen, estado y formato de una superficie importada (``imports``). |
+| [apps/web/web/enums/Lotes.py](../../apps/web/web/enums/Lotes.py) | Backend de versión, modos de lote y estados de lotes, ítems e intentos. |
+| [apps/web/web/enums/Resultados.py](../../apps/web/web/enums/Resultados.py) | Validación y alcance de ``generation_results`` y formato, unidad y estado de ``exports``. |
+| [apps/web/web/enums/Usuarios.py](../../apps/web/web/enums/Usuarios.py) | Estados de una cuenta de ``app_users``. |
+| [apps/web/web/enums/__init__.py](../../apps/web/web/enums/__init__.py) | Valores cerrados del dominio. Deben coincidir con los ``CHECK`` del esquema. |
+| [apps/web/web/jobs/ConciliadorArchivos.py](../../apps/web/web/jobs/ConciliadorArchivos.py) | Conciliación entre filas de ``file_assets`` y objetos del bucket. |
+| [apps/web/web/jobs/TrabajadorGeneracion.py](../../apps/web/web/jobs/TrabajadorGeneracion.py) | Trabajador de generación: un ítem a la vez, con lease y latido. |
+| [apps/web/web/jobs/__init__.py](../../apps/web/web/jobs/__init__.py) | Marcador de paquete. |
+| [apps/web/web/persistence/ConexionPostgres.py](../../apps/web/web/persistence/ConexionPostgres.py) | Motor SQLAlchemy y sesiones por proceso. |
+| [apps/web/web/persistence/Contratos.py](../../apps/web/web/persistence/Contratos.py) | DTO y errores de la persistencia. No son entidades ORM. |
+| [apps/web/web/persistence/Modelos.py](../../apps/web/web/persistence/Modelos.py) | Modelos declarativos de SQLAlchemy del esquema ``ortesislab``. |
+| [apps/web/web/persistence/__init__.py](../../apps/web/web/persistence/__init__.py) | Acceso a PostgreSQL con SQLAlchemy 2.0; el esquema se versiona con Alembic. |
+| [apps/web/web/persistence/repositorios/Consultas.py](../../apps/web/web/persistence/repositorios/Consultas.py) | Tablas y fragmentos de consulta que comparten varios repositorios. |
+| [apps/web/web/persistence/repositorios/RepositorioAssets.py](../../apps/web/web/persistence/repositorios/RepositorioAssets.py) | Filas de ``file_assets``: el contenido vive en el bucket. |
+| [apps/web/web/persistence/repositorios/RepositorioBase.py](../../apps/web/web/persistence/repositorios/RepositorioBase.py) | Clase padre de los repositorios: lectura de filas y conversión a DTO. |
+| [apps/web/web/persistence/repositorios/RepositorioHistorial.py](../../apps/web/web/persistence/repositorios/RepositorioHistorial.py) | Eventos de historial y listado de ejecuciones por versión. |
+| [apps/web/web/persistence/repositorios/RepositorioImports.py](../../apps/web/web/persistence/repositorios/RepositorioImports.py) | Importaciones de superficies: original recibido y NPZ normalizado. |
+| [apps/web/web/persistence/repositorios/RepositorioLotes.py](../../apps/web/web/persistence/repositorios/RepositorioLotes.py) | Lotes, ítems y cola del trabajador: admisión, reserva, lease y cierre. |
+| [apps/web/web/persistence/repositorios/RepositorioPreferencias.py](../../apps/web/web/persistence/repositorios/RepositorioPreferencias.py) | Preferencias por usuario con control optimista de revisión. |
+| [apps/web/web/persistence/repositorios/RepositorioProyectos.py](../../apps/web/web/persistence/repositorios/RepositorioProyectos.py) | Proyectos del usuario; cada cuenta tiene uno predeterminado. |
+| [apps/web/web/persistence/repositorios/RepositorioResultados.py](../../apps/web/web/persistence/repositorios/RepositorioResultados.py) | Resultados geométricos, intentos de una versión y exports STL. |
+| [apps/web/web/persistence/repositorios/RepositorioUsuarios.py](../../apps/web/web/persistence/repositorios/RepositorioUsuarios.py) | Cuentas creadas desde OIDC y sus sesiones de servidor. |
+| [apps/web/web/persistence/repositorios/RepositorioVersiones.py](../../apps/web/web/persistence/repositorios/RepositorioVersiones.py) | Versiones inmutables numeradas por proyecto. |
+| [apps/web/web/persistence/repositorios/__init__.py](../../apps/web/web/persistence/repositorios/__init__.py) | Repositorios SQLAlchemy, uno por archivo. Reciben una ``Session`` ya abierta y no hacen commit. |
+| [apps/web/web/services/AutenticacionOidc.py](../../apps/web/web/services/AutenticacionOidc.py) | Rutas OIDC del backend: /auth/login, /auth/callback y /auth/logout. |
+| [apps/web/web/services/ContextoUsuario.py](../../apps/web/web/services/ContextoUsuario.py) | Principal autenticado de cada operación. |
+| [apps/web/web/services/GeneradorGeometrico.py](../../apps/web/web/services/GeneradorGeometrico.py) | Construcción numérica de una versión: métricas, STL y JSON de parámetros. |
+| [apps/web/web/services/ServicioHistorial.py](../../apps/web/web/services/ServicioHistorial.py) | Historial por usuario: listado paginado, detalle, restauración y reintento. |
+| [apps/web/web/services/ServicioImports.py](../../apps/web/web/services/ServicioImports.py) | Importación de superficies: original y NPZ normalizado en el bucket. |
+| [apps/web/web/services/ServicioLotes.py](../../apps/web/web/services/ServicioLotes.py) | Admisión de lotes, progreso y transiciones del trabajador. |
+| [apps/web/web/services/ServicioPreferencias.py](../../apps/web/web/services/ServicioPreferencias.py) | Preferencias por usuario con control optimista de revisión. |
+| [apps/web/web/services/ServicioVersiones.py](../../apps/web/web/services/ServicioVersiones.py) | Versiones inmutables: snapshot de parámetros, material y escala. |
+| [apps/web/web/services/__init__.py](../../apps/web/web/services/__init__.py) | Marcador de paquete. |
+| [apps/web/web/storage/AlmacenamientoPrivado.py](../../apps/web/web/storage/AlmacenamientoPrivado.py) | Contrato del almacén de bytes y claves de objeto. |
+| [apps/web/web/storage/StorageS3.py](../../apps/web/web/storage/StorageS3.py) | Almacén de bytes en un bucket S3 (MinIO en desarrollo). |
+| [apps/web/web/storage/__init__.py](../../apps/web/web/storage/__init__.py) | Marcador de paquete. |
+| [core/config/almacen.yaml](../../core/config/almacen.yaml) | Timeouts de conexion y lectura e intentos del cliente S3. |
+| [core/config/cache.yaml](../../core/config/cache.yaml) | TTL, pausa de reintento y timeout de Redis. |
+| [core/config/comprobacion_geometrica.json](../../core/config/comprobacion_geometrica.json) | Mediciones historicas de referencia, no umbrales de aceptacion. |
+| [core/config/limites.json](../../core/config/limites.json) | Umbrales, tolerancias y presupuestos de algoritmos. |
+| [core/config/parametros_defecto.json](../../core/config/parametros_defecto.json) | Valores iniciales de las 17 opciones geometricas. |
+| [core/config/persistencia.yaml](../../core/config/persistencia.yaml) | Conexion PostgreSQL, cuotas de lotes y limites del historial. |
+| [core/config/registro.json](../../core/config/registro.json) | Niveles de logging y nombre de archivo. |
+| [core/config/sesion.yaml](../../core/config/sesion.yaml) | Duracion de la sesion y vigencia de la cookie del intercambio OIDC. |
+| [core/config/trabajador.yaml](../../core/config/trabajador.yaml) | Lease, latido, supervision y conciliacion del trabajador. |
+| [core/config/web.yaml](../../core/config/web.yaml) | Progreso, variantes, tamanos de subida y etiquetas de la app. |
 | [docs/Agents/ESTANDAR_DOCUMENTACION.md](ESTANDAR_DOCUMENTACION.md) | Estándar documental |
 | [docs/Agents/GUIA_REFLEX.md](GUIA_REFLEX.md) | Reflex Documentation |
 | [docs/Agents/INVENTARIO.md](INVENTARIO.md) | Inventario de carpetas y archivos propios (instantánea). |
@@ -81,7 +143,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Agents/Scripts/GenerarIndices.py](Scripts/GenerarIndices.py) | Regenera los catálogos de hechos de la documentación y comprueba enlaces. |
 | [docs/AppBackend/ARQUITECTURA.md](../AppBackend/ARQUITECTURA.md) | Arquitectura interna de AppBackend |
 | [docs/AppBackend/CONTRATOS.md](../AppBackend/CONTRATOS.md) | Contratos de AppBackend |
-| [docs/AppBackend/DATABASE.md](../AppBackend/DATABASE.md) | DATABASE — PostgreSQL, versiones e historial |
+| [docs/AppBackend/DATABASE.md](../AppBackend/DATABASE.md) | Base de datos |
 | [docs/AppBackend/MODULOS.md](../AppBackend/MODULOS.md) | Carpetas y archivos de AppBackend |
 | [docs/AppBackend/OPERACION_Y_PRUEBAS.md](../AppBackend/OPERACION_Y_PRUEBAS.md) | Operación y pruebas del backend |
 | [docs/AppBackend/README.md](../AppBackend/README.md) | AppBackend |
@@ -111,8 +173,8 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/audits/2026-10-29-documentacion/identidad/proyecto.md](../Audit/audits/2026-10-29-documentacion/identidad/proyecto.md) | Identidad del proyecto |
 | [docs/Audit/audits/2026-10-29-documentacion/infraestructura/entorno-local.md](../Audit/audits/2026-10-29-documentacion/infraestructura/entorno-local.md) | Infraestructura · Entorno local, base de datos y operación |
 | [docs/Audit/audits/2026-10-29-documentacion/nucleo-blender/modulos.md](../Audit/audits/2026-10-29-documentacion/nucleo-blender/modulos.md) | Núcleo geométrico y complemento Blender · Catálogo por módulo y función |
-| [docs/Audit/audits/2026-10-29-evidencias.json](../Audit/audits/2026-10-29-evidencias.json) | Evidencias ejecutadas de la auditoría AUD-2026-10-29-002. |
-| [docs/Audit/audits/2026-10-29-inventario.json](../Audit/audits/2026-10-29-inventario.json) | Inventario congelado de archivos de AUD-2026-10-29-002. |
+| [docs/Audit/audits/2026-10-29-evidencias.json](../Audit/audits/2026-10-29-evidencias.json) | Resultados observados en AUD-2026-10-29-002; no cierran hallazgos. |
+| [docs/Audit/audits/2026-10-29-inventario.json](../Audit/audits/2026-10-29-inventario.json) | Inventario y huellas de los archivos de AUD-2026-10-29-002. |
 | [docs/Audit/audits/README.md](../Audit/audits/README.md) | Auditorías |
 | [docs/Audit/resolves/2026-10-13-firmas-base.json](../Audit/resolves/2026-10-13-firmas-base.json) | Instantánea AST de las 69 firmas públicas de los archivos auditados. |
 | [docs/Audit/resolves/2026-10-13-resolve-organizar-pruebas.md](../Audit/resolves/2026-10-13-resolve-organizar-pruebas.md) | RES-2026-10-13-002 — Orden de pruebas y assets de prueba |
@@ -129,8 +191,13 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-issue-b-cierre-parcial-a.md](../Audit/resolves/2026-11-12-issue-b-cierre-parcial-a.md) | RES-2026-11-12-B-A — Cierre parcial hallazgos B (tramo A) |
 | [docs/Audit/resolves/2026-11-12-issue-b-cierre-parcial-b.md](../Audit/resolves/2026-11-12-issue-b-cierre-parcial-b.md) | RES-2026-11-12-B-B — Cierre parcial hallazgos B (tramo B) |
 | [docs/Audit/resolves/2026-11-12-issue-b-indice.md](../Audit/resolves/2026-11-12-issue-b-indice.md) | Índice de cierre — AUD-2026-10-29-002 (hallazgos B) |
+| [docs/Audit/resolves/2026-11-12-resolve-ajustes-entorno.md](../Audit/resolves/2026-11-12-resolve-ajustes-entorno.md) | RES-2026-11-12-001 — Aviso de clave ausente dentro de `Variable.__get__` |
 | [docs/Audit/resolves/2026-11-12-resolve-aud-2026-10-29.md](../Audit/resolves/2026-11-12-resolve-aud-2026-10-29.md) | RES-2026-11-12-002 — Cierre hallazgos AUD-2026-10-29-002 (B-01…B-22) |
 | [docs/Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md](../Audit/resolves/2026-11-12-resolve-cierre-issues-auditoria.md) | RES-2026-11-12-001 — Cierre de issues AUD-2026-10-13-001 (plan autorizado) |
+| [docs/Audit/resolves/2026-11-12-resolve-dotenv-raiz.md](../Audit/resolves/2026-11-12-resolve-dotenv-raiz.md) | RES-2026-11-12-003 — Cargar el .env de la raíz con python-dotenv |
+| [docs/Audit/resolves/2026-11-12-resolve-monorepo.md](../Audit/resolves/2026-11-12-resolve-monorepo.md) | RES-2026-11-12-001 — Reubicar el repositorio como monorepo |
+| [docs/Audit/resolves/2026-11-12-resolve-quitar-autoescala.md](../Audit/resolves/2026-11-12-resolve-quitar-autoescala.md) | RES-2026-11-12-004 — Quitar el autoescalado de coordenadas |
+| [docs/Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md](../Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md) | RES-2026-11-12-001 — Lectura directa del YAML en `Cargar` |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
 | [docs/BlenderPlugin/ALGORITMOS.md](../BlenderPlugin/ALGORITMOS.md) | Algoritmos de generación y comprobación |
 | [docs/BlenderPlugin/API_Y_DATOS.md](../BlenderPlugin/API_Y_DATOS.md) | API Python, contratos y datos de Blender |
@@ -143,19 +210,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/BlenderPlugin/README.md](../BlenderPlugin/README.md) | BlenderPlugin |
 | [docs/BlenderPlugin/SIMBOLOS.md](../BlenderPlugin/SIMBOLOS.md) | Índice de símbolos del paquete Blender y núcleo (instantánea). |
 | [docs/README.md](../README.md) | Documentación de OrtesisLab |
-| [infra/database/.env.example](../../infra/database/.env.example) | Plantilla de secretos, usuarios y puertos de Compose. |
-| [infra/database/.gitattributes](../../infra/database/.gitattributes) | Fuerza LF en scripts, SQL y JSON que se ejecutan en contenedores. |
-| [infra/database/.gitignore](../../infra/database/.gitignore) | Excluye `.env` y volcados de backups. |
-| [infra/database/backups/.gitkeep](../../infra/database/backups/.gitkeep) | Conserva la carpeta de volcados; su contenido se ignora. |
-| [infra/database/compose.yaml](../../infra/database/compose.yaml) | PostgreSQL 17, MinIO, Redis, dbmate, cliente `mc` y OIDC de pruebas. |
-| [infra/database/init/01_roles.sh](../../infra/database/init/01_roles.sh) | Crea los roles separados al inicializar el volumen de PostgreSQL. |
-| [infra/database/minio/inicializar.sh](../../infra/database/minio/inicializar.sh) | Crea bucket, políticas y cuenta de servicio en MinIO. |
-| [infra/database/minio/politica-aplicacion.json](../../infra/database/minio/politica-aplicacion.json) | Permisos S3 de la cuenta de servicio del backend. |
-| [infra/database/minio/politica-lectura-stl.json](../../infra/database/minio/politica-lectura-stl.json) | Lectura anónima solo de `usuarios/*/assets/*.stl`. |
 | [pyproject.toml](../../pyproject.toml) | Metadata Python, dependencias, build y comando de consola. |
-| [reflex.lock/bun.lock](../../reflex.lock/bun.lock) | Resolución reproducible de dependencias JavaScript. |
-| [reflex.lock/package.json](../../reflex.lock/package.json) | Dependencias y scripts JavaScript del frontend generado. |
-| [rxconfig.py](../../rxconfig.py) | Configuración Reflex, módulo web, plugins y tema. |
 | [scripts/EjecutarOrtesisLab.py](../../scripts/EjecutarOrtesisLab.py) | Script para abrir el complemento dentro de Blender. |
 | [scripts/EjecutarTrabajador.py](../../scripts/EjecutarTrabajador.py) | Proceso trabajador de OrtesisLab: cola de generación y conciliación. |
 | [scripts/EmpaquetarBlender.py](../../scripts/EmpaquetarBlender.py) | Genera el ZIP instalable de Blender, sin Reflex, logs ni la base v5. |
@@ -168,10 +223,10 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [tests/aplicacion_web/test_generador_web.py](../../tests/aplicacion_web/test_generador_web.py) | Comprueba el lote y el STL sin abrir Blender ni la superficie real. |
 | [tests/aplicacion_web/test_humo_import.py](../../tests/aplicacion_web/test_humo_import.py) | Humo: la web y el trabajador deben importar sin ImportError. |
 | [tests/assets/Test.stl](../../tests/assets/Test.stl) | Superficie STL de entrada para las pruebas. |
-| [tests/assets/blender_ejecucion.log](../../tests/assets/blender_ejecucion.log) | Log histórico de una corrida Blender; no es prueba actual. |
-| [tests/assets/nucleo_ejecucion.log](../../tests/assets/nucleo_ejecucion.log) | Log histórico de una corrida del núcleo; no es prueba actual. |
+| [tests/assets/blender_ejecucion.log](../../tests/assets/blender_ejecucion.log) | Log histórico de una ejecución del complemento en Blender. |
+| [tests/assets/nucleo_ejecucion.log](../../tests/assets/nucleo_ejecucion.log) | Log histórico de las pruebas del núcleo geométrico. |
 | [tests/assets/resultado_blender.json](../../tests/assets/resultado_blender.json) | Resultado histórico de una ejecución en Blender; no valida la versión actual. |
-| [tests/assets/zip_ejecucion.log](../../tests/assets/zip_ejecucion.log) | Log histórico del empaquetado ZIP de Blender; no es prueba actual. |
+| [tests/assets/zip_ejecucion.log](../../tests/assets/zip_ejecucion.log) | Log histórico del empaquetado del complemento. |
 | [tests/blender/__init__.py](../../tests/blender/__init__.py) | Scripts de integración que ejecuta Blender; unittest no los recoge. |
 | [tests/blender/blender_paquete_zip.py](../../tests/blender/blender_paquete_zip.py) | Comprueba el paquete distribuido en aislamiento, sin assets ni Reflex. |
 | [tests/blender/blender_superficie_abierta.py](../../tests/blender/blender_superficie_abierta.py) | Ejecutar con Blender --background --factory-startup --python-exit-code 1 --python este_archivo. |
@@ -182,7 +237,6 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [tests/e2e/test_dos_sesiones.py](../../tests/e2e/test_dos_sesiones.py) | Aislamiento de claves por usuario en el bucket. |
 | [tests/geometria/__init__.py](../../tests/geometria/__init__.py) | Pruebas de escala, refinamiento, suavizado de borde y espesor. |
 | [tests/geometria/test_carga_presupuesto.py](../../tests/geometria/test_carga_presupuesto.py) | Presupuestos de carga NPZ y validación de límites (A-01, A-03, A-11). |
-| [tests/geometria/test_escala_malla.py](../../tests/geometria/test_escala_malla.py) | Diagnóstico de unidades de una superficie antes de usar Blender. |
 | [tests/geometria/test_exportacion_validada.py](../../tests/geometria/test_exportacion_validada.py) | Validación numérica previa a STL web. |
 | [tests/geometria/test_normales_topologia.py](../../tests/geometria/test_normales_topologia.py) | Regresiones A-04, A-05, A-06, A-14, A-16 y A-22 (fixtures sintéticas). |
 | [tests/geometria/test_refinador_malla.py](../../tests/geometria/test_refinador_malla.py) | Refinamiento de patrones web sin depender de Blender. |
@@ -203,82 +257,31 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [tests/persistencia/test_propiedad_datos.py](../../tests/persistencia/test_propiedad_datos.py) | Propiedad de los datos y permisos de rol sobre PostgreSQL real. |
 | [tests/persistencia/test_superficie_no_estatica.py](../../tests/persistencia/test_superficie_no_estatica.py) | A-02: el import no escribe en uploaded_files/ servido por Reflex. |
 | [uv.lock](../../uv.lock) | Resoluciones reproducibles de dependencias Python. |
-| [web/Ajustes.py](../../web/Ajustes.py) | Configuración de servidor de la persistencia, leída del entorno. |
-| [web/ConfiguracionBackend.py](../../web/ConfiguracionBackend.py) | Valores ajustables del backend, leídos de ``config/<area>.yaml`` en la raíz. |
-| [web/EstadoApp.py](../../web/EstadoApp.py) | Estado de la página de comparación. |
-| [web/EstadoHistorial.py](../../web/EstadoHistorial.py) | Estado de /historial: filtros, cursor y comparación de hasta tres versiones. |
-| [web/GeneradorWeb.py](../../web/GeneradorWeb.py) | Genera cascarones para la aplicación web. |
-| [web/GenerateModelsApp.py](../../web/GenerateModelsApp.py) | Aplicación Reflex de comparación de ortesis. |
-| [web/LectorSuperficie.py](../../web/LectorSuperficie.py) | Lectura de superficies subidas a la aplicación web. |
-| [web/PaginaComparacion.py](../../web/PaginaComparacion.py) | Pantalla para previsualizar una ortesis o un lote de variantes. |
-| [web/PaginaHistorial.py](../../web/PaginaHistorial.py) | Pantalla /historial: generaciones del usuario, comparación y restauración. |
-| [web/Sesion.py](../../web/Sesion.py) | Barra de sesión común a la comparación y al historial. |
-| [web/__init__.py](../../web/__init__.py) | Aplicación Reflex. |
-| [web/cache/CacheRedis.py](../../web/cache/CacheRedis.py) | Caché compartida de superficies preparadas. |
-| [web/cache/__init__.py](../../web/cache/__init__.py) | Marcador de paquete. |
-| [web/enums/Archivos.py](../../web/enums/Archivos.py) | Tipos y estados de los objetos del bucket registrados en ``file_assets``. |
-| [web/enums/Historial.py](../../web/enums/Historial.py) | Tipos de evento de ``history_events``. |
-| [web/enums/Imports.py](../../web/enums/Imports.py) | Origen, estado y formato de una superficie importada (``imports``). |
-| [web/enums/Lotes.py](../../web/enums/Lotes.py) | Backend de versión, modos de lote y estados de lotes, ítems e intentos. |
-| [web/enums/Resultados.py](../../web/enums/Resultados.py) | Validación y alcance de ``generation_results`` y formato, unidad y estado de ``exports``. |
-| [web/enums/Usuarios.py](../../web/enums/Usuarios.py) | Estados de una cuenta de ``app_users``. |
-| [web/enums/__init__.py](../../web/enums/__init__.py) | Valores cerrados del dominio. Deben coincidir con los ``CHECK`` del esquema. |
-| [web/jobs/ConciliadorArchivos.py](../../web/jobs/ConciliadorArchivos.py) | Conciliación entre filas de ``file_assets`` y objetos del bucket. |
-| [web/jobs/TrabajadorGeneracion.py](../../web/jobs/TrabajadorGeneracion.py) | Trabajador de generación: un ítem a la vez, con lease y latido. |
-| [web/jobs/__init__.py](../../web/jobs/__init__.py) | Marcador de paquete. |
-| [web/persistence/ConexionPostgres.py](../../web/persistence/ConexionPostgres.py) | Pool síncrono de Psycopg por proceso. |
-| [web/persistence/Contratos.py](../../web/persistence/Contratos.py) | DTO y errores de la persistencia. No son entidades ORM. |
-| [web/persistence/Modelos.py](../../web/persistence/Modelos.py) | Modelos declarativos de SQLAlchemy del esquema ``ortesislab``. |
-| [web/persistence/__init__.py](../../web/persistence/__init__.py) | Acceso a PostgreSQL con SQL parametrizado, sin ORM. |
-| [web/persistence/repositorios/Consultas.py](../../web/persistence/repositorios/Consultas.py) | Tablas y fragmentos de consulta que comparten varios repositorios. |
-| [web/persistence/repositorios/RepositorioAssets.py](../../web/persistence/repositorios/RepositorioAssets.py) | Filas de ``file_assets``: el contenido vive en el bucket. |
-| [web/persistence/repositorios/RepositorioBase.py](../../web/persistence/repositorios/RepositorioBase.py) | Clase padre de los repositorios: lectura de filas y conversión a DTO. |
-| [web/persistence/repositorios/RepositorioHistorial.py](../../web/persistence/repositorios/RepositorioHistorial.py) | Eventos de historial y listado de ejecuciones por versión. |
-| [web/persistence/repositorios/RepositorioImports.py](../../web/persistence/repositorios/RepositorioImports.py) | Importaciones de superficies: original recibido y NPZ normalizado. |
-| [web/persistence/repositorios/RepositorioLotes.py](../../web/persistence/repositorios/RepositorioLotes.py) | Lotes, ítems y cola del trabajador: admisión, reserva, lease y cierre. |
-| [web/persistence/repositorios/RepositorioPreferencias.py](../../web/persistence/repositorios/RepositorioPreferencias.py) | Preferencias por usuario con control optimista de revisión. |
-| [web/persistence/repositorios/RepositorioProyectos.py](../../web/persistence/repositorios/RepositorioProyectos.py) | Proyectos del usuario; cada cuenta tiene uno predeterminado. |
-| [web/persistence/repositorios/RepositorioResultados.py](../../web/persistence/repositorios/RepositorioResultados.py) | Resultados geométricos, intentos de una versión y exports STL. |
-| [web/persistence/repositorios/RepositorioUsuarios.py](../../web/persistence/repositorios/RepositorioUsuarios.py) | Cuentas creadas desde OIDC y sus sesiones de servidor. |
-| [web/persistence/repositorios/RepositorioVersiones.py](../../web/persistence/repositorios/RepositorioVersiones.py) | Versiones inmutables numeradas por proyecto. |
-| [web/persistence/repositorios/__init__.py](../../web/persistence/repositorios/__init__.py) | Repositorios SQLAlchemy, uno por archivo. Reciben una ``Session`` ya abierta y no hacen commit. |
-| [web/services/AutenticacionOidc.py](../../web/services/AutenticacionOidc.py) | Rutas OIDC del backend: /auth/login, /auth/callback y /auth/logout. |
-| [web/services/ContextoUsuario.py](../../web/services/ContextoUsuario.py) | Principal autenticado de cada operación. |
-| [web/services/GeneradorGeometrico.py](../../web/services/GeneradorGeometrico.py) | Construcción numérica de una versión: métricas, STL y JSON de parámetros. |
-| [web/services/ServicioHistorial.py](../../web/services/ServicioHistorial.py) | Historial por usuario: listado paginado, detalle, restauración y reintento. |
-| [web/services/ServicioImports.py](../../web/services/ServicioImports.py) | Importación de superficies: original y NPZ normalizado en el bucket. |
-| [web/services/ServicioLotes.py](../../web/services/ServicioLotes.py) | Admisión de lotes, progreso y transiciones del trabajador. |
-| [web/services/ServicioPreferencias.py](../../web/services/ServicioPreferencias.py) | Preferencias por usuario con control optimista de revisión. |
-| [web/services/ServicioVersiones.py](../../web/services/ServicioVersiones.py) | Versiones inmutables: snapshot de parámetros, material y escala. |
-| [web/services/__init__.py](../../web/services/__init__.py) | Marcador de paquete. |
-| [web/storage/AlmacenamientoPrivado.py](../../web/storage/AlmacenamientoPrivado.py) | Contrato del almacén de bytes y claves de objeto. |
-| [web/storage/StorageS3.py](../../web/storage/StorageS3.py) | Almacén de bytes en un bucket S3 (MinIO en desarrollo). |
-| [web/storage/__init__.py](../../web/storage/__init__.py) | Marcador de paquete. |
 
 ## Carpetas y artefactos locales
 
 | Carpeta | Propósito y mantenimiento |
 |---|---|
-| `web/` | Aplicación Reflex: entrada, páginas, estado, lectores y generador web |
-| `db/` | Migraciones dbmate, volcado del esquema, seed de desarrollo y preparación de pruebas |
-| `infra/database/` | Compose, roles, políticas de MinIO y backups locales |
-| `web/persistence/`, `web/services/`, `web/storage/`, `web/cache/`, `web/jobs/` | Persistencia, servicios, bucket, caché Redis y trabajador |
-| `GenerateModelsApp/` | Núcleo común y adaptadores Blender; subcarpetas constants, config y util |
+| `apps/web/` | Aplicación Reflex: paquete `web`, `rxconfig.py` y assets del visor |
+| `apps/db/` | PostgreSQL, Redis, MinIO, OIDC de pruebas, Alembic y seed |
+| `apps/ortesis-plugin/` | Complemento de Blender (`GenerateModelsApp`) y su ZIP |
+| `core/config/` | YAML del backend y JSON de geometría que comparten la web y el complemento |
+| `apps/web/web/persistence/`, `services/`, `storage/`, `cache/`, `jobs/` | Persistencia, servicios, bucket, caché Redis y trabajador |
 | `src/generatemodelsapp/` | Entrada del comando de saludo empaquetado por uv |
 | `scripts/` | Lanzadores, empaquetado, trabajador y migración de subidas |
 | `tests/` | Pruebas Python, integraciones Blender, fixture y evidencia histórica |
-| `assets/` | Visor, favicon y superficie incluida; external/ ignorado contiene assets externos generados |
+| `apps/web/assets/` | Visor, favicon y superficie incluida; external/ ignorado contiene assets externos generados |
 | `docs/` | README de carpetas, AppBackend, AppFrontend, BlenderPlugin, Agents y registros de audit |
 | `docs/Agents/` | Mantenimiento con agentes, estándar, inventario, referencia Reflex y cambios |
 | `.agents/skills/` | Instrucciones Reflex versionadas; no lógica de producto |
 | `.codegraph/` | Índice local de navegación; no reindexar sin decisión del usuario |
 | `.vscode/` | Preferencias de editor |
-| `reflex.lock/` | Dependencias frontend reproducibles |
+| `apps/web/reflex.lock/` | Dependencias frontend reproducibles |
 | `.venv/` | Intérprete/dependencias Python instaladas; regenerar con uv |
 | `__pycache__/` | Bytecode Python regenerable; nunca fuente |
 | `.states/` | Artefactos de estado Reflex; no historial de dominio |
 | `uploaded_files/` | Subidas de la arquitectura anterior; `scripts/MigrarSubidas.py` las traslada al bucket y las borra |
-| `GenerateModelsApp/logs/` | Logs de ejecución del dominio |
+| `apps/ortesis-plugin/GenerateModelsApp/logs/` | Logs de ejecución del dominio |
 | `dist/` | Copias/ensayos de distribución; incluye ZIP anteriores y extracciones temporales de pruebas; no fuente vigente |
 
 ## `.web/`: árbol generado

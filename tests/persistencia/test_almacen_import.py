@@ -44,10 +44,10 @@ class ImportAlBucket(unittest.TestCase):
 
     def test_importa_original_y_npz_con_url_y_hash(self):
         contenido = Placa()
-        importacion, info = ServicioImports.Importar(self.a, "pieza.stl", contenido, autoescalar=True)
+        importacion, info = ServicioImports.Importar(self.a, "pieza.stl", contenido)
         self.assertEqual(importacion.status, "ready")
         self.assertEqual(importacion.format, "stl_binary")
-        self.assertEqual(info["factor_escala"], 100)
+        self.assertEqual(info["dimensiones"], "1.0 × 1.0 × 0.0 mm")
         self.assertEqual((info["vertices"], info["caras"]), (4, 2))
         with Conectar() as conexion:
             original = RepositorioAssets.Obtener(conexion, self.a.user_id, importacion.original_asset_id)

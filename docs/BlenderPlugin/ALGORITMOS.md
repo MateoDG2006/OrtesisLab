@@ -29,7 +29,7 @@ La web omite C para `SOLID`, entrega métricas/STL directamente y no ejecuta O. 
 
 ## 2. Validación, normales y distancia geodésica
 
-Fuente: [`AnalizadorMalla`](../../GenerateModelsApp/Malla.py).
+Fuente: [`AnalizadorMalla`](../../apps/ortesis-plugin/GenerateModelsApp/Malla.py).
 
 Cada triángulo aporta tres aristas dirigidas. Al ordenar sus extremos se cuentan incidencias: una significa contorno, dos interior y más de dos es no manifold. Si no hay contorno se rechaza como sólido cerrado. Repetir una arista dirigida indica orientación inconsistente. Se detectan triángulos duplicados ordenando sus índices; se verifica área, finitud, índices y ausencia de vértices sueltos. Cada vértice del contorno debe tener grado dos de contorno. Un recorrido de adyacencia exige una sola componente.
 
@@ -37,13 +37,11 @@ Normal por vértice: sumar `cross(p_b-p_a, p_c-p_a)` de caras incidentes y norma
 
 Distancia `b_i`: **Dijkstra multifuente** con todos los vértices de contorno a distancia cero, pesos igual a longitud de arista y cola de prioridad `heapq`. Es una aproximación geodésica discreta por aristas, no un solver continuo sobre triángulos. Su etapa de caminos tiene complejidad aproximada `O((V+E) log V)` y memoria `O(V+E)`; la extracción de aristas con `np.unique` añade ordenación.
 
-## 3. Interpretación de unidades y refinamiento
+## 3. Refinamiento
 
-Fuente: [`EscalaMalla`](../../GenerateModelsApp/EscalaMalla.py), [`RefinadorMalla`](../../GenerateModelsApp/RefinadorMalla.py).
+Fuente: [`RefinadorMalla`](../../apps/ortesis-plugin/GenerateModelsApp/RefinadorMalla.py).
 
-La escala no procede de metadatos STL. Se mide `max(ptp(p, axis=0))` y se buscan factores `10^k`, `k ∈ [-6,6]`, que la dejen entre 20 y 1000 mm. Se prioriza la menor corrección decimal (en empate, exponente positivo). Si ya está dentro del rango se prefiere 1, salvo que el alcance del paso por rondas requiera otra escala plausible. Es una heurística; una pieza pequeña real puede interpretarse como un error de unidades. Desactivar autoescala aplica 1 y conserva la sugerencia.
-
-`Aplicar` filtra factores alcanzables en como máximo 16 mitades y puede reintentar factores menores que sigan dentro del rango si ocurre un error específico de paso. `Presupuesto` estima crecimiento por cuatro, pero solo informa: alcanzar el límite de vértices **no encoge** automáticamente la pieza. `Resolver` es el diagnóstico simple sin ejecutar refinamiento.
+Las coordenadas del archivo se usan tal como llegan. No hay corrección decimal ni cambio de tamaño para acercar el eje mayor a un rango.
 
 Paso efectivo:
 
@@ -58,7 +56,7 @@ Límites: 16 rondas y presupuesto de 500 000 vértices para añadir nuevos punto
 
 ## 4. Suavizado del contorno exterior
 
-Fuente: [`SuavizadoBorde`](../../GenerateModelsApp/SuavizadoBorde.py).
+Fuente: [`SuavizadoBorde`](../../apps/ortesis-plugin/GenerateModelsApp/SuavizadoBorde.py).
 
 Se recorren aristas de contorno en bucles de al menos ocho vértices. Cada bucle se remuestrea uniformemente por longitud de arco, se transforma con `rfft` y recibe un filtro pasabajos: empieza la transición en `0.5/longitud_mm` y anula desde `1/longitud_mm`, usando transición cúbica. Se conservan los modos 0, 1 y 2 para no borrar la forma global. Después se aplica `irfft` y se interpola a la parametrización original.
 
@@ -68,7 +66,7 @@ Consecuencia: preservar la base original no implica que la copia de generación 
 
 ## 5. Proyección y algoritmos de patrón
 
-Fuente: [`Patron`](../../GenerateModelsApp/constants/Paterns.py). Se rota `p[:, :2]` con la matriz del código. La distancia `d_i` se mide en **XY**, en mm de esa proyección. No se desenrolla la superficie ni se mantiene ancho geodésico uniforme: paredes casi verticales y zonas superpuestas en XY pueden repetir/comprimir el patrón.
+Fuente: [`Patron`](../../apps/ortesis-plugin/GenerateModelsApp/constants/Paterns.py). Se rota `p[:, :2]` con la matriz del código. La distancia `d_i` se mide en **XY**, en mm de esa proyección. No se desenrolla la superficie ni se mantiene ancho geodésico uniforme: paredes casi verticales y zonas superpuestas en XY pueden repetir/comprimir el patrón.
 
 | Código | Cálculo | Consecuencia |
 |---|---|---|
@@ -91,7 +89,7 @@ Coste peor de evaluación: `O(P*S)` con `P` puntos y `S` semillas; la memoria te
 
 ## 6. Campo de material: patrón, marco y banda
 
-Fuente: `Model3DForPrinting.ConstruirGeometria` en [`Modeling.py`](../../GenerateModelsApp/Modeling.py).
+Fuente: `Model3DForPrinting.ConstruirGeometria` en [`Modeling.py`](../../apps/ortesis-plugin/GenerateModelsApp/Modeling.py).
 
 ```text
 s_i = rib_width_mm/2 - d_i
@@ -116,7 +114,7 @@ En celdas el espesor nominal es `skin_mm`; en nervaduras plenamente desarrollada
 
 ## 7. Recorte triangular sin capa
 
-Fuente: `Cascaron.Recortar` en [`Cascaron.py`](../../GenerateModelsApp/Cascaron.py).
+Fuente: `Cascaron.Recortar` en [`Cascaron.py`](../../apps/ortesis-plugin/GenerateModelsApp/Cascaron.py).
 
 Para cada triángulo se conserva la parte de campo positivo mediante recorte lineal por aristas. En un cruce:
 

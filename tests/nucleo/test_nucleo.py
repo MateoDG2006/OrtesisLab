@@ -10,8 +10,7 @@ import unittest
 import numpy as np
 
 RAIZ = pathlib.Path(__file__).resolve().parents[2]
-if str(RAIZ) not in sys.path:
-    sys.path.insert(0, str(RAIZ))
+sys.path[:0] = [str(RAIZ / "apps" / "web"), str(RAIZ / "apps" / "ortesis-plugin")]
 
 from GenerateModelsApp.Cascaron import Cascaron
 from GenerateModelsApp.Excepciones import (

@@ -24,7 +24,7 @@ El agente decide y registra si un cambio no altera el contrato. No existe un det
 | Dependencias, procesos o empaquetado | Operación de sistemas afectados, inventario y README |
 | Archivos nuevos, eliminados o renombrados | Catálogo de responsabilidad y enlaces; INVENTARIO y SIMBOLOS |
 | Clases, funciones o métodos nuevos, movidos o renombrados | SIMBOLOS del área |
-| JSON de `GenerateModelsApp/config/` | CONFIGURACION_GENERADA y PARAMETROS |
+| JSON de `core/config/` | CONFIGURACION_GENERADA y PARAMETROS |
 
 ## Secuencia obligatoria del agente/desarrollador
 
@@ -47,7 +47,7 @@ El agente decide y registra si un cambio no altera el contrato. No existe un det
 
 - Inventaría archivos versionados y nuevos no ignorados (excluye `__pycache__`, el índice de CodeGraph y logs no versionados). Conserva las descripciones existentes; un archivo nuevo toma el primer renglón de su docstring o su título Markdown. Copia sin cambios la tabla de carpetas y la sección `.web/`.
 - Extrae por AST, sin importar Reflex ni Blender, clases y funciones, incluidas privadas, anidadas y corrutinas, y escribe los tres `SIMBOLOS.md`: backend (`rxconfig.py`, `scripts/`, `src/`, `web/`), frontend (`rxconfig.py` y `web/Estado*`, `web/Pagina*`, `web/Sesion*`, `web/GenerateModelsApp.py`) y Blender (`GenerateModelsApp/`).
-- Escribe `CONFIGURACION_GENERADA.md` con cada JSON de `GenerateModelsApp/config/`.
+- Escribe `CONFIGURACION_GENERADA.md` con cada JSON de `core/config/`.
 - Comprueba los enlaces relativos de `README.md` y `docs/`, salvo `docs/Audit/`, cuyos registros tienen ciclo propio.
 - `--comprobar` no escribe y termina con 1 si algún catálogo cambiaría o hay enlaces rotos; sin esa opción termina con 1 solo por enlaces rotos.
 

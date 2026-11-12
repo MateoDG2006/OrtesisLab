@@ -17,7 +17,7 @@ Alternativa desde el repositorio, dentro de Blender: ejecutar `scripts/EjecutarO
 1. Crear/importar una única capa de caras conectadas, sin espesor y con aberturas modeladas en mano/dedo. El complemento no identifica anatomía ni retira tapas.
 2. Trabajar con coordenadas interpretadas en mm. Metric, Unit Scale 0.001 facilita presentación; por sí sola no garantiza que un STL entrante tenga tamaño correcto. Eje longitudinal Y y abertura hacia Z favorecen el patrón XY.
 3. En Object Mode aplicar modificadores y escala. Si hay duplicados, sueltos o fragmentos, seleccionar base y usar Arreglar: esta acción conserva componente mayor y modifica la entrada.
-4. En **N > Ortesis**, Usar malla seleccionada o elegir `source`. Revisar el aviso de autoescala y dimensiones. La generación escala/refina una copia; la base queda oculta pero conserva su geometría.
+4. En **N > Ortesis**, Usar malla seleccionada o elegir `source`. La generación refina una copia con las coordenadas del archivo; la base queda oculta pero conserva su geometría.
 5. Ajustar controles con [PARAMETROS.md](PARAMETROS.md). Empezar con `repair=False` permite evaluar el cascarón antes de aproximarlo con voxel.
 6. Pulsar Generar / actualizar. El resultado único se llama `OL_Ortesis`; un resultado previo se reemplaza.
 7. Comprobar malla. Confirmar contornos y ausencia de techos de mano/dedo visualmente, además de `ok` geométrico.

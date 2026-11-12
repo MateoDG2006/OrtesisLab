@@ -1,0 +1,143 @@
+"""Lectura de superficies subidas a la aplicación web."""
+
+from __future__ import annotations
+
+import io
+import struct
+import zipfile
+from pathlib import Path
+
+import numpy as np
+
+from GenerateModelsApp.Excepciones import ArchivoSuperficieIlegible
+from GenerateModelsApp.Malla import AnalizadorMalla
+from GenerateModelsApp.util.Utilidades import Configuracion
+
+from .ConfiguracionBackend import ConfiguracionBackend
+from .enums import ExtensionSuperficie
+
+
+class LectorSuperficie:
+    """Convierte STL o NPZ en los arreglos que consume el núcleo geométrico."""
+
+    MAXIMO_BYTES = ConfiguracionBackend.Cargar("web")["maximo_bytes"]
+    MAXIMO_DESCOMPRIMIDO_BYTES = ConfiguracionBackend.Cargar("web")["maximo_descomprimido_bytes"]
+    EXTENSIONES = set(ExtensionSuperficie)
+
+    @staticmethod
+    def Preparar(nombre: str, contenido: bytes) -> tuple[tuple, dict]:
+        archivo = Path(nombre).name
+        extension = Path(archivo).suffix.lower()
+        if extension not in LectorSuperficie.EXTENSIONES:
+            raise ArchivoSuperficieIlegible(
+                archivo,
+                "Use un archivo STL o NPZ.",
+            )
+        if not contenido:
+            raise ArchivoSuperficieIlegible(archivo, "El archivo está vacío.")
+        if len(contenido) > LectorSuperficie.MAXIMO_BYTES:
+            raise ArchivoSuperficieIlegible(
+                archivo,
+                f"El archivo supera {LectorSuperficie.MAXIMO_BYTES // (1024 * 1024)} MB.",
+            )
+
+        if extension == ".stl":
+            vertices, caras, normales = LectorSuperficie._Stl(contenido, archivo)
+        else:
+            vertices, caras, normales = LectorSuperficie._Npz(contenido, archivo)
+
+        if not np.isfinite(vertices).all():
+            raise ArchivoSuperficieIlegible(
+                archivo,
+                "La superficie contiene coordenadas no finitas.",
+            )
+
+        resultado = AnalizadorMalla.Preparar(
+            vertices,
+            caras,
+            normales,
+            suavizarNormales=False,
+        )
+        puntos, faces, normales_preparadas, borde = resultado
+        dimensiones = np.ptp(puntos, axis=0)
+        info = {
+            "nombre": archivo,
+            "vertices": len(puntos),
+            "caras": len(faces),
+            "dimensiones": " × ".join(f"{valor:.1f}" for valor in dimensiones) + " mm",
+        }
+        return (puntos, faces, normales_preparadas, borde), info
+
+    @staticmethod
+    def _Npz(contenido: bytes, nombre: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        try:
+            with zipfile.ZipFile(io.BytesIO(contenido)) as archivo:
+                total = sum(entrada.file_size for entrada in archivo.infolist())
+                if total > LectorSuperficie.MAXIMO_DESCOMPRIMIDO_BYTES:
+                    raise ArchivoSuperficieIlegible(
+                        nombre, "El NPZ descomprimido supera el límite permitido."
+                    )
+            with np.load(io.BytesIO(contenido), allow_pickle=False) as datos:
+                vertices = np.asarray(datos["vertices"], dtype=np.float64)
+                caras = np.asarray(datos["faces"])
+                normales = np.asarray(datos["normals"], dtype=np.float64)
+        except (OSError, ValueError, KeyError, zipfile.BadZipFile) as exc:
+            raise ArchivoSuperficieIlegible(nombre, str(exc)) from exc
+        return vertices, caras, normales
+
+    @staticmethod
+    def _Stl(contenido: bytes, nombre: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        triangulos = LectorSuperficie._StlBinario(contenido)
+        if triangulos is None:
+            triangulos = LectorSuperficie._StlAscii(contenido, nombre)
+        if len(triangulos) == 0:
+            raise ArchivoSuperficieIlegible(nombre, "El STL no contiene triángulos.")
+
+        crudos = triangulos.reshape(-1, 3).astype(np.float64)
+        tolerancia = Configuracion.ValorLimite("clip_snap_mm")
+        claves = np.round(crudos / tolerancia)
+        _claves, indices, inversa = np.unique(
+            claves,
+            axis=0,
+            return_index=True,
+            return_inverse=True,
+        )
+        vertices = crudos[indices]
+        caras = inversa.reshape(-1, 3).astype(np.int32)
+        normales = LectorSuperficie._Normales(vertices, caras)
+        return vertices, caras, normales
+
+    @staticmethod
+    def _StlBinario(contenido: bytes) -> np.ndarray | None:
+        if len(contenido) < 84:
+            return None
+        cantidad = struct.unpack_from("<I", contenido, 80)[0]
+        if 84 + cantidad * 50 != len(contenido):
+            return None
+        registro = np.dtype(
+            [
+                ("normal", "<f4", (3,)),
+                ("vertices", "<f4", (3, 3)),
+                ("atributo", "<u2"),
+            ]
+        )
+        datos = np.frombuffer(contenido, dtype=registro, count=cantidad, offset=84)
+        return datos["vertices"].astype(np.float64)
+
+    @staticmethod
+    def _StlAscii(contenido: bytes, nombre: str) -> np.ndarray:
+        vertices = []
+        try:
+            for linea in contenido.decode("utf-8", errors="strict").splitlines():
+                partes = linea.strip().split()
+                if partes and partes[0].lower() == "vertex" and len(partes) == 4:
+                    vertices.append(tuple(float(valor) for valor in partes[1:]))
+        except (UnicodeDecodeError, ValueError) as exc:
+            raise ArchivoSuperficieIlegible(nombre, "El STL no es binario ni ASCII válido.") from exc
+        if len(vertices) % 3:
+            raise ArchivoSuperficieIlegible(nombre, "El STL ASCII tiene un triángulo incompleto.")
+        return np.asarray(vertices, dtype=np.float64).reshape(-1, 3, 3)
+
+    @staticmethod
+    def _Normales(vertices: np.ndarray, caras: np.ndarray) -> np.ndarray:
+        return AnalizadorMalla.NormalesDeCaras(vertices, caras)

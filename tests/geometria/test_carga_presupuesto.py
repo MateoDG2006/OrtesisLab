@@ -88,7 +88,7 @@ class CargaYPresupuesto(unittest.TestCase):
         buffer = io.BytesIO()
         np.savez(buffer, vertices=vertices, faces=faces, normals=normals)
         InspeccionNpz.VerificarContenido(buffer.getvalue(), "ok.npz", 134217728)
-        leidos, _info = LectorSuperficie.Preparar("ok.npz", buffer.getvalue(), autoescalar=False)
+        leidos, _info = LectorSuperficie.Preparar("ok.npz", buffer.getvalue())
         self.assertEqual(len(leidos[0]), 3)
 
 

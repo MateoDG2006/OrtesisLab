@@ -16,8 +16,8 @@ migrada con `uv run alembic -x base=test upgrade head`, y las variables
 | Carpeta | Qué cubre | Archivos |
 |---|---|---|
 | [nucleo](nucleo/test_nucleo.py) | Núcleo común: geometría de `Modeling` y `Cascaron`, malla, catálogo de patrones, validación, volumen, peso, precio e importación sin Blender | `test_nucleo.py` |
-| [geometria](geometria/test_escala_malla.py) | Unidades y presupuesto (`EscalaMalla`), subdivisión (`RefinadorMalla`), contorno (`SuavizadoBorde`) y espesor sin tapar canales (`Cascaron`) | `test_escala_malla.py`, `test_refinador_malla.py`, `test_suavizado_borde.py`, `test_superficie_abierta.py` |
-| [aplicacion_web](aplicacion_web/test_generador_web.py) | Lote, STL y lectura de superficies en `GeneradorWeb` y `LectorSuperficie`, incluida la autoescala con un import persistido | `test_generador_web.py` |
+| [geometria](geometria/test_refinador_malla.py) | Subdivisión (`RefinadorMalla`), contorno (`SuavizadoBorde`) y espesor sin tapar canales (`Cascaron`) | `test_refinador_malla.py`, `test_suavizado_borde.py`, `test_superficie_abierta.py` |
+| [aplicacion_web](aplicacion_web/test_generador_web.py) | Lote, STL y lectura de superficies en `GeneradorWeb` y `LectorSuperficie`; las coordenadas del archivo se conservan | `test_generador_web.py` |
 | [persistencia](persistencia/apoyo_persistencia.py) | PostgreSQL, bucket, Redis, imports, lotes, trabajador, historial, propiedad de los datos y permisos de rol | `apoyo_persistencia.py`, `test_almacen_import.py`, `test_lotes_trabajador.py`, `test_propiedad_datos.py` |
 | [blender](blender/blender_superficie_abierta.py) | Complemento dentro de Blender: superficie abierta, y el ZIP distribuido en aislamiento | `blender_superficie_abierta.py`, `blender_paquete_zip.py` |
 | [assets](assets/Test.stl) | Fixture de entrada y evidencia histórica. No son pruebas y no validan una ejecución nueva | `Test.stl`, `resultado_blender.json`, logs `*_ejecucion.log` |

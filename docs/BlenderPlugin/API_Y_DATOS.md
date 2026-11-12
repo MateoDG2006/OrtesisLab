@@ -20,7 +20,6 @@ resultado = GeneradorObjeto.Crear(
     liner=True,
     skin_mm=1.0,
     repair=False,
-    autoescalar=True,
 )
 informe = ValidadorMalla.Comprobar(resultado)
 if informe["ok"]:
@@ -31,11 +30,11 @@ No instala el paquete con un archivo suelto: son necesarias sus importaciones y 
 
 | API | Precondiciones → resultado / efectos |
 |---|---|
-| `SuperficieInterior.Leer(source, paso_mm=None, autoescalar=True)` | MESH base, Object Mode, sin modificadores, escala aplicada → tupla de arrays; escala/refina copia y actualiza diagnóstico/caché |
+| `SuperficieInterior.Leer(source, paso_mm=None)` | MESH base, Object Mode, sin modificadores, escala del objeto aplicada → tupla de arrays; refina una copia y la guarda en caché |
 | `SuperficieInterior.Cargar(path=None)` | NPZ explícito o rutas candidatas → objeto oculto `OL_SuperficieInterior`; fija unidades escena; no se llama desde panel |
 | `Complemento.BuildGeometry(source, **options)` | Base válida → `(vertices, faces, cfg, n_interiores, m_interiores)`; no escribe resultado en escena ni aplica voxel |
 | `GeneradorObjeto.Crear(source, **options)` | Base/opciones válidas → objeto `OL_Ortesis`; sustituye malla, oculta base y selecciona resultado; voxel opcional |
-| `ReparadorMalla.Arreglar(objeto, autoescalar=True)` | Base activa válida para limpieza → resumen; modifica base si valida copia y pone escala a uno |
+| `ReparadorMalla.Arreglar(objeto)` | Base activa válida para limpieza → resumen; hornea la escala del objeto, modifica la base si la copia valida y la deja en uno |
 | `ValidadorMalla.Comprobar(ob, intersections=True)` | Objeto MESH generado → informe; copia BMesh para medir, guarda JSON en `ol_validation` |
 | `ExportadorStl.Exportar(ob, path)` | Objeto con `ol_config` e informe final válido → escribe STL y `path + '.json'`; devuelve informe |
 

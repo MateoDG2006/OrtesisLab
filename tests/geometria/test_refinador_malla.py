@@ -4,7 +4,6 @@ import unittest
 
 import numpy as np
 
-from GenerateModelsApp.EscalaMalla import EscalaMalla
 from GenerateModelsApp.Modeling import Model3DForPrinting
 from GenerateModelsApp.RefinadorMalla import RefinadorMalla
 from GenerateModelsApp.util.Utilidades import Configuracion
@@ -70,25 +69,6 @@ class RefinamientoWeb(unittest.TestCase):
         )
         self.assertGreater(interiores, 0)
         self.assertLess(caras_interiores, len(caras))
-
-    def test_autoescala_una_arista_que_no_alcanza_el_paso(self):
-        lado = 2_000_000.0
-        vertices = np.array([[0.0, 0.0, 0.0], [lado, 0.0, 0.0], [0.0, 1.0, 0.0]])
-        caras = np.array([[0, 1, 2]], dtype=np.int32)
-        normales = np.tile([0.0, 0.0, 1.0], (3, 1))
-
-        def refinar(factor):
-            return RefinadorMalla.Refinar(vertices * factor, caras, normales, 1.0)
-
-        _resultado, diagnostico = EscalaMalla.Aplicar(
-            lado,
-            True,
-            refinar,
-            arista_maxima=lado,
-            paso_mm=1.0,
-        )
-        self.assertEqual(diagnostico["factor"], 0.0001)
-        self.assertAlmostEqual(diagnostico["dimension_despues_mm"], 200)
 
 
 if __name__ == "__main__":

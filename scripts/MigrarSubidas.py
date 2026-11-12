@@ -19,7 +19,7 @@ import uuid
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(RAIZ))
+sys.path[:0] = [str(RAIZ / "apps" / "web"), str(RAIZ / "apps" / "ortesis-plugin")]
 
 from web.Ajustes import Ajustes  # noqa: E402
 from web.enums import FormatoImport, OrigenImport, TipoAsset, TipoEvento  # noqa: E402

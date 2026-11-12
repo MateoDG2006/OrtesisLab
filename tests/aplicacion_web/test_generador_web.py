@@ -105,22 +105,21 @@ class LoteYStl(unittest.TestCase):
         )
         self.assertEqual(len(resultado[0]), 4)
         self.assertEqual(len(resultado[1]), 2)
-        self.assertEqual(info["factor_escala"], 1)
+        self.assertAlmostEqual(float(np.ptp(resultado[0], axis=0).max()), 100)
         self.assertEqual(info["nombre"], "superficie.stl")
 
-    def test_autoescala_una_superficie_pequena(self):
+    def test_una_superficie_pequena_conserva_sus_coordenadas(self):
         vertices = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0]]
         caras = [[0, 1, 2], [0, 2, 3]]
         resultado, info = LectorSuperficie.Preparar(
             "superficie.stl",
             GeneradorWeb.Stl(vertices, caras),
-            autoescalar=True,
         )
-        self.assertEqual(info["factor_escala"], 100)
-        self.assertAlmostEqual(float(np.ptp(resultado[0], axis=0).max()), 100)
+        self.assertAlmostEqual(float(np.ptp(resultado[0], axis=0).max()), 1)
+        self.assertEqual(info["dimensiones"], "1.0 × 1.0 × 0.0 mm")
 
     @requiere_base
-    def test_la_preferencia_se_aplica_al_generar_y_se_puede_quitar(self):
+    def test_la_superficie_guardada_conserva_las_coordenadas(self):
         vertices = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0]]
         caras = [[0, 1, 2], [0, 2, 3]]
         with EntornoServicios() as entorno:
@@ -130,32 +129,14 @@ class LoteYStl(unittest.TestCase):
                 archivo, info = GeneradorWeb.GuardarSuperficie(
                     "pieza.stl",
                     GeneradorWeb.Stl(vertices, caras),
-                    autoescalar=True,
                 )
                 self.assertTrue(entorno.almacen.Existe(GeneradorWeb.RutaSuperficie(archivo).as_posix()))
-                self.assertEqual(info["factor_escala"], 100)
+                self.assertEqual(info["dimensiones"], "1.0 × 1.0 × 0.0 mm")
                 self.assertAlmostEqual(float(np.ptp(GeneradorWeb.Cruda(archivo)[0], axis=0).max()), 1)
-                escalada = GeneradorWeb.Superficie(archivo, autoescalar=True)
-                self.assertAlmostEqual(float(np.ptp(escalada[0], axis=0).max()), 100)
-                original, diagnostico = GeneradorWeb._SuperficieConDiagnostico(archivo, False)
-                self.assertAlmostEqual(float(np.ptp(original[0], axis=0).max()), 1)
-                self.assertIn("Autoescalado desactivado", diagnostico["advertencia"])
-                GeneradorWeb.SuperficieRefinada(archivo, 50, autoescalar=True)
-                GeneradorWeb.SuperficieRefinada(archivo, 50, autoescalar=False)
-                _refinada, diagnostico = GeneradorWeb._SuperficieRefinadaConDiagnostico(archivo, 50, True)
-                self.assertEqual(diagnostico["factor"], 100)
-
-    def test_permite_desactivar_el_autoescalado_de_la_subida(self):
-        vertices = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0]]
-        caras = [[0, 1, 2], [0, 2, 3]]
-        resultado, info = LectorSuperficie.Preparar(
-            "superficie.stl",
-            GeneradorWeb.Stl(vertices, caras),
-            autoescalar=False,
-        )
-        self.assertEqual(info["factor_escala"], 1)
-        self.assertIn("Autoescalado desactivado", info["aviso"])
-        self.assertAlmostEqual(float(np.ptp(resultado[0], axis=0).max()), 1.0)
+                superficie = GeneradorWeb.Superficie(archivo)
+                self.assertAlmostEqual(float(np.ptp(superficie[0], axis=0).max()), 1)
+                refinada = GeneradorWeb.SuperficieRefinada(archivo, 50)
+                self.assertAlmostEqual(float(np.ptp(refinada[0], axis=0).max()), 1)
 
     def test_carga_test_como_superficie_abierta(self):
         resultado, info = LectorSuperficie.Preparar(

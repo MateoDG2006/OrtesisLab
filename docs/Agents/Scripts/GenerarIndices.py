@@ -28,7 +28,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[3]
 INVENTARIO = RAIZ / "docs/Agents/INVENTARIO.md"
 CONFIGURACION = RAIZ / "docs/BlenderPlugin/CONFIGURACION_GENERADA.md"
-CARPETA_CONFIG = RAIZ / "GenerateModelsApp/config"
+CARPETA_CONFIG = RAIZ / "core/config"
 
 ORDEN = "python docs/Agents/Scripts/GenerarIndices.py"
 CABECERA_SIMBOLOS = f"> Generado por `{ORDEN}`. No editar a mano."
@@ -41,7 +41,7 @@ SIN_SIMBOLOS = "| — | Sin clases/funciones | — | Declaraciones o marcador de
 SIN_DOCSTRING = "Sin docstring; consultar el catálogo de módulos y el código."
 SIN_DESCRIPCION = "Sin descripción; completar en INVENTARIO.md."
 EXCLUIDOS = re.compile(r"__pycache__/|^\.codegraph/(?!\.gitignore$)|\.log$")
-FRONTEND = re.compile(r"^(rxconfig\.py|web/(Estado|Pagina|Sesion|GenerateModelsApp)\w*\.py)$")
+FRONTEND = re.compile(r"^apps/web/(rxconfig\.py|web/(Estado|Pagina|Sesion|GenerateModelsApp)\w*\.py)$")
 ENLACE = re.compile(r"\]\(([^)#\s]+)(#[^)]*)?\)")
 
 
@@ -189,9 +189,9 @@ def Generados() -> dict[Path, str]:
     archivos = Archivos()
     previas = DescripcionesPrevias()
     python = [ruta for ruta in archivos if ruta.endswith(".py")]
-    backend = [r for r in python if r == "rxconfig.py" or r.startswith(("scripts/", "src/", "web/"))]
+    backend = [r for r in python if r.startswith(("apps/web/", "scripts/", "src/"))]
     frontend = [r for r in python if FRONTEND.match(r)]
-    blender = [r for r in python if r.startswith("GenerateModelsApp/")]
+    blender = [r for r in python if r.startswith("apps/ortesis-plugin/GenerateModelsApp/")]
     return {
         RAIZ / "docs/AppBackend/SIMBOLOS.md": IndiceSimbolos(
             "AppBackend", backend, RAIZ / "docs/AppBackend/SIMBOLOS.md", previas

@@ -2,20 +2,20 @@
 
 ## Capas y dependencias
 
-El paquete [`GenerateModelsApp/`](../../GenerateModelsApp/__init__.py) contiene un núcleo Python/NumPy y adaptadores de Blender. `__init__.py` declara `bl_info` y difiere las importaciones de registro: importar el paquete o el núcleo no carga `bpy`. `ApiBlender.py` concentra las importaciones `bpy`, `bmesh`, propiedades y utilidades mathutils; fuera de Blender produce `EntornoBlenderRequerido`.
+El paquete [`GenerateModelsApp/`](../../apps/ortesis-plugin/GenerateModelsApp/__init__.py) contiene un núcleo Python/NumPy y adaptadores de Blender. `__init__.py` declara `bl_info` y difiere las importaciones de registro: importar el paquete o el núcleo no carga `bpy`. `ApiBlender.py` concentra las importaciones `bpy`, `bmesh`, propiedades y utilidades mathutils; fuera de Blender produce `EntornoBlenderRequerido`.
 
 ```mermaid
 flowchart TB
   B[Blender activa el paquete] --> INIT[__init__.register]
   INIT --> REG[Complemento.Registrar]
-  REG --> UI[Interfaz: preferencias, ajustes, operadores y panel]
+  REG --> UI[Interfaz: ajustes, operadores y panel]
   UI --> S[SuperficieInterior]
   UI --> REP[ReparadorMalla]
   UI --> OBJ[GeneradorObjeto]
   UI --> VAL[ValidadorMalla]
   UI --> EXP[ExportadorStl]
   OBJ --> S
-  S --> ESC[EscalaMalla y RefinadorMalla]
+  S --> ESC[RefinadorMalla]
   ESC --> M[AnalizadorMalla]
   OBJ --> MOD[Model3DForPrinting]
   MOD --> SU[SuavizadoBorde]
@@ -33,7 +33,7 @@ flowchart TB
 
 `Complemento.Registrar` primero retira un registro anterior; registra `CLASSES` en orden y crea `bpy.types.Scene.ortesislab` como `PointerProperty(OL_Settings)`. Guarda la tupla de clases en `bpy.app.driver_namespace['_ortesislab_classes']`. Si falla a mitad del registro, intenta desregistrar lo ya registrado. `Retirar` elimina la propiedad y recorre las clases en orden inverso.
 
-Las ocho clases registradas son preferencias, ajustes, usar superficie, arreglar base, generar, validar, exportar y panel. Los nombres `register`, `unregister`, `draw`, `execute`, `invoke` y `poll` se mantienen porque Blender los busca por contrato. Los controles no tienen actualización automática de geometría: hay que ejecutar Generar.
+Las siete clases registradas son ajustes, usar superficie, arreglar base, generar, validar, exportar y panel. Los nombres `register`, `unregister`, `draw`, `execute`, `invoke` y `poll` se mantienen porque Blender los busca por contrato. Los controles no tienen actualización automática de geometría: hay que ejecutar Generar.
 
 ```mermaid
 classDiagram
@@ -57,14 +57,13 @@ classDiagram
   }
   class PanelAyuda {
     +OpcionesDesdeAjustes(ajustes)
-    +OrigenAutoescala(context)
     +Cancelar(operador, ajustes, exc)
   }
   class GeneradorObjeto {
     +Crear(source, options)
   }
   class SuperficieInterior {
-    +Leer(source, paso_mm, autoescalar)
+    +Leer(source, paso_mm)
   }
   class Model3DForPrinting
   Complemento --> OL_Settings : registra
@@ -88,7 +87,7 @@ sequenceDiagram
   participant B as Escena Blender
   Usuario->>O: Generar / actualizar
   O->>O: Elegir source o activo; copiar ajustes
-  O->>G: Crear(source, opciones, autoescalar)
+  O->>G: Crear(source, opciones)
   G->>G: ValidarOpciones y PasoPatron
   G->>S: Leer y refinar copia
   S-->>G: Puntos, triángulos, normales y borde

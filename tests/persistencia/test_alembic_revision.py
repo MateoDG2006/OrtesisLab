@@ -11,6 +11,7 @@ class RevisionAlembic(unittest.TestCase):
     def test_upgrade_y_downgrade_existen(self):
         ruta = (
             Path(__file__).resolve().parents[2]
+            / "apps"
             / "db"
             / "alembic"
             / "versions"

@@ -39,9 +39,7 @@ class SuperficieNoEstatica(unittest.TestCase):
             from web.services.ServicioImports import ServicioImports
 
             with ContextoUsuario.Activar(usuario):
-                importacion, _info = ServicioImports.Importar(
-                    usuario, "placa.npz", contenido, autoescalar=False
-                )
+                importacion, _info = ServicioImports.Importar(usuario, "placa.npz", contenido)
             asset = ConexionPostgres.Ejecutar(
                 lambda c: RepositorioAssets.Obtener(
                     c, usuario.user_id, importacion.normalized_asset_id

@@ -22,15 +22,15 @@ uv sync
 
 `uv sync` crea `.venv` e instala Reflex, NumPy y los clientes de PostgreSQL, S3 y Redis según `uv.lock`.
 
-Aplicación web (necesita Docker y `make`; copiar antes `infra/database/.env.example` y `.env.example` a `.env` y completarlos):
+Aplicación web (necesita Docker y `make`; copiar antes `apps/db/.env.example` a `apps/db/.env` y `.env.example` a `.env`, y completarlos):
 
 ```powershell
 make db-up
 make db-init-s3
-uv run alembic upgrade head   # requiere una revisión en db/alembic/versions; ver operación del backend
+uv run alembic upgrade head   # requiere una revisión en apps/db/alembic/versions; ver operación del backend
 make auth-dev-up
 uv run python scripts/EjecutarTrabajador.py
-uv run reflex run
+uv run --directory apps/web reflex run
 ```
 
 Queda en `http://localhost:3000`. El backend escucha en el puerto 8000; con `--env prod` todo usa el 3000. El trabajador genera los modelos encolados. Detalle en [operación del backend](docs/AppBackend/OPERACION_Y_PRUEBAS.md).

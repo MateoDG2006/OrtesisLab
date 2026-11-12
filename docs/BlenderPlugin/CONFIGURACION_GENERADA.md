@@ -2,7 +2,7 @@
 
 > Generado por `python docs/Agents/Scripts/GenerarIndices.py` desde los JSON del paquete. Para significado y efectos consultar [PARAMETROS.md](PARAMETROS.md).
 
-## [comprobacion_geometrica.json](../../GenerateModelsApp/config/comprobacion_geometrica.json)
+## [comprobacion_geometrica.json](../../core/config/comprobacion_geometrica.json)
 
 ```json
 {
@@ -31,7 +31,7 @@
 }
 ```
 
-## [limites.json](../../GenerateModelsApp/config/limites.json)
+## [limites.json](../../core/config/limites.json)
 
 ```json
 {
@@ -61,13 +61,11 @@
   "clip_snap_mm": 0.0001,
   "clip_connect_mm": 0.005,
   "border_smooth_wavelength_mm": 8.0,
-  "border_smooth_max_mm": 3.0,
-  "min_plausible_surface_extent_mm": 20,
-  "max_plausible_surface_extent_mm": 1000
+  "border_smooth_max_mm": 3.0
 }
 ```
 
-## [parametros_defecto.json](../../GenerateModelsApp/config/parametros_defecto.json)
+## [parametros_defecto.json](../../core/config/parametros_defecto.json)
 
 ```json
 {
@@ -91,7 +89,7 @@
 }
 ```
 
-## [registro.json](../../GenerateModelsApp/config/registro.json)
+## [registro.json](../../core/config/registro.json)
 
 ```json
 {

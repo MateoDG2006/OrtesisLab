@@ -57,7 +57,7 @@ class LotesYTrabajador(unittest.TestCase):
         with Conectar() as conexion:
             self.a = CrearUsuario(conexion, "A")
             self.b = CrearUsuario(conexion, "B")
-        self.importacion, _ = ServicioImports.Importar(self.a, "placa.stl", Placa(100.0), autoescalar=True)
+        self.importacion, _ = ServicioImports.Importar(self.a, "placa.stl", Placa(100.0))
         self.trabajador = TrabajadorGeneracion("prueba")
         # La cola es global: cada prueba la deja vacía para la siguiente.
         self.addCleanup(self.Vaciar)
@@ -69,7 +69,6 @@ class LotesYTrabajador(unittest.TestCase):
             mode="sweep" if len(variantes) > 1 else "single",
             definition={"prueba": True},
             variantes=variantes,
-            auto_scale=True,
         )
 
     def Vaciar(self) -> int:

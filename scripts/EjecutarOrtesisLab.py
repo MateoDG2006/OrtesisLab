@@ -13,8 +13,7 @@ from pathlib import Path
 
 # La raíz del repositorio es el padre de esta carpeta scripts/.
 _RAIZ = Path(__file__).resolve().parents[1]
-if str(_RAIZ) not in sys.path:
-    sys.path.insert(0, str(_RAIZ))
+sys.path.insert(0, str(_RAIZ / "apps" / "ortesis-plugin"))
 
 from GenerateModelsApp.OrtesisLab import register  # noqa: E402
 

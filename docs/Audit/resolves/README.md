@@ -24,6 +24,17 @@
 [RES-2026-10-13-002](2026-10-13-resolve-organizar-pruebas.md) siguen como
 trabajo previo `EN_CURSO` de persistencia y organización de pruebas.
 
+[RES-2026-11-12-002](2026-11-12-resolve-simplificar-carga-yaml.md) autoriza
+sustituir el `open` de `ConfiguracionBackend.Cargar` por `Path.read_text`.
+Sigue en curso: no cierra B-09 ni desbloquea el archivo.
+
+[RES-2026-11-12-003](2026-11-12-resolve-ajustes-entorno.md) autoriza quitar
+`VariableFaltante`, `VariableInvalida` y `Ajustes.Faltante`. Sigue en curso:
+no cierra la revisión de `apps/web/web/Ajustes.py`.
+
+[RES-2026-11-12-004](2026-11-12-resolve-quitar-autoescala.md) autoriza quitar
+el autoescalado de coordenadas. Sigue en curso y no cierra hallazgos.
+
 ## Protocolo
 
 1. Identificar todas las auditorías que incluyan cada archivo y todos los

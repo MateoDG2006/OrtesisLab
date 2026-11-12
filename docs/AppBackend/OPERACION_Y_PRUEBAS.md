@@ -7,17 +7,17 @@ Desde la raíz, con uv, Docker Compose y `make` disponibles:
 ```powershell
 uv python install 3.14
 uv sync --locked
-copy infra\database\.env.example infra\database\.env   # completar secretos
+copy apps\db\.env.example apps\db\.env   # completar secretos
 copy .env.example .env                                  # completar URLs y credenciales
 make db-up            # PostgreSQL 127.0.0.1:5433, MinIO :9000/:9001, Redis :6379
 make db-init-s3       # bucket, políticas (lectura anónima solo de STL) y cuenta de servicio
-# inicializar la base y aplicar migraciones: ver «Base de datos: inicializar y migrar»
+# tablas: ver «Base de datos»
 make auth-dev-up      # proveedor OIDC de pruebas (opcional; ORTESISLAB_OIDC_PORT cambia el puerto local)
 uv run python scripts/EjecutarTrabajador.py
 uv run reflex run
 ```
 
-Variables de la aplicación: [`.env.example`](../../.env.example). Todas se declaran en un solo lugar, la clase `Ajustes` de [`web/Ajustes.py`](../../web/Ajustes.py), y ningún otro archivo lee el entorno. El entorno real tiene prioridad sobre el `.env` de la raíz. Una variable sin valor por defecto es obligatoria: leerla sin definirla, o con valor vacío, lanza `VariableFaltante` («Falta la variable de entorno …»). Ese es el único error de la configuración; la comprobación ocurre al leer la variable, de modo que cada proceso solo exige las que usa.
+Variables de la aplicación: [`.env.example`](../../.env.example). Todas se declaran en un solo lugar, la clase `Ajustes` de [`web/Ajustes.py`](../../apps/web/web/Ajustes.py), y ningún otro archivo lee el entorno. `Cargar()` lee ese `.env` con python-dotenv (UTF-8, con o sin BOM), sin pisar variables que el proceso ya tenga. Esos valores quedan en el entorno del proceso y las referencias `$` se sustituyen. Una variable sin valor por defecto es obligatoria: leerla sin definirla, o con valor vacío, lanza `RuntimeError` («Falta la variable de entorno …»). Ese es el único error de clave ausente; la comprobación ocurre al leer la variable, de modo que cada proceso solo exige las que usa.
 
 | Variable | Defecto | La usa |
 |---|---|---|
@@ -34,26 +34,26 @@ Variables de la aplicación: [`.env.example`](../../.env.example). Todas se decl
 | `ORTESISLAB_APP_URL` | `http://localhost:3000` | Redirección tras login y logout |
 | `ORTESISLAB_COOKIE_SECURE` | `false` | `true` añade `Secure` a las cookies |
 
-La web exige al arrancar la base y OIDC; las variables S3 se exigen en la primera operación con el bucket. El trabajador exige las S3 y la suya de base al arrancar. Para añadir una variable se declara un atributo `Variable("ORTESISLAB_…", defecto)` en `Ajustes`, se añade a `.env.example` y se lee con `Ajustes.Cargar().<atributo>`. Las seis URL de base de datos deben escribirse con el driver de SQLAlchemy, `postgresql+psycopg://usuario:clave@host:puerto/base`. Si una no empieza así, leerla lanza `VariableInvalida`; el código no las convierte.
+La web exige al arrancar la base y OIDC; las variables S3 se exigen en la primera operación con el bucket. El trabajador exige las S3 y la suya de base al arrancar. Para añadir una variable se declara un atributo `Variable("ORTESISLAB_…", defecto)` en `Ajustes`, se añade a `.env.example` y se lee con `Ajustes.Cargar().<atributo>`. Las seis URL de base de datos deben escribirse con el driver de SQLAlchemy, `postgresql+psycopg://usuario:clave@host:puerto/base`. Si una no empieza así, leerla lanza `RuntimeError`; el código no las convierte.
 
 ### Valores ajustables (`config/*.yaml`)
 
-Los límites, tiempos y tamaños del backend no van en el entorno ni en el código. Están en archivos YAML versionados en [`config/`](../../config/web.yaml), uno por área, que lee `ConfiguracionBackend.Cargar("<area>")` ([`web/ConfiguracionBackend.py`](../../web/ConfiguracionBackend.py)). Cada archivo se lee una vez por proceso, al importar el módulo que lo usa, así que un cambio exige reiniciar la web y el trabajador. Si falta un archivo o una clave, el proceso falla al importar ese módulo. Las constantes de contrato no están aquí: versiones de lector y exportador, prefijos de claves, nombre de la cookie y esquema SQL. Los estados, tipos y formatos son `StrEnum` en [`web/enums/`](../../web/enums/__init__.py), porque deben coincidir con los `CHECK` del esquema; un YAML solo guarda sus etiquetas visibles.
+Los límites, tiempos y tamaños del backend no van en el entorno ni en el código. Están en archivos YAML versionados en [`core/config/`](../../core/config/web.yaml), uno por área, que lee `ConfiguracionBackend.Cargar("<area>")` ([`web/ConfiguracionBackend.py`](../../apps/web/web/ConfiguracionBackend.py)). Cada archivo se lee una vez por proceso, al importar el módulo que lo usa, así que un cambio exige reiniciar la web y el trabajador. Si falta un archivo o una clave, el proceso falla al importar ese módulo. Las constantes de contrato no están aquí: versiones de lector y exportador, prefijos de claves, nombre de la cookie y esquema SQL. Los estados, tipos y formatos son `StrEnum` en [`web/enums/`](../../apps/web/web/enums/__init__.py), porque deben coincidir con los `CHECK` del esquema; un YAML solo guarda sus etiquetas visibles.
 
 | Archivo | Claves | Lo usa |
 |---|---|---|
-| [`persistencia.yaml`](../../config/persistencia.yaml) | `conexion`: `reintentos` 3, `pausa_reintento_s` 0.05, `espera_adquisicion_s` 5, `timeout_conexion_s` 10. `lotes`: `maximo_items` 12, `maximo_pendientes` 3, `maximo_intentos` 3, `espera_reintento_s` 5. `historial`: `limite_defecto` 25, `limite_maximo` 100, `maximo_comparacion` 3 | `ConexionPostgres`, `Contratos`, `ServicioLotes`, `ServicioHistorial` |
-| [`trabajador.yaml`](../../config/trabajador.yaml) | `lease_s` 120, `latido_s` 30, `supervision_s` 30, `conciliacion_s` 600. `conciliador`: `horas_staged` 24, `dias_rechazo` 30, `lote_comprobacion` 200 | `TrabajadorGeneracion`, `ConciliadorArchivos` |
-| [`cache.yaml`](../../config/cache.yaml) | `ttl_s` 604800 (7 días), `reintento_s` 30, `timeout_s` 0.5 | `CacheRedis` |
-| [`almacen.yaml`](../../config/almacen.yaml) | `timeout_conexion_s` 3, `timeout_lectura_s` 30, `intentos` 3 | `StorageS3` |
-| [`sesion.yaml`](../../config/sesion.yaml) | `duracion_horas` 12, `intercambio_oidc_s` 600 | `ContextoUsuario`, `AutenticacionOidc` |
-| [`web.yaml`](../../config/web.yaml) | `intervalo_progreso_s` 1, `maximo_variantes` 12, `espera_crear_s` 600, `maximo_bytes` 50 MiB, `maximo_descomprimido_bytes` 128 MiB, `max_normalizaciones_concurrentes` 2 (semáforo de `LectorSuperficie.Preparar`); `patrones` (5) y `ejes` (11): clave y etiqueta visible, en el orden de los selectores; `estados_visibles` (5): etiqueta de cada estado de ítem en `/historial` | `EstadoApp`, `GeneradorWeb`, `LectorSuperficie`, `EstadoHistorial` |
+| [`persistencia.yaml`](../../core/config/persistencia.yaml) | `conexion`: `reintentos` 3, `pausa_reintento_s` 0.05, `espera_adquisicion_s` 5, `timeout_conexion_s` 10. `lotes`: `maximo_items` 12, `maximo_pendientes` 3, `maximo_intentos` 3, `espera_reintento_s` 5. `historial`: `limite_defecto` 25, `limite_maximo` 100, `maximo_comparacion` 3 | `ConexionPostgres`, `Contratos`, `ServicioLotes`, `ServicioHistorial` |
+| [`trabajador.yaml`](../../core/config/trabajador.yaml) | `lease_s` 120, `latido_s` 30, `supervision_s` 30, `conciliacion_s` 600. `conciliador`: `horas_staged` 24, `dias_rechazo` 30, `lote_comprobacion` 200 | `TrabajadorGeneracion`, `ConciliadorArchivos` |
+| [`cache.yaml`](../../core/config/cache.yaml) | `ttl_s` 604800 (7 días), `reintento_s` 30, `timeout_s` 0.5 | `CacheRedis` |
+| [`almacen.yaml`](../../core/config/almacen.yaml) | `timeout_conexion_s` 3, `timeout_lectura_s` 30, `intentos` 3 | `StorageS3` |
+| [`sesion.yaml`](../../core/config/sesion.yaml) | `duracion_horas` 12, `intercambio_oidc_s` 600 | `ContextoUsuario`, `AutenticacionOidc` |
+| [`web.yaml`](../../core/config/web.yaml) | `intervalo_progreso_s` 1, `maximo_variantes` 12, `espera_crear_s` 600, `maximo_bytes` 50 MiB, `maximo_descomprimido_bytes` 128 MiB; `patrones` (5) y `ejes` (11): clave y etiqueta visible, en el orden de los selectores; `estados_visibles` (5): etiqueta de cada estado de ítem en `/historial` | `EstadoApp`, `GeneradorWeb`, `LectorSuperficie`, `EstadoHistorial` |
 
 Al editarlos hay que respetar dos relaciones que el código no comprueba:
 - `web.yaml` `maximo_variantes` no debe superar `persistencia.yaml` `lotes.maximo_items`; si lo supera, la admisión rechaza los lotes más grandes.
 - `latido_s` debe ser bastante menor que `lease_s`, o el trabajador pierde la reserva mientras construye.
 
-El complemento de Blender conserva su configuración JSON en `GenerateModelsApp/config/`, porque el Python de Blender no incluye PyYAML.
+Los JSON de geometría están en `core/config/`. El ZIP de Blender los copia a `GenerateModelsApp/config/`, porque el complemento instalado no ve el monorepo. El Python de Blender no incluye PyYAML, así que esa configuración no pasa a YAML.
 
 `ORTESISLAB_OIDC_REDIRECT_URI` debe apuntar al puerto donde responde `/auth/callback`: en desarrollo, el backend Reflex (8000); con `reflex run --env prod`, la aplicación sirve frontend y backend en un único puerto (3000). Blender no es requisito web ni del trabajador. El visor descarga Three.js desde unpkg.
 
@@ -61,65 +61,19 @@ Para trasladar subidas de la arquitectura anterior: `uv run python scripts/Migra
 
 Antes de crear/modificar código Reflex o iniciar/depurar procesos, aplicar las skills del repositorio `reflex-docs`, `setup-python-env` y `reflex-process-management` según [AGENTS.md](../../AGENTS.md).
 
-## Base de datos: inicializar y migrar
+## Base de datos
 
-El repositorio no trae migraciones: `db/alembic/versions/` está vacío y las migraciones las genera y aplica el responsable del esquema. Los comandos de esta sección son manuales; `make` no ejecuta migraciones. Los ejemplos usan PowerShell desde la raíz, con `$c` como abreviatura de Compose:
+`make` no migra. El primer `make db-up` deja `ortesislab_dev` con roles y el esquema `ortesislab` vacío. `make db-reset CONFIRM=ELIMINAR` vuelve a crear esa base vacía si el volumen ya existe. `make db-test-reset` hace lo mismo con `ortesislab_test`. El resto de objetivos está en `make db-help`.
 
-```powershell
-$c = "docker compose -f infra/database/compose.yaml --env-file infra/database/.env"
-```
-
-### 1. Inicializar una base vacía
-
-En el primer `make db-up` (volumen nuevo) [`infra/database/init/01_roles.sh`](../../infra/database/init/01_roles.sh) crea `ortesislab_dev`, los roles `ortesislab_migrator`, `ortesislab_app`, `ortesislab_worker` y `ortesislab_backup`, sus `search_path` y `statement_timeout`, y el esquema `ortesislab` cuyo dueño es el migrador. No crea tablas.
-
-Si el volumen ya existe pero la base no (por ejemplo, tras `make db-drop`), los roles siguen en el clúster y basta con crear la base y su esquema con [`db/test/preparar_base.sql`](../../db/test/preparar_base.sql), que recibe el nombre en la variable `base`:
-
-```powershell
-Invoke-Expression "$c exec -T postgres createdb -U ortesislab_admin -O ortesislab_migrator ortesislab_dev"
-Get-Content -Raw db\test\preparar_base.sql | Invoke-Expression "$c exec -T postgres psql -v ON_ERROR_STOP=1 -q -v base=ortesislab_dev -U ortesislab_admin -d ortesislab_dev"
-```
-
-Para la base de pruebas, `make db-test-reset` borra `ortesislab_test`, la vuelve a crear y aplica el mismo archivo con `base=ortesislab_test`. Queda vacía hasta migrarla.
-
-### 2. Configurar Alembic
-
-[`alembic.ini`](../../alembic.ini) apunta a [`db/alembic/`](../../db/alembic/env.py). `env.py` toma la URL del rol migrador de `Ajustes` (`ORTESISLAB_MIGRATOR_DATABASE_URL`; con `-x base=test`, `ORTESISLAB_TEST_MIGRATOR_DATABASE_URL`; cualquier otro valor de `base` usa la primera), usa `Base.metadata` de [`web/persistence/Modelos.py`](../../web/persistence/Modelos.py) como esquema objetivo, guarda `alembic_version` en `ortesislab`, ignora esa tabla en la comparación y compara tipos y defaults. Tiene un único flujo de ejecución, siempre conectado a la base: no admite el modo `--sql` de Alembic, que genera SQL sin conexión.
-
-### 3. Revisión inicial y migraciones nuevas
-
-En el repositorio ya está la revisión inicial [`db/alembic/versions/20261112_1200_esquema_inicial.py`](../../db/alembic/versions/20261112_1200_esquema_inicial.py). Tras preparar la base vacía, aplicarla con:
-
-```powershell
-uv run alembic upgrade head
-# base de pruebas:
-uv run alembic -x base=test upgrade head
-```
-
-Para cambios posteriores, modificar primero `Modelos.py` y generar una revisión contra una base en `head`:
+Las tablas las genera y aplica quien mantiene el esquema. La revisión inicial está en [`apps/db/alembic/versions/20261112_1200_esquema_inicial.py`](../../apps/db/alembic/versions/20261112_1200_esquema_inicial.py). Cambiar primero [`Modelos.py`](../../apps/web/web/persistence/Modelos.py) y generar la siguiente revisión contra una base en `head`:
 
 ```powershell
 uv run alembic -x base=test revision --autogenerate -m "descripcion"
+uv run alembic upgrade head
+uv run alembic -x base=test upgrade head
 ```
 
-El autogenerado debe revisarse a mano antes de aplicarlo. Alembic no genera estos elementos del esquema; la revisión inicial ya los incluye con `op.execute` (detalle en [DATABASE.md](DATABASE.md#12-migraciones-con-alembic)). Las revisiones nuevas que los toquen deben añadirlos a mano igualmente:
-
-- la función y el trigger `model_versions_comprobar` de `model_versions`;
-- los `GRANT` de `ortesislab_app` y `ortesislab_worker`;
-- la FK circular `batch_items_winning_attempt_fk`: el modelo la marca `use_alter`, pero el autogenerado la deja dentro de `create_table('batch_items')`. Hay que quitarla de ahí y crearla con `op.create_foreign_key` después de `generation_attempts`; en `downgrade`, borrarla antes de las tablas.
-
-Los cambios posteriores de `CHECK`, `GRANT`, funciones o triggers también se escriben a mano.
-
-### 4. Aplicar, consultar y revertir
-
-| Acción | Desarrollo | Base de pruebas |
-|---|---|---|
-| Aplicar pendientes | `uv run alembic upgrade head` | `uv run alembic -x base=test upgrade head` |
-| Revisión actual | `uv run alembic current` | `uv run alembic -x base=test current` |
-| Historial | `uv run alembic history` | igual |
-| Modelos y base coinciden | `uv run alembic check` | `uv run alembic -x base=test check` |
-| Revertir la última | `uv run alembic downgrade -1` | `uv run alembic -x base=test downgrade -1` |
-`alembic check` termina con error si los modelos y la base difieren en lo que Alembic compara, es decir, tablas, columnas, tipos, defaults, índices y restricciones con nombre. No compara `GRANT` ni triggers. Alembic no bloquea migraciones concurrentes: ejecutarlas desde un único operador. Después de migrar `ortesislab_dev`, `make db-seed` carga el fixture opcional.
+`-x base=test` usa la URL de pruebas; sin esa opción, Alembic usa la de desarrollo. Revisar el autogenerado: la FK circular, el trigger de versiones y los `GRANT` se añaden a mano, como indica [DATABASE.md](DATABASE.md#lo-que-alembic-no-genera). Después de migrar `ortesislab_dev`, `make db-seed` carga el fixture opcional. Alembic no bloquea migraciones concurrentes: ejecutarlas desde un único operador.
 
 ## Comprobación funcional
 
@@ -145,7 +99,7 @@ El detalle de cada carpeta está en [tests/README.md](../../tests/README.md).
 
 | Archivo de prueba | Evidencia que aporta |
 |---|---|
-| `tests/aplicacion_web/test_generador_web.py` | 13 casos: combinaciones y límites, semilla, STL, lectura STL/NPZ, preferencia de autoescala con import persistido, archivo `tests/assets/Test.stl`, expansión e índices inválidos |
+| `tests/aplicacion_web/test_generador_web.py` | Combinaciones y límites, semilla, STL, lectura STL/NPZ que conserva las coordenadas, archivo `tests/assets/Test.stl`, expansión e índices inválidos |
 | `tests/persistencia/test_almacen_import.py` | 6 casos: import con `object_url` y hash, deduplicación, rechazo, aislamiento entre usuarios, plantilla por usuario y migración de `uploaded_files` |
 | `tests/persistencia/test_lotes_trabajador.py` | 8 casos: idempotencia, cuota, lote parcial con STL en el bucket, lease vencido, cancelación, generación sin Redis, restauración y conciliación |
 | `tests/persistencia/test_propiedad_datos.py` | 8 casos: acceso entre usuarios, FK compuestas, URL obligatoria en `ready`, revisión de preferencias, permisos de roles app/trabajador y validez de sesiones |
@@ -163,8 +117,8 @@ Línea base con SQLAlchemy: **73 pruebas, 50 aprobadas y 23 omitidas, el 2026-10
 |---|---|
 | `Inicie sesión para continuar.` con sesión iniciada | Cookie ausente o vencida (12 h), sesión revocada, `ORTESISLAB_SESSION_SECRET` cambiado |
 | `/auth/login` muestra la página 404 de la app | El enlace debe navegar con recarga completa; revisar `ORTESISLAB_OIDC_REDIRECT_URI` y el puerto del backend |
-| `VariableFaltante: Falta la variable de entorno …` al arrancar o en la primera subida | Definir esa variable en el entorno o en `.env` |
-| `VariableInvalida: … debe empezar por postgresql+psycopg://` | Cambiar el esquema de esa URL de `postgresql://` a `postgresql+psycopg://` |
+| `RuntimeError: Falta la variable de entorno …` al arrancar o en la primera subida | Definir esa variable en el entorno o en `.env` |
+| `RuntimeError: … debe empezar por postgresql+psycopg://` | Cambiar el esquema de esa URL de `postgresql://` a `postgresql+psycopg://` |
 | Lote queda `En cola…` | El trabajador no está corriendo o no alcanza la base; revisar su log |
 | Base no disponible | Motor SQLAlchemy no abierto al arrancar (log `web`); `make db-health` |
 | `relation "..." does not exist` | Base sin migrar: `uv run alembic current` y `upgrade head` |

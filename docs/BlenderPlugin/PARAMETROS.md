@@ -2,20 +2,17 @@
 
 ## Fuentes y reglas generales
 
-Fuentes: [`OL_Settings` y panel](../../GenerateModelsApp/Interfaz.py), [`parametros_defecto.json`](../../GenerateModelsApp/config/parametros_defecto.json), [`ValidarOpciones`](../../GenerateModelsApp/Modeling.py) y [`limites.json`](../../GenerateModelsApp/config/limites.json). Los predeterminados de las propiedades Blender están declarados en código, además del JSON: no se enlazan automáticamente. La tabla refleja su coincidencia actual.
+Fuentes: [`OL_Settings` y panel](../../apps/ortesis-plugin/GenerateModelsApp/Interfaz.py), [`parametros_defecto.json`](../../core/config/parametros_defecto.json), [`ValidarOpciones`](../../apps/ortesis-plugin/GenerateModelsApp/Modeling.py) y [`limites.json`](../../core/config/limites.json). Los predeterminados de las propiedades Blender están declarados en código, además del JSON: no se enlazan automáticamente. La tabla refleja su coincidencia actual.
 
 Todas las longitudes son mm en coordenadas de malla; ángulos en grados. Los **rangos UI** limitan el panel Blender; la **API** impone sus propias reglas y puede aceptar valores fuera de esos rangos. Campos ocultos siguen formando parte de las opciones y pueden ser validados. Ningún control genera mientras se arrastra: pulsar Generar / actualizar.
 
-## Selección, preferencias y estado (fuera de las 17 opciones geométricas)
+## Selección y estado (fuera de las 17 opciones geométricas)
 
 | Control / clave | Predeterminado | Propósito y cambio |
 |---|---|---|
 | Superficie sin espesor / `source` | Sin objeto | Selecciona base MESH; filtra el resultado. Si está vacío, Generar toma el activo. Elegir otra base cambia la forma de partida; no carga plantilla NPZ automáticamente |
-| Autoescalar / `auto_scale` | `True` | Permite factor decimal para llevar eje mayor al rango 20–1000 mm. Generar escala una copia; Arreglar hornea esa corrección. Desactivado mantiene tamaño y muestra sugerencia |
 | `status` | `Listo para generar` | Texto de estado; panel muestra primeros 48 caracteres. No es un parámetro de geometría |
 | `filepath` del operador exportar | `//Ortesis_configurada.stl` | Ruta de salida; `//` es relativa al blend según Blender. Se añade extensión `.stl` si hace falta |
-
-La preferencia instalada `OL_Preferences.auto_scale` prevalece sobre `OL_Settings.auto_scale`; al ejecutar desde scripts se usa la de escena. La API recibe esta decisión como `autoescalar`, no `auto_scale`, y la retira antes de validar opciones.
 
 ## Las 17 opciones del núcleo
 
@@ -88,11 +85,9 @@ Valores exactos actualizados en [CONFIGURACION_GENERADA.md](CONFIGURACION_GENERA
 | `max_surface_vertices` | 500000 | Presupuesto para seguir subdividiendo; aumentar permite más detalle y memoria |
 | `max_refined_cache_entries` | 2 | Entradas de caché LRU Blender; no cambia los máximos fijos de caché web |
 | `surface_subdivision_iterations` | 16 | Máximo de rondas y cota de alcance de paso; aumentar admite más mitades |
-| `clip_snap_mm` | 0.0001 | Cuantización de coincidencias STL web antes de escala; aumentar fusiona más coordenadas cercanas |
+| `clip_snap_mm` | 0.0001 | Cuantización de coincidencias STL web; aumentar fusiona más coordenadas cercanas |
 | `clip_connect_mm` | 0.005 | Margen positivo alrededor del cero del campo; aumentar ensancha uniones casi puntuales |
 | `border_smooth_wavelength_mm` | 8.0 | Ondas cortas a filtrar; aumentar suaviza variaciones más largas; ≤0 desactiva filtrado |
 | `border_smooth_max_mm` | 3.0 | Desplazamiento máximo del borde; aumentar permite más cambio; ≤0 no actúa como tope |
-| `min_plausible_surface_extent_mm` | 20 | Eje mayor mínimo considerado plausible en heurística de escala |
-| `max_plausible_surface_extent_mm` | 1000 | Eje mayor máximo considerado plausible en heurística de escala |
 
 Los límites son configuración técnica, no resultados clínicos ni tolerancias de impresora. No modificar `comprobacion_geometrica.json` para intentar aprobar una malla: contiene referencias históricas.

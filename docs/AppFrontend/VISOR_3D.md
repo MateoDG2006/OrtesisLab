@@ -1,6 +1,6 @@
 # Visor 3D: código, datos e interacción
 
-Fuente única: [`assets/visor.html`](../../assets/visor.html). Cada vista es un documento HTML autónomo dentro de un iframe, con su propio contexto WebGL, escena, cámara y bucle de dibujo. No comparte cámara ni geometría cargada con otros iframes.
+Fuente única: [`assets/visor.html`](../../apps/web/assets/visor.html). Cada vista es un documento HTML autónomo dentro de un iframe, con su propio contexto WebGL, escena, cámara y bucle de dibujo. No comparte cámara ni geometría cargada con otros iframes.
 
 ## Carga y representación
 

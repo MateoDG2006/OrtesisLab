@@ -4,19 +4,19 @@
 
 | Archivo/carpeta | Función |
 |---|---|
-| [`web/PaginaComparacion.py`](../../web/PaginaComparacion.py) | Todos los componentes visuales; `ETIQUETAS_EJE` agrega opción sin barrido a `EJES` |
-| [`web/PaginaHistorial.py`](../../web/PaginaHistorial.py) | Página `/historial`: filtros, tabla paginada, acciones por versión y tarjetas de comparación |
-| [`web/Sesion.py`](../../web/Sesion.py) | Barra común: navegación, nombre y botón Iniciar/Cerrar sesión |
-| [`web/GenerateModelsApp.py`](../../web/GenerateModelsApp.py) | Páginas `/` e `/historial`, títulos y `on_load` |
-| [`web/EstadoApp.py`](../../web/EstadoApp.py) | Estado/handlers de `/`; se ejecutan en backend |
-| [`web/EstadoHistorial.py`](../../web/EstadoHistorial.py) | Estado/handlers de `/historial` |
-| [`web/GeneradorWeb.py`](../../web/GeneradorWeb.py) | Catálogos compartidos y fichas para mostrar; no renderiza |
-| [`web/LectorSuperficie.py`](../../web/LectorSuperficie.py) | Límite de subida usado por cliente y lector real servidor |
-| [`web/__init__.py`](../../web/__init__.py) | Marcador de paquete |
-| [`rxconfig.py`](../../rxconfig.py) | Plugins de compilación y apariencia |
-| [`assets/visor.html`](../../assets/visor.html) | Documento independiente Three.js dentro de iframe |
-| [`assets/favicon.ico`](../../assets/favicon.ico) | Icono del sitio |
-| [`assets/superficie_interior_mm.npz`](../../assets/superficie_interior_mm.npz) | Datos de ejemplo usados por backend; no componente visual |
+| [`web/PaginaComparacion.py`](../../apps/web/web/PaginaComparacion.py) | Todos los componentes visuales; `ETIQUETAS_EJE` agrega opción sin barrido a `EJES` |
+| [`web/PaginaHistorial.py`](../../apps/web/web/PaginaHistorial.py) | Página `/historial`: filtros, tabla paginada, acciones por versión y tarjetas de comparación |
+| [`web/Sesion.py`](../../apps/web/web/Sesion.py) | Barra común: navegación, nombre y botón Iniciar/Cerrar sesión |
+| [`web/GenerateModelsApp.py`](../../apps/web/web/GenerateModelsApp.py) | Páginas `/` e `/historial`, títulos y `on_load` |
+| [`web/EstadoApp.py`](../../apps/web/web/EstadoApp.py) | Estado/handlers de `/`; se ejecutan en backend |
+| [`web/EstadoHistorial.py`](../../apps/web/web/EstadoHistorial.py) | Estado/handlers de `/historial` |
+| [`web/GeneradorWeb.py`](../../apps/web/web/GeneradorWeb.py) | Catálogos compartidos y fichas para mostrar; no renderiza |
+| [`web/LectorSuperficie.py`](../../apps/web/web/LectorSuperficie.py) | Límite de subida usado por cliente y lector real servidor |
+| [`web/__init__.py`](../../apps/web/web/__init__.py) | Marcador de paquete |
+| [`rxconfig.py`](../../apps/web/rxconfig.py) | Plugins de compilación y apariencia |
+| [`assets/visor.html`](../../apps/web/assets/visor.html) | Documento independiente Three.js dentro de iframe |
+| [`assets/favicon.ico`](../../apps/web/assets/favicon.ico) | Icono del sitio |
+| [`assets/superficie_interior_mm.npz`](../../apps/web/assets/superficie_interior_mm.npz) | Datos de ejemplo usados por backend; no componente visual |
 | `reflex.lock/package.json`, `reflex.lock/bun.lock` | Dependencias JavaScript reproducibles |
 | `.web/` | Compilación, dependencias instaladas y archivos públicos generados |
 

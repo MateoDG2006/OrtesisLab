@@ -28,9 +28,21 @@ from web.persistence.repositorios import (
 )
 
 AJUSTES = Ajustes.Cargar()
-FALTANTE = AJUSTES.Faltante("test_database_url", "test_worker_database_url")
-URL_APP = "" if FALTANTE else AJUSTES.test_database_url
-URL_TRABAJADOR = "" if FALTANTE else AJUSTES.test_worker_database_url
+
+
+def _UrlDePrueba(atributo: str) -> tuple[str, str]:
+    try:
+        return getattr(AJUSTES, atributo), ""
+    except RuntimeError as error:
+        texto = str(error)
+        if texto.startswith("Falta la variable de entorno"):
+            return "", texto
+        raise
+
+
+URL_APP, FALTA_APP = _UrlDePrueba("test_database_url")
+URL_TRABAJADOR, FALTA_TRABAJADOR = _UrlDePrueba("test_worker_database_url")
+FALTANTE = FALTA_APP or FALTA_TRABAJADOR
 
 
 class SesionPrueba(Session):
