@@ -338,7 +338,7 @@ GRANT SELECT, UPDATE ON generation_batches, batch_items TO ortesislab_worker;
 GRANT SELECT, INSERT, UPDATE ON generation_attempts, file_assets, exports TO ortesislab_worker;
 GRANT SELECT, INSERT ON generation_results TO ortesislab_worker;
 GRANT SELECT, INSERT, DELETE ON history_events TO ortesislab_worker;
-GRANT DELETE ON auth_sessions TO ortesislab_worker;
+GRANT SELECT, DELETE ON auth_sessions TO ortesislab_worker;
 ```
 
 `tests/persistencia/test_propiedad_datos.py` depende de esos permisos, del `CHECK` `file_assets_ready_url_ck` y de las claves foráneas compuestas.

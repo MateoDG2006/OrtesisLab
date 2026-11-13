@@ -1,5 +1,30 @@
 # Registro de cambios documentales
 
+## 2026-11-12 — El refinado no rechaza un pliegue
+
+Al refinar `OrtesisTest1model.stl` a 1 mm (242645 vértices) el suavizado de 20 iteraciones invertía la normal de un vértice de contorno en un pliegue. `Preparar` rechazaba toda la superficie. Ahora el vértice nuevo toma la normal de sus caras, y si el suavizado lo cruza más de 60° conserva esa normal. Una normal de entrada ya desviada sigue rechazándose. Autorización en [RES-2026-11-12-016](../Audit/resolves/2026-11-12-resolve-normal-pliegue.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `uv run python -m unittest tests.geometria.test_normales_topologia tests.geometria.test_refinador_malla`: 9 pruebas, OK.
+- `RefinadorMalla.Refinar` de `tests/assets/OrtesisTest1model.stl` con paso 1 mm: superficie preparada, acuerdo mínimo 0,813.
+
+## 2026-11-12 — El trabajador puede leer las sesiones que purga
+
+`ortesislab_worker` tenía `DELETE` sobre `auth_sessions` y no `SELECT`. El `DELETE` de la conciliación filtra por `expires_at` y `revoked_at`, y PostgreSQL lo rechazaba con `permission denied for table auth_sessions`. La revisión `c4d8e1a90b27` concede ese `SELECT`. La aplicación sigue sin borrar sesiones. Autorización en [RES-2026-11-12-015](../Audit/resolves/2026-11-12-resolve-select-sesiones-trabajador.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `uv run alembic upgrade head`: aplicó `c4d8e1a90b27`.
+- `RepositorioUsuarios.PurgarSesionesVencidas` y `RepositorioHistorial.PurgarAntiguos` con el rol del trabajador: terminaron e imprimieron `purga-ok 0` y `historial-ok 0`.
+
+## 2026-11-12 — La prueba de carga lee `OrtesisTest1model.stl`
+
+`tests/assets/Test.stl` ya no está. `test_carga_test_como_superficie_abierta` lee `tests/assets/OrtesisTest1model.stl`. Ese STL pasa el lector: 168646 vértices y normales alineadas con las caras. El `NormalesInvalidas` del proceso web sale de `apps/web/assets/superficie_interior_mm.npz`: 35 de 52125 vértices tienen una normal guardada a más de 60° de la normal de las caras. Autorización en [RES-2026-11-12-013](../Audit/resolves/2026-11-12-resolve-fixture-stl.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `uv run python -m unittest discover -s tests -p "test_*.py"`: 97 pruebas, 28 omitidas, 1 error por `Test.stl` ausente y 1 fallo ajeno en `test_stl_rechaza_coordenadas_fuera_de_float32`.
+- `LectorSuperficie.Preparar` de `OrtesisTest1model.stl` y el test de carga con ese archivo: superficie preparada, OK.
+- `ServicioImports.PrepararPlantilla` sobre `superficie_interior_mm.npz`: lanzó `NormalesInvalidas`.
+
 ## 2026-11-12 — Límites, imports colgados y purga del trabajador
 
 `Configuracion.Limites` exigía dos claves de autoescala que `limites.json` ya no tiene, así que cualquier límite lanzaba `KeyError`. Esas claves salen de `LIMITES_POSITIVOS`. `RepositorioImports.ColgadosVencidos` cierra imports `received` o `validating` vencidos, e `ImportDTO` incluye `user_id` porque el conciliador lo usa. `ServicioVersiones.CLAVES_SOLO_VOXEL` es `repair` y `resolution_mm`. La revisión Alembic `b7c1d4e9a2f0` concede `DELETE` de `history_events` y `auth_sessions` solo a `ortesislab_worker`; la aplicación sigue sin borrar historial. `ValidarEnArranque` ya no se llama desde el merge del login. Autorización en [RES-2026-11-12-014](../Audit/resolves/2026-11-12-resolve-fase0-defectos.md). Los hallazgos siguen abiertos.

@@ -136,9 +136,10 @@ class RefinadorMalla:
             len(faces),
             pasoMm,
         )
+        # El punto medio hereda las normales de los extremos: en un pliegue quedan invertidas.
         return AnalizadorMalla.Preparar(
             puntos,
             faces,
-            normals,
+            AnalizadorMalla.NormalesDeCaras(puntos, faces),
             suavizarNormales=True,
         )

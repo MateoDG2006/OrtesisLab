@@ -33,7 +33,7 @@ Fuente: [`AnalizadorMalla`](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py)
 
 Cada triángulo aporta tres aristas dirigidas. Al ordenar sus extremos se cuentan incidencias: una significa contorno, dos interior y más de dos es no manifold. Si no hay contorno se rechaza como sólido cerrado. Repetir una arista dirigida indica orientación inconsistente. Se detectan triángulos duplicados ordenando sus índices; se verifica área, finitud, índices y ausencia de vértices sueltos. Cada vértice del contorno debe tener grado dos de contorno. Un recorrido de adyacencia exige una sola componente.
 
-Normal por vértice: sumar `cross(p_b-p_a, p_c-p_a)` de caras incidentes y normalizar. El producto cruzado pondera por área. Al refinar se promedian normales vecinas durante 20 iteraciones: mitad normal actual y mitad media de vecinos, renormalizando. Esto suaviza la dirección de desplazamiento sin mover los puntos interiores.
+Normal por vértice: sumar `cross(p_b-p_a, p_c-p_a)` de caras incidentes y normalizar. El producto cruzado pondera por área. Una normal de entrada a más de 60° de esa suma se rechaza. Al refinar se promedian normales vecinas durante 20 iteraciones: mitad normal actual y mitad media de vecinos, renormalizando. Esto suaviza la dirección de desplazamiento sin mover los puntos interiores. Si un vértice cruza el pliegue y queda a más de 60°, conserva la normal de sus caras.
 
 Distancia `b_i`: **Dijkstra multifuente** con todos los vértices de contorno a distancia cero, pesos igual a longitud de arista y cola de prioridad `heapq`. Es una aproximación geodésica discreta por aristas, no un solver continuo sobre triángulos. Su etapa de caminos tiene complejidad aproximada `O((V+E) log V)` y memoria `O(V+E)`; la extracción de aristas con `np.unique` añade ordenación.
 
@@ -50,7 +50,7 @@ SOLID: h = surface_step_mm
 Otros: h = min(surface_step_mm, rib_width_mm/3, cell_mm/6)
 ```
 
-Se extraen aristas únicas y se marcan las de longitud `>1.001*h`. Se crea un punto medio único por arista compartida y se interpolan/normalizan sus normales. Cada triángulo se divide según tenga 0, 1, 2 o 3 aristas marcadas; al compartir índices de punto medio se evitan grietas por subdivisión independiente. La superficie conserva su abertura topológica.
+Se extraen aristas únicas y se marcan las de longitud `>1.001*h`. Se crea un punto medio único por arista compartida. La normal interpolada de los extremos solo sirve para rechazar una arista con normales opuestas; al cerrar, cada vértice recibe la normal de las caras refinadas. Cada triángulo se divide según tenga 0, 1, 2 o 3 aristas marcadas; al compartir índices de punto medio se evitan grietas por subdivisión independiente. La superficie conserva su abertura topológica.
 
 Límites: 16 rondas y presupuesto de 500 000 vértices para añadir nuevos puntos. Si la próxima ronda excede ese presupuesto, se detiene y devuelve una malla que puede no alcanzar `h`. No es una garantía de que toda entrada ya tenga menos de 500 000 vértices, ni de que el cascarón final permanezca bajo ese número. Si agota rondas sin alcanzar paso y sin detenerse por presupuesto, lanza error. El usuario debe revisar el detalle logrado.
 

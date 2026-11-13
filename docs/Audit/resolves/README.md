@@ -27,6 +27,9 @@
 | [2026-11-12-resolve-modulo-ortesislabapp](2026-11-12-resolve-modulo-ortesislabapp.md) | EN_CURSO | Módulo Reflex `web.OrtesisLabApp` |
 | [2026-11-12-resolve-quitar-validar-arranque](2026-11-12-resolve-quitar-validar-arranque.md) | EN_CURSO | Quitar `ValidarEnArranque` del arranque |
 | [2026-11-12-resolve-login-local](2026-11-12-resolve-login-local.md) | EN_CURSO | Login y registro con correo y contraseña |
+| [2026-11-12-resolve-fixture-stl](2026-11-12-resolve-fixture-stl.md) | EN_CURSO | La prueba de carga lee `OrtesisTest1model.stl` |
+| [2026-11-12-resolve-select-sesiones-trabajador](2026-11-12-resolve-select-sesiones-trabajador.md) | EN_CURSO | `SELECT` de `auth_sessions` para el trabajador |
+| [2026-11-12-resolve-normal-pliegue](2026-11-12-resolve-normal-pliegue.md) | EN_CURSO | El suavizado no rechaza un pliegue al refinar |
 | [2026-11-12-resolve-rediseno-interfaz-lotes](2026-11-12-resolve-rediseno-interfaz-lotes.md) | EN_CURSO | Rediseño de `/`, página `/lote` y miniaturas; no cierra hallazgos |
 | [2026-11-12-resolve-conflictos-merge-login-lote](2026-11-12-resolve-conflictos-merge-login-lote.md) | EN_CURSO | Merge de `/lote` con el login local; no cierra hallazgos |
 | [2026-11-12-resolve-fase0-defectos](2026-11-12-resolve-fase0-defectos.md) | EN_CURSO | D-1, D-3, D-4 y DELETE de retención; no cierra hallazgos |

@@ -140,13 +140,13 @@ class LoteYStl(unittest.TestCase):
 
     def test_carga_test_como_superficie_abierta(self):
         resultado, info = LectorSuperficie.Preparar(
-            "Test.stl",
-            (Path(__file__).resolve().parents[1] / "assets" / "Test.stl").read_bytes(),
+            "OrtesisTest1model.stl",
+            (Path(__file__).resolve().parents[1] / "assets" / "OrtesisTest1model.stl").read_bytes(),
         )
         self.assertGreater(len(resultado[0]), 0)
         self.assertGreater(len(resultado[1]), 0)
         self.assertTrue(np.isfinite(resultado[3]).all())
-        self.assertEqual(info["nombre"], "Test.stl")
+        self.assertEqual(info["nombre"], "OrtesisTest1model.stl")
 
     def test_npz_rechaza_indices_fraccionarios_y_expansion_excesiva(self):
         contenido = io.BytesIO()

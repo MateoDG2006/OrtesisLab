@@ -270,10 +270,10 @@ Análisis de la superficie abierta, sin Blender.
 | `AnalizadorMalla` | Clase | [24](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L24) | Comprueba que la base sea una superficie abierta y mide el borde. |
 | `AnalizadorMalla.NormalesDeCaras` | Función/método | [28](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L28) | Entrada: vértices y triángulos orientados. Proceso: promedia normales |
 | `AnalizadorMalla.Preparar` | Función/método | [47](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L47) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `AnalizadorMalla.DistanciaAlContorno` | Función/método | [148](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L148) | Entrada: malla triangular abierta. Proceso: Dijkstra por aristas. |
-| `AnalizadorMalla._VerticesNoManifold` | Función/método | [160](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L160) | True si algún vértice no tiene un único abanico de caras (A-05). |
-| `AnalizadorMalla._Adyacencia` | Función/método | [197](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `AnalizadorMalla._Geodesica` | Función/método | [206](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L206) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `AnalizadorMalla.DistanciaAlContorno` | Función/método | [156](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L156) | Entrada: malla triangular abierta. Proceso: Dijkstra por aristas. |
+| `AnalizadorMalla._VerticesNoManifold` | Función/método | [168](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L168) | True si algún vértice no tiene un único abanico de caras (A-05). |
+| `AnalizadorMalla._Adyacencia` | Función/método | [205](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L205) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `AnalizadorMalla._Geodesica` | Función/método | [214](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py#L214) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py`
 

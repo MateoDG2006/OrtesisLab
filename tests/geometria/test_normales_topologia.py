@@ -19,6 +19,41 @@ from OrtesisLabPlugin.SuavizadoBorde import SuavizadoBorde
 
 
 class NormalesYTopologia(unittest.TestCase):
+    def test_a04_rechaza_normales_tangenciales_aunque_se_suavicen(self):
+        vertices = np.array(
+            [[0.0, 0.0, 0.0], [40.0, 0.0, 0.0], [40.0, 40.0, 0.0], [0.0, 40.0, 0.0]],
+            dtype=np.float64,
+        )
+        caras = np.array([[0, 1, 2], [0, 2, 3]], dtype=np.int32)
+        normales = np.tile([1.0, 0.0, 0.0], (4, 1))
+        with self.assertRaises(NormalesInvalidas):
+            AnalizadorMalla.Preparar(vertices, caras, normales, suavizarNormales=True)
+
+    def test_el_suavizado_conserva_la_normal_del_pliegue(self):
+        # La fila inferior se dobla casi 180°. El promedio con los vecinos la invierte.
+        puntos = np.array(
+            [
+                [0, 0, 0], [10, 0, 0], [20, 0, 0],
+                [0, 10, 0], [10, 10, 0], [20, 10, 0],
+                [0, 9.2, -0.3], [10, 8.5, -0.3], [20, 9.2, -0.3],
+            ],
+            dtype=np.float64,
+        )
+        caras = np.array(
+            [
+                [0, 1, 4], [0, 4, 3], [1, 2, 5], [1, 5, 4],
+                [3, 4, 7], [3, 7, 6], [4, 5, 8], [4, 8, 7],
+            ],
+            dtype=np.int32,
+        )
+        normales = AnalizadorMalla.NormalesDeCaras(puntos, caras)
+        refinados, caras_ref, normales_ref, _borde = RefinadorMalla.Refinar(
+            puntos, caras, normales, 5.0
+        )
+        geometricas = AnalizadorMalla.NormalesDeCaras(refinados, caras_ref)
+        acuerdo = np.einsum("ij,ij->i", normales_ref, geometricas)
+        self.assertGreaterEqual(float(acuerdo.min()), 0.5)
+
     def test_a04_rechaza_normales_tangenciales(self):
         vertices = np.array(
             [[0.0, 0.0, 0.0], [40.0, 0.0, 0.0], [40.0, 40.0, 0.0], [0.0, 40.0, 0.0]],

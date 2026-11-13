@@ -101,7 +101,7 @@ El detalle de cada carpeta está en [tests/README.md](../../tests/README.md).
 
 | Archivo de prueba | Evidencia que aporta |
 |---|---|
-| `tests/aplicacion_web/test_generador_web.py` | Combinaciones y límites, semilla, STL, lectura STL/NPZ que conserva las coordenadas, archivo `tests/assets/Test.stl`, expansión e índices inválidos |
+| `tests/aplicacion_web/test_generador_web.py` | Combinaciones y límites, semilla, STL, lectura STL/NPZ que conserva las coordenadas, archivo `tests/assets/OrtesisTest1model.stl`, expansión e índices inválidos |
 | `tests/persistencia/test_almacen_import.py` | 6 casos: import con `object_url` y hash, deduplicación, rechazo, aislamiento entre usuarios, plantilla por usuario y migración de `uploaded_files` |
 | `tests/persistencia/test_lotes_trabajador.py` | 8 casos: idempotencia, cuota, lote parcial con STL en el bucket, lease vencido, cancelación, generación sin Redis, restauración y conciliación |
 | `tests/persistencia/test_propiedad_datos.py` | 8 casos: acceso entre usuarios, FK compuestas, URL obligatoria en `ready`, revisión de preferencias, permisos de roles app/trabajador y validez de sesiones |

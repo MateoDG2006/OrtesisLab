@@ -90,11 +90,21 @@ class AnalizadorMalla:
             raise SuperficieInvalida("El contorno se toca en un vértice; separe o conecte correctamente las caras.")
 
         normales_suaves = normales_entrada.copy()
+        geometricas = AnalizadorMalla.NormalesDeCaras(puntos, faces)
+        epsilon = Configuracion.ValorLimite("normal_epsilon")
+        unidad = normales_suaves / np.maximum(
+            np.linalg.norm(normales_suaves, axis=1)[:, None],
+            epsilon,
+        )
+        # A-04: la normal de entrada tiene que seguir a las caras. El suavizado se comprueba aparte.
+        if float(np.min(np.einsum("ij,ij->i", unidad, geometricas))) < 0.5:
+            raise NormalesInvalidas(
+                detalle="Las normales no coinciden con la orientación de las caras."
+            )
         if suavizarNormales:
             grado = np.bincount(aristas.ravel(), minlength=len(puntos))
             if np.any(grado == 0):
                 raise VerticesSueltos()
-            epsilon = Configuracion.ValorLimite("normal_epsilon")
             # Promedia cada normal con las de sus vecinos, varias veces.
             for _ in range(int(Configuracion.ValorLimite("normal_smooth_iterations"))):
                 promedio = np.zeros_like(normales_suaves)
@@ -111,13 +121,11 @@ class AnalizadorMalla:
             raise NormalesInvalidas()
         normales_suaves = normales_suaves / longitudes[:, None]
 
-        # A-04: normales unitarias deben alinearse con la geometría de las caras.
-        geometricas = AnalizadorMalla.NormalesDeCaras(puntos, faces)
+        # En un pliegue el promedio con los vecinos puede invertir la normal. Ahí manda la cara.
         acuerdo = np.einsum("ij,ij->i", normales_suaves, geometricas)
-        if float(np.min(acuerdo)) < 0.5:
-            raise NormalesInvalidas(
-                detalle="Las normales no coinciden con la orientación de las caras."
-            )
+        fuera = acuerdo < 0.5
+        if np.any(fuera):
+            normales_suaves[fuera] = geometricas[fuera]
 
         # A-05: cada vértice debe tener un solo abanico de caras.
         if AnalizadorMalla._VerticesNoManifold(faces, len(puntos)):
