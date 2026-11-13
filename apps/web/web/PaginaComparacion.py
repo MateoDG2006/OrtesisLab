@@ -10,9 +10,9 @@ from reflex_base.vars.base import Var
 
 from .ConfiguracionBackend import ConfiguracionBackend
 from .EstadoApp import (
+    CASILLAS_PATRON,
     ETIQUETAS_EJE,
     ID_SUBIDA_SUPERFICIE,
-    LIMITE_LOTE,
     EstadoApp,
 )
 from .GeneradorWeb import EJES, PATRONES
@@ -83,7 +83,7 @@ class PaginaComparacion:
                     "Patrón", EstadoApp.pattern, EstadoApp.set_pattern, list(PATRONES.items()), AYUDAS["pattern"]
                 ),
                 rx.cond(
-                    EstadoApp.pattern == "SOLID",
+                    EstadoApp.es_macizo,
                     PaginaComparacion.Numero("solid_mm", EstadoApp.solid_mm, EstadoApp.set_solid_mm),
                     rx.vstack(
                         PaginaComparacion.Numero("cell_mm", EstadoApp.cell_mm, EstadoApp.set_cell_mm),
@@ -138,7 +138,7 @@ class PaginaComparacion:
     def Avanzados() -> rx.Component:
         return rx.vstack(
             rx.cond(
-                EstadoApp.pattern != "SOLID",
+                ~EstadoApp.es_macizo,
                 rx.vstack(
                     rx.cond(
                         EstadoApp.liner,
@@ -147,7 +147,7 @@ class PaginaComparacion:
                     ),
                     PaginaComparacion.Numero("angle_deg", EstadoApp.angle_deg, EstadoApp.set_angle_deg),
                     rx.cond(
-                        EstadoApp.pattern == "VORONOI",
+                        EstadoApp.pide_semilla,
                         PaginaComparacion.Numero("seed", EstadoApp.seed, EstadoApp.set_seed),
                         rx.box(),
                     ),
@@ -313,18 +313,19 @@ class PaginaComparacion:
     def Lote() -> rx.Component:
         return rx.vstack(
             rx.text(
-                f"El lote parte de los parámetros de la izquierda. Elija los patrones y, si quiere, "
-                f"un parámetro que recorra un rango. Admite hasta {LIMITE_LOTE} variantes.",
+                "El lote parte de los parámetros de la izquierda. Elija los patrones y, si quiere, "
+                "un parámetro que recorra un rango.",
                 size="2",
                 color_scheme="gray",
             ),
             rx.text("1. Patrones", size="3", weight="bold"),
             rx.grid(
-                PaginaComparacion.Casilla(PATRONES["VORONOI"], EstadoApp.usar_voronoi, EstadoApp.set_usar_voronoi),
-                PaginaComparacion.Casilla(PATRONES["HEX"], EstadoApp.usar_hex, EstadoApp.set_usar_hex),
-                PaginaComparacion.Casilla(PATRONES["DIAMOND"], EstadoApp.usar_diamond, EstadoApp.set_usar_diamond),
-                PaginaComparacion.Casilla(PATRONES["SQUARE"], EstadoApp.usar_square, EstadoApp.set_usar_square),
-                PaginaComparacion.Casilla(PATRONES["SOLID"], EstadoApp.usar_solid, EstadoApp.set_usar_solid),
+                *[
+                    PaginaComparacion.Casilla(
+                        PATRONES[codigo], getattr(EstadoApp, campo), getattr(EstadoApp, f"set_{campo}")
+                    )
+                    for codigo, campo in CASILLAS_PATRON
+                ],
                 columns={"initial": "1", "sm": "2", "md": "3"},
                 spacing="2",
                 width="100%",

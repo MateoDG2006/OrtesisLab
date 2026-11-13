@@ -6,7 +6,6 @@ from uuid import uuid4
 from web.storage.AlmacenamientoPrivado import Almacen
 
 
-@unittest.skip("Requiere base y bucket reales")
 class DosSesiones(unittest.TestCase):
     def test_claves_distintas_por_usuario(self):
         usuario_a, usuario_b = uuid4(), uuid4()

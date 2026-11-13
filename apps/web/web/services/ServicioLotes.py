@@ -16,7 +16,6 @@ from web.enums import AlcanceGeometria, EstadoImport, EstadoIntento, FormatoExpo
 from web.persistence.ConexionPostgres import ConexionPostgres
 from web.persistence.Contratos import (
     MAXIMO_INTENTOS,
-    MAXIMO_ITEMS_LOTE,
     MAXIMO_LOTES_PENDIENTES,
     VERSION_EXPORTADOR,
     AccesoDenegado,
@@ -64,8 +63,8 @@ class ServicioLotes:
         request_id. Errores: conflicto idempotente, cuota, import ajeno."""
         reintento = solicitud.mode == ModoLote.RETRY
         total = len(solicitud.version_ids or []) if reintento else len(solicitud.variantes)
-        if not 1 <= total <= MAXIMO_ITEMS_LOTE:
-            raise CuotaExcedida(f"Un lote admite de 1 a {MAXIMO_ITEMS_LOTE} variantes.")
+        if total < 1:
+            raise CuotaExcedida("El lote no tiene variantes.")
         huella = ServicioLotes.HuellaSolicitud(solicitud)
         user_id = usuario.user_id
 

@@ -25,26 +25,6 @@ class ValidadorMalla:
         ob[PROP_VALIDACION] = json.dumps(informe)
 
     @staticmethod
-    def _Componentes(bm) -> int:
-        # Cuenta grupos de vértices conectados. Una ortesis válida tiene uno.
-        vistos = set()
-        piezas = 0
-        for vertice in bm.verts:
-            if vertice in vistos:
-                continue
-            piezas += 1
-            pendientes = [vertice]
-            vistos.add(vertice)
-            while pendientes:
-                actual = pendientes.pop()
-                for arista in actual.link_edges:
-                    vecino = arista.other_vert(actual)
-                    if vecino not in vistos:
-                        vistos.add(vecino)
-                        pendientes.append(vecino)
-        return piezas
-
-    @staticmethod
     def _Cruces(bm, tree) -> int:
         # Cuenta triángulos que se atraviesan sin compartir vértices.
         cruces = 0

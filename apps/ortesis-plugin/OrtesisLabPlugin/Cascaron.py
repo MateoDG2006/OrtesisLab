@@ -8,6 +8,7 @@ from __future__ import annotations
 import numpy as np
 
 from .Excepciones import GeometriaInconsistente, NormalesInvalidas, SuperficieEliminadaPorPatron
+from .StlBinario import StlBinario
 from .util.Utilidades import Configuracion, Registro
 
 
@@ -154,28 +155,13 @@ class Cascaron:
         return np.vstack([puntos, exterior]), completo
 
     @staticmethod
-    def Cerrar(p, f, n, t):
-        """Alias compatible: cerrar el espesor no significa tapar el canal."""
-        return Cascaron.Engrosar(p, f, n, t)
-
-    @staticmethod
     def VolumenMm3(vertices, faces) -> float:
-        """Entrada: vértices y caras del cascarón en mm. Proceso: triangula
-        cada polígono y suma volúmenes orientados en NumPy. Salida: mm³.
-        Errores: geometría sin caras. Efectos: registro de orientación.
-        """
         logger = Registro.Obtener("cascaron")
         puntos = np.asarray(vertices, dtype=np.float64)
-        triangulos = []
-        for cara in faces:
-            indices = [int(indice) for indice in cara]
-            if len(indices) < 3:
-                continue
-            for posicion in range(1, len(indices) - 1):
-                triangulos.append((indices[0], indices[posicion], indices[posicion + 1]))
-        if not triangulos:
+        triangulos = StlBinario.Triangulos(faces)
+        if triangulos.size == 0:
             raise GeometriaInconsistente("No hay caras para calcular el volumen.")
-        caras_triangulares = np.asarray(triangulos, dtype=np.int32)
+        caras_triangulares = triangulos
         a = puntos[caras_triangulares[:, 0]]
         b = puntos[caras_triangulares[:, 1]]
         c = puntos[caras_triangulares[:, 2]]

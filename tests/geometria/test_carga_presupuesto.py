@@ -71,8 +71,12 @@ class CargaYPresupuesto(unittest.TestCase):
         Configuracion.Recargar()
         datos = Configuracion.Limites()
         datos["pattern_batch"] = 0
-        with self.assertRaises(ConfiguracionInvalida):
-            Configuracion._ValidarLimites(datos)
+        Configuracion._CACHE["limites.json"] = datos
+        try:
+            with self.assertRaises(ConfiguracionInvalida):
+                Configuracion.Limites()
+        finally:
+            Configuracion.Recargar()
 
     def test_limites_cargan_sin_claves_de_escala(self):
         Configuracion.Recargar()

@@ -52,22 +52,6 @@ class EstadoHistorial(rx.State):
     _siguiente: str = ""
 
     @rx.event
-    def set_filtro_patron(self, valor: str):
-        self.filtro_patron = valor
-
-    @rx.event
-    def set_filtro_estado(self, valor: str):
-        self.filtro_estado = valor
-
-    @rx.event
-    def set_filtro_desde(self, valor: str):
-        self.filtro_desde = valor
-
-    @rx.event
-    def set_filtro_hasta(self, valor: str):
-        self.filtro_hasta = valor
-
-    @rx.event
     async def Cargar(self):
         self._cursores = [""]
         self.pagina = 1
@@ -275,3 +259,8 @@ class EstadoHistorial(rx.State):
             ),
             "nota": version.change_note or "",
         }
+
+
+# Reflex 0.9 no genera set_*. Solo los filtros que /historial ya enlazaba.
+for _campo in ("filtro_patron", "filtro_estado", "filtro_desde", "filtro_hasta"):
+    EstadoHistorial._create_setter(_campo, EstadoHistorial.base_vars[_campo])

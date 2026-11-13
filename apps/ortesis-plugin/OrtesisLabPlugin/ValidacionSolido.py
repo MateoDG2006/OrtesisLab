@@ -1,9 +1,4 @@
-"""Validación de mallas sólidas solo con NumPy (sin Blender).
-
-Entrada: vértices (N,3) y caras poligonales o triángulos.
-Proceso: triangula, mide aristas, componentes y degeneración opcional.
-Salida: dict con conteos y ``ok`` (una sola pieza cerrada y manifold).
-"""
+"""Validación de mallas sólidas solo con NumPy, sin Blender."""
 
 from __future__ import annotations
 
@@ -11,6 +6,7 @@ from collections import defaultdict
 
 import numpy as np
 
+from .StlBinario import StlBinario
 from .util.Utilidades import Configuracion
 
 _TOPE_CRUCES_HEURISTICA = 800
@@ -18,17 +14,6 @@ _TOPE_CRUCES_HEURISTICA = 800
 
 class ValidadorSolido:
     """Comprueba topología de un sólido triangular antes de publicar."""
-
-    @staticmethod
-    def _Triangulos(caras) -> np.ndarray:
-        salida = []
-        for cara in caras:
-            indices = [int(vertice) for vertice in cara]
-            if len(indices) < 3:
-                continue
-            for posicion in range(1, len(indices) - 1):
-                salida.append((indices[0], indices[posicion], indices[posicion + 1]))
-        return np.asarray(salida, dtype=np.int64)
 
     @staticmethod
     def _ContarComponentes(triangulos: np.ndarray) -> int:
@@ -125,7 +110,7 @@ class ValidadorSolido:
         puntos = np.asarray(vertices, dtype=np.float64)
         if puntos.ndim != 2 or puntos.shape[1] != 3:
             raise ValueError("Los vértices deben ser una matriz N×3.")
-        triangulos = ValidadorSolido._Triangulos(caras)
+        triangulos = StlBinario.Triangulos(caras)
         area_minima = float(Configuracion.ValorLimite("degenerate_area"))
         abiertas, no_manifold = ValidadorSolido._ContarAristas(triangulos)
         from .Malla import AnalizadorMalla

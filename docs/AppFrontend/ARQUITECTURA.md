@@ -26,7 +26,7 @@ No hay un frontend separado escrito a mano en React ni un API client propio de g
 
 ## Sesión
 
-`Sesion.Barra` muestra enlaces Comparar (`/`), Lote (`/lote`) e Historial (`/historial`), el nombre del usuario y, si no hay sesión, Crear cuenta e Iniciar sesión. Esos botones recargan `<api_url>/auth/registro` o `/auth/login`. Cerrar sesión envía un POST a `/auth/logout`. Reflex compila las anclas como `Link` del enrutador y, sin recarga completa, mostraría su página 404 en vez de llegar al backend. La cookie `ortesislab_sesion` es HttpOnly; React nunca la lee. Al volver de cerrar sesión o al entrar otro usuario en la misma pestaña, `CargarPredeterminados` borra fichas, vistas y superficie y `EstadoHistorial` vacía filas y selección.
+`Sesion.Barra` muestra enlaces Comparar (`/`), Lote (`/lote`) e Historial (`/historial`), el nombre del usuario y, si no hay sesión, Crear cuenta e Iniciar sesión. Esos botones recargan `<api_url>/auth/registro` o `/auth/login`. Cerrar sesión envía un POST a `/auth/logout` con un `<form>` HTML. `rx.el.form` cancela ese envío. Reflex compila las anclas como `Link` del enrutador y, sin recarga completa, mostraría su página 404 en vez de llegar al backend. La cookie `ortesislab_sesion` es HttpOnly; React nunca la lee. Al volver de cerrar sesión o al entrar otro usuario en la misma pestaña, `CargarPredeterminados` borra fichas, vistas y superficie y `EstadoHistorial` vacía filas y selección.
 
 ## Árbol de componentes
 

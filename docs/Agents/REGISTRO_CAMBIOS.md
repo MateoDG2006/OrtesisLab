@@ -1,5 +1,31 @@
 # Registro de cambios documentales
 
+## 2026-11-13 — Cerrar sesión envía el POST
+
+El botón no cerraba la sesión: `rx.el.form` llama a `preventDefault` y el POST a `/auth/logout` no sale. La barra usa un `<form method="post">` que el navegador envía. Autorización en [RES-2026-11-13-004](../Audit/resolves/2026-11-13-resolve-cerrar-sesion.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas: en http://localhost:3000, con la cuenta local `cierre-prueba`, el botón Cerrar sesión volvió a mostrar Crear cuenta e Iniciar sesión.
+
+## 2026-11-13 — El formulario vuelve a tener set_*
+
+`make web` fallaba en `EstadoApp.set_pattern`. Reflex 0.9 no genera esos eventos (`state_auto_setters` es False). `EstadoApp` y `EstadoHistorial` registran otra vez un setter solo para los campos que las páginas ya enlazaban. Autorización en [RES-2026-11-13-003](../Audit/resolves/2026-11-13-resolve-setters-formulario.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas: construir `PaginaComparacion.Index`, `PaginaLote.Index` y `PaginaHistorial.Index`. Las tres páginas se arman. `make web` no se dejó en marcha.
+
+## 2026-11-13 — Un lote no tiene tope de variantes
+
+`lotes.maximo_items` desaparece. `Combinaciones` y `ServicioLotes.Solicitar` aceptan cualquier cantidad mayor que cero. El `CHECK` de `generation_batches.total_items` pasa a `total_items >= 1` en la revisión `e7a3c91b4d02`. Siguen el tope de lotes pendientes y el de vistas comparadas. Autorización en [RES-2026-11-13-002](../Audit/resolves/2026-11-13-resolve-sin-tope-lote.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas: `python -m unittest tests.aplicacion_web.test_generador_web tests.aplicacion_web.test_estado_lote` — 14 pruebas, 1 omitida, OK. La migración no se aplicó a una base.
+
+## 2026-11-13 — Un STL, un patrón y un tope de lote
+
+El binario STL (cabecera `OrtesisLab cascaron geometrico`, registro de 50 bytes y abanico de polígonos) queda en `OrtesisLabPlugin/StlBinario.py`. Lo escriben la web y el exportador de Blender, lo lee `LectorSuperficie` y lo usa el volumen del cascarón. Coordenadas fuera de float32 lanzan `CoordenadasFueraDeFloat32`; el exportador de Blender lo traduce a `ExportacionFallida`. `Patron.celosia` y `Patron.semilla` sustituyen las comparaciones con `SOLID` y `VORONOI` en el núcleo, el panel y la página. El tope de variantes es solo `lotes.maximo_items`. Se quitan `ChangePattern`, `Cascaron.Cerrar`, `GeneradorWeb.Escribir` y `Stl`, `EstadoApp.Ver`, los `set_*` que solo copiaban el campo, `ValidacionMalla._Componentes`, las clases `Triangle` y `Minimalistic` y las claves `maximo_variantes` y `max_normalizaciones_concurrentes`. `SuperficieInterior.VaciarCache` es el método que `Configuracion.Recargar` ya llamaba. Autorización en [RES-2026-11-13-001](../Audit/resolves/2026-11-13-resolve-untangle.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas:
+- `.venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py"`: 96 pruebas, 27 omitidas, OK. Las omitidas piden PostgreSQL o una base que no está en este entorno.
+- No se ejecutaron los scripts de Blender (`bpy` no está aquí): `tests/blender/blender_superficie_abierta.py` y `blender_paquete_zip.py`.
+
 ## 2026-11-12 — El refinado no rechaza un pliegue
 
 Al refinar `OrtesisTest1model.stl` a 1 mm (242645 vértices) el suavizado de 20 iteraciones invertía la normal de un vértice de contorno en un pliegue. `Preparar` rechazaba toda la superficie. Ahora el vértice nuevo toma la normal de sus caras, y si el suavizado lo cruza más de 60° conserva esa normal. Una normal de entrada ya desviada sigue rechazándose. Autorización en [RES-2026-11-12-016](../Audit/resolves/2026-11-12-resolve-normal-pliegue.md). Los hallazgos siguen abiertos.

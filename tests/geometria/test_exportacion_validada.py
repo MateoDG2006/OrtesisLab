@@ -3,10 +3,9 @@
 import unittest
 
 import numpy as np
-
 from OrtesisLabPlugin.Excepciones import CoordenadasFueraDeFloat32
+from OrtesisLabPlugin.StlBinario import StlBinario
 from OrtesisLabPlugin.ValidacionSolido import ValidadorSolido
-from web.GeneradorWeb import GeneradorWeb
 
 
 def _cubo():
@@ -55,7 +54,7 @@ class ExportacionValidada(unittest.TestCase):
         puntos = np.array([[0, 0, 0], [4e38, 0, 0], [0, 1, 0]], dtype=np.float64)
         caras = [[0, 1, 2]]
         with self.assertRaises(CoordenadasFueraDeFloat32):
-            GeneradorWeb.Stl(puntos, caras)
+            StlBinario.Bytes(puntos, caras)
 
 
 if __name__ == "__main__":

@@ -40,6 +40,10 @@ class SuperficieInterior:
     _refinadas: OrderedDict[tuple, tuple] = OrderedDict()
 
     @staticmethod
+    def VaciarCache() -> None:
+        SuperficieInterior._refinadas.clear()
+
+    @staticmethod
     def _Candidatos(path=None) -> list[Path]:
         # Orden de búsqueda: ruta pedida, assets del repo, junto al módulo y junto al blend.
         rutas = []

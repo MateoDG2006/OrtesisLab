@@ -74,14 +74,15 @@ El [inventario global](../Agents/INVENTARIO.md) explica cada archivo auxiliar y 
 |---|---|
 | `Barra` | Enlaces Comparar, Lote e Historial, nombre y botón de sesión según `autenticado` |
 | `Boton` | `rx.button(as_child=True)` sobre un ancla con `reloadDocument` |
+| `FormularioPost` | `<form method="post">` nativo. `rx.el.form` cancela el envío y cerrar sesión no saldría |
 | `Ruta` | `api_url` de la configuración Reflex + ruta `/auth/*` |
 
 ## Reglas de visibilidad
 
 | Condición | Resultado |
 |---|---|
-| `pattern=='SOLID'` | Muestra espesor macizo; oculta celda, nervadura, capa y, en avanzados, transición, giro, semilla, marco, banda y paso |
-| Patrón distinto de SOLID | Muestra celda, nervadura y capa; con avanzados, giro, marco, banda y paso |
+| `es_macizo` (el patrón no tiene celosía) | Muestra espesor macizo; oculta celda, nervadura, capa y, en avanzados, transición, giro, semilla, marco, banda y paso |
+| Patrón con celosía | Muestra celda, nervadura y capa; con avanzados, giro, marco, banda y paso. La semilla solo si el patrón la pide |
 | `avanzados=False` | Oculta la sección avanzada (sus valores siguen enviándose) |
 | `liner=True` en retícula | Muestra espesor capa y espesor nominal total; con avanzados, transición |
 | `liner=False` | Texto de rejilla abierta; altura es espesor total |

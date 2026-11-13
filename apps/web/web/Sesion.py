@@ -3,6 +3,17 @@
 from __future__ import annotations
 
 import reflex as rx
+from reflex_base.components.component import field
+from reflex_base.vars.base import Var
+from reflex_components_core.el.elements.base import BaseHTML
+
+
+class _FormularioHtml(BaseHTML):
+    """<form> que el navegador envía. rx.el.form cancela el submit."""
+
+    tag = "form"
+    action: Var[str] = field(default=None)
+    method: Var[str] = field(default=None)
 
 
 class Sesion:
@@ -21,11 +32,10 @@ class Sesion:
 
     @staticmethod
     def FormularioPost(texto: str, ruta: str, variante: str) -> rx.Component:
-        return rx.el.form(
+        return _FormularioHtml.create(
             rx.button(texto, type="submit", size="1", variant=variante),
             method="post",
             action=Sesion.Ruta(ruta),
-            custom_attrs={"reloadDocument": True},
         )
 
     @staticmethod

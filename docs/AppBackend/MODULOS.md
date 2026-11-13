@@ -37,7 +37,7 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 | Grupo | Métodos/campos | Función |
 |---|---|---|
 | Parámetros | `pattern`, 13 campos numéricos (incluida `seed`), `liner`, `repair`, `flip_normals` | Adaptación del contrato compartido; ver [parámetros](../BlenderPlugin/PARAMETROS.md) |
-| Edición | `set_*` explícitos con `@rx.event` | Asignan el valor del formulario |
+| Edición | `set_*` de los campos del formulario, vía `State._create_setter` | Asignan el valor. Reflex 0.9 no los genera (`state_auto_setters` es False) |
 | Sesión | `autenticado`, `usuario_nombre`, `_propietario`, `_Usuario`, `_OlvidarTrabajo` | Resuelven el usuario por cookie; al cambiar de usuario o cerrar sesión borran fichas, vistas y superficie de la pestaña |
 | Entrada | `CargarSuperficie`, `UsarSuperficieIncluida`, `superficie_*` | Registran el import del usuario (`GuardarSuperficie`) o vuelven a la plantilla |
 | Inicialización | `CargarPredeterminados` | Defaults JSON, último lote del usuario y reanudación con `SeguirLote` si está abierto |
@@ -49,25 +49,25 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 
 ### `web/EstadoHistorial.py`
 
-[`EstadoHistorial`](../../apps/web/web/EstadoHistorial.py): filtros (`filtro_patron`, `filtro_estado`, `filtro_desde`, `filtro_hasta`), cursor (`_cursores`, `Siguiente`, `Anterior`), selección de hasta 3 versiones (`Seleccionar`, `comparacion`), `Restaurar`, `Reintentar` y `Descargar`. `_Fila` y `_Tarjeta` traducen DTO a textos; `_Tarjeta` lista los parámetros que difieren de la primera versión elegida. `ESTADOS_VISIBLES` (etiqueta de cada estado de ítem) se lee de `config/web.yaml`.
+[`EstadoHistorial`](../../apps/web/web/EstadoHistorial.py): filtros (`filtro_patron`, `filtro_estado`, `filtro_desde`, `filtro_hasta`) con `set_*` registrados igual que en `EstadoApp`, cursor (`_cursores`, `Siguiente`, `Anterior`), selección de hasta 3 versiones (`Seleccionar`, `comparacion`), `Restaurar`, `Reintentar` y `Descargar`. `_Fila` y `_Tarjeta` traducen DTO a textos; `_Tarjeta` lista los parámetros que difieren de la primera versión elegida. `ESTADOS_VISIBLES` (etiqueta de cada estado de ítem) se lee de `config/web.yaml`.
 
 ## `web/GeneradorWeb.py`
 
-[`GeneradorWeb`](../../apps/web/web/GeneradorWeb.py) conserva sus firmas públicas. `PATRONES`, `EJES` y `MAXIMO_VARIANTES` siguen exportándose desde aquí, pero sus valores salen de `config/web.yaml`.
+[`GeneradorWeb`](../../apps/web/web/GeneradorWeb.py) prepara superficies y fichas. `PATRONES` y `EJES` salen de `config/web.yaml`. Un lote no tiene tope de variantes. El STL lo escribe [`StlBinario`](../../apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py).
 
 | Métodos | Entrada → proceso → salida |
 |---|---|
-| `_Origen`, `Cruda`, `EjeMayor` | Nombre interno o vacío → SHA-256 del NPZ del usuario activo o de la plantilla → arrays originales (Redis o bucket) |
-| `Superficie`, `_Superficie`, `SuperficieRefinada`, `_SuperficieRefinada` | Copia de las coordenadas del archivo; la tupla refinada se guarda en Redis por contenido y paso |
+| `_Origen`, `Cruda` | Nombre interno o vacío → SHA-256 del NPZ del usuario activo o de la plantilla → arrays originales (Redis o bucket) |
+| `Superficie`, `SuperficieRefinada` | Copia de las coordenadas del archivo; la tupla refinada se guarda en Redis por contenido y paso |
 | `GuardarSuperficie` | Bytes → `ServicioImports.Importar` del usuario activo → `superficie-<asset hex>.npz` y metadatos |
 | `Crear` | Encola un lote `single`, espera al trabajador (600 s) y devuelve la ficha |
 | `_FichaDeItem`, `Ficha`, `FichaError`, `Detalle`, `Numero` | Ítem persistido o error → diccionario y texto español |
-| `Combinaciones`, `Triangulos`, `Stl` | Producto acotado de variantes; triangulación y STL binario |
-| `Ruta`, `Leer`, `Escribir`, `RutaSuperficie` | `object_url` o nombre → clave del bucket validada contra el usuario activo; lectura verificada por SHA-256; `Escribir` solo repone bytes con el mismo hash |
+| `Combinaciones` | Producto acotado de variantes. Un patrón sin celosía no duplica la capa interior |
+| `Ruta`, `Leer`, `RutaSuperficie` | `object_url` o nombre → clave del bucket validada contra el usuario activo; lectura verificada por SHA-256 |
 
 ## `web/LectorSuperficie.py`
 
-[`LectorSuperficie`](../../apps/web/web/LectorSuperficie.py) restringe extensiones, tamaño, finitud y topología. `_StlBinario` acepta registros si el tamaño es exactamente `84 + 50*n`; de lo contrario `_StlAscii` extrae grupos de tres líneas `vertex`. `_Stl` fusiona coordenadas por cuantización y recalcula normales. `_Npz` revisa la expansión declarada ZIP y carga sin pickle. `Preparar` devuelve la superficie analizada y metadatos; no escribe por sí mismo.
+[`LectorSuperficie`](../../apps/web/web/LectorSuperficie.py) restringe extensiones, tamaño, finitud y topología. El STL binario lo reconoce `StlBinario.VerticesSiBinario` (tamaño exacto `84 + 50*n`); si no encaja, `_StlAscii` extrae grupos de tres líneas `vertex`. `_Stl` fusiona coordenadas por cuantización y recalcula normales. `_Npz` revisa la expansión declarada ZIP y carga sin pickle. `Preparar` devuelve la superficie analizada y metadatos; no escribe por sí mismo.
 
 ## Persistencia: `web/persistence/`
 

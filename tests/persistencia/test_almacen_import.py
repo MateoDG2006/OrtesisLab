@@ -9,11 +9,9 @@ import uuid
 from pathlib import Path
 
 import numpy as np
-from sqlalchemy import select
-
 from OrtesisLabPlugin.Excepciones import ArchivoSuperficieIlegible
-from tests.persistencia.apoyo_persistencia import Conectar, CrearUsuario, EntornoServicios, requiere_base
-from web.GeneradorWeb import GeneradorWeb
+from OrtesisLabPlugin.StlBinario import StlBinario
+from sqlalchemy import select
 from web.cache.CacheRedis import CacheRedis
 from web.persistence.Contratos import AccesoDenegado
 from web.persistence.Modelos import Importacion
@@ -21,10 +19,12 @@ from web.persistence.repositorios import RepositorioAssets, RepositorioImports
 from web.services.ServicioImports import ServicioImports
 from web.storage.AlmacenamientoPrivado import Almacen
 
+from tests.persistencia.apoyo_persistencia import Conectar, CrearUsuario, EntornoServicios, requiere_base
+
 
 def Placa(lado: float = 1.0) -> bytes:
     vertices = [[0, 0, 0], [lado, 0, 0], [lado, lado, 0], [0, lado, 0]]
-    return GeneradorWeb.Stl(vertices, [[0, 1, 2], [0, 2, 3]])
+    return StlBinario.Bytes(vertices, [[0, 1, 2], [0, 2, 3]])
 
 
 @requiere_base

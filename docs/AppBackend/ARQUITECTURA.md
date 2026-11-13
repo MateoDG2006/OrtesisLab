@@ -126,6 +126,6 @@ La política del bucket concede lectura anónima solo a `usuarios/*/assets/*.stl
 | Cola en PostgreSQL con `SKIP LOCKED` | No se necesita otro broker; la concurrencia está acotada a un trabajo por usuario y uno por proceso trabajador |
 | Lectura anónima de STL por URL | El visor carga sin proxy; la URL no es un secreto fuerte |
 | Redis como caché pura | Perderlo solo cuesta tiempo de cálculo |
-| Máximo 12 variantes / 3 vistas / 3 lotes pendientes | Contiene trabajo por petición, contextos WebGL y uso de la cola |
+| 3 vistas y 3 lotes pendientes | Contiene los contextos WebGL de la comparación y el uso de la cola. Un lote no tiene tope de variantes |
 | SQLAlchemy con repositorios y DTO | Las firmas de repositorios y servicios no exponen modelos ORM; el estado Reflex nunca guarda una `Session` |
 | Alembic sin revisiones versionadas en el repositorio y sin bloqueo | Las migraciones las genera y aplica a mano el responsable del esquema desde un único operador; `GRANT`, trigger de versiones y FK circular se añaden a mano a la revisión |

@@ -9,6 +9,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [.agents/skills/reflex-docs/SKILL.md](../../.agents/skills/reflex-docs/SKILL.md) | Skill local Reflex: instrucciones y referencias para agentes. |
 | [.agents/skills/reflex-process-management/SKILL.md](../../.agents/skills/reflex-process-management/SKILL.md) | Skill local Reflex: instrucciones y referencias para agentes. |
 | [.agents/skills/setup-python-env/SKILL.md](../../.agents/skills/setup-python-env/SKILL.md) | Skill local Reflex: instrucciones y referencias para agentes. |
+| [.agents/skills/untangle-codebase/SKILL.md](../../.agents/skills/untangle-codebase/SKILL.md) | Skill para juntar el código que cambia junto, soltar el que no, y quitar lo que no tiene motivo propio. |
 | [.codegraph/.gitignore](../../.codegraph/.gitignore) | Excluye el índice local de CodeGraph del versionado. |
 | [.env.example](../../.env.example) | Plantilla de variables `ORTESISLAB_*` de la aplicación, el trabajador y las pruebas. |
 | [.gitignore](../../.gitignore) | Excluye entornos, compilación, estados, subidas anteriores, logs y `.env`. |
@@ -48,6 +49,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/ortesis-plugin/OrtesisLabPlugin/OrtesisLab.py](../../apps/ortesis-plugin/OrtesisLabPlugin/OrtesisLab.py) | Complemento OrtesisLab dentro del paquete. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py) | Refinamiento triangular independiente de Blender para evaluar patrones. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/ReparacionMalla.py](../../apps/ortesis-plugin/OrtesisLabPlugin/ReparacionMalla.py) | Limpieza segura de la superficie base dentro de Blender. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py](../../apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py) | STL binario del cascarón, en milímetros, sin Blender. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py) | Suavizado del contorno exterior antes de dar espesor. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py) | Carga y lectura de la superficie interior dentro de Blender. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py) | Comprobación geométrica de la malla ya generada. |
@@ -212,6 +214,10 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-12-resolve-revision-alembic.md](../Audit/resolves/2026-11-12-resolve-revision-alembic.md) | RES-2026-11-12-007 — Quitar la revisión de Alembic no generada por Alembic |
 | [docs/Audit/resolves/2026-11-12-resolve-select-sesiones-trabajador.md](../Audit/resolves/2026-11-12-resolve-select-sesiones-trabajador.md) | RES-2026-11-12-015 — SELECT de sesiones para el trabajador |
 | [docs/Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md](../Audit/resolves/2026-11-12-resolve-simplificar-carga-yaml.md) | RES-2026-11-12-001 — Lectura directa del YAML en `Cargar` |
+| [docs/Audit/resolves/2026-11-13-resolve-cerrar-sesion.md](../Audit/resolves/2026-11-13-resolve-cerrar-sesion.md) | RES-2026-11-13-004 — Cerrar sesión |
+| [docs/Audit/resolves/2026-11-13-resolve-setters-formulario.md](../Audit/resolves/2026-11-13-resolve-setters-formulario.md) | RES-2026-11-13-003 — Setters del formulario |
+| [docs/Audit/resolves/2026-11-13-resolve-sin-tope-lote.md](../Audit/resolves/2026-11-13-resolve-sin-tope-lote.md) | RES-2026-11-13-002 — Sin tope de variantes por lote |
+| [docs/Audit/resolves/2026-11-13-resolve-untangle.md](../Audit/resolves/2026-11-13-resolve-untangle.md) | RES-2026-11-13-001 — Desenredo estructural |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
 | [docs/BlenderPlugin/ALGORITMOS.md](../BlenderPlugin/ALGORITMOS.md) | Algoritmos de generación y comprobación |
 | [docs/BlenderPlugin/API_Y_DATOS.md](../BlenderPlugin/API_Y_DATOS.md) | API Python, contratos y datos de Blender |

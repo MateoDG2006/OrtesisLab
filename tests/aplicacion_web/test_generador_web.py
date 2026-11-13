@@ -1,16 +1,17 @@
 """Comprueba el lote y el STL sin abrir Blender ni la superficie real."""
 
+import io
 import struct
 import unittest
-import io
 from pathlib import Path
 
 import numpy as np
-
-from web.GeneradorWeb import MAXIMO_VARIANTES, GeneradorWeb
+from OrtesisLabPlugin.Excepciones import ArchivoSuperficieIlegible, GeometriaInconsistente
+from OrtesisLabPlugin.StlBinario import StlBinario
+from web.GeneradorWeb import GeneradorWeb
 from web.LectorSuperficie import LectorSuperficie
 from web.services.ContextoUsuario import ContextoUsuario
-from OrtesisLabPlugin.Excepciones import ArchivoSuperficieIlegible, GeometriaInconsistente
+
 from tests.persistencia.apoyo_persistencia import Conectar, CrearUsuario, EntornoServicios, requiere_base
 
 
@@ -55,25 +56,19 @@ class LoteYStl(unittest.TestCase):
         self.assertEqual(variantes[-1]["pattern"], "SOLID")
         self.assertTrue(variantes[-1]["liner"])
 
-    def test_rechaza_un_lote_demasiado_grande(self):
-        with self.assertRaises(ValueError):
-            GeneradorWeb.Combinaciones(
-                base(), ["HEX", "SQUARE"], "cell_mm", 5, 40, 1, True
-            )
-        self.assertGreater(
-            len(["HEX", "SQUARE"]) * 36 * 2,
-            MAXIMO_VARIANTES,
+    def test_un_barrido_largo_no_tiene_tope(self):
+        variantes = GeneradorWeb.Combinaciones(
+            base(), ["HEX", "SQUARE"], "cell_mm", 5, 40, 1, True
         )
+        self.assertEqual(len(variantes), 144)
 
     def test_la_semilla_del_barrido_es_entera(self):
         variantes = GeneradorWeb.Combinaciones(base(), ["VORONOI"], "seed", 1, 3, 1, False)
         self.assertEqual([item["seed"] for item in variantes], [1, 2, 3])
 
-    def test_el_barrido_respeta_el_extremo_y_el_limite_antes_de_crear_variantes(self):
+    def test_el_barrido_respeta_el_extremo(self):
         variantes = GeneradorWeb.Combinaciones(base(), ["HEX"], "cell_mm", 0, 1, 0.6, False)
         self.assertEqual([item["cell_mm"] for item in variantes], [0, 0.6])
-        with self.assertRaises(ValueError):
-            GeneradorWeb.Combinaciones(base(), ["HEX"], "cell_mm", 0, 1, 1e-12, False)
 
     def test_el_barrido_rechaza_no_finitos_y_semillas_fraccionarias(self):
         for desde, hasta, paso, eje in (
@@ -88,12 +83,12 @@ class LoteYStl(unittest.TestCase):
     def test_stl_de_un_triangulo(self):
         vertices = [[0, 0, 0], [1, 0, 0], [0, 1, 0]]
         caras = [[0, 1, 2]]
-        datos = GeneradorWeb.Stl(vertices, caras)
+        datos = StlBinario.Bytes(vertices, caras)
         self.assertEqual(len(datos), 84 + 50)
         self.assertEqual(struct.unpack_from("<I", datos, 80)[0], 1)
         normal = np.array(struct.unpack_from("<3f", datos, 84))
         self.assertAlmostEqual(abs(normal[2]), 1, places=5)
-        muro = GeneradorWeb.Stl(vertices + [[0, 0, 1]], [[0, 1, 2, 3]])
+        muro = StlBinario.Bytes(vertices + [[0, 0, 1]], [[0, 1, 2, 3]])
         self.assertEqual(struct.unpack_from("<I", muro, 80)[0], 2)
 
     def test_carga_una_superficie_stl_abierta(self):
@@ -101,7 +96,7 @@ class LoteYStl(unittest.TestCase):
         caras = [[0, 1, 2], [0, 2, 3]]
         resultado, info = LectorSuperficie.Preparar(
             "superficie.stl",
-            GeneradorWeb.Stl(vertices, caras),
+            StlBinario.Bytes(vertices, caras),
         )
         self.assertEqual(len(resultado[0]), 4)
         self.assertEqual(len(resultado[1]), 2)
@@ -113,7 +108,7 @@ class LoteYStl(unittest.TestCase):
         caras = [[0, 1, 2], [0, 2, 3]]
         resultado, info = LectorSuperficie.Preparar(
             "superficie.stl",
-            GeneradorWeb.Stl(vertices, caras),
+            StlBinario.Bytes(vertices, caras),
         )
         self.assertAlmostEqual(float(np.ptp(resultado[0], axis=0).max()), 1)
         self.assertEqual(info["dimensiones"], "1.0 × 1.0 × 0.0 mm")
@@ -128,7 +123,7 @@ class LoteYStl(unittest.TestCase):
             with ContextoUsuario.Activar(usuario):
                 archivo, info = GeneradorWeb.GuardarSuperficie(
                     "pieza.stl",
-                    GeneradorWeb.Stl(vertices, caras),
+                    StlBinario.Bytes(vertices, caras),
                 )
                 self.assertTrue(entorno.almacen.Existe(GeneradorWeb.RutaSuperficie(archivo).as_posix()))
                 self.assertEqual(info["dimensiones"], "1.0 × 1.0 × 0.0 mm")

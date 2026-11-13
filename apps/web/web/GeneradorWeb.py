@@ -9,15 +9,14 @@ su ``object_url``.
 
 from __future__ import annotations
 
-import struct
-import uuid
 import math
+import uuid
 from decimal import Decimal
 from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
-
+from OrtesisLabPlugin.constants.Paterns import Patron
 from OrtesisLabPlugin.Excepciones import ArchivoSuperficieNoEncontrado
 from OrtesisLabPlugin.RefinadorMalla import RefinadorMalla
 
@@ -31,9 +30,6 @@ from .services.ServicioImports import PLANTILLA, ServicioImports
 from .storage.AlmacenamientoPrivado import PATRON_CLAVE, Almacen
 
 _CONFIG = ConfiguracionBackend.Cargar("web")
-# Un lote más grande deja la página esperando varios minutos.
-MAXIMO_VARIANTES = _CONFIG["maximo_variantes"]
-# Tiempo máximo que Crear espera al trabajador para una variante suelta.
 ESPERA_CREAR_S = _CONFIG["espera_crear_s"]
 
 PATRONES = _CONFIG["patrones"]
@@ -78,10 +74,6 @@ class GeneradorWeb:
 
     @staticmethod
     def Superficie(archivo: str = ""):
-        return GeneradorWeb._Superficie(archivo)
-
-    @staticmethod
-    def _Superficie(archivo: str):
         # Copia para que quien reciba la tupla no altere la caché cruda.
         puntos, caras, normales, borde = GeneradorWeb.Cruda(archivo)
         return (
@@ -93,10 +85,6 @@ class GeneradorWeb:
 
     @staticmethod
     def SuperficieRefinada(archivo: str, pasoMm: float):
-        return GeneradorWeb._SuperficieRefinada(archivo, pasoMm)
-
-    @staticmethod
-    def _SuperficieRefinada(archivo: str, pasoMm: float):
         huella, _cargar = GeneradorWeb._Origen(archivo)
         clave = CacheRedis.ClaveRefinada(huella, pasoMm)
         refinado = CacheRedis.LeerTupla(clave)
@@ -203,7 +191,7 @@ class GeneradorWeb:
     @staticmethod
     def Detalle(opciones: dict) -> str:
         # Resume los parámetros que sí cambian el cascarón.
-        if opciones.get("pattern") == "SOLID":
+        if not Patron.Celosia(opciones.get("pattern", "")):
             partes = [f"Espesor {GeneradorWeb.Numero(float(opciones['solid_mm']), 2)} mm"]
         else:
             capa = "capa continua" if opciones.get("liner") else "rejilla abierta"
@@ -242,10 +230,6 @@ class GeneradorWeb:
         paso: float,
         ambos_revestimientos: bool,
     ) -> list[dict]:
-        """Entrada: patrones, rango y paso. Proceso: acota el barrido antes de
-        crear variantes. Salida: opciones dentro del rango. Errores: ValueError
-        ante parámetros inválidos o lote excesivo. Efectos: ninguno.
-        """
         if not patrones:
             raise ValueError("Elija al menos un patrón.")
         desconocidos = [patron for patron in patrones if patron not in PATRONES]
@@ -254,7 +238,6 @@ class GeneradorWeb:
         if eje and eje != "ninguno" and eje not in EJES:
             raise ValueError("Ese parámetro no forma parte del complemento.")
 
-        multiplicador = sum(1 if patron == "SOLID" or not ambos_revestimientos else 2 for patron in patrones)
         valores: list[float | int] | None = None
         if eje and eje != "ninguno":
             if not all(math.isfinite(valor) for valor in (desde, hasta, paso)):
@@ -269,42 +252,29 @@ class GeneradorWeb:
             inicio = Decimal(str(desde))
             final = Decimal(str(hasta))
             incremento = Decimal(str(paso))
-            maximo_valores = MAXIMO_VARIANTES // multiplicador
-            if final - inicio >= incremento * maximo_valores:
-                raise ValueError(
-                    f"El lote tiene más de {MAXIMO_VARIANTES} variantes. "
-                    "Amplíe el paso o quite un patrón."
-                )
             cantidad = int((final - inicio) // incremento) + 1
             valores = [
                 int(inicio + indice * incremento) if eje == "seed"
                 else float(inicio + indice * incremento)
                 for indice in range(cantidad)
             ]
-        elif multiplicador > MAXIMO_VARIANTES:
-            raise ValueError(f"El lote supera el máximo de {MAXIMO_VARIANTES} variantes.")
 
         revestimientos = [True, False] if ambos_revestimientos else [bool(base["liner"])]
         variantes = []
         for patron in patrones:
-            capas = revestimientos if patron != "SOLID" else [bool(base["liner"])]
+            capas = revestimientos if Patron.Celosia(patron) else [bool(base["liner"])]
             numeros = valores if valores is not None else [None]
             for numero in numeros:
                 for capa in capas:
                     opciones = dict(base)
                     opciones["pattern"] = patron
-                    if patron != "SOLID":
+                    if Patron.Celosia(patron):
                         opciones["liner"] = capa
                     if numero is not None:
                         opciones[eje] = numero
                     variantes.append(opciones)
         if not variantes:
             raise ValueError("No hay variantes con esos parámetros.")
-        if len(variantes) > MAXIMO_VARIANTES:
-            raise ValueError(
-                f"El lote tiene {len(variantes)} variantes y el máximo es {MAXIMO_VARIANTES}. "
-                "Amplíe el paso o quite un patrón."
-            )
         return variantes
 
     @staticmethod
@@ -312,48 +282,6 @@ class GeneradorWeb:
         # Separador de miles y coma decimal, como se lee en español.
         texto = f"{valor:,.{decimales}f}"
         return texto.replace(",", " ").replace(".", ",").replace(" ", ".")
-
-    @staticmethod
-    def Stl(vertices, caras) -> bytes:
-        # STL binario del cascarón, en milímetros, sin pasar por Blender.
-        # Los muros del contorno llegan como cuadriláteros; el STL solo admite triángulos.
-        puntos = np.asarray(vertices, dtype=np.float64)
-        triangulos = GeneradorWeb.Triangulos(caras)
-        coords = puntos[triangulos]
-        arista_a = coords[:, 1] - coords[:, 0]
-        arista_b = coords[:, 2] - coords[:, 0]
-        normal = np.cross(arista_a, arista_b)
-        longitud = np.linalg.norm(normal, axis=1)
-        normal = normal / np.maximum(longitud, 1e-12)[:, None]
-        registro = np.dtype([("normal", "<f4", (3,)), ("vertices", "<f4", (3, 3)), ("atributo", "<u2")])
-        datos = np.zeros(len(triangulos), dtype=registro)
-        datos["normal"] = normal.astype(np.float32)
-        datos["vertices"] = coords.astype(np.float32)
-        cabecera = b"OrtesisLab cascaron geometrico".ljust(80, b"\0")
-        return cabecera + struct.pack("<I", len(triangulos)) + datos.tobytes()
-
-    @staticmethod
-    def Triangulos(caras) -> np.ndarray:
-        # Parte cada cara de más de tres vértices en un abanico de triángulos.
-        salida = []
-        for cara in caras:
-            indices = [int(vertice) for vertice in cara]
-            if len(indices) < 3:
-                continue
-            for posicion in range(1, len(indices) - 1):
-                salida.append((indices[0], indices[posicion], indices[posicion + 1]))
-        return np.asarray(salida, dtype=np.int32)
-
-    @staticmethod
-    def Escribir(nombre: str, datos: bytes) -> None:
-        # Repone el objeto de un STL registrado; solo acepta los bytes que su fila declara.
-        clave = GeneradorWeb.Ruta(nombre).as_posix()
-        usuario = ContextoUsuario.Actual()
-        asset = ConexionPostgres.Ejecutar(lambda conexion: RepositorioAssets.PorClave(conexion, usuario.user_id, clave))
-        huella = Almacen.Sha256(datos)
-        if huella != asset.sha256:
-            raise ValueError("Los datos no coinciden con la malla registrada.")
-        Almacen.Actual().Publicar(clave, datos, asset.media_type, huella, f"ortesis-{asset.id.hex[:8]}.stl")
 
     @staticmethod
     def Leer(nombre: str) -> bytes:

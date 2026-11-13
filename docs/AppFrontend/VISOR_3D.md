@@ -44,7 +44,7 @@ Perspectiva de 35°. Objetivo en centro de esfera; radio inicial `max(2.4*r,1)`,
 
 ## Modo miniatura
 
-Con `miniatura=1` en la URL (lo añade `PaginaComparacion.Enlace(..., miniatura=True)` para las tarjetas de `/lote`), el visor dibuja un solo fotograma con el encuadre inicial, lo convierte en una imagen PNG (`toDataURL`), sustituye el canvas por esa imagen, llama a `renderer.dispose()` y `forceContextLoss()` y no inicia `requestAnimationFrame` ni reacciona a resize. Así un lote de hasta 12 variantes no mantiene 12 contextos WebGL abiertos. Las listas de eventos de puntero y teclado siguen registradas pero no dibujan. El iframe de la miniatura usa `loading=lazy` y `tabindex=-1`.
+Con `miniatura=1` en la URL (lo añade `PaginaComparacion.Enlace(..., miniatura=True)` para las tarjetas de `/lote`), el visor dibuja un solo fotograma con el encuadre inicial, lo convierte en una imagen PNG (`toDataURL`), sustituye el canvas por esa imagen, llama a `renderer.dispose()` y `forceContextLoss()` y no inicia `requestAnimationFrame` ni reacciona a resize. Así cada tarjeta de `/lote` no mantiene un contexto WebGL abierto. Las listas de eventos de puntero y teclado siguen registradas pero no dibujan. El iframe de la miniatura usa `loading=lazy` y `tabindex=-1`.
 
 No implementa OrbitControls, pan, selección de caras, teclado, exportación de imagen ni resaltado de errores. Tampoco libera explícitamente buffers/materiales ni maneja pérdida de contexto dentro del documento; al quitar iframe el navegador gestiona su ciclo de vida. Hasta tres comparaciones en `/lote` o la vista principal en `/` pueden estar renderizando simultáneamente; las miniaturas no.
 

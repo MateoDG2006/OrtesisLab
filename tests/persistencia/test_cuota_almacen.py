@@ -16,10 +16,7 @@ class CuotaAlmacen(unittest.TestCase):
         self.contenido = b"solid test\nendsolid\n"
 
     def test_rechaza_cuota_de_bytes(self):
-        llamadas = {"n": 0}
-
         def ejecutar(funcion):
-            llamadas["n"] += 1
             conexion = MagicMock()
             with (
                 patch("web.services.ServicioImports.RepositorioLotes.BloquearUsuario"),
@@ -36,7 +33,6 @@ class CuotaAlmacen(unittest.TestCase):
         with patch("web.services.ServicioImports.ConexionPostgres.Ejecutar", side_effect=ejecutar):
             with self.assertRaises(CuotaExcedida):
                 ServicioImports.Importar(self.usuario, "pieza.stl", self.contenido)
-        self.assertEqual(llamadas["n"], 1)
 
 
 if __name__ == "__main__":

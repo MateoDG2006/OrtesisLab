@@ -6,16 +6,17 @@ activo en ``ContextoUsuario`` porque la superficie se lee de su asset.
 
 from __future__ import annotations
 
-import struct
 from decimal import Decimal
 
 import numpy as np
-
+from OrtesisLabPlugin.constants.Materials import Material
+from OrtesisLabPlugin.constants.Paterns import Patron
 from OrtesisLabPlugin.Modeling import Model3DForPrinting
 from OrtesisLabPlugin.RefinadorMalla import RefinadorMalla
-from OrtesisLabPlugin.constants.Materials import Material
-from web.GeneradorWeb import GeneradorWeb
+from OrtesisLabPlugin.StlBinario import StlBinario
+
 from web.enums import AlcanceGeometria, UnidadExport
+from web.GeneradorWeb import GeneradorWeb
 from web.persistence.Contratos import ResultadoGeometrico
 
 from .ServicioVersiones import ServicioVersiones
@@ -41,19 +42,19 @@ class GeneradorGeometrico:
     ) -> tuple[ResultadoGeometrico, bytes, bytes]:
         """Salida: resultado numérico, STL binario y JSON canónico de parámetros.
         Errores: OrtesisLabError si la geometría o los parámetros no son válidos."""
-        if opciones["pattern"] == "SOLID":
-            paso = None
-            superficie = GeneradorWeb._Superficie(superficie_archivo)
-        else:
+        if Patron.Celosia(opciones["pattern"]):
             paso = RefinadorMalla.PasoPatron(opciones)
-            superficie = GeneradorWeb._SuperficieRefinada(superficie_archivo, paso)
+            superficie = GeneradorWeb.SuperficieRefinada(superficie_archivo, paso)
+        else:
+            paso = None
+            superficie = GeneradorWeb.Superficie(superficie_archivo)
         puntos, caras, normales, borde = superficie
         modelo = Model3DForPrinting(GeneradorGeometrico.MaterialDe(material))
         vertices, faces, cfg, _interiores, _caras = modelo.Construir(puntos, caras, normales, borde, **opciones)
         volumen = float(modelo.CalculateVolume())
         peso = float(modelo.CalculateWeight())
         precio = float(modelo.CalculatePrice())
-        stl = GeneradorWeb.Stl(vertices, faces)
+        stl = StlBinario.Bytes(vertices, faces)
         dimensiones = [float(valor) for valor in np.ptp(np.asarray(vertices), axis=0)] if len(vertices) else [0.0] * 3
         resultado = ResultadoGeometrico(
             volume_mm3=volumen,
@@ -63,7 +64,7 @@ class GeneradorGeometrico:
             density_g_cm3=Decimal(repr(float(material["density_g_cm3"]))),
             currency=material.get("currency"),
             vertices=len(vertices),
-            triangles=struct.unpack_from("<I", stl, 80)[0],
+            triangles=StlBinario.Contar(stl),
             dimensions_mm=dimensiones,
             effective_scale=1.0,
             effective_step_mm=paso,

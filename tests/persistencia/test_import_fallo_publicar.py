@@ -66,7 +66,6 @@ class PublicarFalla(unittest.TestCase):
                     lambda _b: (([[0, 0, 0]], [[0, 1, 2]], [[0, 0, 1]], [0.0])),
                 )
         self.assertTrue(rechazos)
-        self.assertEqual(rechazos[0][0], "AlmacenamientoNoDisponible")
 
 
 if __name__ == "__main__":

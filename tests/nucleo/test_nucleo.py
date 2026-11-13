@@ -111,7 +111,7 @@ class GeometriaOriginal(unittest.TestCase):
         escalar = np.array([1.0, -0.4, 0.2, -1.0])
         recortados, caras, normales_recorte = Cascaron.Recortar(puntos, triangulos, normales, escalar)
         self.assertGreater(len(caras), 0)
-        vertices, caras_cerradas = Cascaron.Cerrar(recortados, caras, normales_recorte, 1.2)
+        vertices, caras_cerradas = Cascaron.Engrosar(recortados, caras, normales_recorte, 1.2)
         self.assertEqual(len(vertices), len(recortados) * 2)
         self.assertGreaterEqual(len(caras_cerradas), len(caras) * 2)
 
@@ -208,7 +208,7 @@ class ParametrosYMaterial(unittest.TestCase):
     def test_catalogo_y_patrones_sin_geometria(self):
         modelo = Model3DForPrinting()
         self.assertEqual(modelo.ChangePatern("HoneyComb").codigo, "HEX")
-        self.assertEqual(modelo.ChangePattern("macizo").codigo, "SOLID")
+        self.assertEqual(modelo.ChangePatern("macizo").codigo, "SOLID")
         with self.assertRaises(PatronNoImplementado):
             modelo.ChangePatern("Triangle")
         with self.assertRaises(PatronNoImplementado):
@@ -229,7 +229,7 @@ class ParametrosYMaterial(unittest.TestCase):
 
     def test_volumen_de_cascaron_y_sin_geometria(self):
         puntos = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0]])
-        vertices, caras = Cascaron.Cerrar(puntos, np.array([[0, 1, 2]]), np.tile([0.0, 0.0, 1.0], (3, 1)), 2.0)
+        vertices, caras = Cascaron.Engrosar(puntos, np.array([[0, 1, 2]]), np.tile([0.0, 0.0, 1.0], (3, 1)), 2.0)
         self.assertAlmostEqual(Cascaron.VolumenMm3(vertices, caras), 1.0)
         with self.assertRaises(Exception):
             Model3DForPrinting().CalculateVolume()

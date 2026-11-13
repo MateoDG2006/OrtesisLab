@@ -15,7 +15,6 @@ from web.ConfiguracionBackend import ConfiguracionBackend
 from web.enums import ITEMS_TERMINALES, LOTES_ABIERTOS
 
 _LOTES = ConfiguracionBackend.Cargar("persistencia")["lotes"]
-MAXIMO_ITEMS_LOTE = _LOTES["maximo_items"]
 MAXIMO_LOTES_PENDIENTES = _LOTES["maximo_pendientes"]
 MAXIMO_INTENTOS = _LOTES["maximo_intentos"]
 

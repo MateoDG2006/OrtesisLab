@@ -108,7 +108,7 @@ class Model3DForPrinting:
             raise CeldaDemasiadoPequena(minimo_celda)
 
         relacion = Configuracion.ValorLimite("max_rib_width_ratio")
-        if cfg["pattern"] != "SOLID" and cfg["rib_width_mm"] >= cfg["cell_mm"] * relacion:
+        if Patron.Celosia(cfg["pattern"]) and cfg["rib_width_mm"] >= cfg["cell_mm"] * relacion:
             raise NervaduraDemasiadoAncha(int(round(relacion * 100)))
 
         for clave in _FINITOS:
@@ -163,7 +163,7 @@ class Model3DForPrinting:
                 nervadura,
                 cfg["reinforce_width_mm"] * 0.5 - np.abs(puntos[:, 1] - cfg["reinforce_y_mm"]),
             )
-        if cfg["pattern"] == "SOLID":
+        if not Patron.Celosia(cfg["pattern"]):
             espesor = np.full(len(puntos), cfg["solid_mm"])
         elif cfg["liner"]:
             ancho = max(Configuracion.ValorLimite("min_rounding_width_mm"), cfg["rounding_mm"])
@@ -193,10 +193,6 @@ class Model3DForPrinting:
         self._volumen_mm3 = None
         logger.info("Patrón activo: %s (%s)", instancia.name, codigo)
         return instancia
-
-    def ChangePattern(self, patron):
-        # Mismo cambio de patrón, con el nombre en inglés.
-        return self.ChangePatern(patron)
 
     def Construir(self, vertices, caras, normales, distanciaBorde, **options):
         # Guarda el cascarón en la instancia para poder cubicar después.

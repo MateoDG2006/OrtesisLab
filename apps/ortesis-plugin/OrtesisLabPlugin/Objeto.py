@@ -5,15 +5,6 @@ from __future__ import annotations
 import json
 
 from .ApiBlender import bmesh, bpy
-from .Excepciones import (
-    GeometriaFragmentada,
-    MallaNoConstruida,
-    ReconstruccionFallida,
-    ResolucionDemasiadoFina,
-)
-from .Modeling import Model3DForPrinting
-from .RefinadorMalla import RefinadorMalla
-from .Superficie import SuperficieInterior
 from .constants.Nombres import (
     ALCANCE,
     MALLA_GEOMETRIA,
@@ -31,6 +22,16 @@ from .constants.Nombres import (
     ROL_RESULTADO,
     VALIDACION_PENDIENTE,
 )
+from .constants.Paterns import Patron
+from .Excepciones import (
+    GeometriaFragmentada,
+    MallaNoConstruida,
+    ReconstruccionFallida,
+    ResolucionDemasiadoFina,
+)
+from .Modeling import Model3DForPrinting
+from .RefinadorMalla import RefinadorMalla
+from .Superficie import SuperficieInterior
 from .util.Utilidades import Configuracion, Registro
 
 _TRABAJO = "OL_Ortesis__trabajo"
@@ -42,7 +43,7 @@ class GeneradorObjeto:
     @staticmethod
     def _EspesorMinimo(cfg: dict) -> float:
         # El voxel no puede ser más fino que un tercio de este espesor.
-        if cfg["pattern"] == "SOLID":
+        if not Patron.Celosia(cfg["pattern"]):
             return cfg["solid_mm"]
         if cfg["liner"]:
             return cfg["skin_mm"]

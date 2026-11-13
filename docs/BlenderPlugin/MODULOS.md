@@ -14,7 +14,7 @@ El [índice de símbolos](SIMBOLOS.md) complementa este mapa con cada método y 
 | [`ReparacionMalla.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/ReparacionMalla.py) | `ReparadorMalla`: hornear escala, fusionar, limpiar, conservar mayor componente de caras y recalcular normales |
 | [`Objeto.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py) | `GeneradorObjeto`: cascarón → datablock/objeto; voxel, descarte de fragmentos y smooth opcionales |
 | [`ValidacionMalla.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py) | `ValidadorMalla`: informe de conectividad, bordes, no manifold, degeneradas y cruces; guarda `ol_validation` |
-| [`Exportacion.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py) | `ExportadorStl`: revalida, exporta seleccionado, escribe `*.stl.json`; bloquea informe inválido |
+| [`Exportacion.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py) | `ExportadorStl`: revalida, escribe el STL con `StlBinario` y el `*.stl.json`; bloquea informe inválido |
 
 ### Responsabilidades de los operadores
 
@@ -30,6 +30,7 @@ Cambiar el JSON de defaults no cambia automáticamente los `default` declarados 
 | [`Malla.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py) | `AnalizadorMalla`: normales de caras, contrato triangular, topología abierta/conectada, suavizado de normales y Dijkstra desde el contorno |
 | [`RefinadorMalla.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py) | Divide aristas largas con punto medio único; casos de 0/1/2/3 cortes por triángulo; suaviza normales y vuelve a analizar |
 | [`SuavizadoBorde.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py) | Descubre bucles, remuestrea por longitud, filtra FFT y limita desplazamiento para evitar caras invertidas |
+| [`StlBinario.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py) | Cabecera, registro y abanico del STL binario en milímetros; lo comparten volumen, validación, exportador y web |
 | [`Cascaron.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py) | Hermite `Smooth01`, recorte por campo escalar con cruces compartidos, duplicación por normales, muros del contorno y volumen |
 | [`Excepciones.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Excepciones.py) | Taxonomía de errores previstos, heredados de `OrtesisLabError`; al construirse intentan registrar mensaje y detalle |
 
@@ -44,7 +45,7 @@ El encabezado histórico de `Cascaron.py` dice «en contra de la normal»; la im
 | [`Nombres.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Nombres.py) | Nombres estables de objetos, atributos, propiedades, modificadores y STL por defecto |
 | [`__init__.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/__init__.py) | Marcador del subpaquete |
 
-Se conserva la ortografía de archivo `Paterns.py` y del alias de método `ChangePatern`: cambiarla rompe imports existentes. `ChangePattern` reenvía a `ChangePatern`. `Triangle` y `Minimalistic` tienen metadata de catálogo, pero no geometría. Las imágenes de catálogo son un placeholder remoto; el panel actual no las utiliza para construir geometría.
+Se conserva la ortografía de archivo `Paterns.py` y del método `ChangePatern`: cambiarla rompe imports existentes. Cada patrón dice si tiene celosía (`celosia`) y si pide semilla (`semilla`); el panel, el refinador y la web leen eso en lugar de comparar el código con `SOLID` o `VORONOI`. `TRIANGLE` y `MINIMALISTIC` siguen rechazándose con `PatronNoImplementado`. El STL binario (cabecera, abanico y float32) está en `StlBinario.py`; lo usan el volumen, la validación, el exportador y la web.
 
 ## `util/` y `config/`
 

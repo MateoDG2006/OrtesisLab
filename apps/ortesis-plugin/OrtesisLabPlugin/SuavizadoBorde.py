@@ -17,11 +17,6 @@ class SuavizadoBorde:
 
     @staticmethod
     def Aplicar(vertices, caras, normales):
-        """Entrada: superficie abierta ya validada. Proceso: filtra cada bucle
-        del borde y sus normales. Salida: copias de vértices y normales, y el
-        desplazamiento máximo en mm. Errores: ninguno; un bucle corto se deja
-        igual. Efectos: registra el desplazamiento.
-        """
         logger = Registro.Obtener("malla")
         puntos = np.array(vertices, dtype=np.float64, copy=True)
         normales_salida = np.array(normales, dtype=np.float64, copy=True)

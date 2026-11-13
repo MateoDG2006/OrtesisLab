@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
+from .constants.Paterns import Patron
 from .Excepciones import CalidadInsuficiente, NormalesInvalidas, SuperficieInvalida
 from .Malla import AnalizadorMalla
 from .util.Utilidades import Configuracion, Registro
@@ -14,19 +15,14 @@ class RefinadorMalla:
 
     @staticmethod
     def PasoPatron(opciones: dict) -> float:
-        """Entrada: parámetros validados. Proceso: limita el paso según el patrón.
-        Salida: paso máximo en mm. Errores: claves ausentes. Efectos: ninguno.
-        """
+        # La celda y la nervadura tienen que caber en el paso; el macizo no las tiene.
         paso = float(opciones["surface_step_mm"])
-        if opciones["pattern"] != "SOLID":
+        if Patron.Celosia(opciones["pattern"]):
             paso = min(paso, float(opciones["rib_width_mm"]) / 3, float(opciones["cell_mm"]) / 6)
         return paso
 
     @staticmethod
     def AristaMayor(puntos: np.ndarray, caras: np.ndarray) -> float:
-        """Entrada: malla triangular. Proceso: mide sus aristas. Salida: longitud
-        máxima en mm, o cero para malla vacía. Efectos secundarios: ninguno.
-        """
         if len(caras) == 0 or len(puntos) == 0:
             return 0.0
         pares = np.vstack((caras[:, [0, 1]], caras[:, [1, 2]], caras[:, [2, 0]]))

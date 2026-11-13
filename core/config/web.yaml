@@ -2,15 +2,11 @@
 
 # Cada cuánto consulta la página el progreso de un lote.
 intervalo_progreso_s: 1.0
-# Combinaciones por lote; no puede superar persistencia.yaml lotes.maximo_items.
-maximo_variantes: 12
 # Espera máxima de GeneradorWeb.Crear al trabajador.
 espera_crear_s: 600.0
 # Tamaño máximo de la superficie subida y de su contenido descomprimido.
 maximo_bytes: 52428800
 maximo_descomprimido_bytes: 134217728
-# Normalizaciones STL/NPZ concurrentes en el proceso web (semáforo de proceso).
-max_normalizaciones_concurrentes: 2
 
 # Patrones de relleno ofrecidos y su etiqueta visible. Las claves son los
 # nombres del núcleo; el orden es el de los selectores.

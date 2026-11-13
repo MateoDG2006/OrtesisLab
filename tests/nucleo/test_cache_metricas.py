@@ -2,18 +2,20 @@
 
 import io
 import unittest
-import numpy as np
 
+import numpy as np
 from OrtesisLabPlugin.Modeling import Model3DForPrinting
 from OrtesisLabPlugin.util.Utilidades import Configuracion
 from web.cache.CacheRedis import CacheRedis
 
 
 class CacheYMetricas(unittest.TestCase):
-    def test_recargar_limpia_cache_json(self):
-        Configuracion._CACHE["limites.json"] = {"marcador": 1}
+    def test_recargar_vuelve_a_leer_limites(self):
+        datos = Configuracion.Limites()
+        datos["min_cell_mm"] = -1
+        Configuracion._CACHE["limites.json"] = datos
         Configuracion.Recargar()
-        self.assertEqual(len(Configuracion._CACHE), 0)
+        self.assertGreater(Configuracion.ValorLimite("min_cell_mm"), 0)
 
     def test_leer_tupla_devuelve_copia(self):
         original = np.array([1.0, 2.0, 3.0])
@@ -34,11 +36,17 @@ class CacheYMetricas(unittest.TestCase):
         finally:
             CacheRedis.Usar(None)
 
-    def test_volumen_se_invalida_al_cambiar_vertices(self):
+    def test_volumen_se_recalcula_al_cambiar_vertices(self):
         modelo = Model3DForPrinting()
-        modelo._volumen_mm3 = 5.0
-        modelo.vertices = np.zeros((3, 3))
-        self.assertIsNone(modelo._volumen_mm3)
+        modelo.vertices = np.array(
+            [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+        )
+        modelo.faces = [(0, 1, 2), (0, 3, 1), (0, 2, 3), (1, 3, 2)]
+        self.assertAlmostEqual(modelo.CalculateVolume(), 1.0 / 6.0)
+        modelo.vertices = np.array(
+            [[0.0, 0.0, 0.0], [2.0, 0.0, 0.0], [0.0, 2.0, 0.0], [0.0, 0.0, 2.0]]
+        )
+        self.assertAlmostEqual(modelo.CalculateVolume(), 8.0 / 6.0)
 
 
 if __name__ == "__main__":

@@ -12,14 +12,15 @@ from .ApiBlender import (
     StringProperty,
     bpy,
 )
+from .constants.Nombres import ARCHIVO_STL_DEFECTO, PROP_ROL, RESULT, ROL_RESULTADO
+from .constants.Paterns import Patron
 from .Excepciones import ConfiguracionInvalida, ModeloNoGenerado, OrtesisLabError
 from .Exportacion import ExportadorStl
 from .Objeto import GeneradorObjeto
 from .ReparacionMalla import ReparadorMalla
 from .Superficie import SuperficieInterior
-from .ValidacionMalla import ValidadorMalla
-from .constants.Nombres import ARCHIVO_STL_DEFECTO, RESULT, PROP_ROL, ROL_RESULTADO
 from .util.Utilidades import Configuracion, Registro
+from .ValidacionMalla import ValidadorMalla
 
 ESTADO_LISTO = "Listo para generar"
 ESTADO_ACTUALIZADO = "Modelo actualizado; valide antes de exportar."
@@ -234,7 +235,7 @@ class OL_PT_panel(bpy.types.Panel):
         layout.prop(ajustes, "flip_normals")
         layout.prop(ajustes, "surface_step_mm")
         layout.prop(ajustes, "pattern")
-        if ajustes.pattern == "SOLID":
+        if not Patron.Celosia(ajustes.pattern):
             layout.prop(ajustes, "solid_mm")
         else:
             for clave in ("cell_mm", "rib_width_mm", "rib_height_mm", "liner"):
@@ -248,7 +249,7 @@ class OL_PT_panel(bpy.types.Panel):
             else:
                 layout.label(text="Rejilla abierta: altura = espesor total")
             layout.prop(ajustes, "angle_deg")
-            if ajustes.pattern == "VORONOI":
+            if Patron.PideSemilla(ajustes.pattern):
                 layout.prop(ajustes, "seed")
             layout.prop(ajustes, "border_mm")
             layout.prop(ajustes, "reinforce_width_mm")

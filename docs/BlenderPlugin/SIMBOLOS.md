@@ -27,14 +27,13 @@ Recorte de celdas y cascarón de espesor variable.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `Cascaron` | Clase | [14](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L14) | Pasa de una superficie abierta a un sólido de espesor conocido. |
-| `Cascaron.Smooth01` | Función/método | [18](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L18) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Cascaron.Recortar` | Función/método | [24](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L24) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Cascaron.Recortar.verticeOriginal` | Función/método | [48](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L48) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Cascaron.Recortar.cruce` | Función/método | [56](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L56) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Cascaron.Engrosar` | Función/método | [102](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L102) | Añade espesor a las caras existentes; nunca rellena una abertura. |
-| `Cascaron.Cerrar` | Función/método | [157](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L157) | Alias compatible: cerrar el espesor no significa tapar el canal. |
-| `Cascaron.VolumenMm3` | Función/método | [162](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L162) | Entrada: vértices y caras del cascarón en mm. Proceso: triangula |
+| `Cascaron` | Clase | [15](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L15) | Pasa de una superficie abierta a un sólido de espesor conocido. |
+| `Cascaron.Smooth01` | Función/método | [19](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L19) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Cascaron.Recortar` | Función/método | [25](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L25) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Cascaron.Recortar.verticeOriginal` | Función/método | [49](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L49) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Cascaron.Recortar.cruce` | Función/método | [57](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L57) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Cascaron.Engrosar` | Función/método | [103](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L103) | Añade espesor a las caras existentes; nunca rellena una abertura. |
+| `Cascaron.VolumenMm3` | Función/método | [158](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py#L158) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/consola.py`
 
@@ -79,34 +78,32 @@ Patrones de nervadura.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `Patron` | Clase | [21](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L21) | Catálogo y, cuando existe, distancia al eje de la nervadura. |
+| `Patron` | Clase | [19](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L19) | Distancia al eje de la nervadura, y si el patrón tiene celosía o semilla. |
 | `Patron.__init__` | Función/método | [26](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L26) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Patron.Distancia` | Función/método | [31](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L31) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Patron.RotarXy` | Función/método | [36](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L36) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Patron.DistanciaCuadricula` | Función/método | [43](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L43) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Patron.DistanciaSemillas` | Función/método | [48](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L48) | Entrada: puntos XY y celda en mm. Proceso: evalúa semillas próximas |
-| `Patron._DistanciaPlanos` | Función/método | [104](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L104) | Entrada: puntos y semillas XY. Proceso: calcula la bisectriz más |
-| `Patron.Geometricos` | Función/método | [119](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L119) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Patron.Obtener` | Función/método | [130](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L130) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `HoneyComb` | Clase | [144](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L144) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `HoneyComb.__init__` | Función/método | [148](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L148) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `HoneyComb.Distancia` | Función/método | [154](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L154) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Square` | Clase | [158](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L158) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Square.__init__` | Función/método | [161](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L161) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Square.Distancia` | Función/método | [167](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L167) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Triangle` | Clase | [171](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L171) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Triangle.__init__` | Función/método | [173](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L173) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Minimalistic` | Clase | [180](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L180) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Minimalistic.__init__` | Función/método | [182](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L182) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Diamond` | Clase | [189](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L189) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Diamond.__init__` | Función/método | [192](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L192) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Diamond.Distancia` | Función/método | [198](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L198) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Voronoi` | Clase | [206](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L206) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Voronoi.__init__` | Función/método | [209](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L209) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Voronoi.Distancia` | Función/método | [215](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L215) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Solid` | Clase | [219](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L219) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Solid.__init__` | Función/método | [222](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L222) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Solid.Distancia` | Función/método | [228](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L228) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Patron.Distancia` | Función/método | [29](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L29) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Patron.RotarXy` | Función/método | [34](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L34) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Patron.DistanciaCuadricula` | Función/método | [41](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L41) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Patron.DistanciaSemillas` | Función/método | [46](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L46) | Entrada: puntos XY y celda en mm. Proceso: evalúa semillas próximas |
+| `Patron._DistanciaPlanos` | Función/método | [102](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L102) | Entrada: puntos y semillas XY. Proceso: calcula la bisectriz más |
+| `Patron.Geometricos` | Función/método | [117](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L117) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Patron.Obtener` | Función/método | [128](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L128) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Patron.Celosia` | Función/método | [142](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L142) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Patron.PideSemilla` | Función/método | [149](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L149) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `HoneyComb` | Clase | [154](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L154) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `HoneyComb.__init__` | Función/método | [158](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L158) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `HoneyComb.Distancia` | Función/método | [162](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L162) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Square` | Clase | [166](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L166) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Square.__init__` | Función/método | [169](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L169) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Square.Distancia` | Función/método | [173](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L173) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Diamond` | Clase | [177](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L177) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Diamond.__init__` | Función/método | [180](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L180) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Diamond.Distancia` | Función/método | [184](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L184) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Voronoi` | Clase | [192](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L192) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Voronoi.__init__` | Función/método | [196](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L196) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Voronoi.Distancia` | Función/método | [200](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L200) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Solid` | Clase | [204](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L204) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Solid.__init__` | Función/método | [208](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L208) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Solid.Distancia` | Función/método | [212](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py#L212) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/contratos.py`
 
@@ -206,10 +203,10 @@ Exporta el STL en milímetros y un JSON con parámetros y comprobación.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `ExportadorStl` | Clase | [20](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py#L20) | Escribe el STL solo si la malla pasó la comprobación. |
-| `ExportadorStl._ValidarMetadatos` | Función/método | [24](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py#L24) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ExportadorStl._EscribirStl` | Función/método | [39](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py#L39) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ExportadorStl.Exportar` | Función/método | [62](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py#L62) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ExportadorStl` | Clase | [19](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py#L19) | Escribe el STL solo si la malla pasó la comprobación. |
+| `ExportadorStl._ValidarMetadatos` | Función/método | [23](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py#L23) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ExportadorStl._EscribirStl` | Función/método | [38](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py#L38) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ExportadorStl.Exportar` | Función/método | [47](../../apps/ortesis-plugin/OrtesisLabPlugin/Exportacion.py#L47) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/InspeccionNpz.py`
 
@@ -242,24 +239,24 @@ Panel N y operadores de OrtesisLab en la vista 3D.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `PanelAyuda` | Clase | [30](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L30) | Lee los controles del panel y muestra los errores en la interfaz. |
-| `PanelAyuda.OpcionesDesdeAjustes` | Función/método | [34](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L34) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PanelAyuda.Cancelar` | Función/método | [44](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L44) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_Settings` | Clase | [54](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L54) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_generate` | Clase | [100](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L100) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_generate.execute` | Función/método | [106](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L106) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_use_surface` | Clase | [122](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L122) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_use_surface.execute` | Función/método | [127](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L127) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_repair_surface` | Clase | [139](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L139) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_repair_surface.poll` | Función/método | [150](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L150) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_repair_surface.execute` | Función/método | [154](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L154) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_validate` | Clase | [171](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L171) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_validate.execute` | Función/método | [176](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L176) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_export` | Clase | [190](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L190) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_export.invoke` | Función/método | [197](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_OT_export.execute` | Función/método | [202](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L202) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_PT_panel` | Clase | [215](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L215) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `OL_PT_panel.draw` | Función/método | [223](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L223) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PanelAyuda` | Clase | [31](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L31) | Lee los controles del panel y muestra los errores en la interfaz. |
+| `PanelAyuda.OpcionesDesdeAjustes` | Función/método | [35](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L35) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PanelAyuda.Cancelar` | Función/método | [45](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L45) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_Settings` | Clase | [55](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L55) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_generate` | Clase | [101](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L101) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_generate.execute` | Función/método | [107](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L107) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_use_surface` | Clase | [123](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L123) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_use_surface.execute` | Función/método | [128](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L128) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_repair_surface` | Clase | [140](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L140) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_repair_surface.poll` | Función/método | [151](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L151) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_repair_surface.execute` | Función/método | [155](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L155) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_validate` | Clase | [172](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L172) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_validate.execute` | Función/método | [177](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L177) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_export` | Clase | [191](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L191) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_export.invoke` | Función/método | [198](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L198) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_OT_export.execute` | Función/método | [203](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L203) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_PT_panel` | Clase | [216](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L216) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `OL_PT_panel.draw` | Función/método | [224](../../apps/ortesis-plugin/OrtesisLabPlugin/Interfaz.py#L224) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/Malla.py`
 
@@ -290,11 +287,10 @@ Modelo de impresión y construcción de la geometría.
 | `Model3DForPrinting.ValidarOpciones` | Función/método | [81](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L81) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Model3DForPrinting.ConstruirGeometria` | Función/método | [131](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L131) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Model3DForPrinting.ChangePatern` | Función/método | [180](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L180) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.ChangePattern` | Función/método | [197](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.Construir` | Función/método | [201](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L201) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.CalculateVolume` | Función/método | [218](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L218) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.CalculateWeight` | Función/método | [235](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L235) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Model3DForPrinting.CalculatePrice` | Función/método | [243](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L243) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.Construir` | Función/método | [197](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.CalculateVolume` | Función/método | [214](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L214) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.CalculateWeight` | Función/método | [231](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L231) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Model3DForPrinting.CalculatePrice` | Función/método | [239](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py#L239) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py`
 
@@ -302,13 +298,13 @@ Crea o actualiza el objeto OL_Ortesis en la escena de Blender.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `GeneradorObjeto` | Clase | [39](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L39) | Escribe el cascarón en la escena y, si se pide, lo reconstruye con voxel. |
-| `GeneradorObjeto._EspesorMinimo` | Función/método | [43](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L43) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorObjeto._Componentes` | Función/método | [52](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L52) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorObjeto._AplicarModificador` | Función/método | [75](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L75) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorObjeto._DescartarTrabajo` | Función/método | [82](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L82) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorObjeto._PromoverResultado` | Función/método | [91](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L91) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `GeneradorObjeto.Crear` | Función/método | [133](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L133) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto` | Clase | [40](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L40) | Escribe el cascarón en la escena y, si se pide, lo reconstruye con voxel. |
+| `GeneradorObjeto._EspesorMinimo` | Función/método | [44](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L44) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto._Componentes` | Función/método | [53](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L53) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto._AplicarModificador` | Función/método | [76](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L76) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto._DescartarTrabajo` | Función/método | [83](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L83) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto._PromoverResultado` | Función/método | [92](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L92) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `GeneradorObjeto.Crear` | Función/método | [134](../../apps/ortesis-plugin/OrtesisLabPlugin/Objeto.py#L134) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/OrtesisLab.py`
 
@@ -329,10 +325,10 @@ Refinamiento triangular independiente de Blender para evaluar patrones.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `RefinadorMalla` | Clase | [12](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py#L12) | Divide únicamente las aristas largas y conserva una superficie conectada. |
-| `RefinadorMalla.PasoPatron` | Función/método | [16](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py#L16) | Entrada: parámetros validados. Proceso: limita el paso según el patrón. |
-| `RefinadorMalla.AristaMayor` | Función/método | [26](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py#L26) | Entrada: malla triangular. Proceso: mide sus aristas. Salida: longitud |
-| `RefinadorMalla.Refinar` | Función/método | [36](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py#L36) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RefinadorMalla` | Clase | [13](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py#L13) | Divide únicamente las aristas largas y conserva una superficie conectada. |
+| `RefinadorMalla.PasoPatron` | Función/método | [17](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py#L17) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RefinadorMalla.AristaMayor` | Función/método | [25](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py#L25) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `RefinadorMalla.Refinar` | Función/método | [32](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py#L32) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/ReparacionMalla.py`
 
@@ -348,6 +344,18 @@ Limpieza segura de la superficie base dentro de Blender.
 | `ReparadorMalla._ValidarBmesh` | Función/método | [132](../../apps/ortesis-plugin/OrtesisLabPlugin/ReparacionMalla.py#L132) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `ReparadorMalla.Arreglar` | Función/método | [148](../../apps/ortesis-plugin/OrtesisLabPlugin/ReparacionMalla.py#L148) | Repara la malla activa y devuelve un resumen de lo retirado. |
 
+## `apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py`
+
+STL binario del cascarón, en milímetros, sin Blender.
+
+| Símbolo | Tipo | Línea | Descripción declarada |
+|---|---|---:|---|
+| `StlBinario` | Clase | [21](../../apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py#L21) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `StlBinario.Triangulos` | Función/método | [23](../../apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py#L23) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `StlBinario.Bytes` | Función/método | [34](../../apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py#L34) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `StlBinario.Contar` | Función/método | [54](../../apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py#L54) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `StlBinario.VerticesSiBinario` | Función/método | [58](../../apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py#L58) | Sin docstring; consultar el catálogo de módulos y el código. |
+
 ## `apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py`
 
 Suavizado del contorno exterior antes de dar espesor.
@@ -355,13 +363,13 @@ Suavizado del contorno exterior antes de dar espesor.
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
 | `SuavizadoBorde` | Clase | [15](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L15) | Aplana los dientes del contorno sin mover el interior de la superficie. |
-| `SuavizadoBorde.Aplicar` | Función/método | [19](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L19) | Entrada: superficie abierta ya validada. Proceso: filtra cada bucle |
-| `SuavizadoBorde._Bucles` | Función/método | [108](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L108) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuavizadoBorde._Perimetro` | Función/método | [144](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L144) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuavizadoBorde._Pasabajos` | Función/método | [153](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L153) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuavizadoBorde._PasabajosCampo` | Función/método | [158](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L158) | Filtra ``campo`` con el perímetro físico de ``geometria`` (mm). |
-| `SuavizadoBorde._MascaraRota` | Función/método | [188](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L188) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuavizadoBorde._CarasRotas` | Función/método | [198](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L198) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde.Aplicar` | Función/método | [19](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L19) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde._Bucles` | Función/método | [103](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L103) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde._Perimetro` | Función/método | [139](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L139) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde._Pasabajos` | Función/método | [148](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L148) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde._PasabajosCampo` | Función/método | [153](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L153) | Filtra ``campo`` con el perímetro físico de ``geometria`` (mm). |
+| `SuavizadoBorde._MascaraRota` | Función/método | [183](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L183) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuavizadoBorde._CarasRotas` | Función/método | [193](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py#L193) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py`
 
@@ -370,9 +378,10 @@ Carga y lectura de la superficie interior dentro de Blender.
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
 | `SuperficieInterior` | Clase | [38](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py#L38) | Prepara una copia de la superficie elegida, sin cerrar sus aberturas. |
-| `SuperficieInterior._Candidatos` | Función/método | [43](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py#L43) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuperficieInterior.Cargar` | Función/método | [56](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py#L56) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `SuperficieInterior.Leer` | Función/método | [100](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py#L100) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior.VaciarCache` | Función/método | [43](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py#L43) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior._Candidatos` | Función/método | [47](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py#L47) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior.Cargar` | Función/método | [60](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py#L60) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `SuperficieInterior.Leer` | Función/método | [104](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py#L104) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py`
 
@@ -413,9 +422,8 @@ Comprobación geométrica de la malla ya generada.
 |---|---|---:|---|
 | `ValidadorMalla` | Clase | [20](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py#L20) | Informa si OL_Ortesis es una sola pieza cerrada. |
 | `ValidadorMalla.GuardarInforme` | Función/método | [24](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py#L24) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorMalla._Componentes` | Función/método | [28](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py#L28) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorMalla._Cruces` | Función/método | [48](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py#L48) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorMalla.Comprobar` | Función/método | [76](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py#L76) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorMalla._Cruces` | Función/método | [28](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py#L28) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorMalla.Comprobar` | Función/método | [56](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py#L56) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py`
 
@@ -423,13 +431,12 @@ Validación de mallas sólidas solo con NumPy (sin Blender).
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `ValidadorSolido` | Clase | [19](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L19) | Comprueba topología de un sólido triangular antes de publicar. |
-| `ValidadorSolido._Triangulos` | Función/método | [23](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L23) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorSolido._ContarComponentes` | Función/método | [34](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L34) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorSolido._ContarComponentes.buscar` | Función/método | [39](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L39) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorSolido._ContarComponentes.unir` | Función/método | [45](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L45) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorSolido._ContarAristas` | Función/método | [57](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L57) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorSolido._CarasDegeneradas` | Función/método | [68](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L68) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorSolido._CrucesHeuristica` | Función/método | [79](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L79) | Heurística ligera: solo en mallas pequeñas; no sustituye BVH de Blender. |
-| `ValidadorSolido._TrianguloContiene` | Función/método | [106](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L106) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `ValidadorSolido.Comprobar` | Función/método | [123](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L123) | Salida: informe compatible con ``ValidadorMalla``. |
+| `ValidadorSolido` | Clase | [15](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L15) | Comprueba topología de un sólido triangular antes de publicar. |
+| `ValidadorSolido._ContarComponentes` | Función/método | [19](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L19) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._ContarComponentes.buscar` | Función/método | [24](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L24) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._ContarComponentes.unir` | Función/método | [30](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L30) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._ContarAristas` | Función/método | [42](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L42) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._CarasDegeneradas` | Función/método | [53](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L53) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido._CrucesHeuristica` | Función/método | [64](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L64) | Heurística ligera: solo en mallas pequeñas; no sustituye BVH de Blender. |
+| `ValidadorSolido._TrianguloContiene` | Función/método | [91](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L91) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `ValidadorSolido.Comprobar` | Función/método | [108](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py#L108) | Salida: informe compatible con ``ValidadorMalla``. |

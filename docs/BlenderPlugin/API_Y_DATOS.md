@@ -57,7 +57,7 @@ peso_g = modelo.CalculateWeight()
 precio = modelo.CalculatePrice()
 ```
 
-Los nombres `puntos`, `triangulos` y `normales` representan datos del llamador; el ejemplo no incorpora una base anatómica. `Construir` no refina por sí mismo: los adaptadores deciden cómo preparar arrays. `ConstruirGeometria` es estático y no guarda geometría en una instancia; `Construir` sí. Cambiar patrón con `ChangePatern`/`ChangePattern` selecciona opciones, pero no reconstruye automáticamente vertices/faces: volver a llamar `Construir` antes de medir el nuevo diseño.
+Los nombres `puntos`, `triangulos` y `normales` representan datos del llamador; el ejemplo no incorpora una base anatómica. `Construir` no refina por sí mismo: los adaptadores deciden cómo preparar arrays. `ConstruirGeometria` es estático y no guarda geometría en una instancia; `Construir` sí. Cambiar patrón con `ChangePatern` selecciona opciones, pero no reconstruye automáticamente vertices/faces: volver a llamar `Construir` antes de medir el nuevo diseño.
 
 Contrato de salida: vertices float64 `(2N,3)` después de recorte si lo hay; caras como lista de tuplas, combinando triángulos y muros cuadriláteros; configuración completa validada; conteos interiores antes de duplicar. `CalculateVolume` necesita geometría y cachea el resultado. La tupla de entrada y NPZ están detallados en [AppBackend/CONTRATOS.md](../AppBackend/CONTRATOS.md).
 

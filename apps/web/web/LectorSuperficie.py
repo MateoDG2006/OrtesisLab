@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 import io
-import struct
 import zipfile
 from pathlib import Path
 
 import numpy as np
-
 from OrtesisLabPlugin.Excepciones import ArchivoSuperficieIlegible
 from OrtesisLabPlugin.Malla import AnalizadorMalla
+from OrtesisLabPlugin.StlBinario import StlBinario
 from OrtesisLabPlugin.util.Utilidades import Configuracion
 
 from .ConfiguracionBackend import ConfiguracionBackend
@@ -87,7 +86,7 @@ class LectorSuperficie:
 
     @staticmethod
     def _Stl(contenido: bytes, nombre: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-        triangulos = LectorSuperficie._StlBinario(contenido)
+        triangulos = StlBinario.VerticesSiBinario(contenido)
         if triangulos is None:
             triangulos = LectorSuperficie._StlAscii(contenido, nombre)
         if len(triangulos) == 0:
@@ -104,25 +103,8 @@ class LectorSuperficie:
         )
         vertices = crudos[indices]
         caras = inversa.reshape(-1, 3).astype(np.int32)
-        normales = LectorSuperficie._Normales(vertices, caras)
+        normales = AnalizadorMalla.NormalesDeCaras(vertices, caras)
         return vertices, caras, normales
-
-    @staticmethod
-    def _StlBinario(contenido: bytes) -> np.ndarray | None:
-        if len(contenido) < 84:
-            return None
-        cantidad = struct.unpack_from("<I", contenido, 80)[0]
-        if 84 + cantidad * 50 != len(contenido):
-            return None
-        registro = np.dtype(
-            [
-                ("normal", "<f4", (3,)),
-                ("vertices", "<f4", (3, 3)),
-                ("atributo", "<u2"),
-            ]
-        )
-        datos = np.frombuffer(contenido, dtype=registro, count=cantidad, offset=84)
-        return datos["vertices"].astype(np.float64)
 
     @staticmethod
     def _StlAscii(contenido: bytes, nombre: str) -> np.ndarray:
@@ -137,7 +119,3 @@ class LectorSuperficie:
         if len(vertices) % 3:
             raise ArchivoSuperficieIlegible(nombre, "El STL ASCII tiene un triángulo incompleto.")
         return np.asarray(vertices, dtype=np.float64).reshape(-1, 3, 3)
-
-    @staticmethod
-    def _Normales(vertices: np.ndarray, caras: np.ndarray) -> np.ndarray:
-        return AnalizadorMalla.NormalesDeCaras(vertices, caras)

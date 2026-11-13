@@ -12,13 +12,13 @@ import math
 import uuid
 
 import reflex as rx
-
+from OrtesisLabPlugin.constants.Paterns import Patron
 from OrtesisLabPlugin.Excepciones import OrtesisLabError
 from OrtesisLabPlugin.util.Utilidades import Configuracion, Registro
 
 from .ConfiguracionBackend import ConfiguracionBackend
 from .enums import ITEMS_TERMINALES
-from .GeneradorWeb import EJES, MAXIMO_VARIANTES, GeneradorWeb
+from .GeneradorWeb import EJES, GeneradorWeb
 from .LectorSuperficie import LectorSuperficie
 from .persistence.Contratos import (
     ErrorPersistencia,
@@ -105,109 +105,13 @@ class EstadoApp(rx.State):
     _solicitud: str = ""
     _propietario: str = ""
 
-    @rx.event
-    def set_pattern(self, valor: str):
-        self.pattern = valor
+    @rx.var
+    def es_macizo(self) -> bool:
+        return not Patron.Celosia(self.pattern)
 
-    @rx.event
-    def set_cell_mm(self, valor: str):
-        self.cell_mm = valor
-
-    @rx.event
-    def set_rib_width_mm(self, valor: str):
-        self.rib_width_mm = valor
-
-    @rx.event
-    def set_rib_height_mm(self, valor: str):
-        self.rib_height_mm = valor
-
-    @rx.event
-    def set_liner(self, valor: bool):
-        self.liner = valor
-
-    @rx.event
-    def set_skin_mm(self, valor: str):
-        self.skin_mm = valor
-
-    @rx.event
-    def set_solid_mm(self, valor: str):
-        self.solid_mm = valor
-
-    @rx.event
-    def set_border_mm(self, valor: str):
-        self.border_mm = valor
-
-    @rx.event
-    def set_rounding_mm(self, valor: str):
-        self.rounding_mm = valor
-
-    @rx.event
-    def set_angle_deg(self, valor: str):
-        self.angle_deg = valor
-
-    @rx.event
-    def set_seed(self, valor: str):
-        self.seed = valor
-
-    @rx.event
-    def set_reinforce_y_mm(self, valor: str):
-        self.reinforce_y_mm = valor
-
-    @rx.event
-    def set_reinforce_width_mm(self, valor: str):
-        self.reinforce_width_mm = valor
-
-    @rx.event
-    def set_flip_normals(self, valor: bool):
-        self.flip_normals = valor
-
-    @rx.event
-    def set_surface_step_mm(self, valor: str):
-        self.surface_step_mm = valor
-
-    @rx.event
-    def set_usar_voronoi(self, valor: bool):
-        self.usar_voronoi = valor
-
-    @rx.event
-    def set_usar_hex(self, valor: bool):
-        self.usar_hex = valor
-
-    @rx.event
-    def set_usar_diamond(self, valor: bool):
-        self.usar_diamond = valor
-
-    @rx.event
-    def set_usar_square(self, valor: bool):
-        self.usar_square = valor
-
-    @rx.event
-    def set_usar_solid(self, valor: bool):
-        self.usar_solid = valor
-
-    @rx.event
-    def set_eje(self, valor: str):
-        self.eje = valor
-
-    @rx.event
-    def set_desde(self, valor: str):
-        self.desde = valor
-
-    @rx.event
-    def set_hasta(self, valor: str):
-        self.hasta = valor
-
-    @rx.event
-    def set_paso(self, valor: str):
-        self.paso = valor
-
-    @rx.event
-    def set_ambos_revestimientos(self, valor: bool):
-        self.ambos_revestimientos = valor
-
-    @rx.event
-    def set_avanzados(self, valor: bool):
-        self.avanzados = valor
+    @rx.var
+    def pide_semilla(self) -> bool:
+        return Patron.PideSemilla(self.pattern)
 
     @rx.event
     async def CargarSuperficie(self, archivos: list[rx.UploadFile]):
@@ -472,13 +376,6 @@ class EstadoApp(rx.State):
         self.mensaje = "Cancelación pedida; la variante en curso termina antes de parar." if cancelado else self.mensaje
 
     @rx.event
-    def Ver(self, identificador: str):
-        for ficha in self.resultados:
-            if ficha["id"] == identificador:
-                self._Mostrar(ficha)
-                return
-
-    @rx.event
     def Comparar(self, identificador: str):
         # Hasta tres visores a la vez. Un segundo clic quita esa variante.
         ficha = next((item for item in self.resultados if item["id"] == identificador), None)
@@ -650,17 +547,7 @@ class EstadoApp(rx.State):
         base = self._Opciones()
         if not lote:
             return [base]
-        patrones = [
-            codigo
-            for codigo, activo in (
-                ("VORONOI", self.usar_voronoi),
-                ("HEX", self.usar_hex),
-                ("DIAMOND", self.usar_diamond),
-                ("SQUARE", self.usar_square),
-                ("SOLID", self.usar_solid),
-            )
-            if activo
-        ]
+        patrones = [codigo for codigo, campo in CASILLAS_PATRON if getattr(self, campo)]
         desde, hasta, paso = (0.0, 0.0, 1.0) if self.eje in ("", "ninguno") else (
             self._Numero(self.desde, "Valor inicial"),
             self._Numero(self.hasta, "Valor final"),
@@ -712,6 +599,42 @@ class EstadoApp(rx.State):
         return valor
 
 
-# El máximo se muestra en la página sin duplicar la constante en el texto fijo.
-LIMITE_LOTE = MAXIMO_VARIANTES
+# Reflex 0.9 no genera set_*. Solo los campos que el formulario ya enlazaba.
+for _campo in (
+    "pattern",
+    "cell_mm",
+    "rib_width_mm",
+    "rib_height_mm",
+    "liner",
+    "skin_mm",
+    "solid_mm",
+    "border_mm",
+    "rounding_mm",
+    "angle_deg",
+    "seed",
+    "reinforce_y_mm",
+    "reinforce_width_mm",
+    "flip_normals",
+    "surface_step_mm",
+    "usar_voronoi",
+    "usar_hex",
+    "usar_diamond",
+    "usar_square",
+    "usar_solid",
+    "eje",
+    "desde",
+    "hasta",
+    "paso",
+    "ambos_revestimientos",
+    "avanzados",
+):
+    EstadoApp._create_setter(_campo, EstadoApp.base_vars[_campo])
+
 ETIQUETAS_EJE = [("ninguno", "No variar números"), *EJES.items()]
+CASILLAS_PATRON = (
+    ("VORONOI", "usar_voronoi"),
+    ("HEX", "usar_hex"),
+    ("DIAMOND", "usar_diamond"),
+    ("SQUARE", "usar_square"),
+    ("SOLID", "usar_solid"),
+)

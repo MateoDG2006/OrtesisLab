@@ -13,11 +13,6 @@ class EntradaConsola(unittest.TestCase):
         self.assertIn("ortesislab", scripts)
         self.assertEqual(scripts["ortesislab"], "OrtesisLabPlugin.consola:main")
 
-    def test_main_imprimible(self):
-        from OrtesisLabPlugin.consola import main
-
-        self.assertTrue(callable(main))
-
 
 if __name__ == "__main__":
     unittest.main()

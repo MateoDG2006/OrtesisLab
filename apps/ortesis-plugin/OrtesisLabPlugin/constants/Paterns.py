@@ -3,7 +3,7 @@
 La distancia se mide en la proyección XY, en milímetros, hasta el eje
 de la nervadura. HoneyComb y Square conservan su nombre de catálogo;
 su código geométrico es HEX y SQUARE.
-Triangle y Minimalistic siguen en el catálogo y todavía no generan malla.
+TRIANGLE y MINIMALISTIC se rechazan: no hay geometría para esos nombres.
 """
 
 from __future__ import annotations
@@ -15,18 +15,16 @@ import numpy as np
 from ..Excepciones import PatronNoImplementado, PatronNoReconocido, PresupuestoExcedido
 from ..util.Utilidades import Configuracion
 
-_IMAGEN = "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
-
 
 class Patron:
-    """Catálogo y, cuando existe, distancia al eje de la nervadura."""
+    """Distancia al eje de la nervadura, y si el patrón tiene celosía o semilla."""
 
     codigo = ""
+    celosia = True
+    semilla = False
 
     def __init__(self):
         self.name = ""
-        self.description = ""
-        self.image = _IMAGEN
 
     def Distancia(self, puntos, celdaMm: float, anguloGrados: float, semilla: int):
         # Las subclases que generan malla reemplazan este método.
@@ -140,6 +138,18 @@ class Patron:
             raise PatronNoReconocido()
         return tabla[clave]
 
+    @staticmethod
+    def Celosia(codigo: str) -> bool:
+        patron = Patron.Geometricos().get(str(codigo))
+        if patron is None:
+            return True
+        return patron.celosia
+
+    @staticmethod
+    def PideSemilla(codigo: str) -> bool:
+        patron = Patron.Geometricos().get(str(codigo))
+        return patron is not None and patron.semilla
+
 
 class HoneyComb(Patron):
     # Hexágonos regulares. En la geometría el código es HEX.
@@ -148,8 +158,6 @@ class HoneyComb(Patron):
     def __init__(self):
         super().__init__()
         self.name = "HoneyComb"
-        self.description = "A honeycomb pattern"
-        self.image = _IMAGEN
 
     def Distancia(self, puntos, celdaMm: float, anguloGrados: float, semilla: int):
         return Patron.DistanciaSemillas(Patron.RotarXy(puntos, anguloGrados), celdaMm, semilla, False)
@@ -161,29 +169,9 @@ class Square(Patron):
     def __init__(self):
         super().__init__()
         self.name = "Square"
-        self.description = "A square pattern"
-        self.image = _IMAGEN
 
     def Distancia(self, puntos, celdaMm: float, anguloGrados: float, semilla: int):
         return Patron.DistanciaCuadricula(Patron.RotarXy(puntos, anguloGrados), celdaMm)
-
-
-class Triangle(Patron):
-    # Sigue en el catálogo. Pedirla para generar es un error.
-    def __init__(self):
-        super().__init__()
-        self.name = "Triangle"
-        self.description = "A triangle pattern"
-        self.image = _IMAGEN
-
-
-class Minimalistic(Patron):
-    # Sigue en el catálogo. Pedirla para generar es un error.
-    def __init__(self):
-        super().__init__()
-        self.name = "Minimalistic"
-        self.description = "A minimalistic pattern"
-        self.image = _IMAGEN
 
 
 class Diamond(Patron):
@@ -192,8 +180,6 @@ class Diamond(Patron):
     def __init__(self):
         super().__init__()
         self.name = "Diamond"
-        self.description = "Rombos"
-        self.image = _IMAGEN
 
     def Distancia(self, puntos, celdaMm: float, anguloGrados: float, semilla: int):
         # La cuadrícula se gira 45° para que las celdas queden en rombo.
@@ -205,12 +191,11 @@ class Diamond(Patron):
 
 class Voronoi(Patron):
     codigo = "VORONOI"
+    semilla = True
 
     def __init__(self):
         super().__init__()
         self.name = "Voronoi"
-        self.description = "Orgánico / Voronoi"
-        self.image = _IMAGEN
 
     def Distancia(self, puntos, celdaMm: float, anguloGrados: float, semilla: int):
         return Patron.DistanciaSemillas(Patron.RotarXy(puntos, anguloGrados), celdaMm, semilla, True)
@@ -218,19 +203,16 @@ class Voronoi(Patron):
 
 class Solid(Patron):
     codigo = "SOLID"
+    celosia = False
 
     def __init__(self):
         super().__init__()
         self.name = "Solid"
-        self.description = "Macizo"
-        self.image = _IMAGEN
 
     def Distancia(self, puntos, celdaMm: float, anguloGrados: float, semilla: int):
         # El macizo no tiene huecos: la distancia al eje es cero en todos los puntos.
         return np.zeros(len(puntos))
 
-
-CATALOGO = (HoneyComb, Square, Triangle, Minimalistic, Diamond, Voronoi, Solid)
 
 _ALIAS = {
     "HONEYCOMB": "HEX",
