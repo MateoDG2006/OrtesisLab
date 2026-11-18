@@ -16,6 +16,7 @@ Todos los eventos que leen o escriben datos resuelven primero el usuario desde l
 | `CancelarLote` | `lote_id` actual | Pide la cancelación; los ítems en cola pasan a `cancelled` y el trabajador detiene el que corre entre etapas |
 | `Ver(id)` / `Comparar(id)` | ID de ficha del lote | Selecciona o alterna vista; cuarta comparación se rechaza con mensaje |
 | `Descargar(id)` | ID de ficha del lote | Registra `export_downloaded` y descarga desde la `object_url`; ID ausente o ficha sin archivo no hace nada |
+| `DescargarVista` | Botón Descargar STL del escenario de `/` | Busca en `resultados` la ficha cuyo `archivo` es el que muestra el visor y llama a `Descargar`; sin ficha no hace nada |
 
 ## Eventos de `/historial`
 

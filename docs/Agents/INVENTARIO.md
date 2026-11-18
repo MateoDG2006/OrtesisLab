@@ -68,6 +68,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/web/.gitignore](../../apps/web/.gitignore) | Excluye `.web`, bytecode, bases SQLite, `.states`, `assets/external/` y `__pycache__` de la aplicación Reflex. |
 | [apps/web/assets/README.md](../../apps/web/assets/README.md) | Assets de la aplicación |
 | [apps/web/assets/favicon.ico](../../apps/web/assets/favicon.ico) | Icono del sitio. |
+| [apps/web/assets/ortesislab.css](../../apps/web/assets/ortesislab.css) | Paleta clara/oscura del rediseño y clases `ol-*` que usan las páginas Reflex. |
 | [apps/web/assets/superficie_interior_mm.npz](../../apps/web/assets/superficie_interior_mm.npz) | Superficie de ejemplo incluida para la web. |
 | [apps/web/assets/vendor/three-0.169.0.module.js](../../apps/web/assets/vendor/three-0.169.0.module.js) | Three.js que el visor importa para dibujar el STL. |
 | [apps/web/assets/visor.html](../../apps/web/assets/visor.html) | Visor Three.js que carga el STL binario desde su object_url. |
@@ -225,6 +226,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-13-resolve-untangle.md](../Audit/resolves/2026-11-13-resolve-untangle.md) | RES-2026-11-13-001 — Desenredo estructural |
 | [docs/Audit/resolves/2026-11-18-resolve-docker-prod.md](../Audit/resolves/2026-11-18-resolve-docker-prod.md) | RES-2026-11-18-001 — Docker de producción |
 | [docs/Audit/resolves/2026-11-18-resolve-imagenes-minio.md](../Audit/resolves/2026-11-18-resolve-imagenes-minio.md) | RES-2026-11-18-002 — Imágenes MinIO públicas |
+| [docs/Audit/resolves/2026-11-18-resolve-rediseno-visual-canvas.md](../Audit/resolves/2026-11-18-resolve-rediseno-visual-canvas.md) | RES-2026-11-18-001 — Rediseño visual según el canvas «OrtesisLab Rediseño» |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
 | [docs/BlenderPlugin/ALGORITMOS.md](../BlenderPlugin/ALGORITMOS.md) | Algoritmos de generación y comprobación |
 | [docs/BlenderPlugin/API_Y_DATOS.md](../BlenderPlugin/API_Y_DATOS.md) | API Python, contratos y datos de Blender |

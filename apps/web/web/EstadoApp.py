@@ -225,7 +225,7 @@ class EstadoApp(rx.State):
             self.mensaje = str(exc)
             return
         if progreso is None:
-            self.mensaje = "Todavía no hay lotes. Genere uno desde la página principal."
+            self.mensaje = "Todavía no hay lotes. Cree uno con el formulario «Nuevo lote»."
             return
         if str(progreso.lote.id) != self.lote_id:
             self.vistas = []
@@ -409,6 +409,13 @@ class EstadoApp(rx.State):
             self.mensaje = str(exc)
             return
         return rx.download(url=url, filename=f"ortesis-{coincidencia.group('asset')[:8]}.stl")
+
+    @rx.event
+    async def DescargarVista(self):
+        # Botón del visor principal: la variante que se está mostrando.
+        ficha = next((item for item in self.resultados if item["archivo"] == self.archivo and self.archivo), None)
+        if ficha is not None:
+            return await self.Descargar(ficha["id"])
 
     @rx.var
     def espesor_total(self) -> str:

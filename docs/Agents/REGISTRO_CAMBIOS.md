@@ -17,6 +17,14 @@ Pruebas ejecutadas: `docker pull` de silo/mc OK; en `pgsty/mc`, `sed` ausente y 
 Pila completa con `Dockerfile`, `compose.prod.yaml`, Caddy (HTTPS), `deploy/env.prod.example` y `scripts/EntradaContenedor.py` (`migrate` \| `web` \| `worker`). Postgres y Redis no publican puertos; el navegador entra por `APP_HOST` y `S3_HOST`. `make prod` no sustituye `make up` local. Autorización en [RES-2026-11-18-001](../Audit/resolves/2026-11-18-resolve-docker-prod.md). Los hallazgos siguen abiertos.
 
 Pruebas ejecutadas: `docker compose -f compose.prod.yaml --env-file deploy/env.prod.example config` OK; `docker build -t ortesislab:prod .` OK (sin aviso SecretsUsedInArgOrEnv). No se desplegó HTTPS real (faltan dominios del usuario).
+## 2026-11-18 — Rediseño visual del canvas «OrtesisLab Rediseño»
+
+Las tres páginas siguen el canvas: paleta clara/oscura en `assets/ortesislab.css`, fuente Manrope, tema Radix teal/sage/large y botones en píldora. La barra muestra marca, navegación Diseño/Lotes/Historial con la página activa, modo claro/oscuro, chip de usuario y botón de icono para salir. `/` pasa a escenario con visor 640px, Resumen plegable y Descargar STL (`EstadoApp.DescargarVista`), mosaicos de patrón y diálogo «Cambiar superficie». El formulario de lote se mueve de la pestaña de `/` a «Nuevo lote» en `/lote`. `/historial` usa insignias por estado (`estado_codigo` en la fila) y botones de icono. Se mantiene un solo parámetro que varía; no se añadieron «Descargar todas», tiempo de impresión ni el logo UTP del canvas porque no existen en el backend o en los recursos. El visor conserva su fondo claro. Autorización en [RES-2026-11-18-001](../Audit/resolves/2026-11-18-resolve-rediseno-visual-canvas.md).
+
+Pruebas ejecutadas:
+- `reflex compile --dry` en `apps/web`: compiló sin errores.
+- `python -m unittest discover -s tests/aplicacion_web -t .`: 18 pruebas, 1 omitida, OK.
+- No se vio en navegador: `reflex run` arrancó el backend, pero el servidor de desarrollo de React Router no abrió puerto en este entorno (el 3000 lo ocupa Docker).
 
 ## 2026-11-13 — Cerrar sesión envía el POST
 
