@@ -1,5 +1,23 @@
 # Registro de cambios documentales
 
+## 2026-11-18 — Puertos de web y MinIO en compose.prod
+
+`compose.prod.yaml` publica `3000` (web), `9000`/`9001` (MinIO) además de 80/443 de Caddy. Postgres y Redis siguen sin puerto en el host. Autorización en [RES-2026-11-18-001](../Audit/resolves/2026-11-18-resolve-docker-prod.md).
+
+Pruebas ejecutadas: revisión del YAML; el usuario debe volver a `make prod`.
+
+## 2026-11-18 — Imágenes MinIO de forks públicos
+
+MinIO Inc. dejó de publicar `minio/minio` y `minio/mc`. Los defaults de `compose.prod.yaml` y `apps/db/compose.yaml` pasan a `pgsty/silo` y `pgsty/mc`. `inicializar.sh` sustituye `__BUCKET__` con bash porque `pgsty/mc` no trae `sed`. Autorización en [RES-2026-11-18-002](../Audit/resolves/2026-11-18-resolve-imagenes-minio.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas: `docker pull` de silo/mc OK; en `pgsty/mc`, `sed` ausente y `bash` presente.
+
+## 2026-11-18 — Docker de producción
+
+Pila completa con `Dockerfile`, `compose.prod.yaml`, Caddy (HTTPS), `deploy/env.prod.example` y `scripts/EntradaContenedor.py` (`migrate` \| `web` \| `worker`). Postgres y Redis no publican puertos; el navegador entra por `APP_HOST` y `S3_HOST`. `make prod` no sustituye `make up` local. Autorización en [RES-2026-11-18-001](../Audit/resolves/2026-11-18-resolve-docker-prod.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas: `docker compose -f compose.prod.yaml --env-file deploy/env.prod.example config` OK; `docker build -t ortesislab:prod .` OK (sin aviso SecretsUsedInArgOrEnv). No se desplegó HTTPS real (faltan dominios del usuario).
+
 ## 2026-11-13 — Cerrar sesión envía el POST
 
 El botón no cerraba la sesión: `rx.el.form` llama a `preventDefault` y el POST a `/auth/logout` no sale. La barra usa un `<form method="post">` que el navegador envía. Autorización en [RES-2026-11-13-004](../Audit/resolves/2026-11-13-resolve-cerrar-sesion.md). Los hallazgos siguen abiertos.

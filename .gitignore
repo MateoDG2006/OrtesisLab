@@ -22,3 +22,4 @@ uploaded_files/
 
 # Configuración local con secretos
 .env
+deploy/.env

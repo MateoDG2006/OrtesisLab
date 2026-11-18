@@ -1,0 +1,166 @@
+# Pila de producción OrtesisLab. No sustituye apps/db/compose.yaml (desarrollo).
+# Uso: cp deploy/env.prod.example deploy/.env && edite claves/dominios
+#      docker compose -f compose.prod.yaml --env-file deploy/.env up -d --build
+name: ortesislab
+
+services:
+  postgres:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Defina POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:?Defina POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD}
+      ORTESISLAB_MIGRATOR_PASSWORD: ${ORTESISLAB_MIGRATOR_PASSWORD:?Defina ORTESISLAB_MIGRATOR_PASSWORD}
+      ORTESISLAB_APP_PASSWORD: ${ORTESISLAB_APP_PASSWORD:?Defina ORTESISLAB_APP_PASSWORD}
+      ORTESISLAB_WORKER_PASSWORD: ${ORTESISLAB_WORKER_PASSWORD:?Defina ORTESISLAB_WORKER_PASSWORD}
+      ORTESISLAB_BACKUP_PASSWORD: ${ORTESISLAB_BACKUP_PASSWORD:?Defina ORTESISLAB_BACKUP_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./apps/db/init:/docker-entrypoint-initdb.d:ro
+      - ./apps/db/backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  minio:
+    # MinIO ya no publica en Docker Hub/Quay; silo es el fork community con la misma API.
+    image: ${MINIO_IMAGE:-pgsty/silo:RELEASE.2026-11-12T00-00-00Z}
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Defina MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Defina MINIO_ROOT_PASSWORD}
+      MINIO_API_CORS_ALLOW_ORIGIN: ${ORTESISLAB_S3_CORS_ORIGINS:?Defina ORTESISLAB_S3_CORS_ORIGINS}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  minio-init:
+    image: ${MC_IMAGE:-pgsty/mc:RELEASE.2026-11-12T00-00-00Z}
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      ORTESISLAB_S3_ACCESS_KEY: ${ORTESISLAB_S3_ACCESS_KEY:?Defina ORTESISLAB_S3_ACCESS_KEY}
+      ORTESISLAB_S3_SECRET_KEY: ${ORTESISLAB_S3_SECRET_KEY:?Defina ORTESISLAB_S3_SECRET_KEY}
+      ORTESISLAB_S3_BUCKET: ${ORTESISLAB_S3_BUCKET:-ortesislab}
+    volumes:
+      - ./apps/db/minio:/config:ro
+    entrypoint: ["/bin/bash", "/config/inicializar.sh"]
+    restart: on-failure
+
+  redis:
+    image: redis:7.4-alpine
+    command:
+      - redis-server
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+      - --maxmemory
+      - ${ORTESISLAB_REDIS_MAXMEMORY:-256mb}
+      - --maxmemory-policy
+      - allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["migrate"]
+    environment:
+      ORTESISLAB_MIGRATOR_DATABASE_URL: ${ORTESISLAB_MIGRATOR_DATABASE_URL:?Defina ORTESISLAB_MIGRATOR_DATABASE_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["web"]
+    environment:
+      ORTESISLAB_DATABASE_URL: ${ORTESISLAB_DATABASE_URL:?Defina ORTESISLAB_DATABASE_URL}
+      ORTESISLAB_S3_ENDPOINT: ${ORTESISLAB_S3_ENDPOINT:?Defina ORTESISLAB_S3_ENDPOINT}
+      ORTESISLAB_S3_PUBLIC_URL: ${ORTESISLAB_S3_PUBLIC_URL:?Defina ORTESISLAB_S3_PUBLIC_URL}
+      ORTESISLAB_S3_ACCESS_KEY: ${ORTESISLAB_S3_ACCESS_KEY}
+      ORTESISLAB_S3_SECRET_KEY: ${ORTESISLAB_S3_SECRET_KEY}
+      ORTESISLAB_S3_BUCKET: ${ORTESISLAB_S3_BUCKET:-ortesislab}
+      ORTESISLAB_S3_REGION: ${ORTESISLAB_S3_REGION:-us-east-1}
+      ORTESISLAB_REDIS_URL: ${ORTESISLAB_REDIS_URL:-redis://redis:6379/0}
+      ORTESISLAB_APP_URL: ${ORTESISLAB_APP_URL:?Defina ORTESISLAB_APP_URL}
+      ORTESISLAB_COOKIE_SECURE: ${ORTESISLAB_COOKIE_SECURE:-true}
+    ports:
+      - "3000:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      minio-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["worker"]
+    environment:
+      ORTESISLAB_WORKER_DATABASE_URL: ${ORTESISLAB_WORKER_DATABASE_URL:?Defina ORTESISLAB_WORKER_DATABASE_URL}
+      ORTESISLAB_S3_ENDPOINT: ${ORTESISLAB_S3_ENDPOINT}
+      ORTESISLAB_S3_PUBLIC_URL: ${ORTESISLAB_S3_PUBLIC_URL}
+      ORTESISLAB_S3_ACCESS_KEY: ${ORTESISLAB_S3_ACCESS_KEY}
+      ORTESISLAB_S3_SECRET_KEY: ${ORTESISLAB_S3_SECRET_KEY}
+      ORTESISLAB_S3_BUCKET: ${ORTESISLAB_S3_BUCKET:-ortesislab}
+      ORTESISLAB_S3_REGION: ${ORTESISLAB_S3_REGION:-us-east-1}
+      ORTESISLAB_REDIS_URL: ${ORTESISLAB_REDIS_URL:-redis://redis:6379/0}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      minio-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2.9-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      APP_HOST: ${APP_HOST:?Defina APP_HOST}
+      S3_HOST: ${S3_HOST:?Defina S3_HOST}
+      ACME_EMAIL: ${ACME_EMAIL:-}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  minio-data:
+  caddy-data:
+  caddy-config:

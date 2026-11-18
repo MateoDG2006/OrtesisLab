@@ -22,7 +22,19 @@ make worker      # otra terminal
 make web         # otra terminal
 ```
 
-Queda en `http://localhost:3000`. El backend escucha en el puerto 8000; con `--env prod` todo usa el 3000. El trabajador genera los modelos encolados. `make migrar` aplica las revisiones de Alembic; `apps/db/alembic/versions/` está vacío, así que hoy no crea tablas. Detalle en [operación del backend](docs/AppBackend/OPERACION_Y_PRUEBAS.md).
+Queda en `http://localhost:3000`. El backend escucha en el puerto 8000; con `--env prod` todo usa el 3000. El trabajador genera los modelos encolados. `make migrar` aplica las revisiones de Alembic. Detalle en [operación del backend](docs/AppBackend/OPERACION_Y_PRUEBAS.md).
+
+### Producción con Docker
+
+Levanta Postgres, MinIO, Redis, migraciones, web, trabajador y Caddy (HTTPS) sin usar `make up` local. Hace falta DNS de `APP_HOST` y `S3_HOST` apuntando al servidor, y los puertos 80/443 abiertos.
+
+```powershell
+copy deploy\env.prod.example deploy\.env
+# Complete dominios y claves en deploy\.env
+make prod
+```
+
+Equivalente: `docker compose -f compose.prod.yaml --env-file deploy/.env up -d --build`. La plantilla es [`deploy/env.prod.example`](deploy/env.prod.example).
 
 Pruebas, sin Blender (las de persistencia se omiten si no hay una base propia en `ORTESISLAB_TEST_*`):
 

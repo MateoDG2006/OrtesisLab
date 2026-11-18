@@ -26,7 +26,8 @@ services:
       retries: 20
 
   minio:
-    image: ${MINIO_IMAGE:-minio/minio:RELEASE.2025-09-07T16-13-09Z}
+    # MinIO ya no publica en Docker Hub/Quay; silo es el fork community con la misma API.
+    image: ${MINIO_IMAGE:-pgsty/silo:RELEASE.2026-11-12T00-00-00Z}
     command: ["server", "/data", "--console-address", ":9001"]
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Defina MINIO_ROOT_USER}
@@ -46,7 +47,7 @@ services:
   # Crea el bucket, la política de lectura anónima de los STL de resultado y la
   # cuenta de servicio de la aplicación. Es idempotente.
   minio-init:
-    image: ${MC_IMAGE:-minio/mc:RELEASE.2025-08-13T08-35-41Z}
+    image: ${MC_IMAGE:-pgsty/mc:RELEASE.2026-11-12T00-00-00Z}
     depends_on:
       minio:
         condition: service_healthy
@@ -58,7 +59,7 @@ services:
       ORTESISLAB_S3_BUCKET: ${ORTESISLAB_S3_BUCKET:-ortesislab}
     volumes:
       - ./minio:/config:ro
-    entrypoint: ["/bin/sh", "/config/inicializar.sh"]
+    entrypoint: ["/bin/bash", "/config/inicializar.sh"]
     restart: "no"
     profiles: ["init"]
 
@@ -84,7 +85,7 @@ services:
 
   # Herramienta efímera: no arranca con `up`.
   mc:
-    image: ${MC_IMAGE:-minio/mc:RELEASE.2025-08-13T08-35-41Z}
+    image: ${MC_IMAGE:-pgsty/mc:RELEASE.2026-11-12T00-00-00Z}
     profiles: ["tools"]
     environment:
       MC_HOST_local: http://${MINIO_ROOT_USER}:${MINIO_ROOT_PASSWORD}@minio:9000

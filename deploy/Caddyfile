@@ -1,0 +1,11 @@
+{
+	email {$ACME_EMAIL}
+}
+
+{$APP_HOST} {
+	reverse_proxy web:3000
+}
+
+{$S3_HOST} {
+	reverse_proxy minio:9000
+}

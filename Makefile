@@ -15,7 +15,7 @@ export FILE
 export CONFIRM
 export ACCION
 
-.PHONY: help install up web worker migrar empaquetar test test-blender lint \
+.PHONY: help install up web worker migrar empaquetar test test-blender lint prod \
 	db-up db-down db-estado db-respaldo db-reset
 
 help:
@@ -25,6 +25,7 @@ help:
 	@echo "  web                      Reflex en http://localhost:3000"
 	@echo "  worker                   Cola de generacion. UNA_VEZ=1 procesa y termina"
 	@echo "  migrar                   alembic upgrade head"
+	@echo "  prod                     Pila Docker de produccion (compose.prod.yaml)"
 	@echo "  empaquetar               ZIP del complemento de Blender"
 	@echo "  test                     unittest de tests/"
 	@echo "  test-blender             Empaqueta y ejecuta las dos pruebas de Blender"
@@ -55,6 +56,10 @@ worker:
 
 migrar:
 	uv run alembic upgrade head
+
+prod:
+	@$(PYTHON) -c "from pathlib import Path; raise SystemExit(0 if Path('deploy/.env').is_file() else 'Falta deploy/.env. Copie deploy/env.prod.example y complete claves.')"
+	docker compose -f compose.prod.yaml --env-file deploy/.env up -d --build
 
 empaquetar:
 	uv run python scripts/EmpaquetarBlender.py

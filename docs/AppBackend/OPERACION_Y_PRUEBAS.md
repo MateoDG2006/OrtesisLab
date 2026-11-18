@@ -52,6 +52,31 @@ Para trasladar subidas de la arquitectura anterior: `uv run python scripts/Migra
 
 Antes de crear/modificar código Reflex o iniciar/depurar procesos, aplicar las skills del repositorio `reflex-docs`, `setup-python-env` y `reflex-process-management` según [AGENTS.md](../../AGENTS.md).
 
+## Producción con Docker
+
+[`compose.prod.yaml`](../../compose.prod.yaml) levanta la pila completa. No sustituye [`apps/db/compose.yaml`](../../apps/db/compose.yaml) ni `make up` (desarrollo en el host).
+
+```powershell
+copy deploy\env.prod.example deploy\.env
+# Complete APP_HOST, S3_HOST, claves y ORTESISLAB_*
+make prod
+```
+
+| Pieza | Rol |
+|---|---|
+| [`Dockerfile`](../../Dockerfile) | Imagen única; `scripts/EntradaContenedor.py` arranca `migrate`, `web` o `worker` |
+| `postgres` / `redis` | Datos. Sin puertos en el host |
+| `minio` | `pgsty/silo` en 9000 (API) y 9001 (consola). Cliente de init: `pgsty/mc` |
+| `minio-init` | Bucket, política de lectura de STL y usuario de aplicación |
+| `migrate` | `alembic upgrade head` y termina |
+| `web` | `reflex run --env prod --single-port`; host `3000:3000` |
+| `worker` | `scripts/EjecutarTrabajador.py` |
+| `caddy` | TLS (Let's Encrypt) en 80/443; `APP_HOST` → web, `S3_HOST` → MinIO |
+
+URLs: el proceso usa hostnames internos (`postgres`, `minio`, `redis`). El navegador usa `ORTESISLAB_APP_URL` y `ORTESISLAB_S3_PUBLIC_URL` (HTTPS). `ORTESISLAB_COOKIE_SECURE=true`. `ORTESISLAB_S3_CORS_ORIGINS` debe ser el origen de la app (`https://APP_HOST`). Secretos en `deploy/.env` (no versionado); plantilla en [`deploy/env.prod.example`](../../deploy/env.prod.example).
+
+Prerrequisitos: DNS de `APP_HOST` y `S3_HOST` al servidor; 80 y 443 abiertos hacia Caddy. Sin dominios reales Let's Encrypt no emite certificados.
+
 ## Base de datos
 
 La infraestructura local son cinco objetivos. El detalle de cada `ACCION` sale en `make help` y en [`scripts/BaseLocal.py`](../../scripts/BaseLocal.py).
@@ -67,7 +92,7 @@ La infraestructura local son cinco objetivos. El detalle de cada `ACCION` sale e
 
 El primer `make db-up` sobre un volumen nuevo ejecuta `apps/db/init/01_roles.sh`: roles y esquema `ortesislab` vacío, sin tablas. No hay fixture ni base de pruebas: los datos salen del uso de la aplicación. `make up` es `db-up` seguido de `make migrar` (`alembic upgrade head`).
 
-Las tablas las genera y aplica quien mantiene el esquema. `apps/db/alembic/versions/` no tiene revisiones, así que `make migrar` no crea tablas. Cambiar primero [`Modelos.py`](../../apps/web/web/persistence/Modelos.py) y generar la revisión contra una base cuyo esquema `ortesislab` ya existe:
+Las tablas las genera y aplica quien mantiene el esquema. Cambiar primero [`Modelos.py`](../../apps/web/web/persistence/Modelos.py) y generar la revisión contra una base cuyo esquema `ortesislab` ya existe:
 
 ```powershell
 uv run alembic revision --autogenerate -m "descripcion"

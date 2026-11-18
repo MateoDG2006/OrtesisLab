@@ -1,0 +1,16 @@
+.venv
+.git
+.web
+apps/web/.web
+**/__pycache__
+**/*.pyc
+.states
+logs
+uploaded_files
+apps/db/backups
+docs/Audit
+.agents
+.codegraph
+*.dump
+.env
+deploy/.env

@@ -11,12 +11,14 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [.agents/skills/setup-python-env/SKILL.md](../../.agents/skills/setup-python-env/SKILL.md) | Skill local Reflex: instrucciones y referencias para agentes. |
 | [.agents/skills/untangle-codebase/SKILL.md](../../.agents/skills/untangle-codebase/SKILL.md) | Skill para juntar el código que cambia junto, soltar el que no, y quitar lo que no tiene motivo propio. |
 | [.codegraph/.gitignore](../../.codegraph/.gitignore) | Excluye el índice local de CodeGraph del versionado. |
+| [.dockerignore](../../.dockerignore) | Excluye `.venv`, `.git`, `.web`, logs y `deploy/.env` del contexto de build. |
 | [.env.example](../../.env.example) | Plantilla de variables `ORTESISLAB_*` de la aplicación, el trabajador y las pruebas. |
 | [.gitignore](../../.gitignore) | Excluye entornos, compilación, estados, subidas anteriores, logs y `.env`. |
 | [.python-version](../../.python-version) | Selecciona el intérprete Python del proyecto para uv. |
 | [.vscode/settings.json](../../.vscode/settings.json) | Configuración local de editor; actualmente objeto vacío. |
 | [AGENTS.md](../../AGENTS.md) | Instrucciones Reflex y obligación de mantenimiento documental para agentes. |
 | [CLAUDE.md](../../CLAUDE.md) | Entrada de instrucciones que remite a AGENTS.md. |
+| [Dockerfile](../../Dockerfile) | Imagen única de producción: `uv sync`, compila Reflex y arranca con `EntradaContenedor.py`. |
 | [Makefile](../../Makefile) | Instalar, levantar, probar y lintear. Cinco objetivos de infraestructura local: `db-up`, `db-down`, `db-estado`, `db-respaldo` y `db-reset`. |
 | [README.md](../../README.md) | Presentación, instalación y entradas a documentación. |
 | [alembic.ini](../../alembic.ini) | Configuración de Alembic: carpeta `apps/db/alembic`, plantilla de revisiones y logging. La URL la aporta `env.py` desde `Ajustes`. |
@@ -125,6 +127,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/web/web/storage/AlmacenamientoPrivado.py](../../apps/web/web/storage/AlmacenamientoPrivado.py) | Contrato del almacén de bytes y claves de objeto. |
 | [apps/web/web/storage/StorageS3.py](../../apps/web/web/storage/StorageS3.py) | Almacén de bytes en un bucket S3 (MinIO en desarrollo). |
 | [apps/web/web/storage/__init__.py](../../apps/web/web/storage/__init__.py) | Marcador de paquete. |
+| [compose.prod.yaml](../../compose.prod.yaml) | Pila de producción: Postgres, MinIO, Redis, migrate, web, worker y Caddy HTTPS. |
 | [core/config/README.md](../../core/config/README.md) | Para qué sirve cada YAML del backend y cada JSON de geometría. |
 | [core/config/almacen.yaml](../../core/config/almacen.yaml) | Timeouts de conexion y lectura e intentos del cliente S3. |
 | [core/config/cache.yaml](../../core/config/cache.yaml) | TTL, pausa de reintento y timeout de Redis. |
@@ -136,6 +139,8 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [core/config/sesion.yaml](../../core/config/sesion.yaml) | Duración de la sesión de servidor. |
 | [core/config/trabajador.yaml](../../core/config/trabajador.yaml) | Lease, latido, supervision y conciliacion del trabajador. |
 | [core/config/web.yaml](../../core/config/web.yaml) | Progreso, espera de creacion, tamanos de subida y etiquetas de la app. |
+| [deploy/Caddyfile](../../deploy/Caddyfile) | TLS Let's Encrypt: `APP_HOST` → web:3000 y `S3_HOST` → minio:9000. |
+| [deploy/env.prod.example](../../deploy/env.prod.example) | Plantilla de secretos y dominios para `deploy/.env` de producción. |
 | [docs/Agents/ESTANDAR_DOCUMENTACION.md](ESTANDAR_DOCUMENTACION.md) | Estándar documental |
 | [docs/Agents/GUIA_REFLEX.md](GUIA_REFLEX.md) | Reflex Documentation |
 | [docs/Agents/INVENTARIO.md](INVENTARIO.md) | Inventario de carpetas y archivos propios (instantánea). |
@@ -218,6 +223,8 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-13-resolve-setters-formulario.md](../Audit/resolves/2026-11-13-resolve-setters-formulario.md) | RES-2026-11-13-003 — Setters del formulario |
 | [docs/Audit/resolves/2026-11-13-resolve-sin-tope-lote.md](../Audit/resolves/2026-11-13-resolve-sin-tope-lote.md) | RES-2026-11-13-002 — Sin tope de variantes por lote |
 | [docs/Audit/resolves/2026-11-13-resolve-untangle.md](../Audit/resolves/2026-11-13-resolve-untangle.md) | RES-2026-11-13-001 — Desenredo estructural |
+| [docs/Audit/resolves/2026-11-18-resolve-docker-prod.md](../Audit/resolves/2026-11-18-resolve-docker-prod.md) | RES-2026-11-18-001 — Docker de producción |
+| [docs/Audit/resolves/2026-11-18-resolve-imagenes-minio.md](../Audit/resolves/2026-11-18-resolve-imagenes-minio.md) | RES-2026-11-18-002 — Imágenes MinIO públicas |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
 | [docs/BlenderPlugin/ALGORITMOS.md](../BlenderPlugin/ALGORITMOS.md) | Algoritmos de generación y comprobación |
 | [docs/BlenderPlugin/API_Y_DATOS.md](../BlenderPlugin/API_Y_DATOS.md) | API Python, contratos y datos de Blender |
@@ -241,6 +248,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [scripts/EjecutarOrtesisLab.py](../../scripts/EjecutarOrtesisLab.py) | Script para abrir el complemento dentro de Blender. |
 | [scripts/EjecutarTrabajador.py](../../scripts/EjecutarTrabajador.py) | Proceso trabajador de OrtesisLab: cola de generación y conciliación. |
 | [scripts/EmpaquetarBlender.py](../../scripts/EmpaquetarBlender.py) | Genera el ZIP instalable de Blender, sin Reflex, logs ni la base v5. |
+| [scripts/EntradaContenedor.py](../../scripts/EntradaContenedor.py) | Arranque de un contenedor OrtesisLab: migrate, web o worker. |
 | [scripts/IniciarConsola.py](../../scripts/IniciarConsola.py) | Script del comando de consola del proyecto. |
 | [scripts/MigrarSubidas.py](../../scripts/MigrarSubidas.py) | Traslada una sola vez ``uploaded_files/`` al bucket y registra cada objeto. |
 | [skills-lock.json](../../skills-lock.json) | Procedencia y huellas de las tres skills Reflex instaladas. |

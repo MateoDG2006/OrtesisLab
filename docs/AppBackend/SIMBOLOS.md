@@ -857,6 +857,17 @@ Genera el ZIP instalable de Blender, sin Reflex, logs ni la base v5.
 |---|---|---:|---|
 | `empaquetar` | Función/método | [11](../../scripts/EmpaquetarBlender.py#L11) | Sin docstring; consultar el catálogo de módulos y el código. |
 
+## `scripts/EntradaContenedor.py`
+
+Arranque de un contenedor OrtesisLab: migrate, web o worker.
+
+| Símbolo | Tipo | Línea | Descripción declarada |
+|---|---|---:|---|
+| `_Migrar` | Función/método | [16](../../scripts/EntradaContenedor.py#L16) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `_Web` | Función/método | [24](../../scripts/EntradaContenedor.py#L24) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `_Worker` | Función/método | [52](../../scripts/EntradaContenedor.py#L52) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `main` | Función/método | [60](../../scripts/EntradaContenedor.py#L60) | Sin docstring; consultar el catálogo de módulos y el código. |
+
 ## `scripts/IniciarConsola.py`
 
 Script del comando de consola del proyecto.

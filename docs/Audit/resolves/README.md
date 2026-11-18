@@ -37,6 +37,8 @@
 | [2026-11-13-resolve-sin-tope-lote](2026-11-13-resolve-sin-tope-lote.md) | EN_CURSO | Quitar el máximo de variantes de un lote; no cierra hallazgos |
 | [2026-11-13-resolve-setters-formulario](2026-11-13-resolve-setters-formulario.md) | EN_CURSO | Registrar otra vez los `set_*` del formulario; no cierra hallazgos |
 | [2026-11-13-resolve-cerrar-sesion](2026-11-13-resolve-cerrar-sesion.md) | EN_CURSO | El POST de cerrar sesión lo envía el navegador; no cierra hallazgos |
+| [2026-11-18-resolve-docker-prod](2026-11-18-resolve-docker-prod.md) | EN_CURSO | Docker de producción (pila completa); no cierra hallazgos |
+| [2026-11-18-resolve-imagenes-minio](2026-11-18-resolve-imagenes-minio.md) | EN_CURSO | Defaults MinIO a pgsty/silo y pgsty/mc; no cierra hallazgos |
 
 [RES-2026-10-13-001](2026-10-13-resolve-persistencia-postgres.md) y
 [RES-2026-10-13-002](2026-10-13-resolve-organizar-pruebas.md) siguen como
