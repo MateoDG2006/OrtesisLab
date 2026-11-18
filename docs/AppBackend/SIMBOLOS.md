@@ -156,19 +156,20 @@ Estado de la página de comparación.
 | `EstadoApp.CancelarLote` | Función/método | [367](../../apps/web/web/EstadoApp.py#L367) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `EstadoApp.Comparar` | Función/método | [379](../../apps/web/web/EstadoApp.py#L379) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `EstadoApp.Descargar` | Función/método | [394](../../apps/web/web/EstadoApp.py#L394) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.espesor_total` | Función/método | [414](../../apps/web/web/EstadoApp.py#L414) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.resumen_lote` | Función/método | [423](../../apps/web/web/EstadoApp.py#L423) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.lote_valido` | Función/método | [433](../../apps/web/web/EstadoApp.py#L433) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.resumen_estados` | Función/método | [441](../../apps/web/web/EstadoApp.py#L441) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp.porcentaje` | Función/método | [451](../../apps/web/web/EstadoApp.py#L451) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Usuario` | Función/método | [456](../../apps/web/web/EstadoApp.py#L456) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Seguir` | Función/método | [471](../../apps/web/web/EstadoApp.py#L471) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Publicar` | Función/método | [495](../../apps/web/web/EstadoApp.py#L495) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._OlvidarTrabajo` | Función/método | [526](../../apps/web/web/EstadoApp.py#L526) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Mostrar` | Función/método | [538](../../apps/web/web/EstadoApp.py#L538) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Variantes` | Función/método | [546](../../apps/web/web/EstadoApp.py#L546) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Opciones` | Función/método | [566](../../apps/web/web/EstadoApp.py#L566) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoApp._Numero` | Función/método | [591](../../apps/web/web/EstadoApp.py#L591) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.DescargarVista` | Función/método | [414](../../apps/web/web/EstadoApp.py#L414) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.espesor_total` | Función/método | [421](../../apps/web/web/EstadoApp.py#L421) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.resumen_lote` | Función/método | [430](../../apps/web/web/EstadoApp.py#L430) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.lote_valido` | Función/método | [440](../../apps/web/web/EstadoApp.py#L440) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.resumen_estados` | Función/método | [448](../../apps/web/web/EstadoApp.py#L448) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp.porcentaje` | Función/método | [458](../../apps/web/web/EstadoApp.py#L458) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Usuario` | Función/método | [463](../../apps/web/web/EstadoApp.py#L463) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Seguir` | Función/método | [478](../../apps/web/web/EstadoApp.py#L478) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Publicar` | Función/método | [502](../../apps/web/web/EstadoApp.py#L502) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._OlvidarTrabajo` | Función/método | [533](../../apps/web/web/EstadoApp.py#L533) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Mostrar` | Función/método | [545](../../apps/web/web/EstadoApp.py#L545) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Variantes` | Función/método | [553](../../apps/web/web/EstadoApp.py#L553) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Opciones` | Función/método | [573](../../apps/web/web/EstadoApp.py#L573) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoApp._Numero` | Función/método | [598](../../apps/web/web/EstadoApp.py#L598) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/EstadoHistorial.py`
 
@@ -190,7 +191,7 @@ Estado de /historial: filtros, cursor y comparación de hasta tres versiones.
 | `EstadoHistorial._Filtros` | Función/método | [193](../../apps/web/web/EstadoHistorial.py#L193) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `EstadoHistorial._Fecha` | Función/método | [202](../../apps/web/web/EstadoHistorial.py#L202) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `EstadoHistorial._Fila` | Función/método | [211](../../apps/web/web/EstadoHistorial.py#L211) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `EstadoHistorial._Tarjeta` | Función/método | [235](../../apps/web/web/EstadoHistorial.py#L235) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `EstadoHistorial._Tarjeta` | Función/método | [236](../../apps/web/web/EstadoHistorial.py#L236) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/GeneradorWeb.py`
 
@@ -278,24 +279,26 @@ Pantalla para previsualizar una ortesis o un lote de variantes.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `PaginaComparacion` | Clase | [25](../../apps/web/web/PaginaComparacion.py#L25) | Formulario de parámetros (genéricos y avanzados), vista previa y lote. |
-| `PaginaComparacion.Index` | Función/método | [29](../../apps/web/web/PaginaComparacion.py#L29) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Formulario` | Función/método | [65](../../apps/web/web/PaginaComparacion.py#L65) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Avanzados` | Función/método | [138](../../apps/web/web/PaginaComparacion.py#L138) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Acciones` | Función/método | [180](../../apps/web/web/PaginaComparacion.py#L180) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Superficie` | Función/método | [197](../../apps/web/web/PaginaComparacion.py#L197) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Vista` | Función/método | [261](../../apps/web/web/PaginaComparacion.py#L261) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Lote` | Función/método | [313](../../apps/web/web/PaginaComparacion.py#L313) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Casilla` | Función/método | [393](../../apps/web/web/PaginaComparacion.py#L393) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Marco` | Función/método | [405](../../apps/web/web/PaginaComparacion.py#L405) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Visor` | Función/método | [409](../../apps/web/web/PaginaComparacion.py#L409) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Enlace` | Función/método | [423](../../apps/web/web/PaginaComparacion.py#L423) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Etiqueta` | Función/método | [431](../../apps/web/web/PaginaComparacion.py#L431) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Numero` | Función/método | [454](../../apps/web/web/PaginaComparacion.py#L454) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Campo` | Función/método | [459](../../apps/web/web/PaginaComparacion.py#L459) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Interruptor` | Función/método | [468](../../apps/web/web/PaginaComparacion.py#L468) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Selector` | Función/método | [477](../../apps/web/web/PaginaComparacion.py#L477) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaComparacion.Medida` | Función/método | [494](../../apps/web/web/PaginaComparacion.py#L494) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion` | Clase | [30](../../apps/web/web/PaginaComparacion.py#L30) | Escenario con el visor y la ficha, y columna con parámetros y superficie. |
+| `PaginaComparacion.Pagina` | Función/método | [34](../../apps/web/web/PaginaComparacion.py#L34) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Index` | Función/método | [44](../../apps/web/web/PaginaComparacion.py#L44) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Escenario` | Función/método | [64](../../apps/web/web/PaginaComparacion.py#L64) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Resumen` | Función/método | [136](../../apps/web/web/PaginaComparacion.py#L136) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Resumen.fila` | Función/método | [138](../../apps/web/web/PaginaComparacion.py#L138) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Formulario` | Función/método | [155](../../apps/web/web/PaginaComparacion.py#L155) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Avanzados` | Función/método | [293](../../apps/web/web/PaginaComparacion.py#L293) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Superficie` | Función/método | [335](../../apps/web/web/PaginaComparacion.py#L335) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Cargador` | Función/método | [384](../../apps/web/web/PaginaComparacion.py#L384) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Mosaico` | Función/método | [503](../../apps/web/web/PaginaComparacion.py#L503) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Marco` | Función/método | [528](../../apps/web/web/PaginaComparacion.py#L528) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Visor` | Función/método | [532](../../apps/web/web/PaginaComparacion.py#L532) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Enlace` | Función/método | [546](../../apps/web/web/PaginaComparacion.py#L546) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Etiqueta` | Función/método | [554](../../apps/web/web/PaginaComparacion.py#L554) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Numero` | Función/método | [577](../../apps/web/web/PaginaComparacion.py#L577) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Campo` | Función/método | [582](../../apps/web/web/PaginaComparacion.py#L582) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Interruptor` | Función/método | [599](../../apps/web/web/PaginaComparacion.py#L599) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Selector` | Función/método | [609](../../apps/web/web/PaginaComparacion.py#L609) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaComparacion.Medida` | Función/método | [626](../../apps/web/web/PaginaComparacion.py#L626) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/PaginaHistorial.py`
 
@@ -303,14 +306,15 @@ Pantalla /historial: generaciones del usuario, comparación y restauración.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `PaginaHistorial` | Clase | [13](../../apps/web/web/PaginaHistorial.py#L13) | Filtros, tabla paginada por cursor y visores de las versiones elegidas. |
-| `PaginaHistorial.Index` | Función/método | [17](../../apps/web/web/PaginaHistorial.py#L17) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaHistorial.Filtros` | Función/método | [42](../../apps/web/web/PaginaHistorial.py#L42) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaHistorial.Fecha` | Función/método | [75](../../apps/web/web/PaginaHistorial.py#L75) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaHistorial.Tabla` | Función/método | [83](../../apps/web/web/PaginaHistorial.py#L83) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaHistorial.Fila` | Función/método | [133](../../apps/web/web/PaginaHistorial.py#L133) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaHistorial.Comparacion` | Función/método | [177](../../apps/web/web/PaginaHistorial.py#L177) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaHistorial.Tarjeta` | Función/método | [196](../../apps/web/web/PaginaHistorial.py#L196) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaHistorial` | Clase | [12](../../apps/web/web/PaginaHistorial.py#L12) | Filtros, tabla paginada por cursor y visores de las versiones elegidas. |
+| `PaginaHistorial.Index` | Función/método | [16](../../apps/web/web/PaginaHistorial.py#L16) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaHistorial.Filtros` | Función/método | [28](../../apps/web/web/PaginaHistorial.py#L28) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaHistorial.Fecha` | Función/método | [69](../../apps/web/web/PaginaHistorial.py#L69) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaHistorial.Tabla` | Función/método | [78](../../apps/web/web/PaginaHistorial.py#L78) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaHistorial.Fila` | Función/método | [146](../../apps/web/web/PaginaHistorial.py#L146) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaHistorial.Comparacion` | Función/método | [187](../../apps/web/web/PaginaHistorial.py#L187) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaHistorial.Tarjeta` | Función/método | [205](../../apps/web/web/PaginaHistorial.py#L205) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaHistorial.Accion` | Función/método | [240](../../apps/web/web/PaginaHistorial.py#L240) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/PaginaLote.py`
 
@@ -318,11 +322,12 @@ Pantalla /lote: progreso de un lote con una miniatura por variante.
 
 | Símbolo | Tipo | Línea | Descripción declarada |
 |---|---|---:|---|
-| `PaginaLote` | Clase | [24](../../apps/web/web/PaginaLote.py#L24) | Cabecera con el avance, comparación 3D y cuadrícula de miniaturas. |
-| `PaginaLote.Index` | Función/método | [28](../../apps/web/web/PaginaLote.py#L28) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaLote.Cabecera` | Función/método | [51](../../apps/web/web/PaginaLote.py#L51) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaLote.Comparacion` | Función/método | [96](../../apps/web/web/PaginaLote.py#L96) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `PaginaLote.Tarjeta` | Función/método | [123](../../apps/web/web/PaginaLote.py#L123) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaLote` | Clase | [16](../../apps/web/web/PaginaLote.py#L16) | Formulario «Nuevo lote», avance, comparación 3D y cuadrícula de miniaturas. |
+| `PaginaLote.Index` | Función/método | [20](../../apps/web/web/PaginaLote.py#L20) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaLote.NuevoLote` | Función/método | [46](../../apps/web/web/PaginaLote.py#L46) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaLote.Cabecera` | Función/método | [151](../../apps/web/web/PaginaLote.py#L151) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaLote.Comparacion` | Función/método | [204](../../apps/web/web/PaginaLote.py#L204) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `PaginaLote.Tarjeta` | Función/método | [235](../../apps/web/web/PaginaLote.py#L235) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/persistence/__init__.py`
 
@@ -750,8 +755,8 @@ Barra de sesión común a la comparación y al historial.
 | `Sesion` | Clase | [19](../../apps/web/web/Sesion.py#L19) | Enlaces al registro y al login del backend, y navegación entre páginas. |
 | `Sesion.Ruta` | Función/método | [23](../../apps/web/web/Sesion.py#L23) | Sin docstring; consultar el catálogo de módulos y el código. |
 | `Sesion.Boton` | Función/método | [28](../../apps/web/web/Sesion.py#L28) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Sesion.FormularioPost` | Función/método | [34](../../apps/web/web/Sesion.py#L34) | Sin docstring; consultar el catálogo de módulos y el código. |
-| `Sesion.Barra` | Función/método | [42](../../apps/web/web/Sesion.py#L42) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Sesion.Salir` | Función/método | [34](../../apps/web/web/Sesion.py#L34) | Sin docstring; consultar el catálogo de módulos y el código. |
+| `Sesion.Barra` | Función/método | [50](../../apps/web/web/Sesion.py#L50) | Sin docstring; consultar el catálogo de módulos y el código. |
 
 ## `apps/web/web/storage/__init__.py`
 

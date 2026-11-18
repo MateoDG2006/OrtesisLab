@@ -6,7 +6,7 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 
 | Archivo/carpeta | Responsabilidad y relación |
 |---|---|
-| [`rxconfig.py`](../../apps/web/rxconfig.py) | Selecciona el módulo web, sitemap, Tailwind V4 y tema Radix indigo/slate/medium |
+| [`rxconfig.py`](../../apps/web/rxconfig.py) | Selecciona el módulo web, sitemap, Tailwind V4 y tema Radix teal/sage/large |
 | [`web/OrtesisLabApp.py`](../../apps/web/web/OrtesisLabApp.py) | Instancia `rx.App` con el registro y el login, abre/cierra el motor SQLAlchemy de PostgreSQL en el ciclo de vida y registra `/` e `/historial` |
 | [`web/Ajustes.py`](../../apps/web/web/Ajustes.py) | Única declaración y lectura de las variables `ORTESISLAB_*`: cada atributo de `Ajustes` es una `Variable(clave, defecto)`; sin defecto es obligatoria y leerla ausente o vacía lanza `RuntimeError` («Falta la variable de entorno …»); las URL de base exigen el prefijo `postgresql+psycopg://` y, si no lo tienen, lanzan `RuntimeError`. Las pruebas de persistencia leen las dos URL de prueba y, si falta alguna, se omiten con ese mensaje. `Cargar()` lee el `.env` de la raíz con python-dotenv (UTF-8, con o sin BOM) sin pisar variables que el proceso ya tenga; los valores quedan en el entorno y las referencias `$` se sustituyen |
 | [`web/__init__.py`](../../apps/web/web/__init__.py) | Marcador del paquete web; no arranca servicios |
@@ -43,7 +43,7 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 | Inicialización | `CargarPredeterminados` | Defaults JSON, último lote del usuario y reanudación con `SeguirLote` si está abierto |
 | Trabajo | `Previsualizar`, `PedirLote` (fijan `_solicitud`), `Generar`, `SeguirLote`, `CancelarLote`, `_Seguir`, `_Publicar`, `lote_id` | Admisión idempotente del lote y lectura del progreso cada segundo |
 | Selección | `Ver`, `Comparar`, `_Mostrar`, `archivo`, `ficha_*`, `vistas` | `archivo` es la `object_url` del STL |
-| Descarga | `Descargar` | Registra `export_downloaded` y devuelve `rx.download(url=object_url)` |
+| Descarga | `Descargar`, `DescargarVista` | Registra `export_downloaded` y devuelve `rx.download(url=object_url)`; `DescargarVista` resuelve la ficha visible en `/` |
 | Derivados | `espesor_total`, `porcentaje` | Suma nominal de espesores y progreso entero |
 | Adaptación | `_Numero`, `_Opciones`, `_Variantes` | Parsean texto, validan semilla y construyen opciones/combinaciones |
 

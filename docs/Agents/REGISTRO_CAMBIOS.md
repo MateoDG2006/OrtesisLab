@@ -1,5 +1,14 @@
 # Registro de cambios documentales
 
+## 2026-11-18 — Rediseño visual del canvas «OrtesisLab Rediseño»
+
+Las tres páginas siguen el canvas: paleta clara/oscura en `assets/ortesislab.css`, fuente Manrope, tema Radix teal/sage/large y botones en píldora. La barra muestra marca, navegación Diseño/Lotes/Historial con la página activa, modo claro/oscuro, chip de usuario y botón de icono para salir. `/` pasa a escenario con visor 640px, Resumen plegable y Descargar STL (`EstadoApp.DescargarVista`), mosaicos de patrón y diálogo «Cambiar superficie». El formulario de lote se mueve de la pestaña de `/` a «Nuevo lote» en `/lote`. `/historial` usa insignias por estado (`estado_codigo` en la fila) y botones de icono. Se mantiene un solo parámetro que varía; no se añadieron «Descargar todas», tiempo de impresión ni el logo UTP del canvas porque no existen en el backend o en los recursos. El visor conserva su fondo claro. Autorización en [RES-2026-11-18-001](../Audit/resolves/2026-11-18-resolve-rediseno-visual-canvas.md).
+
+Pruebas ejecutadas:
+- `reflex compile --dry` en `apps/web`: compiló sin errores.
+- `python -m unittest discover -s tests/aplicacion_web -t .`: 18 pruebas, 1 omitida, OK.
+- No se vio en navegador: `reflex run` arrancó el backend, pero el servidor de desarrollo de React Router no abrió puerto en este entorno (el 3000 lo ocupa Docker).
+
 ## 2026-11-13 — Cerrar sesión envía el POST
 
 El botón no cerraba la sesión: `rx.el.form` llama a `preventDefault` y el POST a `/auth/logout` no sale. La barra usa un `<form method="post">` que el navegador envía. Autorización en [RES-2026-11-13-004](../Audit/resolves/2026-11-13-resolve-cerrar-sesion.md). Los hallazgos siguen abiertos.

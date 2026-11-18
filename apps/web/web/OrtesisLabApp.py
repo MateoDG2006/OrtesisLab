@@ -35,7 +35,13 @@ async def PoolPostgres():
         ConexionPostgres.Cerrar()
 
 
-app = rx.App(api_transformer=Autenticacion.Aplicacion())
+app = rx.App(
+    api_transformer=Autenticacion.Aplicacion(),
+    stylesheets=[
+        "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap",
+        "/ortesislab.css",
+    ],
+)
 app.register_lifespan_task(PoolPostgres)
 app.add_page(PaginaComparacion.Index, title="OrtesisLab", on_load=EstadoApp.CargarPredeterminados)
 app.add_page(PaginaLote.Index, route="/lote", title="Lote · OrtesisLab", on_load=EstadoApp.AbrirLote)

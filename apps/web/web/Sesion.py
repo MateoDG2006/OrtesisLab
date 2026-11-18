@@ -31,39 +31,71 @@ class Sesion:
         return rx.button(enlace, as_child=True, size="1", variant=variante)
 
     @staticmethod
-    def FormularioPost(texto: str, ruta: str, variante: str) -> rx.Component:
+    def Salir() -> rx.Component:
         return _FormularioHtml.create(
-            rx.button(texto, type="submit", size="1", variant=variante),
+            rx.icon_button(
+                rx.icon("log-out", size=18),
+                type="submit",
+                size="3",
+                variant="outline",
+                color_scheme="gray",
+                aria_label="Cerrar sesión",
+                title="Cerrar sesión",
+            ),
             method="post",
-            action=Sesion.Ruta(ruta),
+            action=Sesion.Ruta("/auth/logout"),
         )
 
     @staticmethod
-    def Barra(autenticado=None, nombre=None) -> rx.Component:
+    def Barra(activa: str, autenticado=None, nombre=None) -> rx.Component:
         from .EstadoApp import EstadoApp
 
         autenticado = EstadoApp.autenticado if autenticado is None else autenticado
         nombre = EstadoApp.usuario_nombre if nombre is None else nombre
+        secciones = (("/", "Diseño"), ("/lote", "Lotes"), ("/historial", "Historial"))
         return rx.hstack(
-            rx.link("Comparar", href="/", size="2"),
-            rx.link("Lote", href="/lote", size="2"),
-            rx.link("Historial", href="/historial", size="2"),
-            rx.spacer(),
-            rx.cond(
-                autenticado,
-                rx.hstack(
-                    rx.text(nombre, size="2", color_scheme="gray"),
-                    Sesion.FormularioPost("Cerrar sesión", "/auth/logout", "soft"),
-                    spacing="3",
-                    align="center",
+            rx.text("OrtesisLab", size="5", weight="bold", style={"letter_spacing": "-0.02em"}),
+            rx.el.nav(
+                *[
+                    rx.link(texto, href=ruta, custom_attrs={"aria-current": "page"} if ruta == activa else {})
+                    for ruta, texto in secciones
+                ],
+                class_name="ol-nav",
+                aria_label="Secciones",
+            ),
+            rx.hstack(
+                rx.icon_button(
+                    rx.color_mode_cond(rx.icon("moon", size=18), rx.icon("sun", size=18)),
+                    on_click=rx.toggle_color_mode,
+                    size="3",
+                    variant="outline",
+                    color_scheme="gray",
+                    aria_label="Cambiar entre modo claro y oscuro",
                 ),
-                rx.hstack(
-                    Sesion.Boton("Crear cuenta", "/auth/registro", "soft"),
-                    Sesion.Boton("Iniciar sesión", "/auth/login", "solid"),
-                    spacing="2",
+                rx.cond(
+                    autenticado,
+                    rx.hstack(
+                        rx.box(
+                            rx.avatar(fallback=nombre.to(str)[:2].upper(), size="2", radius="full", variant="solid"),
+                            rx.text(nombre, size="2", weight="medium"),
+                            class_name="ol-chip",
+                        ),
+                        Sesion.Salir(),
+                        spacing="2",
+                        align="center",
+                    ),
+                    rx.hstack(
+                        Sesion.Boton("Crear cuenta", "/auth/registro", "soft"),
+                        Sesion.Boton("Iniciar sesión", "/auth/login", "solid"),
+                        spacing="2",
+                    ),
                 ),
+                spacing="2",
+                align="center",
             ),
             width="100%",
             align="center",
-            padding_right="48px",
+            justify="between",
+            wrap="wrap",
+            spacing="4",
         )

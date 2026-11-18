@@ -4,10 +4,10 @@
 
 | Archivo/carpeta | Función |
 |---|---|
-| [`web/PaginaComparacion.py`](../../apps/web/web/PaginaComparacion.py) | Página `/`: superficie, parámetros genéricos/avanzados con ayuda, pestañas «Una ortesis» y «Lote de variantes»; helpers `Campo`, `Selector`, `Visor` reutilizados por otras páginas |
-| [`web/PaginaLote.py`](../../apps/web/web/PaginaLote.py) | Página `/lote`: avance del lote, comparación 3D y cuadrícula de tarjetas con miniatura por variante |
+| [`web/PaginaComparacion.py`](../../apps/web/web/PaginaComparacion.py) | Página `/` (Diseño): escenario con visor y Resumen, parámetros genéricos/avanzados con ayuda y superficie con diálogo de carga; helpers `Pagina`, `Mosaico`, `Campo`, `Selector`, `Visor` reutilizados por otras páginas |
+| [`web/PaginaLote.py`](../../apps/web/web/PaginaLote.py) | Página `/lote`: formulario «Nuevo lote», avance del lote, comparación 3D y cuadrícula de tarjetas con miniatura por variante |
 | [`web/PaginaHistorial.py`](../../apps/web/web/PaginaHistorial.py) | Página `/historial`: filtros, tabla paginada, acciones por versión y tarjetas de comparación |
-| [`web/Sesion.py`](../../apps/web/web/Sesion.py) | Barra común: navegación, nombre y botón Iniciar/Cerrar sesión |
+| [`web/Sesion.py`](../../apps/web/web/Sesion.py) | Barra común: marca, navegación, modo claro/oscuro, usuario e Iniciar/Cerrar sesión |
 | [`web/OrtesisLabApp.py`](../../apps/web/web/OrtesisLabApp.py) | Páginas `/`, `/lote` e `/historial`, títulos y `on_load` |
 | [`web/EstadoApp.py`](../../apps/web/web/EstadoApp.py) | Estado/handlers de `/` y `/lote` (comparten estado); se ejecutan en backend |
 | [`web/EstadoHistorial.py`](../../apps/web/web/EstadoHistorial.py) | Estado/handlers de `/historial` |
@@ -15,6 +15,7 @@
 | [`web/LectorSuperficie.py`](../../apps/web/web/LectorSuperficie.py) | Límite de subida usado por cliente y lector real servidor |
 | [`web/__init__.py`](../../apps/web/web/__init__.py) | Marcador de paquete |
 | [`rxconfig.py`](../../apps/web/rxconfig.py) | Plugins de compilación y apariencia |
+| [`assets/ortesislab.css`](../../apps/web/assets/ortesislab.css) | Paleta clara/oscura y clases `ol-*` del rediseño |
 | [`assets/visor.html`](../../apps/web/assets/visor.html) | Documento independiente Three.js dentro de iframe |
 | [`assets/favicon.ico`](../../apps/web/assets/favicon.ico) | Icono del sitio |
 | [`assets/superficie_interior_mm.npz`](../../apps/web/assets/superficie_interior_mm.npz) | Datos de ejemplo usados por backend; no componente visual |
@@ -27,18 +28,19 @@ El [inventario global](../Agents/INVENTARIO.md) explica cada archivo auxiliar y 
 
 | Método | Composición / conexiones |
 |---|---|
-| `Index` | Barra de sesión, título, explicación; columna izquierda Superficie + Formulario, derecha Acciones |
-| `Formulario` | Parámetros genéricos (patrón, celda, nervadura, capa interior, espesor macizo) → `EstadoApp.<campo>`; casilla «Mostrar parámetros avanzados» → `avanzados`; Restaurar → `RestaurarPredeterminados` |
-| `Avanzados` | Transición, giro, semilla, marco, banda, paso de superficie e invertir espesor |
-| `Acciones` | `rx.tabs`: «Una ortesis» (`Vista`) y «Lote de variantes» (`Lote`) |
-| `Superficie` | Tarjeta con `rx.upload` ID `superficie-entrada`; badges de selección; carga con `rx.upload_files`; botón incluida; avisos y metadatos |
-| `Vista` | Previsualizar → `EstadoApp.Previsualizar` y `mensaje`; si `archivo` no vacío: iframe 520px, detalle, volumen/peso/precio, alcance; si vacío: placeholder |
-| `Lote` | Pasos 1–3: casillas de patrones (`Casilla`), parámetro a variar con su ayuda y Desde/Hasta/Cada, ambas capas; aviso `resumen_lote` (verde si `lote_valido`); «Generar lote y ver progreso» → `PedirLote`, que redirige a `/lote?id=<lote>`; enlace al último lote |
-| `Casilla` | Tarjeta con checkbox y etiqueta de un patrón |
+| `Pagina` | Fondo `--ol-bg`, padding 20px, `Sesion.Barra(activa)` y el contenido; la usan las tres páginas |
+| `Index` | Escenario y, a su lado, Formulario + Superficie con wrap |
+| `Escenario` | Rótulo «Una ortesis · previsualización»; si `archivo` no vacío, `Resumen` y visor 640px; si no, placeholder; `ficha_error`, `mensaje`, alcance PETG; Descargar STL → `DescargarVista` (desactivado sin `archivo`) y Previsualizar → `Previsualizar` |
+| `Resumen` | `<details open>` flotante: volumen, peso PETG, precio y detalle |
+| `Formulario` | Mosaicos de patrón (`role=radio`) → `set_pattern`; celda, nervadura y altura en tres columnas; capa interior continua con switch → `liner`; capa base y total en nervadura; botón «Parámetros avanzados» → `set_avanzados(~avanzados)`; Restaurar → `RestaurarPredeterminados`; aviso de voxel |
+| `Avanzados` | Giro, marco, banda, paso de superficie, transición (con capa), semilla (si el patrón la pide) e invertir espesor |
+| `Superficie` | Miniatura, nombre de `superficie_nombre`, `Cargador`, `superficie_detalle`, `espesor_total` y `superficie_error` |
+| `Cargador` | Enlace «Cambiar archivo (STL o NPZ)» que abre `rx.dialog`: `rx.upload` ID `superficie-entrada`, badges de selección, Cargar archivo (`rx.upload_files`) y Usar superficie incluida |
+| `Mosaico` | Botón con icono SVG y nombre de un patrón; `aria-checked` (radio, Diseño) o `aria-pressed` (varios, Lotes) |
 | `Marco` | Wrapper flexible del visor de comparación, alto 320px |
 | `Visor` | iframe con title, `loading=lazy` y URL de Enlace; `miniatura=True` pide un único fotograma |
 | `Enlace` | `object_url` del STL → `/visor.html?src=${encodeURIComponent(url)}` (+ `&miniatura=1`) |
-| `Etiqueta` | Texto y, si hay ayuda, icono `info` enfocable con `rx.tooltip` y `aria_label` |
+| `Etiqueta` | Texto y, si hay ayuda, icono `circle-help` enfocable con `rx.tooltip` y `aria_label` |
 | `Numero` | `Campo` con etiqueta de `web.yaml` `ejes` y ayuda de `web.yaml` `ayudas` |
 | `Campo` | `Etiqueta` y `rx.input(type='number')` controlado por cadena con `aria_label` |
 | `Interruptor` | Switch booleano con `Etiqueta` (ayuda opcional) |
@@ -51,30 +53,32 @@ El [inventario global](../Agents/INVENTARIO.md) explica cada archivo auxiliar y 
 
 | Método | Composición / conexiones |
 |---|---|
-| `Index` | Barra de sesión, título, Cabecera, Comparacion y cuadrícula responsive (1–4 columnas) de `Tarjeta` sobre `resultados` |
-| `Cabecera` | `mensaje`; Cancelar lote (si `ocupado`) → `CancelarLote`; Nuevo lote → `/`; barra `porcentaje`, «hechos de total terminadas» y `resumen_estados` |
+| `Index` | NuevoLote y, a su lado, Cabecera, Comparacion y cuadrícula `auto-fill` (mín. 240px) de `Tarjeta` sobre `resultados` |
+| `NuevoLote` | Parte de los parámetros de Diseño: mosaicos de patrones (`usar_*`, `aria-pressed`), característica que varía (`eje`, ayuda y Desde/Hasta/Cada), con y sin capa (`ambos_revestimientos`), aviso `resumen_lote` (teal si `lote_valido`); Generar lote → `PedirLote`, que redirige a `/lote?id=<lote>` |
+| `Cabecera` | «hechos de total variantes terminadas» o «Sin lote abierto», `mensaje`; Cancelar lote (si `ocupado`) → `CancelarLote`; barra `porcentaje` y `resumen_estados` |
 | `Comparacion` | Si `vistas` no está vacía: hasta tres visores interactivos (`Marco`) |
-| `Tarjeta` | Miniatura 200px si hay STL; si no, error, spinner «Construyendo…» (`running`) o «En cola»; patrón, insignia de estado (`COLORES_ESTADO`, textos `estados_visibles`), detalle, métricas; «Ver en 3D»/«Quitar de 3D» → `Comparar`; STL → `Descargar` |
+| `Tarjeta` | Miniatura 150px si hay STL; si no, error, spinner «Construyendo…» (`running`) o «En cola»; patrón, insignia `ol-b-<estado>` con textos `estados_visibles`, detalle, métricas; «Ver en 3D»/«Quitar de 3D» → `Comparar`; STL → `Descargar` |
 
 ### `/historial` (`PaginaHistorial`)
 
 | Método | Composición / conexiones |
 |---|---|
-| `Index` | Barra de sesión, título, explicación, Filtros, aviso `mensaje`, Tabla y Comparacion |
-| `Filtros` | Selectores Patrón (200px) y Estado (160px), fechas Desde/Hasta y botón Filtrar → `EstadoHistorial.Cargar` |
+| `Index` | `Pagina` con Filtros, aviso `mensaje`, Tabla y Comparacion |
+| `Filtros` | Selectores Patrón y Estado, fechas Desde/Hasta (flexibles) y botón Filtrar → `EstadoHistorial.Cargar` |
 | `Fecha` | Etiqueta y `rx.input(type='date')` controlado |
-| `Tabla` | Columnas Versión, Fecha, Patrón, Parámetros, Estado, Volumen, Peso, Precio y acciones; Anterior/Siguiente con número de página |
-| `Fila` | Comparar/Quitar → `Seleccionar`; Restaurar; Reintentar; STL → `Descargar` (desactivado sin URL); aviso rojo si el archivo falta |
-| `Comparacion` | Si hay selección, tarjetas lado a lado |
-| `Tarjeta` | Versión, patrón, métricas, diferencias de parámetros respecto de la primera elegida y visor de 320px |
+| `Tabla` | Columnas Versión, Fecha, Patrón, Parámetros, Estado, Volumen, Peso, Precio y acciones (mín. 960px, desplazable); pie con «Restaurar crea una versión nueva…» y Anterior/Siguiente con número de página |
+| `Fila` | Insignia `ol-b-<estado_codigo>`; Comparar/Quitar → `Seleccionar`; botones de icono (`Accion`) Restaurar, Reintentar y Descargar STL (desactivado sin URL); aviso coral si el archivo falta |
+| `Accion` | `rx.icon_button` con `aria_label` y tooltip |
+| `Comparacion` | Si hay selección, cuadrícula `auto-fit` (mín. 280px) de tarjetas |
+| `Tarjeta` | Versión, visor de 220px, patrón, diferencias de parámetros respecto de la primera elegida, métricas, intentos y nota |
 
 ### Barra de sesión (`Sesion`)
 
 | Método | Composición |
 |---|---|
-| `Barra` | Enlaces Comparar, Lote e Historial, nombre y botón de sesión según `autenticado` |
+| `Barra` | Marca, navegación Diseño/Lotes/Historial con `aria-current` en `activa`, modo claro/oscuro, chip con iniciales y nombre y `Salir`, o Crear cuenta/Iniciar sesión según `autenticado` |
 | `Boton` | `rx.button(as_child=True)` sobre un ancla con `reloadDocument` |
-| `FormularioPost` | `<form method="post">` nativo. `rx.el.form` cancela el envío y cerrar sesión no saldría |
+| `Salir` | Botón de icono dentro de `<form method="post">` nativo a `/auth/logout`. `rx.el.form` cancela el envío y cerrar sesión no saldría |
 | `Ruta` | `api_url` de la configuración Reflex + ruta `/auth/*` |
 
 ## Reglas de visibilidad

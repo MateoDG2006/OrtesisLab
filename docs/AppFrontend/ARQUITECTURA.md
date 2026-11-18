@@ -26,31 +26,29 @@ No hay un frontend separado escrito a mano en React ni un API client propio de g
 
 ## Sesión
 
-`Sesion.Barra` muestra enlaces Comparar (`/`), Lote (`/lote`) e Historial (`/historial`), el nombre del usuario y, si no hay sesión, Crear cuenta e Iniciar sesión. Esos botones recargan `<api_url>/auth/registro` o `/auth/login`. Cerrar sesión envía un POST a `/auth/logout` con un `<form>` HTML. `rx.el.form` cancela ese envío. Reflex compila las anclas como `Link` del enrutador y, sin recarga completa, mostraría su página 404 en vez de llegar al backend. La cookie `ortesislab_sesion` es HttpOnly; React nunca la lee. Al volver de cerrar sesión o al entrar otro usuario en la misma pestaña, `CargarPredeterminados` borra fichas, vistas y superficie y `EstadoHistorial` vacía filas y selección.
+`Sesion.Barra(activa, …)` muestra la marca OrtesisLab, la navegación en píldora Diseño (`/`), Lotes (`/lote`) e Historial (`/historial`) con `aria-current="page"` en la ruta activa, el botón de modo claro/oscuro (`rx.toggle_color_mode`) y, con sesión, un chip con las iniciales y el nombre más el botón de icono Cerrar sesión; sin sesión, Crear cuenta e Iniciar sesión. Esos botones recargan `<api_url>/auth/registro` o `/auth/login`. Cerrar sesión envía un POST a `/auth/logout` con un `<form>` HTML. `rx.el.form` cancela ese envío. Reflex compila las anclas como `Link` del enrutador y, sin recarga completa, mostraría su página 404 en vez de llegar al backend. La cookie `ortesislab_sesion` es HttpOnly; React nunca la lee. Al volver de cerrar sesión o al entrar otro usuario en la misma pestaña, `CargarPredeterminados` borra fichas, vistas y superficie y `EstadoHistorial` vacía filas y selección.
 
 ## Árbol de componentes
 
 ```mermaid
 flowchart TB
-  I[Index] --> CM[Color mode button]
-  I --> SB[Sesion.Barra]
-  I --> H[Título y explicación]
-  I --> ROW[Configuración + Acciones, con wrap]
-  ROW --> S[Superficie: uploader]
-  ROW --> F[Formulario: genéricos con ayuda]
-  F --> AV[Casilla avanzados → Avanzados]
-  ROW --> AC[Acciones: pestañas]
-  AC --> V[Una ortesis: Previsualizar, Visor 520px, métricas]
-  AC --> L[Lote: patrones, barrido, ambas capas, resumen]
-  L -->|redirect /lote?id| LI[PaginaLote.Index]
-  LI --> CAB[Cabecera: mensaje, progreso, conteo, Cancelar]
+  I[Index vía Pagina] --> SB[Sesion.Barra: marca, navegación, modo, usuario]
+  I --> ROW[Escenario + columna, con wrap]
+  ROW --> E[Escenario: Resumen plegable, Visor 640px, Descargar STL, Previsualizar]
+  ROW --> F[Formulario: mosaicos de patrón, genéricos con ayuda]
+  F --> AV[Botón Parámetros avanzados → Avanzados]
+  ROW --> S[Superficie: ficha y Cargador]
+  S --> D[Diálogo Cambiar superficie: upload, Cargar, incluida]
+  LI[PaginaLote.Index] --> NL[NuevoLote: mosaicos, característica que varía, ambas capas, resumen, Generar lote]
+  NL -->|redirect /lote?id| LI
+  LI --> CAB[Cabecera: variantes terminadas, progreso, conteo, Cancelar]
   LI --> C[Comparación: hasta 3 visores de 320px]
-  LI --> GR[Cuadrícula de Tarjeta con miniatura 200px]
+  LI --> GR[Cuadrícula de Tarjeta con miniatura 150px]
   HI[PaginaHistorial.Index] --> SB2[Sesion.Barra]
   HI --> FI[Filtros: patrón, estado, desde, hasta, Filtrar]
   HI --> TA[Tabla paginada y Anterior/Siguiente]
-  TA --> FL[Fila: Comparar, Restaurar, Reintentar, STL]
-  HI --> CO[Comparación: Tarjeta con visor de 320px]
+  TA --> FL[Fila: insignia de estado; Comparar e iconos Restaurar, Reintentar, STL]
+  HI --> CO[Comparación: Tarjeta con visor de 220px]
 ```
 
 ## Clases y dependencias UML
@@ -58,14 +56,15 @@ flowchart TB
 ```mermaid
 classDiagram
   class PaginaComparacion {
+    +Pagina(activa, contenido, autenticado, nombre)
     +Index()
+    +Escenario()
+    +Resumen()
     +Formulario()
-    +Superficie()
     +Avanzados()
-    +Acciones()
-    +Vista()
-    +Lote()
-    +Casilla(etiqueta, valor, cambio)
+    +Superficie()
+    +Cargador()
+    +Mosaico(codigo, elegido, al_pulsar, rol)
     +Marco(archivo)
     +Visor(archivo, alto, miniatura)
     +Enlace(archivo, miniatura)
@@ -78,6 +77,7 @@ classDiagram
   }
   class PaginaLote {
     +Index()
+    +NuevoLote()
     +Cabecera()
     +Comparacion()
     +Tarjeta(ficha)
@@ -90,11 +90,13 @@ classDiagram
     +Fila(fila)
     +Comparacion()
     +Tarjeta(tarjeta)
+    +Accion(icono, etiqueta, al_pulsar, deshabilitado)
   }
   class Sesion {
     +Ruta(ruta)
     +Boton(texto, ruta, variante)
-    +Barra(autenticado, nombre)
+    +Salir()
+    +Barra(activa, autenticado, nombre)
   }
   class EstadoApp
   class EstadoHistorial
@@ -105,18 +107,17 @@ classDiagram
   PaginaComparacion --> LectorSuperficie : limite de upload
   PaginaComparacion --> GeneradorWeb : catalogos
   PaginaLote --> EstadoApp : vars y handlers
-  PaginaLote --> PaginaComparacion : Visor, Marco y Medida
+  PaginaLote --> PaginaComparacion : Pagina, Mosaico, Campo, Visor, Marco y Medida
   PaginaHistorial --> EstadoHistorial : vars y handlers
-  PaginaHistorial --> Sesion
-  PaginaHistorial --> PaginaComparacion : Selector y Visor
+  PaginaHistorial --> PaginaComparacion : Pagina, Selector, Visor y Medida
   EstadoApp --> GeneradorWeb : fichas y superficie
 ```
 
 ## Estilos y dependencias
 
-Tema Radix: indigo, gris slate, radio medium; Tailwind V4 y sitemap como plugins. Componentes `rx.card`, stacks, tablas, inputs y botones declaran sus estilos/anchos en Python. Página centrada con máximo 1200px (`/lote` 1400px) y padding 6; columna de configuración máximo 420px; la cuadrícula de `/lote` usa 1/2/3/4 columnas según el breakpoint de Radix; vista flexible mínimo 320px; comparación mínimo 260px por marco. El wrap hace que bloques salten de línea; no hay un sistema de breakpoints propio.
+Aspecto del canvas «OrtesisLab Rediseño». Tema Radix: teal, gris sage, radio large; Tailwind V4 y sitemap como plugins. `rx.App` carga la fuente Manrope de Google Fonts y [`assets/ortesislab.css`](../../apps/web/assets/ortesislab.css), que define la paleta `--ol-*` para modo claro (`html .radix-themes`) y oscuro (`html.dark .radix-themes`), sustituye `--color-background`, `--color-panel-solid`, `--accent-9/10` y `--accent-contrast` de Radix y declara las clases `ol-card`, `ol-sub`, `ol-nav`, `ol-chip`, `ol-tile`, `ol-badge`/`ol-b-<estado>`, `ol-resumen` y `ol-tabla`. Las páginas ocupan todo el ancho con padding 20px. En `/` el escenario crece (`flex 999 1 640px`) y la columna mide `1 1 380px`; en `/lote` el formulario mide `1 1 340px` (máximo 400px) y el avance `999 1 640px`; la cuadrícula de tarjetas usa `repeat(auto-fill, minmax(240px, 1fr))`. Por debajo de 768px el Resumen deja de flotar. Botones de acción en píldora (`radius="full"`).
 
-`reflex.lock/package.json` fija React/ReactDOM 19.2.8, React Router 8.4.0, Radix Themes 3.3.0, Vite 8.2.2 y Tailwind 4.3.0, entre otras dependencias. Son versiones observadas en ese lock, no recomendaciones de actualización. El visor usa Three.js 0.169.0 desde CDN y no comparte el tema de Reflex: su fondo es claro aunque se cambie color mode.
+`reflex.lock/package.json` fija React/ReactDOM 19.2.8, React Router 8.4.0, Radix Themes 3.3.0, Vite 8.2.2 y Tailwind 4.3.0, entre otras dependencias. Son versiones observadas en ese lock, no recomendaciones de actualización. El visor usa Three.js 0.169.0 desde CDN y no comparte el tema de Reflex: su fondo es claro aunque se cambie color mode, también sobre el escenario oscuro del rediseño.
 
 ## Fronteras y riesgos actuales
 

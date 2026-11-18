@@ -223,6 +223,7 @@ class EstadoHistorial(rx.State):
             "patron": PATRONES.get(fila.pattern, fila.pattern),
             "detalle": GeneradorWeb.Detalle(fila.parameters),
             "estado": ESTADOS_VISIBLES.get(fila.status, fila.status),
+            "estado_codigo": str(fila.status),
             "volumen": "" if fila.volume_mm3 is None else f"{GeneradorWeb.Numero(fila.volume_mm3, 1)} mm³",
             "peso": "" if fila.weight_g is None else f"{GeneradorWeb.Numero(fila.weight_g, 2)} g",
             "precio": "" if fila.estimated_price is None else GeneradorWeb.Numero(float(fila.estimated_price), 2),

@@ -1,0 +1,58 @@
+/* Paleta del canvas «OrtesisLab Rediseño». Radix lee --accent-*, --color-*; el resto usa --ol-*. */
+html .radix-themes {
+  --default-font-family: Manrope, system-ui, sans-serif;
+  --ol-bg: #F3EDE6; --ol-panel: #FFFFFF; --ol-panel2: #FAF6F1; --ol-line: rgba(25, 90, 95, .16);
+  --ol-text: #12292B; --ol-muted: #4F6567; --ol-accent: #195A5F; --ol-onaccent: #FFFFFF;
+  --ol-strong: #195A5F; --ol-coral: #A9483A; --ol-stage: #E6F1EF; --ol-input: #FFFFFF;
+  --ol-mesh: #138F89; --ol-meshfill: rgba(18, 184, 176, .14);
+}
+html.dark .radix-themes {
+  --ol-bg: #0A1719; --ol-panel: #102427; --ol-panel2: #15302F; --ol-line: rgba(243, 237, 230, .10);
+  --ol-text: #F3EDE6; --ol-muted: #9FB5B3; --ol-accent: #12B8B0; --ol-onaccent: #04201F;
+  --ol-strong: #195A5F; --ol-coral: #E8937F; --ol-stage: #0D1E21; --ol-input: #0B1C1E;
+  --ol-mesh: #12B8B0; --ol-meshfill: rgba(18, 184, 176, .10);
+}
+html .radix-themes, html.dark .radix-themes {
+  --color-background: var(--ol-bg);
+  --color-panel-solid: var(--ol-panel);
+  --color-surface: var(--ol-input);
+  --accent-9: var(--ol-accent);
+  --accent-10: var(--ol-accent);
+  --accent-contrast: var(--ol-onaccent);
+  --focus-8: #12B8B0;
+  color: var(--ol-text);
+}
+
+.ol-card { background: var(--ol-panel); border: 1px solid var(--ol-line); border-radius: 24px; padding: 22px; box-sizing: border-box; }
+.ol-sub { background: var(--ol-panel2); border: 1px solid var(--ol-line); border-radius: 14px; padding: 12px 14px; }
+.ol-lbl { font-size: 12px; font-weight: 600; color: var(--ol-muted); }
+.ol-muted { color: var(--ol-muted); }
+
+.ol-nav { display: flex; gap: 4px; flex-wrap: wrap; background: var(--ol-panel); border: 1px solid var(--ol-line); border-radius: 999px; padding: 4px; }
+.ol-nav a { color: var(--ol-muted); text-decoration: none; font-size: 14px; font-weight: 600; padding: 10px 14px; border-radius: 999px; }
+.ol-nav a[aria-current="page"] { color: var(--ol-text); background: var(--ol-panel2); }
+.ol-chip { display: flex; align-items: center; gap: 10px; background: var(--ol-panel); border: 1px solid var(--ol-line); border-radius: 999px; padding: 4px 14px 4px 4px; }
+
+.ol-tile { min-height: 84px; border-radius: 16px; border: 1px solid var(--ol-line); background: var(--ol-panel2); color: var(--ol-text); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; padding: 10px 6px; }
+.ol-tile svg { color: var(--ol-mesh); }
+.ol-tile[aria-checked="true"], .ol-tile[aria-pressed="true"] { background: var(--ol-accent); border-color: var(--ol-accent); color: var(--ol-onaccent); }
+.ol-tile[aria-checked="true"] svg, .ol-tile[aria-pressed="true"] svg { color: var(--ol-onaccent); }
+.ol-tile:focus-visible { outline: 2px solid #12B8B0; outline-offset: 2px; }
+
+.ol-badge { display: inline-flex; align-items: center; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 4px 10px; white-space: nowrap; border: 1px solid transparent; }
+.ol-b-succeeded { background: var(--ol-accent); color: var(--ol-onaccent); }
+.ol-b-running { background: var(--ol-strong); color: #F3EDE6; }
+.ol-b-queued { color: var(--ol-muted); border-color: var(--ol-line); }
+.ol-b-failed { color: var(--ol-coral); border-color: var(--ol-coral); }
+.ol-b-cancelled { background: var(--ol-panel2); color: var(--ol-muted); }
+
+.ol-resumen { position: absolute; top: 40px; left: 0; width: 280px; z-index: 5; background: var(--ol-strong); color: #F3EDE6; border-radius: 18px; padding: 16px; box-shadow: 0 24px 48px rgba(0, 0, 0, .35); }
+.ol-resumen summary { cursor: pointer; font-size: 16px; font-weight: 600; min-height: 36px; display: flex; align-items: center; }
+.ol-resumen dl { margin: 10px 0 0; border-top: 1px solid rgba(243, 237, 230, .16); }
+.ol-resumen dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; border-bottom: 1px solid rgba(243, 237, 230, .16); }
+.ol-resumen dl div:last-child { border-bottom: 0; }
+.ol-resumen dt { font-size: 12px; color: #B9DCD9; font-weight: 600; }
+.ol-resumen dd { margin: 0; font-size: 15px; font-weight: 700; }
+
+.ol-tabla th { font-size: 12px; font-weight: 700; color: var(--ol-muted); }
+@media (max-width: 768px) { .ol-resumen { position: static; width: auto; } }
