@@ -13,6 +13,7 @@ import math
 import numpy as np
 
 from ..Excepciones import PatronNoImplementado, PatronNoReconocido, PresupuestoExcedido
+from ..util.Arrays import Arrays
 from ..util.Utilidades import Configuracion
 
 
@@ -35,12 +36,17 @@ class Patron:
         # Gira la proyección XY. El macizo no la usa.
         angulo = math.radians(anguloGrados)
         coseno, seno = math.cos(angulo), math.sin(angulo)
-        return puntos[:, :2] @ np.array([[coseno, -seno], [seno, coseno]])
+        xp = Arrays.xp()
+        xy = Arrays.asarray(puntos[:, :2])
+        matriz = Arrays.asarray([[coseno, -seno], [seno, coseno]])
+        return Arrays.to_numpy(xy @ matriz)
 
     @staticmethod
     def DistanciaCuadricula(uv, celda: float):
         # Distancia al eje más cercano de una retícula cuadrada.
-        return np.min(np.abs((uv + celda * 0.5) % celda - celda * 0.5), axis=1)
+        xp = Arrays.xp()
+        puntos = Arrays.asarray(uv)
+        return Arrays.to_numpy(xp.min(xp.abs((puntos + celda * 0.5) % celda - celda * 0.5), axis=1))
 
     @staticmethod
     def DistanciaSemillas(uv, celda: float, semilla: int, organico: bool):
@@ -102,16 +108,23 @@ class Patron:
     def _DistanciaPlanos(puntos, semillas, epsilon):
         """Entrada: puntos y semillas XY. Proceso: calcula la bisectriz más
         cercana de la semilla vecina. Salida: distancias y radio al centro.
-        Efectos secundarios: ninguno.
+        Efectos secundarios: ninguno. Usa CuPy si ``ORTESISLAB_ARRAY=cupy``.
         """
-        distancias2 = np.sum((puntos[:, None, :] - semillas[None, :, :]) ** 2, axis=2)
-        cercano = np.argmin(distancias2, axis=1)
-        centro = semillas[cercano]
-        separacion = np.linalg.norm(semillas[None, :, :] - centro[:, None, :], axis=2)
-        denominador = np.where(separacion > epsilon, 2 * separacion, 1)
-        plano = (distancias2 - distancias2[np.arange(len(puntos)), cercano, None]) / denominador
-        plano[np.arange(len(puntos)), cercano] = np.inf
-        return np.min(plano, axis=1), np.sqrt(distancias2[np.arange(len(puntos)), cercano])
+        xp = Arrays.xp()
+        puntos_x = Arrays.asarray(puntos)
+        semillas_x = Arrays.asarray(semillas)
+        distancias2 = xp.sum((puntos_x[:, None, :] - semillas_x[None, :, :]) ** 2, axis=2)
+        cercano = xp.argmin(distancias2, axis=1)
+        centro = semillas_x[cercano]
+        separacion = xp.linalg.norm(semillas_x[None, :, :] - centro[:, None, :], axis=2)
+        denominador = xp.where(separacion > epsilon, 2 * separacion, 1)
+        indice = xp.arange(len(puntos_x))
+        plano = (distancias2 - distancias2[indice, cercano, None]) / denominador
+        plano[indice, cercano] = xp.inf
+        return (
+            Arrays.to_numpy(xp.min(plano, axis=1)),
+            Arrays.to_numpy(xp.sqrt(distancias2[indice, cercano])),
+        )
 
     @staticmethod
     def Geometricos() -> dict[str, Patron]:

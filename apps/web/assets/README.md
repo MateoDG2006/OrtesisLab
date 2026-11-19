@@ -1,15 +1,17 @@
 # Assets de la aplicación
 
-Reflex publica esta carpeta en la raíz del sitio. Estos tres archivos permanecen
-en la raíz de `assets/`, no en una subcarpeta: el visor se abre en `/visor.html`,
-el icono en `/favicon.ico` y el núcleo busca `assets/superficie_interior_mm.npz`.
+Reflex publica esta carpeta en la raíz del sitio.
 
-| Archivo | Qué es |
+| Ruta | Qué es |
 |---|---|
-| [visor.html](visor.html) | Visor Three.js. Cada vista de comparación lo carga en un iframe con la `object_url` del STL. |
+| [visor.html](visor.html) | Cáscara del visor Three.js (CSS + `main.js`). Cada comparación lo carga en un iframe con la `object_url` del STL. |
+| [visor/](visor/) | Módulos reutilizables del visor: `tema.js`, `stl.js`, `camara.js`, `controles.js`, `main.js`, `visor.css`. |
+| [auth/](auth/) | Plantilla `auth.html` y `auth.css` de login/registro. El API las incrusta con `PlantillaAuth` (no depende de servir estáticos del frontend). |
+| [ortesislab.css](ortesislab.css) | Tokens y clases `ol-*` de la app Reflex. |
 | [favicon.ico](favicon.ico) | Icono del sitio. |
-| [superficie_interior_mm.npz](superficie_interior_mm.npz) | Superficie de ejemplo incluida. La usa la carga explícita de la plantilla, no el visor. |
+| [superficie_interior_mm.npz](superficie_interior_mm.npz) | Superficie de ejemplo incluida. |
+| [vendor/](vendor/) | Three.js local. |
 
-Los fixtures y la evidencia de las pruebas no viven aquí. Están en
-[tests/assets](../tests/assets/Test.stl), para no publicarlos con el sitio.
-`assets/external/` es salida generada y está ignorada por Git.
+`visor.html`, `favicon.ico` y `superficie_interior_mm.npz` permanecen en la raíz de `assets/` porque el sitio los espera en `/visor.html`, `/favicon.ico` y el núcleo busca esa ruta del NPZ.
+
+Los fixtures de pruebas están en [tests/assets](../tests/assets/Test.stl). `assets/external/` es salida generada e ignorada por Git.

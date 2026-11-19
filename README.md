@@ -26,11 +26,11 @@ Queda en `http://localhost:3000`. El backend escucha en el puerto 8000; con `--e
 
 ### Producción con Docker
 
-Levanta Postgres, MinIO, Redis, migraciones, web, trabajador y Caddy (HTTPS) sin usar `make up` local. Hace falta DNS de `APP_HOST` y `S3_HOST` apuntando al servidor, y los puertos 80/443 abiertos.
+Levanta Postgres, MinIO, Redis, migraciones, web y trabajador. App en `http://localhost:3000`, MinIO en `http://localhost:9000`.
 
 ```powershell
 copy deploy\env.prod.example deploy\.env
-# Complete dominios y claves en deploy\.env
+# Complete claves en deploy\.env
 make prod
 ```
 

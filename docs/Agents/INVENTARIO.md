@@ -6,10 +6,140 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 
 | Archivo | Propósito |
 |---|---|
+| [.agents/skills/baseline-ui/SKILL.md](../../.agents/skills/baseline-ui/SKILL.md) | Baseline UI |
+| [.agents/skills/better-accessibility/SKILL.md](../../.agents/skills/better-accessibility/SKILL.md) | Accessibility |
+| [.agents/skills/better-accessibility/agents/openai.yaml](../../.agents/skills/better-accessibility/agents/openai.yaml) | Metadatos del skill para el agente OpenAI |
+| [.agents/skills/better-accessibility/focus-and-keyboard.md](../../.agents/skills/better-accessibility/focus-and-keyboard.md) | Focus and keyboard |
+| [.agents/skills/better-accessibility/forms.md](../../.agents/skills/better-accessibility/forms.md) | Forms |
+| [.agents/skills/better-accessibility/hit-areas.md](../../.agents/skills/better-accessibility/hit-areas.md) | Hit areas |
+| [.agents/skills/better-accessibility/motion-and-zoom.md](../../.agents/skills/better-accessibility/motion-and-zoom.md) | Motion and zoom |
+| [.agents/skills/better-accessibility/reporting.md](../../.agents/skills/better-accessibility/reporting.md) | Reporting |
+| [.agents/skills/better-accessibility/screen-readers.md](../../.agents/skills/better-accessibility/screen-readers.md) | Screen readers |
+| [.agents/skills/better-accessibility/semantics-and-aria.md](../../.agents/skills/better-accessibility/semantics-and-aria.md) | Semantics and ARIA |
+| [.agents/skills/better-colors/SKILL.md](../../.agents/skills/better-colors/SKILL.md) | Colors |
+| [.agents/skills/better-colors/agents/openai.yaml](../../.agents/skills/better-colors/agents/openai.yaml) | Metadatos del skill para el agente OpenAI |
+| [.agents/skills/better-colors/color-formats.md](../../.agents/skills/better-colors/color-formats.md) | Color formats |
+| [.agents/skills/better-colors/color-usage.md](../../.agents/skills/better-colors/color-usage.md) | Color usage |
+| [.agents/skills/better-colors/contrast.md](../../.agents/skills/better-colors/contrast.md) | Contrast |
+| [.agents/skills/better-colors/palette-generation.md](../../.agents/skills/better-colors/palette-generation.md) | Palette generation |
+| [.agents/skills/better-colors/palette-structure.md](../../.agents/skills/better-colors/palette-structure.md) | Palette structure |
+| [.agents/skills/better-colors/reporting.md](../../.agents/skills/better-colors/reporting.md) | Reporting |
+| [.agents/skills/better-colors/token-naming.md](../../.agents/skills/better-colors/token-naming.md) | Token naming |
+| [.agents/skills/better-interface/SKILL.md](../../.agents/skills/better-interface/SKILL.md) | Interface |
+| [.agents/skills/better-interface/agents/openai.yaml](../../.agents/skills/better-interface/agents/openai.yaml) | Metadatos del skill para el agente OpenAI |
+| [.agents/skills/better-interface/review-format.md](../../.agents/skills/better-interface/review-format.md) | Review output format |
+| [.agents/skills/better-layout/SKILL.md](../../.agents/skills/better-layout/SKILL.md) | Layout |
+| [.agents/skills/better-layout/agents/openai.yaml](../../.agents/skills/better-layout/agents/openai.yaml) | Metadatos del skill para el agente OpenAI |
+| [.agents/skills/better-layout/grouping-and-alignment.md](../../.agents/skills/better-layout/grouping-and-alignment.md) | Grouping and alignment |
+| [.agents/skills/better-layout/reporting.md](../../.agents/skills/better-layout/reporting.md) | Reporting |
+| [.agents/skills/better-layout/spacing-and-adaptivity.md](../../.agents/skills/better-layout/spacing-and-adaptivity.md) | Spacing and adaptivity |
+| [.agents/skills/better-typography/SKILL.md](../../.agents/skills/better-typography/SKILL.md) | Typography |
+| [.agents/skills/better-typography/agents/openai.yaml](../../.agents/skills/better-typography/agents/openai.yaml) | Metadatos del skill para el agente OpenAI |
+| [.agents/skills/better-typography/choosing-fonts.md](../../.agents/skills/better-typography/choosing-fonts.md) | Choosing fonts |
+| [.agents/skills/better-typography/css-cheat-sheet.md](../../.agents/skills/better-typography/css-cheat-sheet.md) | CSS cheat sheet |
+| [.agents/skills/better-typography/details-and-accessibility.md](../../.agents/skills/better-typography/details-and-accessibility.md) | Details and accessibility |
+| [.agents/skills/better-typography/reporting.md](../../.agents/skills/better-typography/reporting.md) | Reporting |
+| [.agents/skills/better-typography/spacing-and-sizing.md](../../.agents/skills/better-typography/spacing-and-sizing.md) | Spacing and sizing |
+| [.agents/skills/better-typography/variable-fonts-and-opentype.md](../../.agents/skills/better-typography/variable-fonts-and-opentype.md) | Variable fonts and OpenType |
+| [.agents/skills/better-typography/wrapping-and-punctuation.md](../../.agents/skills/better-typography/wrapping-and-punctuation.md) | Wrapping and punctuation |
+| [.agents/skills/better-ui/SKILL.md](../../.agents/skills/better-ui/SKILL.md) | UI polish |
+| [.agents/skills/better-ui/agents/openai.yaml](../../.agents/skills/better-ui/agents/openai.yaml) | Metadatos del skill para el agente OpenAI |
+| [.agents/skills/better-ui/animations.md](../../.agents/skills/better-ui/animations.md) | Animations |
+| [.agents/skills/better-ui/enter-exit.md](../../.agents/skills/better-ui/enter-exit.md) | Enter and exit animations |
+| [.agents/skills/better-ui/icon-transitions.md](../../.agents/skills/better-ui/icon-transitions.md) | Icon transitions |
+| [.agents/skills/better-ui/icons.md](../../.agents/skills/better-ui/icons.md) | Icons |
+| [.agents/skills/better-ui/performance.md](../../.agents/skills/better-ui/performance.md) | Performance |
+| [.agents/skills/better-ui/reporting.md](../../.agents/skills/better-ui/reporting.md) | Reporting |
+| [.agents/skills/better-ui/surfaces.md](../../.agents/skills/better-ui/surfaces.md) | Surfaces |
+| [.agents/skills/better-writing/SKILL.md](../../.agents/skills/better-writing/SKILL.md) | Writing |
+| [.agents/skills/better-writing/agents/openai.yaml](../../.agents/skills/better-writing/agents/openai.yaml) | Metadatos del skill para el agente OpenAI |
+| [.agents/skills/better-writing/patterns.md](../../.agents/skills/better-writing/patterns.md) | Copy patterns |
+| [.agents/skills/better-writing/reporting.md](../../.agents/skills/better-writing/reporting.md) | Reporting |
+| [.agents/skills/create-design-md/SKILL.md](../../.agents/skills/create-design-md/SKILL.md) | Create DESIGN.md |
+| [.agents/skills/fixing-accessibility/SKILL.md](../../.agents/skills/fixing-accessibility/SKILL.md) | fixing-accessibility |
+| [.agents/skills/fixing-motion-performance/SKILL.md](../../.agents/skills/fixing-motion-performance/SKILL.md) | fixing-motion-performance |
+| [.agents/skills/impeccable/SKILL.md](../../.agents/skills/impeccable/SKILL.md) | Referencia Impeccable: SKILL |
+| [.agents/skills/impeccable/agents/impeccable_asset_producer.toml](../../.agents/skills/impeccable/agents/impeccable_asset_producer.toml) | Agente auxiliar Impeccable (impeccable_asset_producer.toml) |
+| [.agents/skills/impeccable/agents/impeccable_documenter.toml](../../.agents/skills/impeccable/agents/impeccable_documenter.toml) | Agente auxiliar Impeccable (impeccable_documenter.toml) |
+| [.agents/skills/impeccable/agents/impeccable_finish_reviewer.toml](../../.agents/skills/impeccable/agents/impeccable_finish_reviewer.toml) | Agente auxiliar Impeccable (impeccable_finish_reviewer.toml) |
+| [.agents/skills/impeccable/agents/impeccable_manual_edit_applier.toml](../../.agents/skills/impeccable/agents/impeccable_manual_edit_applier.toml) | Agente auxiliar Impeccable (impeccable_manual_edit_applier.toml) |
+| [.agents/skills/impeccable/agents/impeccable_motion_reviewer.toml](../../.agents/skills/impeccable/agents/impeccable_motion_reviewer.toml) | Agente auxiliar Impeccable (impeccable_motion_reviewer.toml) |
+| [.agents/skills/impeccable/agents/openai.yaml](../../.agents/skills/impeccable/agents/openai.yaml) | Metadatos del skill para el agente OpenAI |
+| [.agents/skills/impeccable/reference/adapt.md](../../.agents/skills/impeccable/reference/adapt.md) | Referencia Impeccable: adapt |
+| [.agents/skills/impeccable/reference/adapt.native.md](../../.agents/skills/impeccable/reference/adapt.native.md) | Referencia Impeccable: adapt.native |
+| [.agents/skills/impeccable/reference/android.md](../../.agents/skills/impeccable/reference/android.md) | Android platform |
+| [.agents/skills/impeccable/reference/animate.md](../../.agents/skills/impeccable/reference/animate.md) | Referencia Impeccable: animate |
+| [.agents/skills/impeccable/reference/audit.md](../../.agents/skills/impeccable/reference/audit.md) | Referencia Impeccable: audit |
+| [.agents/skills/impeccable/reference/audit.native.md](../../.agents/skills/impeccable/reference/audit.native.md) | Referencia Impeccable: audit.native |
+| [.agents/skills/impeccable/reference/bolder.md](../../.agents/skills/impeccable/reference/bolder.md) | Referencia Impeccable: bolder |
+| [.agents/skills/impeccable/reference/clarify.md](../../.agents/skills/impeccable/reference/clarify.md) | Referencia Impeccable: clarify |
+| [.agents/skills/impeccable/reference/colorize.md](../../.agents/skills/impeccable/reference/colorize.md) | Referencia Impeccable: colorize |
+| [.agents/skills/impeccable/reference/component-review.md](../../.agents/skills/impeccable/reference/component-review.md) | Plan and asset review |
+| [.agents/skills/impeccable/reference/craft-floor.md](../../.agents/skills/impeccable/reference/craft-floor.md) | Craft floor |
+| [.agents/skills/impeccable/reference/craft.md](../../.agents/skills/impeccable/reference/craft.md) | Craft (deprecated alias) |
+| [.agents/skills/impeccable/reference/critique-rubric.md](../../.agents/skills/impeccable/reference/critique-rubric.md) | Critique rubric |
+| [.agents/skills/impeccable/reference/critique.md](../../.agents/skills/impeccable/reference/critique.md) | Referencia Impeccable: critique |
+| [.agents/skills/impeccable/reference/degraded/asset-producer.md](../../.agents/skills/impeccable/reference/degraded/asset-producer.md) | Impeccable Asset Producer |
+| [.agents/skills/impeccable/reference/degraded/documenter.md](../../.agents/skills/impeccable/reference/degraded/documenter.md) | Impeccable Documenter |
+| [.agents/skills/impeccable/reference/degraded/finish-reviewer.md](../../.agents/skills/impeccable/reference/degraded/finish-reviewer.md) | Impeccable Finish Reviewer |
+| [.agents/skills/impeccable/reference/degraded/manual-edit-applier.md](../../.agents/skills/impeccable/reference/degraded/manual-edit-applier.md) | Impeccable Manual Edit Applier |
+| [.agents/skills/impeccable/reference/degraded/motion-reviewer.md](../../.agents/skills/impeccable/reference/degraded/motion-reviewer.md) | Impeccable Motion Reviewer |
+| [.agents/skills/impeccable/reference/delight.md](../../.agents/skills/impeccable/reference/delight.md) | Referencia Impeccable: delight |
+| [.agents/skills/impeccable/reference/distill.md](../../.agents/skills/impeccable/reference/distill.md) | Referencia Impeccable: distill |
+| [.agents/skills/impeccable/reference/doctor.md](../../.agents/skills/impeccable/reference/doctor.md) | Referencia Impeccable: doctor |
+| [.agents/skills/impeccable/reference/document.md](../../.agents/skills/impeccable/reference/document.md) | Design System: [Project Title] |
+| [.agents/skills/impeccable/reference/extract.md](../../.agents/skills/impeccable/reference/extract.md) | Extract Flow |
+| [.agents/skills/impeccable/reference/foundations.md](../../.agents/skills/impeccable/reference/foundations.md) | $impeccable foundations |
+| [.agents/skills/impeccable/reference/generate.md](../../.agents/skills/impeccable/reference/generate.md) | Referencia Impeccable: generate |
+| [.agents/skills/impeccable/reference/harden.md](../../.agents/skills/impeccable/reference/harden.md) | Referencia Impeccable: harden |
+| [.agents/skills/impeccable/reference/hooks.md](../../.agents/skills/impeccable/reference/hooks.md) | $impeccable hooks |
+| [.agents/skills/impeccable/reference/init.md](../../.agents/skills/impeccable/reference/init.md) | Init flow |
+| [.agents/skills/impeccable/reference/ios.md](../../.agents/skills/impeccable/reference/ios.md) | iOS platform |
+| [.agents/skills/impeccable/reference/layout.md](../../.agents/skills/impeccable/reference/layout.md) | Referencia Impeccable: layout |
+| [.agents/skills/impeccable/reference/live-setup.md](../../.agents/skills/impeccable/reference/live-setup.md) | Referencia Impeccable: live-setup |
+| [.agents/skills/impeccable/reference/live.md](../../.agents/skills/impeccable/reference/live.md) | Referencia Impeccable: live |
+| [.agents/skills/impeccable/reference/mode-operate.md](../../.agents/skills/impeccable/reference/mode-operate.md) | Operate |
+| [.agents/skills/impeccable/reference/mode-persuade.md](../../.agents/skills/impeccable/reference/mode-persuade.md) | Persuade and Experience |
+| [.agents/skills/impeccable/reference/mode-read.md](../../.agents/skills/impeccable/reference/mode-read.md) | Read |
+| [.agents/skills/impeccable/reference/new-work-comp.md](../../.agents/skills/impeccable/reference/new-work-comp.md) | New visual work: the comp-led build |
+| [.agents/skills/impeccable/reference/new-work-world.md](../../.agents/skills/impeccable/reference/new-work-world.md) | New visual work: create or replace the visual world |
+| [.agents/skills/impeccable/reference/new-work.md](../../.agents/skills/impeccable/reference/new-work.md) | New visual work |
+| [.agents/skills/impeccable/reference/onboard.md](../../.agents/skills/impeccable/reference/onboard.md) | Referencia Impeccable: onboard |
+| [.agents/skills/impeccable/reference/operate.md](../../.agents/skills/impeccable/reference/operate.md) | Operate mode depth (and Read notes) |
+| [.agents/skills/impeccable/reference/optimize.md](../../.agents/skills/impeccable/reference/optimize.md) | Referencia Impeccable: optimize |
+| [.agents/skills/impeccable/reference/overdrive.md](../../.agents/skills/impeccable/reference/overdrive.md) | Referencia Impeccable: overdrive |
+| [.agents/skills/impeccable/reference/polish.md](../../.agents/skills/impeccable/reference/polish.md) | Referencia Impeccable: polish |
+| [.agents/skills/impeccable/reference/quieter.md](../../.agents/skills/impeccable/reference/quieter.md) | Referencia Impeccable: quieter |
+| [.agents/skills/impeccable/reference/region-map.md](../../.agents/skills/impeccable/reference/region-map.md) | Region map |
+| [.agents/skills/impeccable/reference/routing.md](../../.agents/skills/impeccable/reference/routing.md) | Command guidance |
+| [.agents/skills/impeccable/reference/shape.md](../../.agents/skills/impeccable/reference/shape.md) | Shape |
+| [.agents/skills/impeccable/reference/typeset.md](../../.agents/skills/impeccable/reference/typeset.md) | Referencia Impeccable: typeset |
+| [.agents/skills/impeccable/reference/visualize.md](../../.agents/skills/impeccable/reference/visualize.md) | Visualize: Direction Comps & Asset Production |
+| [.agents/skills/impeccable/scripts/VERSION](../../.agents/skills/impeccable/scripts/VERSION) | Versión del motor Impeccable |
+| [.agents/skills/impeccable/scripts/command-metadata.json](../../.agents/skills/impeccable/scripts/command-metadata.json) | Datos/metadatos Impeccable (command-metadata.json) |
+| [.agents/skills/impeccable/scripts/data/font-index-failures.json](../../.agents/skills/impeccable/scripts/data/font-index-failures.json) | Datos/metadatos Impeccable (font-index-failures.json) |
+| [.agents/skills/impeccable/scripts/data/font-index.json](../../.agents/skills/impeccable/scripts/data/font-index.json) | Datos/metadatos Impeccable (font-index.json) |
+| [.agents/skills/impeccable/scripts/engine-checksums.txt](../../.agents/skills/impeccable/scripts/engine-checksums.txt) | Checksums del motor Impeccable |
+| [.agents/skills/impeccable/scripts/impeccable](../../.agents/skills/impeccable/scripts/impeccable) | Lanzador CLI de Impeccable |
+| [.agents/skills/impeccable/scripts/impeccable.cmd](../../.agents/skills/impeccable/scripts/impeccable.cmd) | Lanzador CLI de Impeccable |
+| [.agents/skills/impeccable/scripts/live-browser-dom.js](../../.agents/skills/impeccable/scripts/live-browser-dom.js) | Script del navegador en vivo Impeccable (live-browser-dom.js) |
+| [.agents/skills/impeccable/scripts/live-browser-ignores.js](../../.agents/skills/impeccable/scripts/live-browser-ignores.js) | Script del navegador en vivo Impeccable (live-browser-ignores.js) |
+| [.agents/skills/impeccable/scripts/live-browser-session.js](../../.agents/skills/impeccable/scripts/live-browser-session.js) | Script del navegador en vivo Impeccable (live-browser-session.js) |
+| [.agents/skills/impeccable/scripts/live-browser.js](../../.agents/skills/impeccable/scripts/live-browser.js) | Script del navegador en vivo Impeccable (live-browser.js) |
+| [.agents/skills/impeccable/scripts/modern-screenshot.umd.js](../../.agents/skills/impeccable/scripts/modern-screenshot.umd.js) | Script del navegador en vivo Impeccable (modern-screenshot.umd.js) |
+| [.agents/skills/improve-ui/SKILL.md](../../.agents/skills/improve-ui/SKILL.md) | Improve UI |
+| [.agents/skills/improve-ui/agents/openai.yaml](../../.agents/skills/improve-ui/agents/openai.yaml) | Metadatos del skill para el agente OpenAI |
+| [.agents/skills/improve-ui/references/plan-template.md](../../.agents/skills/improve-ui/references/plan-template.md) | Design plan template |
+| [.agents/skills/interface-review/SKILL.md](../../.agents/skills/interface-review/SKILL.md) | Interface review |
+| [.agents/skills/interface-review/agents/openai.yaml](../../.agents/skills/interface-review/agents/openai.yaml) | Metadatos del skill para el agente OpenAI |
+| [.agents/skills/interface-review/removed-signals.md](../../.agents/skills/interface-review/removed-signals.md) | Removed signals |
+| [.agents/skills/interface-review/scope-resolution.md](../../.agents/skills/interface-review/scope-resolution.md) | Scope resolution |
 | [.agents/skills/reflex-docs/SKILL.md](../../.agents/skills/reflex-docs/SKILL.md) | Skill local Reflex: instrucciones y referencias para agentes. |
 | [.agents/skills/reflex-process-management/SKILL.md](../../.agents/skills/reflex-process-management/SKILL.md) | Skill local Reflex: instrucciones y referencias para agentes. |
 | [.agents/skills/setup-python-env/SKILL.md](../../.agents/skills/setup-python-env/SKILL.md) | Skill local Reflex: instrucciones y referencias para agentes. |
+| [.agents/skills/ui-skills-root/SKILL.md](../../.agents/skills/ui-skills-root/SKILL.md) | UI Skills Root |
 | [.agents/skills/untangle-codebase/SKILL.md](../../.agents/skills/untangle-codebase/SKILL.md) | Skill para juntar el código que cambia junto, soltar el que no, y quitar lo que no tiene motivo propio. |
+| [.agents/skills/web-design-guidelines/SKILL.md](../../.agents/skills/web-design-guidelines/SKILL.md) | Web Interface Guidelines |
 | [.codegraph/.gitignore](../../.codegraph/.gitignore) | Excluye el índice local de CodeGraph del versionado. |
 | [.dockerignore](../../.dockerignore) | Excluye `.venv`, `.git`, `.web`, logs y `deploy/.env` del contexto de build. |
 | [.env.example](../../.env.example) | Plantilla de variables `ORTESISLAB_*` de la aplicación, el trabajador y las pruebas. |
@@ -18,6 +148,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [.vscode/settings.json](../../.vscode/settings.json) | Configuración local de editor; actualmente objeto vacío. |
 | [AGENTS.md](../../AGENTS.md) | Instrucciones Reflex y obligación de mantenimiento documental para agentes. |
 | [CLAUDE.md](../../CLAUDE.md) | Entrada de instrucciones que remite a AGENTS.md. |
+| [DESIGN.md](../../DESIGN.md) | OrtesisLab — design language |
 | [Dockerfile](../../Dockerfile) | Imagen única de producción: `uv sync`, compila Reflex y arranca con `EntradaContenedor.py`. |
 | [Makefile](../../Makefile) | Instalar, levantar, probar y lintear. Cinco objetivos de infraestructura local: `db-up`, `db-down`, `db-estado`, `db-respaldo` y `db-reset`. |
 | [README.md](../../README.md) | Presentación, instalación y entradas a documentación. |
@@ -31,6 +162,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/db/alembic/versions/20261112_1118_cuentas_locales.py](../../apps/db/alembic/versions/20261112_1118_cuentas_locales.py) | cuentas_locales |
 | [apps/db/alembic/versions/20261112_1135_purga_trabajador.py](../../apps/db/alembic/versions/20261112_1135_purga_trabajador.py) | purga del trabajador |
 | [apps/db/alembic/versions/20261112_1716_select_sesiones_trabajador.py](../../apps/db/alembic/versions/20261112_1716_select_sesiones_trabajador.py) | select de sesiones para el trabajador |
+| [apps/db/alembic/versions/20261118_1822_lote_plantillas.py](../../apps/db/alembic/versions/20261118_1822_lote_plantillas.py) | lote_plantillas |
 | [apps/db/backups/.gitkeep](../../apps/db/backups/.gitkeep) | Conserva la carpeta de volcados; su contenido se ignora. |
 | [apps/db/compose.yaml](../../apps/db/compose.yaml) | PostgreSQL 17, Redis, MinIO y cliente mc. |
 | [apps/db/init/01_roles.sh](../../apps/db/init/01_roles.sh) | Crea los roles separados al inicializar el volumen de PostgreSQL. |
@@ -53,6 +185,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/ortesis-plugin/OrtesisLabPlugin/ReparacionMalla.py](../../apps/ortesis-plugin/OrtesisLabPlugin/ReparacionMalla.py) | Limpieza segura de la superficie base dentro de Blender. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py](../../apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py) | STL binario del cascarón, en milímetros, sin Blender. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py) | Suavizado del contorno exterior antes de dar espesor. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoSuperficie.py](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoSuperficie.py) | Suavizado Taubin del ruido de malla en el interior de la superficie. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py](../../apps/ortesis-plugin/OrtesisLabPlugin/Superficie.py) | Carga y lectura de la superficie interior dentro de Blender. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionMalla.py) | Comprobación geométrica de la malla ya generada. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py](../../apps/ortesis-plugin/OrtesisLabPlugin/ValidacionSolido.py) | Validación de mallas sólidas solo con NumPy (sin Blender). |
@@ -63,15 +196,24 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py) | Patrones de nervadura. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/constants/__init__.py](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/__init__.py) | Constantes de OrtesisLab: nombres, patrones, materiales y límites. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/contratos.py](../../apps/ortesis-plugin/OrtesisLabPlugin/contratos.py) | Contratos compartidos entre núcleo, Blender y la web. |
+| [apps/ortesis-plugin/OrtesisLabPlugin/util/Arrays.py](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Arrays.py) | Backend de arrays: NumPy por defecto, CuPy si ``ORTESISLAB_ARRAY=cupy``. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py) | Registro de mensajes y lectura de la carpeta config. |
 | [apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py](../../apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py) | Utilidades compartidas: registro de ejecución y lectura de JSON. |
 | [apps/web/.gitignore](../../apps/web/.gitignore) | Excluye `.web`, bytecode, bases SQLite, `.states`, `assets/external/` y `__pycache__` de la aplicación Reflex. |
 | [apps/web/assets/README.md](../../apps/web/assets/README.md) | Assets de la aplicación |
+| [apps/web/assets/auth/auth.css](../../apps/web/assets/auth/auth.css) | Estilos de login/registro (tokens OrtesisLab); los incrusta PlantillaAuth. |
+| [apps/web/assets/auth/auth.html](../../apps/web/assets/auth/auth.html) | Plantilla HTML de login/registro con marcadores {{…}}. |
 | [apps/web/assets/favicon.ico](../../apps/web/assets/favicon.ico) | Icono del sitio. |
 | [apps/web/assets/ortesislab.css](../../apps/web/assets/ortesislab.css) | Paleta clara/oscura del rediseño y clases `ol-*` que usan las páginas Reflex. |
 | [apps/web/assets/superficie_interior_mm.npz](../../apps/web/assets/superficie_interior_mm.npz) | Superficie de ejemplo incluida para la web. |
 | [apps/web/assets/vendor/three-0.169.0.module.js](../../apps/web/assets/vendor/three-0.169.0.module.js) | Three.js que el visor importa para dibujar el STL. |
 | [apps/web/assets/visor.html](../../apps/web/assets/visor.html) | Visor Three.js que carga el STL binario desde su object_url. |
+| [apps/web/assets/visor/camara.js](../../apps/web/assets/visor/camara.js) | Cámara esférica: órbita, zoom y reinicio. |
+| [apps/web/assets/visor/controles.js](../../apps/web/assets/visor/controles.js) | Toolbar, puntero, rueda y teclado del visor. |
+| [apps/web/assets/visor/main.js](../../apps/web/assets/visor/main.js) | Orquestación del visor (escena Three.js). |
+| [apps/web/assets/visor/stl.js](../../apps/web/assets/visor/stl.js) | Validación de URL, descarga y parseo STL binario. |
+| [apps/web/assets/visor/tema.js](../../apps/web/assets/visor/tema.js) | Tema claro/oscuro del documento del visor. |
+| [apps/web/assets/visor/visor.css](../../apps/web/assets/visor/visor.css) | Estilos y tokens del iframe del visor. |
 | [apps/web/reflex.lock/bun.lock](../../apps/web/reflex.lock/bun.lock) | Resolucion de dependencias del frontend generado. |
 | [apps/web/reflex.lock/package.json](../../apps/web/reflex.lock/package.json) | Dependencias del frontend generado por Reflex. |
 | [apps/web/requirements.txt](../../apps/web/requirements.txt) | Declara Reflex 0.9.12 para la aplicación web. |
@@ -110,6 +252,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/web/web/persistence/repositorios/RepositorioHistorial.py](../../apps/web/web/persistence/repositorios/RepositorioHistorial.py) | Eventos de historial y listado de ejecuciones por versión. |
 | [apps/web/web/persistence/repositorios/RepositorioImports.py](../../apps/web/web/persistence/repositorios/RepositorioImports.py) | Importaciones de superficies: original recibido y NPZ normalizado. |
 | [apps/web/web/persistence/repositorios/RepositorioLotes.py](../../apps/web/web/persistence/repositorios/RepositorioLotes.py) | Lotes, ítems y cola del trabajador: admisión, reserva, lease y cierre. |
+| [apps/web/web/persistence/repositorios/RepositorioPlantillasLote.py](../../apps/web/web/persistence/repositorios/RepositorioPlantillasLote.py) | Plantillas con nombre para armar lotes. |
 | [apps/web/web/persistence/repositorios/RepositorioPreferencias.py](../../apps/web/web/persistence/repositorios/RepositorioPreferencias.py) | Preferencias por usuario con control optimista de revisión. |
 | [apps/web/web/persistence/repositorios/RepositorioProyectos.py](../../apps/web/web/persistence/repositorios/RepositorioProyectos.py) | Proyectos del usuario; cada cuenta tiene uno predeterminado. |
 | [apps/web/web/persistence/repositorios/RepositorioResultados.py](../../apps/web/web/persistence/repositorios/RepositorioResultados.py) | Resultados geométricos, intentos de una versión y exports STL. |
@@ -119,16 +262,18 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [apps/web/web/services/Autenticacion.py](../../apps/web/web/services/Autenticacion.py) | Rutas de registro e inicio de sesión: /auth/registro, /auth/login y /auth/logout. |
 | [apps/web/web/services/ContextoUsuario.py](../../apps/web/web/services/ContextoUsuario.py) | Principal autenticado de cada operación. |
 | [apps/web/web/services/GeneradorGeometrico.py](../../apps/web/web/services/GeneradorGeometrico.py) | Construcción numérica de una versión: métricas, STL y JSON de parámetros. |
+| [apps/web/web/services/PlantillaAuth.py](../../apps/web/web/services/PlantillaAuth.py) | Plantilla HTML/CSS de login y registro (sin HTML embebido en la ruta). |
 | [apps/web/web/services/ServicioHistorial.py](../../apps/web/web/services/ServicioHistorial.py) | Historial por usuario: listado paginado, detalle, restauración y reintento. |
 | [apps/web/web/services/ServicioImports.py](../../apps/web/web/services/ServicioImports.py) | Importación de superficies: original y NPZ normalizado en el bucket. |
 | [apps/web/web/services/ServicioLotes.py](../../apps/web/web/services/ServicioLotes.py) | Admisión de lotes, progreso y transiciones del trabajador. |
+| [apps/web/web/services/ServicioPlantillasLote.py](../../apps/web/web/services/ServicioPlantillasLote.py) | CRUD de plantillas de lote por usuario. |
 | [apps/web/web/services/ServicioPreferencias.py](../../apps/web/web/services/ServicioPreferencias.py) | Preferencias por usuario con control optimista de revisión. |
 | [apps/web/web/services/ServicioVersiones.py](../../apps/web/web/services/ServicioVersiones.py) | Versiones inmutables: snapshot de parámetros, material y escala. |
 | [apps/web/web/services/__init__.py](../../apps/web/web/services/__init__.py) | Marcador de paquete. |
 | [apps/web/web/storage/AlmacenamientoPrivado.py](../../apps/web/web/storage/AlmacenamientoPrivado.py) | Contrato del almacén de bytes y claves de objeto. |
 | [apps/web/web/storage/StorageS3.py](../../apps/web/web/storage/StorageS3.py) | Almacén de bytes en un bucket S3 (MinIO en desarrollo). |
 | [apps/web/web/storage/__init__.py](../../apps/web/web/storage/__init__.py) | Marcador de paquete. |
-| [compose.prod.yaml](../../compose.prod.yaml) | Pila de producción: Postgres, MinIO, Redis, migrate, web, worker y Caddy HTTPS. |
+| [compose.prod.yaml](../../compose.prod.yaml) | Pila Docker: Postgres, MinIO, Redis, migrate, web y worker (puertos 3000/9000). |
 | [core/config/README.md](../../core/config/README.md) | Para qué sirve cada YAML del backend y cada JSON de geometría. |
 | [core/config/almacen.yaml](../../core/config/almacen.yaml) | Timeouts de conexion y lectura e intentos del cliente S3. |
 | [core/config/cache.yaml](../../core/config/cache.yaml) | TTL, pausa de reintento y timeout de Redis. |
@@ -140,8 +285,17 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [core/config/sesion.yaml](../../core/config/sesion.yaml) | Duración de la sesión de servidor. |
 | [core/config/trabajador.yaml](../../core/config/trabajador.yaml) | Lease, latido, supervision y conciliacion del trabajador. |
 | [core/config/web.yaml](../../core/config/web.yaml) | Progreso, espera de creacion, tamanos de subida y etiquetas de la app. |
-| [deploy/Caddyfile](../../deploy/Caddyfile) | TLS Let's Encrypt: `APP_HOST` → web:3000 y `S3_HOST` → minio:9000. |
 | [deploy/env.prod.example](../../deploy/env.prod.example) | Plantilla de secretos y dominios para `deploy/.env` de producción. |
+| [design-plans/00-ROADMAP_MEJORA_UI.md](../../design-plans/00-ROADMAP_MEJORA_UI.md) | Roadmap de mejora UI — todas las pantallas |
+| [design-plans/01-auth-sistema-visual.md](../../design-plans/01-auth-sistema-visual.md) | Auth alineado al sistema OrtesisLab |
+| [design-plans/02-visor-theming.md](../../design-plans/02-visor-theming.md) | Visor 3D alineado al tema OrtesisLab |
+| [design-plans/03-landmarks-jerarquia.md](../../design-plans/03-landmarks-jerarquia.md) | Landmarks y jerarquía de títulos |
+| [design-plans/04-historial-responsive.md](../../design-plans/04-historial-responsive.md) | Historial usable en viewports estrechos |
+| [design-plans/05-empty-states.md](../../design-plans/05-empty-states.md) | Empty states con una acción |
+| [design-plans/06-patrones-teclado.md](../../design-plans/06-patrones-teclado.md) | Teclado y hit areas en parámetros |
+| [design-plans/07-visor-controles.md](../../design-plans/07-visor-controles.md) | Alternativa al arrastre en el visor 3D |
+| [design-plans/08-copy-y-polish.md](../../design-plans/08-copy-y-polish.md) | Copy y polish final |
+| [design-plans/AUDITORIA_UI_2026-11-18.md](../../design-plans/AUDITORIA_UI_2026-11-18.md) | Auditoría de interfaz OrtesisLab |
 | [docs/Agents/ESTANDAR_DOCUMENTACION.md](ESTANDAR_DOCUMENTACION.md) | Estándar documental |
 | [docs/Agents/GUIA_REFLEX.md](GUIA_REFLEX.md) | Reflex Documentation |
 | [docs/Agents/INVENTARIO.md](INVENTARIO.md) | Inventario de carpetas y archivos propios (instantánea). |
@@ -224,9 +378,22 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [docs/Audit/resolves/2026-11-13-resolve-setters-formulario.md](../Audit/resolves/2026-11-13-resolve-setters-formulario.md) | RES-2026-11-13-003 — Setters del formulario |
 | [docs/Audit/resolves/2026-11-13-resolve-sin-tope-lote.md](../Audit/resolves/2026-11-13-resolve-sin-tope-lote.md) | RES-2026-11-13-002 — Sin tope de variantes por lote |
 | [docs/Audit/resolves/2026-11-13-resolve-untangle.md](../Audit/resolves/2026-11-13-resolve-untangle.md) | RES-2026-11-13-001 — Desenredo estructural |
+| [docs/Audit/resolves/2026-11-18-resolve-borde-tactil.md](../Audit/resolves/2026-11-18-resolve-borde-tactil.md) | RES-2026-11-18-BORDE-TACTIL — Contorno superior continuo al tacto |
+| [docs/Audit/resolves/2026-11-18-resolve-descarga-stl.md](../Audit/resolves/2026-11-18-resolve-descarga-stl.md) | RES-2026-11-18-004 — Descarga de STL |
 | [docs/Audit/resolves/2026-11-18-resolve-docker-prod.md](../Audit/resolves/2026-11-18-resolve-docker-prod.md) | RES-2026-11-18-001 — Docker de producción |
+| [docs/Audit/resolves/2026-11-18-resolve-eficiencia-variantes.md](../Audit/resolves/2026-11-18-resolve-eficiencia-variantes.md) | RES-2026-11-18-EFIC — Contar variantes sin materializar el producto |
+| [docs/Audit/resolves/2026-11-18-resolve-extraer-html-plantillas.md](../Audit/resolves/2026-11-18-resolve-extraer-html-plantillas.md) | RES-2026-11-18-HTML — Extraer HTML a plantillas y módulos del visor |
+| [docs/Audit/resolves/2026-11-18-resolve-fix-web-div.md](../Audit/resolves/2026-11-18-resolve-fix-web-div.md) | RES-2026-11-18-WEB — Fallo del contenedor web (`div is not defined`) |
 | [docs/Audit/resolves/2026-11-18-resolve-imagenes-minio.md](../Audit/resolves/2026-11-18-resolve-imagenes-minio.md) | RES-2026-11-18-002 — Imágenes MinIO públicas |
+| [docs/Audit/resolves/2026-11-18-resolve-lotes-multi-eje.md](../Audit/resolves/2026-11-18-resolve-lotes-multi-eje.md) | RES-2026-11-18-LOTES-N — Lotes con N características variables |
+| [docs/Audit/resolves/2026-11-18-resolve-normales-plantilla.md](../Audit/resolves/2026-11-18-resolve-normales-plantilla.md) | RES-2026-11-18-NORMALES-PLANTILLA — Corregir normales de la plantilla |
+| [docs/Audit/resolves/2026-11-18-resolve-plantillas-lote-gpu.md](../Audit/resolves/2026-11-18-resolve-plantillas-lote-gpu.md) | RES-2026-11-18-PLANTILLAS — Plantillas de lote, generación desatendida y GPU |
+| [docs/Audit/resolves/2026-11-18-resolve-quitar-botones-visor.md](../Audit/resolves/2026-11-18-resolve-quitar-botones-visor.md) | RES-2026-11-18-VISOR-BTNS — Quitar toolbar del visor |
+| [docs/Audit/resolves/2026-11-18-resolve-quitar-caddy.md](../Audit/resolves/2026-11-18-resolve-quitar-caddy.md) | RES-2026-11-18-003 — Quitar Caddy |
 | [docs/Audit/resolves/2026-11-18-resolve-rediseno-visual-canvas.md](../Audit/resolves/2026-11-18-resolve-rediseno-visual-canvas.md) | RES-2026-11-18-001 — Rediseño visual según el canvas «OrtesisLab Rediseño» |
+| [docs/Audit/resolves/2026-11-18-resolve-refactor-shell-ui.md](../Audit/resolves/2026-11-18-resolve-refactor-shell-ui.md) | RES-2026-11-18-SHELL — Refactor de shell UI (navbar, panel, tipografía, iconos) |
+| [docs/Audit/resolves/2026-11-18-resolve-roadmap-mejora-ui.md](../Audit/resolves/2026-11-18-resolve-roadmap-mejora-ui.md) | RES-2026-11-18-UI — Roadmap de mejora UI |
+| [docs/Audit/resolves/2026-11-18-resolve-suavizado-ruido-interior.md](../Audit/resolves/2026-11-18-resolve-suavizado-ruido-interior.md) | RES-2026-11-18-RUIDO-INTERIOR — Suavizado Taubin del ruido de malla |
 | [docs/Audit/resolves/README.md](../Audit/resolves/README.md) | Resoluciones |
 | [docs/BlenderPlugin/ALGORITMOS.md](../BlenderPlugin/ALGORITMOS.md) | Algoritmos de generación y comprobación |
 | [docs/BlenderPlugin/API_Y_DATOS.md](../BlenderPlugin/API_Y_DATOS.md) | API Python, contratos y datos de Blender |
@@ -256,6 +423,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [skills-lock.json](../../skills-lock.json) | Procedencia y huellas de las tres skills Reflex instaladas. |
 | [tests/README.md](../../tests/README.md) | Pruebas |
 | [tests/aplicacion_web/__init__.py](../../tests/aplicacion_web/__init__.py) | Pruebas del generador web y del lector de superficies. |
+| [tests/aplicacion_web/test_arrays_backend.py](../../tests/aplicacion_web/test_arrays_backend.py) | Backend de arrays NumPy/CuPy del núcleo. |
 | [tests/aplicacion_web/test_contrasena.py](../../tests/aplicacion_web/test_contrasena.py) | Hash de contraseña: la misma clave coincide y otra no. |
 | [tests/aplicacion_web/test_estado_lote.py](../../tests/aplicacion_web/test_estado_lote.py) | La página /lote recibe todas las variantes con su estado, no solo las terminadas. |
 | [tests/aplicacion_web/test_generador_web.py](../../tests/aplicacion_web/test_generador_web.py) | Comprueba el lote y el STL sin abrir Blender ni la superficie real. |
@@ -279,6 +447,7 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [tests/geometria/test_normales_topologia.py](../../tests/geometria/test_normales_topologia.py) | Regresiones A-04, A-05, A-06, A-14, A-16 y A-22 (fixtures sintéticas). |
 | [tests/geometria/test_refinador_malla.py](../../tests/geometria/test_refinador_malla.py) | Refinamiento de patrones web sin depender de Blender. |
 | [tests/geometria/test_suavizado_borde.py](../../tests/geometria/test_suavizado_borde.py) | El contorno exterior pierde los dientes y conserva la forma general. |
+| [tests/geometria/test_suavizado_superficie.py](../../tests/geometria/test_suavizado_superficie.py) | Regresiones del suavizado Taubin de ruido en el interior. |
 | [tests/geometria/test_superficie_abierta.py](../../tests/geometria/test_superficie_abierta.py) | Regresiones del espesor: pared cerrada, canal superior abierto. |
 | [tests/nucleo/__init__.py](../../tests/nucleo/__init__.py) | Pruebas del núcleo geométrico: validación, catálogo, volumen y material. |
 | [tests/nucleo/test_cache_metricas.py](../../tests/nucleo/test_cache_metricas.py) | Caché refinada y métricas del modelo. |
@@ -291,9 +460,11 @@ Los catálogos de [backend](../AppBackend/MODULOS.md), [frontend](../AppFrontend
 | [tests/persistencia/test_cuota_almacen.py](../../tests/persistencia/test_cuota_almacen.py) | Cuotas de almacenamiento en importación (B-05). |
 | [tests/persistencia/test_import_fallo_publicar.py](../../tests/persistencia/test_import_fallo_publicar.py) | Import rechazado si falla la publicación al bucket (B-06). |
 | [tests/persistencia/test_lotes_trabajador.py](../../tests/persistencia/test_lotes_trabajador.py) | Lotes idempotentes, trabajador con lease, aislamiento y conciliación. |
+| [tests/persistencia/test_plantillas_lote.py](../../tests/persistencia/test_plantillas_lote.py) | CRUD de lote_plantillas por usuario. |
 | [tests/persistencia/test_propiedad_datos.py](../../tests/persistencia/test_propiedad_datos.py) | Propiedad de los datos y permisos de rol sobre PostgreSQL real. |
 | [tests/persistencia/test_superficie_no_estatica.py](../../tests/persistencia/test_superficie_no_estatica.py) | A-02: el import no escribe en uploaded_files/ servido por Reflex. |
 | [uv.lock](../../uv.lock) | Resoluciones reproducibles de dependencias Python. |
+| [web-logs.txt](../../web-logs.txt) | Volcado local de logs del servicio web Docker (diagnóstico; no es fuente de la app). |
 
 ## Carpetas y artefactos locales
 

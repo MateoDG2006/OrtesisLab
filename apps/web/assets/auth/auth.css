@@ -1,0 +1,38 @@
+:root {
+  --ol-bg: #F3EDE6; --ol-panel: #FFFFFF; --ol-panel2: #FAF6F1; --ol-line: rgba(25, 90, 95, .16);
+  --ol-text: #12292B; --ol-muted: #4F6567; --ol-accent: #195A5F; --ol-onaccent: #FFFFFF;
+  --ol-coral: #A9483A; --ol-input: #FFFFFF; --focus-8: #12B8B0;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ol-bg: #0A1719; --ol-panel: #102427; --ol-panel2: #15302F; --ol-line: rgba(243, 237, 230, .10);
+    --ol-text: #F3EDE6; --ol-muted: #9FB5B3; --ol-accent: #12B8B0; --ol-onaccent: #04201F;
+    --ol-coral: #E8937F; --ol-input: #0B1C1E;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 24px; font-family: Manrope, system-ui, sans-serif; background: var(--ol-bg); color: var(--ol-text);
+}
+.ol-shell { width: 100%; max-width: 24rem; }
+.ol-brand { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 1rem; }
+.ol-card {
+  background: var(--ol-panel); border: 1px solid var(--ol-line); border-radius: 24px; padding: 1.5rem 1.35rem;
+}
+h1 { font-size: 1.35rem; font-weight: 600; margin: 0 0 .35rem; }
+.ol-lead { margin: 0 0 1rem; color: var(--ol-muted); font-size: .9rem; }
+label { display: block; margin-top: 1rem; font-size: .75rem; font-weight: 600; color: var(--ol-muted); }
+input {
+  width: 100%; margin-top: .35rem; padding: .7rem .85rem; border-radius: 12px;
+  border: 1px solid var(--ol-line); background: var(--ol-input); color: var(--ol-text); font: inherit; font-weight: 600;
+}
+input:focus-visible { outline: 2px solid var(--focus-8); outline-offset: 2px; }
+button[type=submit] {
+  margin-top: 1.25rem; width: 100%; min-height: 44px; border: 0; border-radius: 999px;
+  background: var(--ol-accent); color: var(--ol-onaccent); font: inherit; font-weight: 700; cursor: pointer;
+}
+button[type=submit]:focus-visible { outline: 2px solid var(--focus-8); outline-offset: 2px; }
+.ol-error { margin: 0 0 1rem; color: var(--ol-coral); font-size: .9rem; font-weight: 600; }
+.ol-foot { margin: 1rem 0 0; text-align: center; font-size: .9rem; }
+.ol-foot a { color: var(--ol-accent); font-weight: 600; }

@@ -30,6 +30,24 @@ class SuavizadoBorde:
             return puntos, normales_salida, 0.0
 
         originales = puntos.copy()
+        # Dos pasadas: la segunda limpia el residuo si el tope o el back-off
+        # recortaron la primera. Sin remallar el cascarón.
+        for _ in range(2):
+            puntos, normales_salida = SuavizadoBorde._Pasada(
+                puntos, caras_idx, normales_salida, bucles, longitud, logger
+            )
+
+        desplazamiento = float(np.linalg.norm(puntos - originales, axis=1).max())
+        if desplazamiento > 0:
+            logger.info(
+                "Contorno suavizado: %s bucles, desplazamiento máximo %.3f mm.",
+                len(bucles),
+                desplazamiento,
+            )
+        return puntos, normales_salida, desplazamiento
+
+    @staticmethod
+    def _Pasada(puntos, caras_idx, normales_salida, bucles, longitud, logger):
         delta = np.zeros_like(puntos)
         for bucle in bucles:
             coords = puntos[bucle]
@@ -67,7 +85,8 @@ class SuavizadoBorde:
                     "Parte del contorno no se pudo suavizar sin voltear caras."
                 )
 
-        puntos += delta
+        puntos = puntos + delta
+        normales_salida = normales_salida.copy()
         for bucle in bucles:
             # A-22: el corte espacial usa el perímetro físico del contorno, no
             # distancias entre vectores unitarios.
@@ -90,14 +109,7 @@ class SuavizadoBorde:
             aceptar = validas & (acuerdo > 0) & (diferencia > 1e-6)
             normales_salida[bucle[aceptar]] = propuestas[aceptar]
 
-        desplazamiento = float(np.linalg.norm(puntos - originales, axis=1).max())
-        if desplazamiento > 0:
-            logger.info(
-                "Contorno suavizado: %s bucles, desplazamiento máximo %.3f mm.",
-                len(bucles),
-                desplazamiento,
-            )
-        return puntos, normales_salida, desplazamiento
+        return puntos, normales_salida
 
     @staticmethod
     def _Bucles(caras: np.ndarray) -> list[np.ndarray]:

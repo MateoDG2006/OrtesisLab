@@ -39,6 +39,13 @@
 | [2026-11-13-resolve-cerrar-sesion](2026-11-13-resolve-cerrar-sesion.md) | EN_CURSO | El POST de cerrar sesión lo envía el navegador; no cierra hallazgos |
 | [2026-11-18-resolve-docker-prod](2026-11-18-resolve-docker-prod.md) | EN_CURSO | Docker de producción (pila completa); no cierra hallazgos |
 | [2026-11-18-resolve-imagenes-minio](2026-11-18-resolve-imagenes-minio.md) | EN_CURSO | Defaults MinIO a pgsty/silo y pgsty/mc; no cierra hallazgos |
+| [2026-11-18-resolve-quitar-caddy](2026-11-18-resolve-quitar-caddy.md) | EN_CURSO | Quitar Caddy del compose de producción; no cierra hallazgos |
+| [2026-11-18-resolve-descarga-stl](2026-11-18-resolve-descarga-stl.md) | EN_CURSO | Descarga STL por bytes (rx.download no admite URL absolutas); no cierra hallazgos |
+| [2026-11-18-resolve-roadmap-mejora-ui](2026-11-18-resolve-roadmap-mejora-ui.md) | RESUELTO (alcance UI) | Roadmap mejora UI (auth, visor, landmarks, historial, a11y); no cierra hallazgos A/B |
+| [2026-11-18-resolve-extraer-html-plantillas](2026-11-18-resolve-extraer-html-plantillas.md) | RESUELTO (alcance HTML) | Auth a plantillas; visor modular ES; no cierra hallazgos A/B |
+| [2026-11-18-resolve-normales-plantilla](2026-11-18-resolve-normales-plantilla.md) | RESUELTO (alcance plantilla) | Normales del NPZ incluido + `PrepararPlantilla`; no cierra A-04 |
+| [2026-11-18-resolve-suavizado-ruido-interior](2026-11-18-resolve-suavizado-ruido-interior.md) | RESUELTO (alcance) | Taubin ruido interior; no cierra A/B |
+| [2026-11-18-resolve-borde-tactil](2026-11-18-resolve-borde-tactil.md) | RESUELTO (alcance borde) | Suavizado de contorno 24/8 mm y doble pasada; no cierra hallazgos A/B |
 
 [RES-2026-10-13-001](2026-10-13-resolve-persistencia-postgres.md) y
 [RES-2026-10-13-002](2026-10-13-resolve-organizar-pruebas.md) siguen como

@@ -22,11 +22,11 @@ flowchart LR
   FRAME -->|fetch object_url| STL
 ```
 
-No hay un frontend separado escrito a mano en React ni un API client propio de generación. Sí hay JavaScript deliberado en `assets/visor.html` y una expresión JS en `PaginaComparacion.Enlace`. Lo generado bajo `.web/` se reemplaza al compilar: modificar las fuentes Python/HTML para cambios duraderos.
+No hay un frontend separado escrito a mano en React ni un API client propio de generación. Sí hay JavaScript deliberado en `assets/visor/` (cargado por `visor.html`) y una expresión JS en `PaginaComparacion.Enlace`. Login/registro usan plantillas en `assets/auth/` ensambladas por `PlantillaAuth` (sin HTML embebido en la ruta Starlette). Lo generado bajo `.web/` se reemplaza al compilar: modificar las fuentes Python/HTML/JS para cambios duraderos.
 
 ## Sesión
 
-`Sesion.Barra(activa, …)` muestra la marca OrtesisLab, la navegación en píldora Diseño (`/`), Lotes (`/lote`) e Historial (`/historial`) con `aria-current="page"` en la ruta activa, el botón de modo claro/oscuro (`rx.toggle_color_mode`) y, con sesión, un chip con las iniciales y el nombre más el botón de icono Cerrar sesión; sin sesión, Crear cuenta e Iniciar sesión. Esos botones recargan `<api_url>/auth/registro` o `/auth/login`. Cerrar sesión envía un POST a `/auth/logout` con un `<form>` HTML. `rx.el.form` cancela ese envío. Reflex compila las anclas como `Link` del enrutador y, sin recarga completa, mostraría su página 404 en vez de llegar al backend. La cookie `ortesislab_sesion` es HttpOnly; React nunca la lee. Al volver de cerrar sesión o al entrar otro usuario en la misma pestaña, `CargarPredeterminados` borra fichas, vistas y superficie y `EstadoHistorial` vacía filas y selección.
+`Sesion.Barra(activa, …)` es la navbar del shell (`header.ol-navbar` / `ol-navbar-inner` con margen seguro `--ol-safe`): marca OrtesisLab (enlace a `/`), navegación en píldora Diseño (`/`), Lotes (`/lote`) e Historial (`/historial`) con `aria-current="page"` en la ruta activa, modo claro/oscuro (`rx.toggle_color_mode`) y, con sesión, chip con iniciales/nombre más Cerrar sesión; sin sesión, Crear cuenta e Iniciar sesión. Esos botones recargan `<api_url>/auth/registro` o `/auth/login`. Cerrar sesión envía un POST a `/auth/logout` con un `<form>` HTML. `rx.el.form` cancela ese envío. Reflex compila las anclas como `Link` del enrutador y, sin recarga completa, mostraría su página 404 en vez de llegar al backend. La cookie `ortesislab_sesion` es HttpOnly; React nunca la lee. Al volver de cerrar sesión o al entrar otro usuario en la misma pestaña, `CargarPredeterminados` borra fichas, vistas y superficie y `EstadoHistorial` vacía filas y selección. En `/`, el `main` sin padding aloja un workspace a altura completa: escenario (`ol-stage`) y aside de parámetros (`ol-aside`, 440px).
 
 ## Árbol de componentes
 
@@ -39,7 +39,7 @@ flowchart TB
   F --> AV[Botón Parámetros avanzados → Avanzados]
   ROW --> S[Superficie: ficha y Cargador]
   S --> D[Diálogo Cambiar superficie: upload, Cargar, incluida]
-  LI[PaginaLote.Index] --> NL[NuevoLote: mosaicos, característica que varía, ambas capas, resumen, Generar lote]
+  LI[PaginaLote.Index] --> NL[NuevoLote: mosaicos, N barridos, ambas capas, resumen, Generar lote]
   NL -->|redirect /lote?id| LI
   LI --> CAB[Cabecera: variantes terminadas, progreso, conteo, Cancelar]
   LI --> C[Comparación: hasta 3 visores de 320px]

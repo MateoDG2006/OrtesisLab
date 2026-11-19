@@ -10,6 +10,7 @@ from .RepositorioBase import RepositorioBase
 from .RepositorioHistorial import RepositorioHistorial
 from .RepositorioImports import RepositorioImports
 from .RepositorioLotes import RepositorioLotes
+from .RepositorioPlantillasLote import RepositorioPlantillasLote
 from .RepositorioPreferencias import RepositorioPreferencias
 from .RepositorioProyectos import NOMBRE_PROYECTO_PREDETERMINADO, RepositorioProyectos
 from .RepositorioResultados import RepositorioResultados
@@ -23,6 +24,7 @@ __all__ = [
     "RepositorioHistorial",
     "RepositorioImports",
     "RepositorioLotes",
+    "RepositorioPlantillasLote",
     "RepositorioPreferencias",
     "RepositorioProyectos",
     "RepositorioResultados",

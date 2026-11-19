@@ -20,6 +20,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+gpu = [
+    "cupy-cuda12x>=13.0",
+]
 dev = [
     "moto[server]>=5.1",
     "ruff>=0.9",

@@ -26,10 +26,11 @@ Cambiar el JSON de defaults no cambia automáticamente los `default` declarados 
 
 | Archivo | Componentes y finalidad |
 |---|---|
-| [`Modeling.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py) | `Model3DForPrinting`: valida opciones, combina patrón/marco/banda, suaviza borde, recorta o varía espesor y llama engrosado; conserva geometría para métricas |
+| [`Modeling.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py) | `Model3DForPrinting`: valida opciones, suaviza ruido interior (Taubin), suaviza borde, combina patrón/marco/banda, recorta o varía espesor y llama engrosado; conserva geometría para métricas |
 | [`Malla.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Malla.py) | `AnalizadorMalla`: normales de caras, contrato triangular, topología abierta/conectada, suavizado de normales y Dijkstra desde el contorno |
 | [`RefinadorMalla.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/RefinadorMalla.py) | Divide aristas largas con punto medio único; casos de 0/1/2/3 cortes por triángulo; suaviza normales y vuelve a analizar |
-| [`SuavizadoBorde.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py) | Descubre bucles, remuestrea por longitud, filtra FFT y limita desplazamiento para evitar caras invertidas |
+| [`SuavizadoSuperficie.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoSuperficie.py) | Taubin λ/μ en vértices interiores (borde fijado), tope de desplazamiento y salvaguarda de caras; recalcula normales |
+| [`SuavizadoBorde.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py) | Descubre bucles, remuestrea por longitud, filtra FFT en dos pasadas y limita desplazamiento para evitar caras invertidas |
 | [`StlBinario.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/StlBinario.py) | Cabecera, registro y abanico del STL binario en milímetros; lo comparten volumen, validación, exportador y web |
 | [`Cascaron.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py) | Hermite `Smooth01`, recorte por campo escalar con cruces compartidos, duplicación por normales, muros del contorno y volumen |
 | [`Excepciones.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Excepciones.py) | Taxonomía de errores previstos, heredados de `OrtesisLabError`; al construirse intentan registrar mensaje y detalle |
@@ -49,7 +50,7 @@ Se conserva la ortografía de archivo `Paterns.py` y del método `ChangePatern`:
 
 ## `util/` y `config/`
 
-[`util/Utilidades.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py) contiene `Registro` y `Configuracion`. `Registro.Configurar` monta consola/archivo y `Obtener` devuelve logger hijo. La carpeta [`util/__init__.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py) marca el paquete. `Configuracion.CargarJson` cachea y devuelve copia superficial; `Recargar` vacía esa caché; `ParametrosDefecto`, `Limites` y `ValorLimite` verifican claves y tipos; `ComprobacionDeReferencia` obtiene resultados históricos.
+[`util/Utilidades.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Utilidades.py) contiene `Registro` y `Configuracion`. `Registro.Configurar` monta consola/archivo y `Obtener` devuelve logger hijo. La carpeta [`util/__init__.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/util/__init__.py) marca el paquete. `Configuracion.CargarJson` cachea y devuelve copia superficial; `Recargar` vacía esa caché; `ParametrosDefecto`, `Limites` y `ValorLimite` verifican claves y tipos; `ComprobacionDeReferencia` obtiene resultados históricos. [`util/Arrays.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/util/Arrays.py) elige NumPy o CuPy (`ORTESISLAB_ARRAY`); los hotspots de `Patron` (rotación, cuadrícula, bisectrices) usan esa fachada y devuelven `numpy.ndarray`.
 
 | JSON | Contrato |
 |---|---|

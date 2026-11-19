@@ -62,7 +62,8 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 | `GuardarSuperficie` | Bytes → `ServicioImports.Importar` del usuario activo → `superficie-<asset hex>.npz` y metadatos |
 | `Crear` | Encola un lote `single`, espera al trabajador (600 s) y devuelve la ficha |
 | `_FichaDeItem`, `Ficha`, `FichaError`, `Detalle`, `Numero` | Ítem persistido o error → diccionario y texto español |
-| `Combinaciones` | Producto acotado de variantes. Un patrón sin celosía no duplica la capa interior |
+| `Combinaciones` | Producto de patrones × N barridos `{clave,desde,hasta,paso}` × revestimientos. Un patrón sin celosía no duplica la capa interior |
+| `ContarCombinaciones` | Misma validación y conteo aritmético, sin crear dicts (UI/resumen/guardar plantilla) |
 | `Ruta`, `Leer`, `RutaSuperficie` | `object_url` o nombre → clave del bucket validada contra el usuario activo; lectura verificada por SHA-256 |
 
 ## `web/LectorSuperficie.py`
@@ -100,12 +101,13 @@ Las rutas se expresan desde la raíz del repositorio. [INVENTARIO.md](../Agents/
 |---|---|
 | [`ContextoUsuario.py`](../../apps/web/web/services/ContextoUsuario.py) | Cookie de sesión, `Requerir`, `Registrar`, `Entrar`, `CerrarSesion`, `Activar`/`Actual` |
 | [`Autenticacion.py`](../../apps/web/web/services/Autenticacion.py) | Formularios Starlette de `/auth/registro`, `/auth/login` y `/auth/logout`; la contraseña se guarda con scrypt |
-| [`ServicioImports.py`](../../apps/web/web/services/ServicioImports.py) | Import con deduplicación por SHA-256 del original; staged → original → normalización → NPZ → Redis → ready; plantilla por usuario; `Resolver` de `superficie_archivo` |
+| [`ServicioImports.py`](../../apps/web/web/services/ServicioImports.py) | Import con deduplicación por SHA-256 del original; staged → original → normalización → NPZ → Redis → ready; `PrepararPlantilla` recalcula normales desde las caras; plantilla por usuario; `Resolver` de `superficie_archivo` |
 | [`ServicioVersiones.py`](../../apps/web/web/services/ServicioVersiones.py) | Parámetros canónicos, hash, instantánea de material PETG y alta de versiones numeradas |
 | [`ServicioLotes.py`](../../apps/web/web/services/ServicioLotes.py) | Admisión, progreso, último lote, espera, cancelación; del lado trabajador: reserva, latido, salidas staged, confirmación, fallo con reintento y abandono de leases vencidos |
 | [`GeneradorGeometrico.py`](../../apps/web/web/services/GeneradorGeometrico.py) | Construcción pura: superficie, cascarón, métricas, STL y JSON; no toca base ni bucket |
 | [`ServicioHistorial.py`](../../apps/web/web/services/ServicioHistorial.py) | Listado paginado (25 por defecto, 100 máximo), detalle, comparación de hasta 3, restaurar, reintentar y registro de descarga |
 | [`ServicioPreferencias.py`](../../apps/web/web/services/ServicioPreferencias.py) | Lectura de la fila de preferencias; la página no la consulta |
+| [`ServicioPlantillasLote.py`](../../apps/web/web/services/ServicioPlantillasLote.py) | CRUD de plantillas con nombre para armar lotes |
 
 ## Almacenamiento, caché y trabajos
 

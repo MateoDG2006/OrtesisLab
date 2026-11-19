@@ -37,16 +37,20 @@ def base():
     }
 
 
+def _barrido(clave: str, desde: float, hasta: float, paso: float) -> dict:
+    return {"clave": clave, "desde": desde, "hasta": hasta, "paso": paso}
+
+
 class LoteYStl(unittest.TestCase):
     def test_un_patron_sin_barrido_es_una_variante(self):
-        variantes = GeneradorWeb.Combinaciones(base(), ["HEX"], "ninguno", 0, 0, 1, False)
+        variantes = GeneradorWeb.Combinaciones(base(), ["HEX"], [], False)
         self.assertEqual(len(variantes), 1)
         self.assertEqual(variantes[0]["pattern"], "HEX")
         self.assertTrue(variantes[0]["liner"])
 
     def test_patrones_por_celda_y_capa(self):
         variantes = GeneradorWeb.Combinaciones(
-            base(), ["VORONOI", "SOLID"], "cell_mm", 10, 20, 10, True
+            base(), ["VORONOI", "SOLID"], [_barrido("cell_mm", 10, 20, 10)], True
         )
         # Voronoi se duplica con y sin capa. El macizo no.
         self.assertEqual(len(variantes), 6)
@@ -58,16 +62,46 @@ class LoteYStl(unittest.TestCase):
 
     def test_un_barrido_largo_no_tiene_tope(self):
         variantes = GeneradorWeb.Combinaciones(
-            base(), ["HEX", "SQUARE"], "cell_mm", 5, 40, 1, True
+            base(), ["HEX", "SQUARE"], [_barrido("cell_mm", 5, 40, 1)], True
         )
         self.assertEqual(len(variantes), 144)
 
+    def test_dos_barridos_son_producto_cartesiano(self):
+        variantes = GeneradorWeb.Combinaciones(
+            base(),
+            ["HEX"],
+            [_barrido("cell_mm", 10, 20, 10), _barrido("rib_width_mm", 2, 3, 1)],
+            False,
+        )
+        # 2 celdas × 2 anchos × 1 patrón × 1 capa = 4
+        self.assertEqual(len(variantes), 4)
+        pares = {(item["cell_mm"], item["rib_width_mm"]) for item in variantes}
+        self.assertEqual(pares, {(10.0, 2.0), (10.0, 3.0), (20.0, 2.0), (20.0, 3.0)})
+
+    def test_contar_coincide_con_combinaciones_sin_materializar(self):
+        args = (base(), ["HEX", "VORONOI"], [_barrido("cell_mm", 5, 40, 1)], True)
+        self.assertEqual(GeneradorWeb.ContarCombinaciones(*args), len(GeneradorWeb.Combinaciones(*args)))
+        self.assertEqual(GeneradorWeb.ContarCombinaciones(base(), ["SOLID"], [], False), 1)
+
+    def test_rechaza_barridos_con_la_misma_clave(self):
+        with self.assertRaises(ValueError):
+            GeneradorWeb.Combinaciones(
+                base(),
+                ["HEX"],
+                [_barrido("cell_mm", 10, 20, 10), _barrido("cell_mm", 5, 15, 5)],
+                False,
+            )
+
     def test_la_semilla_del_barrido_es_entera(self):
-        variantes = GeneradorWeb.Combinaciones(base(), ["VORONOI"], "seed", 1, 3, 1, False)
+        variantes = GeneradorWeb.Combinaciones(
+            base(), ["VORONOI"], [_barrido("seed", 1, 3, 1)], False
+        )
         self.assertEqual([item["seed"] for item in variantes], [1, 2, 3])
 
     def test_el_barrido_respeta_el_extremo(self):
-        variantes = GeneradorWeb.Combinaciones(base(), ["HEX"], "cell_mm", 0, 1, 0.6, False)
+        variantes = GeneradorWeb.Combinaciones(
+            base(), ["HEX"], [_barrido("cell_mm", 0, 1, 0.6)], False
+        )
         self.assertEqual([item["cell_mm"] for item in variantes], [0, 0.6])
 
     def test_el_barrido_rechaza_no_finitos_y_semillas_fraccionarias(self):
@@ -78,7 +112,9 @@ class LoteYStl(unittest.TestCase):
         ):
             with self.subTest(desde=desde, hasta=hasta, paso=paso, eje=eje):
                 with self.assertRaises(ValueError):
-                    GeneradorWeb.Combinaciones(base(), ["VORONOI"], eje, desde, hasta, paso, False)
+                    GeneradorWeb.Combinaciones(
+                        base(), ["VORONOI"], [_barrido(eje, desde, hasta, paso)], False
+                    )
 
     def test_stl_de_un_triangulo(self):
         vertices = [[0, 0, 0], [1, 0, 0], [0, 1, 0]]

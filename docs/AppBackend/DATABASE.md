@@ -95,6 +95,17 @@ erDiagram
 | created_at | timestamptz | | |
 | updated_at | timestamptz | | |
 
+### `lote_plantillas`
+
+| Columna | Tipo | Nulo | Clave |
+|---|---|---|---|
+| id | uuid | | PK |
+| user_id | uuid | | FK app_users; única con `nombre` y con `id` |
+| nombre | text | | 1–120 caracteres |
+| payload | jsonb | | objeto: `parametros`, `patrones`, `barridos`, `ambos_revestimientos`, `superficie` |
+| created_at | timestamptz | | |
+| updated_at | timestamptz | | |
+
 ### `file_assets`
 
 | Columna | Tipo | Nulo | Clave |
@@ -329,6 +340,7 @@ La aplicación no borra filas, no altera versiones y el historial es append-only
 
 ```sql
 GRANT SELECT, INSERT, UPDATE ON app_users, user_preferences, auth_sessions, file_assets, projects, imports TO ortesislab_app;
+GRANT SELECT, INSERT, UPDATE, DELETE ON lote_plantillas TO ortesislab_app;
 GRANT SELECT, INSERT ON model_versions TO ortesislab_app;
 GRANT SELECT, INSERT, UPDATE ON generation_batches, batch_items TO ortesislab_app;
 GRANT SELECT ON generation_attempts, generation_results, exports TO ortesislab_app;

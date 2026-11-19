@@ -1,6 +1,7 @@
-# Pila de producción OrtesisLab. No sustituye apps/db/compose.yaml (desarrollo).
-# Uso: cp deploy/env.prod.example deploy/.env && edite claves/dominios
+# Pila Docker OrtesisLab. No sustituye apps/db/compose.yaml (desarrollo local).
+# Uso: cp deploy/env.prod.example deploy/.env && edite claves
 #      docker compose -f compose.prod.yaml --env-file deploy/.env up -d --build
+# App :3000 · MinIO :9000 / :9001
 name: ortesislab
 
 services:
@@ -142,25 +143,6 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  caddy:
-    image: caddy:2.9-alpine
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      APP_HOST: ${APP_HOST:?Defina APP_HOST}
-      S3_HOST: ${S3_HOST:?Defina S3_HOST}
-      ACME_EMAIL: ${ACME_EMAIL:-}
-    volumes:
-      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data
-      - caddy-config:/config
-    depends_on:
-      - web
-    restart: unless-stopped
-
 volumes:
   postgres-data:
   minio-data:
-  caddy-data:
-  caddy-config:

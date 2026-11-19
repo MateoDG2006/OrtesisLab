@@ -156,6 +156,10 @@ class Configuracion:
         "clip_connect_mm",
         "border_smooth_wavelength_mm",
         "border_smooth_max_mm",
+        "surface_smooth_iterations",
+        "surface_smooth_lambda",
+        "surface_smooth_mu",
+        "surface_smooth_max_mm",
     )
     # Enteros estrictamente positivos (no float, no cero).
     LIMITES_ENTEROS = {
@@ -170,6 +174,7 @@ class Configuracion:
         "max_refined_cache_entries",
         "max_refined_cache_bytes",
         "surface_subdivision_iterations",
+        "surface_smooth_iterations",
     }
     # Tolerancias y longitudes: float finito y > 0.
     LIMITES_POSITIVOS = {
@@ -186,12 +191,14 @@ class Configuracion:
         "clip_connect_mm",
         "border_smooth_wavelength_mm",
         "border_smooth_max_mm",
+        "surface_smooth_max_mm",
     }
     # Ratios en (0, 1].
     LIMITES_RATIOS = {
         "max_rib_width_ratio",
         "fragment_vertex_ratio",
         "smooth_factor",
+        "surface_smooth_lambda",
     }
     CLAVES_COMPROBACION = (
         "blender",

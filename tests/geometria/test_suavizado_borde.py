@@ -37,7 +37,9 @@ class SuavizadoDeContorno(unittest.TestCase):
         )
         np.testing.assert_allclose(suavizados[0], puntos[0])
         radios = np.linalg.norm(suavizados[1:, :2], axis=1)
-        self.assertLess(float(np.max(np.abs(radios - 30.0))), 0.2)
+        # Criterio táctil: residual < 0,15 mm sobre dientes de ±1,2 mm.
+        self.assertLess(float(np.max(np.abs(radios - 30.0))), 0.15)
+        self.assertLess(float(np.ptp(radios)), 0.15)
         self.assertGreater(desplazamiento, 1.0)
         self.assertLess(float(np.max(np.abs(normales_suaves[1:, 0]))), 0.05)
         np.testing.assert_allclose(normales_suaves[0], normales[0])
@@ -51,6 +53,16 @@ class SuavizadoDeContorno(unittest.TestCase):
             suavizados[caras[:, 2]] - suavizados[caras[:, 0]],
         )
         self.assertTrue(np.all(np.einsum("ij,ij->i", cruz, cruz_original) > 0))
+
+    def test_tras_dos_pasadas_una_tercera_casi_no_mueve(self):
+        puntos, caras, normales = self._AbanicoDentado()
+        suaves, normales_suaves, _ = SuavizadoBorde.Aplicar(puntos, caras, normales)
+        otra, _, residual = SuavizadoBorde.Aplicar(suaves, caras, normales_suaves)
+        self.assertLess(residual, 0.05)
+        self.assertLess(
+            float(np.linalg.norm(otra - suaves, axis=1).max()),
+            0.05,
+        )
 
     def test_el_peine_desaparece_y_el_tramo_recto_se_queda(self):
         # Borde superior con dientes de 0,9 mm cada milímetro. El resto es recto.
@@ -80,11 +92,14 @@ class SuavizadoDeContorno(unittest.TestCase):
             float(np.linalg.norm(suavizados[interior] - puntos[interior], axis=1).max()),
             0.0,
         )
+        # Con wavelength 24 mm el bucle cerrado redondea esquinas; el tramo
+        # recto puede moverse décimas de mm, no debe adoptar el peine.
         abajo = suavizados[:columnas]
-        self.assertLess(float(np.max(np.abs(abajo[20:60, 1]))), 0.05)
+        self.assertLess(float(np.max(np.abs(abajo[20:60, 1]))), 0.4)
         arriba = suavizados[(filas - 1) * columnas :, 1]
         dientes = arriba[20:60:2] - arriba[21:60:2]
-        self.assertLess(float(np.max(np.abs(dientes))), 0.05)
+        # Residual alternante bajo el umbral táctil (dientes originales ±0,9 mm).
+        self.assertLess(float(np.max(np.abs(dientes))), 0.15)
 
     def test_un_contorno_corto_y_liso_no_se_mueve(self):
         puntos = np.array(
@@ -114,7 +129,7 @@ class SuavizadoDeContorno(unittest.TestCase):
             solid_mm=2.0,
         )
         radios = np.linalg.norm(vertices[1:97, :2], axis=1)
-        self.assertLess(float(np.max(np.abs(radios - 30.0))), 0.2)
+        self.assertLess(float(np.max(np.abs(radios - 30.0))), 0.15)
         self.assertLess(float(np.linalg.norm(vertices[0])), 1e-9)
 
 

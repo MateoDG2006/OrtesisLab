@@ -18,9 +18,10 @@ from OrtesisLabPlugin.util.Utilidades import Configuracion, Registro
 
 from .ConfiguracionBackend import ConfiguracionBackend
 from .enums import ITEMS_TERMINALES
-from .GeneradorWeb import EJES, GeneradorWeb
+from .GeneradorWeb import EJES, PATRONES, GeneradorWeb
 from .LectorSuperficie import LectorSuperficie
 from .persistence.Contratos import (
+    MAXIMO_LOTES_PENDIENTES,
     ErrorPersistencia,
     ProgresoLote,
     SesionInvalida,
@@ -31,7 +32,8 @@ from .services.ContextoUsuario import ContextoUsuario
 from .services.ServicioHistorial import ServicioHistorial
 from .services.ServicioImports import ServicioImports
 from .services.ServicioLotes import ServicioLotes
-from .storage.AlmacenamientoPrivado import PATRON_CLAVE
+from .services.ServicioPlantillasLote import ServicioPlantillasLote
+from .storage.AlmacenamientoPrivado import PATRON_CLAVE, Almacen, AlmacenamientoNoDisponible
 
 ID_SUBIDA_SUPERFICIE = "superficie-entrada"
 INTERVALO_PROGRESO_S = ConfiguracionBackend.Cargar("web")["intervalo_progreso_s"]
@@ -69,12 +71,13 @@ class EstadoApp(rx.State):
     usar_diamond: bool = False
     usar_square: bool = False
     usar_solid: bool = False
-    eje: str = "ninguno"
-    desde: str = "10"
-    hasta: str = "20"
-    paso: str = "5"
+    # Filas de barrido en /lote: {id, clave, desde, hasta, paso}. Vacío = no variar números.
+    barridos: list[dict[str, str]] = []
     ambos_revestimientos: bool = False
     avanzados: bool = False
+    plantillas: list[dict[str, str]] = []
+    plantilla_nombre: str = ""
+    plantillas_marcadas: list[str] = []
 
     ocupado: bool = False
     mensaje: str = (
@@ -112,6 +115,21 @@ class EstadoApp(rx.State):
     @rx.var
     def pide_semilla(self) -> bool:
         return Patron.PideSemilla(self.pattern)
+
+    @rx.event
+    def TeclaPatron(self, key: str):
+        """Flechas en el radiogroup de patrones (Diseño); usa el patrón actual."""
+        orden = list(PATRONES)
+        codigo = self.pattern if self.pattern in orden else orden[0]
+        indice = orden.index(codigo)
+        if key in ("ArrowRight", "ArrowDown"):
+            self.pattern = orden[(indice + 1) % len(orden)]
+        elif key in ("ArrowLeft", "ArrowUp"):
+            self.pattern = orden[(indice - 1) % len(orden)]
+        elif key == "Home":
+            self.pattern = orden[0]
+        elif key == "End":
+            self.pattern = orden[-1]
 
     @rx.event
     async def CargarSuperficie(self, archivos: list[rx.UploadFile]):
@@ -224,6 +242,10 @@ class EstadoApp(rx.State):
         except ErrorPersistencia as exc:
             self.mensaje = str(exc)
             return
+        try:
+            await self._RefrescarPlantillas(usuario)
+        except ErrorPersistencia:
+            pass
         if progreso is None:
             self.mensaje = "Todavía no hay lotes. Cree uno con el formulario «Nuevo lote»."
             return
@@ -269,7 +291,7 @@ class EstadoApp(rx.State):
 
     @rx.event(background=True)
     async def Generar(self):
-        # Registra el lote en la base y sigue su avance; el trabajador construye las variantes.
+        # Registra el lote; en modo lote el worker sigue solo (sin polling bloqueante).
         async with self:
             if self._trabajando:
                 return
@@ -299,9 +321,13 @@ class EstadoApp(rx.State):
             request_id = uuid.UUID(hex=self._solicitud) if self._solicitud else uuid.uuid4()
             definicion = {
                 "modo": "lote" if self.modo_lote else "una",
-                "eje": self.eje,
+                "barridos": [
+                    {"clave": fila["clave"], "desde": fila["desde"], "hasta": fila["hasta"], "paso": fila["paso"]}
+                    for fila in self.barridos
+                ],
                 "superficie": superficie_archivo or "plantilla",
             }
+            modo_lote = self.modo_lote
 
         try:
             usuario = await asyncio.to_thread(ContextoUsuario.Requerir, cookie)
@@ -336,11 +362,15 @@ class EstadoApp(rx.State):
         async with self:
             self.lote_id = str(lote.id)
             self._solicitud = ""
-            self.mensaje = "En cola. El trabajador construye cada variante."
-            modo_lote = self.modo_lote
+            self.mensaje = (
+                f"Lote en cola ({len(variantes)} variantes). El trabajador construye solo; "
+                "abra este lote para ver el avance."
+            )
+            self.ocupado = False
+            self._trabajando = 0
         if modo_lote:
-            # El progreso de un lote se sigue en su propia página.
             yield rx.redirect(f"/lote?id={lote.id}")
+            return
         await self._Seguir(usuario, lote.id)
 
     @rx.event(background=True)
@@ -401,14 +431,20 @@ class EstadoApp(rx.State):
         if usuario is None or coincidencia is None:
             self.mensaje = "Inicie sesión para descargar el STL."
             return
+        asset_id = uuid.UUID(coincidencia.group("asset"))
         try:
-            url = await asyncio.to_thread(
-                ServicioHistorial.RegistrarDescarga, usuario, uuid.UUID(coincidencia.group("asset"))
-            )
-        except ErrorPersistencia as exc:
+            await asyncio.to_thread(ServicioHistorial.RegistrarDescarga, usuario, asset_id)
+            # rx.download(url=…) solo admite rutas que empiezan por /; MinIO es URL absoluta.
+            clave = Almacen.Clave(usuario.user_id, asset_id, stl_publico=True)
+            datos = await asyncio.to_thread(Almacen.Actual().Leer, clave)
+        except (ErrorPersistencia, AlmacenamientoNoDisponible) as exc:
             self.mensaje = str(exc)
             return
-        return rx.download(url=url, filename=f"ortesis-{coincidencia.group('asset')[:8]}.stl")
+        return rx.download(
+            data=datos,
+            filename=f"ortesis-{coincidencia.group('asset')[:8]}.stl",
+            mime_type="application/octet-stream",
+        )
 
     @rx.event
     async def DescargarVista(self):
@@ -428,9 +464,9 @@ class EstadoApp(rx.State):
 
     @rx.var(cache=False)
     def resumen_lote(self) -> str:
-        # Vista previa del lote: cuántas variantes y cuánto tardará, o por qué no es válido.
+        # Vista previa del lote: cuenta sin materializar el producto cartesiano.
         try:
-            cantidad = len(self._Variantes(True))
+            cantidad = self._ContarVariantes()
         except (ValueError, OrtesisLabError) as exc:
             return str(exc)
         minutos = max(1, math.ceil(cantidad * CAPACIDAD_VARIANTE_S / 60))
@@ -439,7 +475,7 @@ class EstadoApp(rx.State):
     @rx.var(cache=False)
     def lote_valido(self) -> bool:
         try:
-            self._Variantes(True)
+            self._ContarVariantes()
         except (ValueError, OrtesisLabError):
             return False
         return True
@@ -550,23 +586,331 @@ class EstadoApp(rx.State):
         self.ficha_precio = ficha["precio"]
         self.ficha_error = ficha["error"]
 
+    def _PayloadPlantilla(self) -> dict:
+        return {
+            "parametros": {
+                "pattern": self.pattern,
+                "cell_mm": self.cell_mm,
+                "rib_width_mm": self.rib_width_mm,
+                "rib_height_mm": self.rib_height_mm,
+                "liner": self.liner,
+                "skin_mm": self.skin_mm,
+                "solid_mm": self.solid_mm,
+                "border_mm": self.border_mm,
+                "rounding_mm": self.rounding_mm,
+                "angle_deg": self.angle_deg,
+                "seed": self.seed,
+                "reinforce_y_mm": self.reinforce_y_mm,
+                "reinforce_width_mm": self.reinforce_width_mm,
+                "flip_normals": self.flip_normals,
+                "surface_step_mm": self.surface_step_mm,
+            },
+            "patrones": [codigo for codigo, campo in CASILLAS_PATRON if getattr(self, campo)],
+            "barridos": [
+                {"clave": fila["clave"], "desde": fila["desde"], "hasta": fila["hasta"], "paso": fila["paso"]}
+                for fila in self.barridos
+            ],
+            "ambos_revestimientos": self.ambos_revestimientos,
+            "superficie": self.superficie_archivo,
+        }
+
+    def _AplicarPayloadPlantilla(self, payload: dict) -> None:
+        parametros = payload.get("parametros") or {}
+        for campo in (
+            "pattern",
+            "cell_mm",
+            "rib_width_mm",
+            "rib_height_mm",
+            "skin_mm",
+            "solid_mm",
+            "border_mm",
+            "rounding_mm",
+            "angle_deg",
+            "seed",
+            "reinforce_y_mm",
+            "reinforce_width_mm",
+            "surface_step_mm",
+        ):
+            if campo in parametros:
+                setattr(self, campo, str(parametros[campo]))
+        if "liner" in parametros:
+            self.liner = bool(parametros["liner"])
+        if "flip_normals" in parametros:
+            self.flip_normals = bool(parametros["flip_normals"])
+        elegidos = set(payload.get("patrones") or [])
+        for codigo, campo in CASILLAS_PATRON:
+            setattr(self, campo, codigo in elegidos)
+        self.barridos = [
+            {
+                "id": uuid.uuid4().hex[:8],
+                "clave": str(fila["clave"]),
+                "desde": str(fila.get("desde", "10")),
+                "hasta": str(fila.get("hasta", "20")),
+                "paso": str(fila.get("paso", "5")),
+            }
+            for fila in (payload.get("barridos") or [])
+            if fila.get("clave") in EJES
+        ]
+        self.ambos_revestimientos = bool(payload.get("ambos_revestimientos", False))
+        self.superficie_archivo = str(payload.get("superficie") or "")
+        if not self.superficie_archivo:
+            self.superficie_nombre = "Superficie incluida"
+            self.superficie_detalle = "Plantilla incluida en el proyecto."
+
+    def _FilasPlantillas(self, filas) -> list[dict[str, str]]:
+        return [{"id": str(fila.id), "nombre": fila.nombre} for fila in filas]
+
+    async def _RefrescarPlantillas(self, usuario) -> None:
+        filas = await asyncio.to_thread(ServicioPlantillasLote.Listar, usuario)
+        self.plantillas = self._FilasPlantillas(filas)
+
+    @rx.event
+    async def CargarListaPlantillas(self):
+        usuario = await self._Usuario()
+        if usuario is None:
+            self.plantillas = []
+            return
+        try:
+            await self._RefrescarPlantillas(usuario)
+        except ErrorPersistencia as exc:
+            self.mensaje = str(exc)
+
+    @rx.event
+    async def GuardarPlantilla(self):
+        usuario = await self._Usuario()
+        if usuario is None:
+            return
+        try:
+            self._ContarVariantes()
+            guardada = await asyncio.to_thread(
+                ServicioPlantillasLote.Guardar,
+                usuario,
+                self.plantilla_nombre,
+                self._PayloadPlantilla(),
+            )
+            await self._RefrescarPlantillas(usuario)
+        except (ValueError, OrtesisLabError, ErrorPersistencia) as exc:
+            self.mensaje = str(exc)
+            return
+        self.plantilla_nombre = guardada.nombre
+        self.mensaje = f"Plantilla «{guardada.nombre}» guardada."
+
+    @rx.event
+    async def CargarPlantilla(self, plantilla_id: str):
+        usuario = await self._Usuario()
+        if usuario is None:
+            return
+        try:
+            plantilla = await asyncio.to_thread(
+                ServicioPlantillasLote.Obtener, usuario, uuid.UUID(plantilla_id)
+            )
+        except (ValueError, ErrorPersistencia) as exc:
+            self.mensaje = str(exc)
+            return
+        self._AplicarPayloadPlantilla(plantilla.payload)
+        self.plantilla_nombre = plantilla.nombre
+        self.mensaje = f"Plantilla «{plantilla.nombre}» cargada en el formulario."
+
+    @rx.event
+    async def BorrarPlantilla(self, plantilla_id: str):
+        usuario = await self._Usuario()
+        if usuario is None:
+            return
+        try:
+            await asyncio.to_thread(ServicioPlantillasLote.Borrar, usuario, uuid.UUID(plantilla_id))
+        except (ValueError, ErrorPersistencia) as exc:
+            self.mensaje = str(exc)
+            return
+        self.plantillas_marcadas = [pid for pid in self.plantillas_marcadas if pid != plantilla_id]
+        self.mensaje = "Plantilla eliminada."
+        await self._RefrescarPlantillas(usuario)
+
+    @rx.event
+    def MarcarPlantilla(self, plantilla_id: str, marcada: bool):
+        if marcada:
+            if plantilla_id not in self.plantillas_marcadas:
+                self.plantillas_marcadas = [*self.plantillas_marcadas, plantilla_id]
+        else:
+            self.plantillas_marcadas = [pid for pid in self.plantillas_marcadas if pid != plantilla_id]
+
+    @rx.event(background=True)
+    async def PedirPlantillasSeleccionadas(self):
+        """Encola hasta ``MAXIMO_LOTES_PENDIENTES`` plantillas marcadas; el worker sigue solo."""
+        async with self:
+            if self._trabajando:
+                return
+            ids = list(self.plantillas_marcadas)
+            if not ids:
+                self.mensaje = "Marque al menos una plantilla."
+                return
+            self._trabajando = 1
+            self.ocupado = True
+            self.mensaje = "Encolando plantillas…"
+            cookie = self.router.headers.cookie
+            superficie_actual = self.superficie_archivo
+
+        encolados = 0
+        omitidos = 0
+        ultimo_id = ""
+        try:
+            usuario = await asyncio.to_thread(ContextoUsuario.Requerir, cookie)
+            for plantilla_id in ids:
+                if encolados >= MAXIMO_LOTES_PENDIENTES:
+                    omitidos = len(ids) - encolados
+                    break
+                plantilla = await asyncio.to_thread(
+                    ServicioPlantillasLote.Obtener, usuario, uuid.UUID(plantilla_id)
+                )
+                async with self:
+                    self._AplicarPayloadPlantilla(plantilla.payload)
+                    try:
+                        variantes = self._Variantes(True)
+                        payload_def = {
+                            "modo": "lote",
+                            "plantilla": plantilla.nombre,
+                            "barridos": [
+                                {
+                                    "clave": fila["clave"],
+                                    "desde": fila["desde"],
+                                    "hasta": fila["hasta"],
+                                    "paso": fila["paso"],
+                                }
+                                for fila in self.barridos
+                            ],
+                            "superficie": self.superficie_archivo or "plantilla",
+                        }
+                        superficie = self.superficie_archivo
+                    except (ValueError, OrtesisLabError) as exc:
+                        self.mensaje = f"«{plantilla.nombre}»: {exc}"
+                        continue
+                try:
+                    importacion = await asyncio.to_thread(ServicioImports.Resolver, usuario, superficie)
+                    lote = await asyncio.to_thread(
+                        ServicioLotes.Solicitar,
+                        usuario,
+                        SolicitudLote(
+                            import_id=importacion.id,
+                            request_id=uuid.uuid4(),
+                            mode="sweep" if len(variantes) > 1 else "single",
+                            definition=payload_def,
+                            variantes=variantes,
+                        ),
+                    )
+                except ErrorPersistencia as exc:
+                    async with self:
+                        self.mensaje = str(exc)
+                    break
+                encolados += 1
+                ultimo_id = str(lote.id)
+        except ErrorPersistencia as exc:
+            async with self:
+                self.mensaje = str(exc)
+                self.ocupado = False
+                self._trabajando = 0
+                self.superficie_archivo = superficie_actual
+            return
+        except Exception:
+            Registro.Obtener("web").exception("Fallo al encolar plantillas")
+            async with self:
+                self.mensaje = "No se pudieron encolar las plantillas."
+                self.ocupado = False
+                self._trabajando = 0
+            return
+
+        async with self:
+            self.ocupado = False
+            self._trabajando = 0
+            if encolados:
+                extra = f" {omitidos} quedaron fuera del tope de {MAXIMO_LOTES_PENDIENTES}." if omitidos else ""
+                self.mensaje = f"Encolados {encolados} lote(s). El trabajador construye solo.{extra}"
+                self.lote_id = ultimo_id or self.lote_id
+            elif not self.mensaje.startswith("Ya hay"):
+                self.mensaje = self.mensaje or "No se encoló ningún lote."
+        if ultimo_id:
+            yield rx.redirect(f"/lote?id={ultimo_id}")
+
+    @rx.event
+    def AnadirBarrido(self):
+        libres = [clave for clave in EJES if clave not in {fila["clave"] for fila in self.barridos}]
+        if not libres:
+            self.mensaje = "Ya añadió todas las características disponibles."
+            return
+        self.barridos = [
+            *self.barridos,
+            {
+                "id": uuid.uuid4().hex[:8],
+                "clave": libres[0],
+                "desde": "10",
+                "hasta": "20",
+                "paso": "5",
+            },
+        ]
+
+    @rx.event
+    def QuitarBarrido(self, fila_id: str):
+        self.barridos = [fila for fila in self.barridos if fila["id"] != fila_id]
+
+    @rx.event
+    def set_barrido_clave(self, fila_id: str, clave: str):
+        if clave not in EJES:
+            return
+        usados = {fila["clave"] for fila in self.barridos if fila["id"] != fila_id}
+        if clave in usados:
+            self.mensaje = "Esa característica ya está en otro barrido."
+            return
+        self.barridos = [
+            {**fila, "clave": clave} if fila["id"] == fila_id else fila for fila in self.barridos
+        ]
+
+    @rx.event
+    def set_barrido_desde(self, fila_id: str, valor: str):
+        self.barridos = [
+            {**fila, "desde": valor} if fila["id"] == fila_id else fila for fila in self.barridos
+        ]
+
+    @rx.event
+    def set_barrido_hasta(self, fila_id: str, valor: str):
+        self.barridos = [
+            {**fila, "hasta": valor} if fila["id"] == fila_id else fila for fila in self.barridos
+        ]
+
+    @rx.event
+    def set_barrido_paso(self, fila_id: str, valor: str):
+        self.barridos = [
+            {**fila, "paso": valor} if fila["id"] == fila_id else fila for fila in self.barridos
+        ]
+
+    def _BarridosValidados(self) -> tuple[list[str], list[dict]]:
+        patrones = [codigo for codigo, campo in CASILLAS_PATRON if getattr(self, campo)]
+        barridos = []
+        for indice, fila in enumerate(self.barridos, start=1):
+            etiqueta = EJES.get(fila.get("clave", ""), f"Barrido {indice}")
+            barridos.append(
+                {
+                    "clave": fila["clave"],
+                    "desde": self._Numero(fila["desde"], f"{etiqueta} (desde)"),
+                    "hasta": self._Numero(fila["hasta"], f"{etiqueta} (hasta)"),
+                    "paso": self._Numero(fila["paso"], f"{etiqueta} (paso)"),
+                }
+            )
+        return patrones, barridos
+
+    def _ContarVariantes(self) -> int:
+        base = self._Opciones()
+        patrones, barridos = self._BarridosValidados()
+        return GeneradorWeb.ContarCombinaciones(
+            base, patrones, barridos, self.ambos_revestimientos
+        )
+
     def _Variantes(self, lote: bool) -> list[dict]:
         base = self._Opciones()
         if not lote:
             return [base]
-        patrones = [codigo for codigo, campo in CASILLAS_PATRON if getattr(self, campo)]
-        desde, hasta, paso = (0.0, 0.0, 1.0) if self.eje in ("", "ninguno") else (
-            self._Numero(self.desde, "Valor inicial"),
-            self._Numero(self.hasta, "Valor final"),
-            self._Numero(self.paso, "Paso"),
-        )
+        patrones, barridos = self._BarridosValidados()
         return GeneradorWeb.Combinaciones(
             base,
             patrones,
-            self.eje,
-            desde,
-            hasta,
-            paso,
+            barridos,
             self.ambos_revestimientos,
         )
 
@@ -628,16 +972,12 @@ for _campo in (
     "usar_diamond",
     "usar_square",
     "usar_solid",
-    "eje",
-    "desde",
-    "hasta",
-    "paso",
     "ambos_revestimientos",
     "avanzados",
+    "plantilla_nombre",
 ):
     EstadoApp._create_setter(_campo, EstadoApp.base_vars[_campo])
 
-ETIQUETAS_EJE = [("ninguno", "No variar números"), *EJES.items()]
 CASILLAS_PATRON = (
     ("VORONOI", "usar_voronoi"),
     ("HEX", "usar_hex"),

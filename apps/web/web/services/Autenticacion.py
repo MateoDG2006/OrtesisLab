@@ -1,51 +1,29 @@
 """Rutas de registro e inicio de sesión: /auth/registro, /auth/login y /auth/logout.
 
 Se montan con ``api_transformer``. La cuenta es un usuario y una contraseña
-guardados en PostgreSQL.
+guardados en PostgreSQL. El HTML vive en ``assets/auth/`` vía ``PlantillaAuth``.
 """
 
 from __future__ import annotations
 
 import asyncio
-from html import escape
 from urllib.parse import parse_qs
 
 from starlette.applications import Starlette
 from starlette.requests import Request
-from starlette.responses import HTMLResponse, PlainTextResponse, RedirectResponse, Response
+from starlette.responses import PlainTextResponse, RedirectResponse, Response
 from starlette.routing import Mount, Route
 
 from web.Ajustes import Ajustes
 from web.persistence.Contratos import ErrorPersistencia, SesionInvalida
 
 from .ContextoUsuario import DURACION_SESION, NOMBRE_COOKIE, ContextoUsuario, CredencialesInvalidas, CuentaYaExiste
+from .PlantillaAuth import PlantillaAuth
 
 
 def _Campos(cuerpo: bytes) -> dict[str, str]:
     datos = parse_qs(cuerpo.decode("utf-8", errors="replace"), keep_blank_values=True)
     return {clave: valores[0] for clave, valores in datos.items()}
-
-
-def _Pagina(titulo: str, accion: str, error: str, enlace: str) -> HTMLResponse:
-    aviso = f"<p>{escape(error)}</p>" if error else ""
-    cuerpo = f"""<!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>{escape(titulo)}</title>
-<style>
-body {{ font-family: system-ui, sans-serif; margin: 4rem auto; max-width: 24rem; }}
-label {{ display: block; margin-top: 1rem; }}
-input {{ width: 100%; padding: .5rem; box-sizing: border-box; }}
-button {{ margin-top: 1rem; }}
-</style></head><body>
-<h1>{escape(titulo)}</h1>
-{aviso}
-<form method="post" action="{escape(accion)}">
-<label>Usuario <input name="usuario" autocomplete="username" required></label>
-<label>Contraseña <input name="password" type="password" autocomplete="current-password" required></label>
-<button type="submit">{escape(titulo)}</button>
-</form>
-<p>{enlace}</p>
-</body></html>"""
-    return HTMLResponse(cuerpo)
 
 
 def _ConCookie(respuesta: Response, valor: str, ajustes: Ajustes) -> Response:
@@ -67,20 +45,21 @@ class Autenticacion:
         """Aplicación raíz que Reflex usa como transformador; monta /auth."""
         ajustes = Ajustes.Cargar()
 
-        def login_pagina(error: str = "") -> HTMLResponse:
-            return _Pagina(
+        def login_pagina(error: str = ""):
+            return PlantillaAuth.Pagina(
                 "Iniciar sesión",
                 "/auth/login",
                 error,
                 '<a href="/auth/registro">Crear cuenta</a>',
             )
 
-        def registro_pagina(error: str = "") -> HTMLResponse:
-            return _Pagina(
+        def registro_pagina(error: str = ""):
+            return PlantillaAuth.Pagina(
                 "Crear cuenta",
                 "/auth/registro",
                 error,
                 '<a href="/auth/login">Ya tengo cuenta</a>',
+                registro=True,
             )
 
         async def login(request: Request) -> Response:

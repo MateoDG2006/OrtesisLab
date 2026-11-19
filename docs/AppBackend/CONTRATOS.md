@@ -15,7 +15,7 @@ Todos los eventos que leen o escriben datos resuelven primero el usuario desde l
 | `SeguirLote` | `lote_id` actual | Reanuda la lectura del progreso de un lote abierto |
 | `CancelarLote` | `lote_id` actual | Pide la cancelación; los ítems en cola pasan a `cancelled` y el trabajador detiene el que corre entre etapas |
 | `Ver(id)` / `Comparar(id)` | ID de ficha del lote | Selecciona o alterna vista; cuarta comparación se rechaza con mensaje |
-| `Descargar(id)` | ID de ficha del lote | Registra `export_downloaded` y descarga desde la `object_url`; ID ausente o ficha sin archivo no hace nada |
+| `Descargar(id)` | ID de ficha del lote | Registra `export_downloaded`, lee el STL del bucket y lo envía con `rx.download(data=…)`; ID ausente o ficha sin archivo no hace nada |
 | `DescargarVista` | Botón Descargar STL del escenario de `/` | Busca en `resultados` la ficha cuyo `archivo` es el que muestra el visor y llama a `Descargar`; sin ficha no hace nada |
 
 ## Eventos de `/historial`
@@ -36,7 +36,7 @@ No son endpoints REST documentados ni una API estable para terceros. Los nombres
 
 La tupla compartida es `(vertices, faces, normals, border)`. Coordenadas y distancias en mm; `vertices` y `normals`: arrays float64 `(N,3)`; `faces`: enteros `(M,3)`; `border`: float64 `(N,)`. `border` mide caminos por aristas hasta el contorno, no distancia euclidiana al borde ni al plano XY.
 
-Para un **NPZ externo** son obligatorias `vertices`, `faces`, `normals`. Para el **NPZ normalizado interno** se guarda además `border`. La plantilla incluida se prepara mediante `AnalizadorMalla` y se registra como import propio de cada usuario la primera vez que la usa. El lector no usa pickle. Se exigen índices enteros válidos, normales finitas y no nulas, triángulos no degenerados/duplicados, orientación consistente, contornos regulares y una sola componente abierta.
+Para un **NPZ externo** son obligatorias `vertices`, `faces`, `normals`. Para el **NPZ normalizado interno** se guarda además `border`. La plantilla incluida se prepara con `NormalesDeCaras` + `AnalizadorMalla.Preparar` (las normales del archivo se recalculan desde las caras) y se registra como import propio de cada usuario la primera vez que la usa. El lector no usa pickle. Se exigen índices enteros válidos, normales finitas y no nulas, triángulos no degenerados/duplicados, orientación consistente, contornos regulares y una sola componente abierta.
 
 Límites: 50 × 1024 × 1024 bytes de subida (50 MiB); 128 MiB de expansión declarada para NPZ. El texto de la UI dice MB. La selección cliente limita a un archivo y el servidor lo vuelve a comprobar. STL ASCII y binario se aceptan; las normales de STL se reconstruyen con áreas de triángulos. La cuantización de coincidencias usa `clip_snap_mm=0.0001` en las coordenadas que llegan. Un mismo original (mismo SHA-256) del mismo usuario reutiliza el import existente. Las coordenadas no se multiplican.
 
@@ -48,7 +48,7 @@ Las 17 claves canónicas están en [PARAMETROS.md](../BlenderPlugin/PARAMETROS.m
 
 ## Variantes, lotes y fichas
 
-Rango: `desde + i*paso <= hasta`, inclusive si se alcanza exactamente. Paso > 0, números finitos y desde ≤ hasta. El barrido de `seed` exige enteros no negativos. El número de variantes se acota **antes** de materializar el rango. Cada patrón no macizo se duplica si se prueban ambas capas; `SOLID` no se duplica por capa. No hay deduplicación geométrica.
+Uno o más barridos `{clave, desde, hasta, paso}` (claves de `web.yaml` `ejes`, sin repetir). Por barrido: `desde + i*paso <= hasta`, inclusive si se alcanza exactamente; paso > 0, números finitos y desde ≤ hasta; `seed` exige enteros no negativos. Las listas de valores se combinan en producto cartesiano con los patrones y, si aplica, ambas capas. Lista vacía de barridos = solo patrones (+ liner). Cada patrón no macizo se duplica si se prueban ambas capas; `SOLID` no se duplica por capa. No hay deduplicación geométrica ni tope de variantes.
 
 Ejemplo: patrones `HEX` y `SQUARE`, celdas 10/15/20, con y sin capa → `2 × 3 × 2 = 12`. Ejes disponibles: `cell_mm`, `rib_width_mm`, `rib_height_mm`, `skin_mm`, `solid_mm`, `border_mm`, `rounding_mm`, `angle_deg`, `seed`, `reinforce_width_mm`, `reinforce_y_mm`.
 

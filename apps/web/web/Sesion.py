@@ -53,49 +53,58 @@ class Sesion:
         autenticado = EstadoApp.autenticado if autenticado is None else autenticado
         nombre = EstadoApp.usuario_nombre if nombre is None else nombre
         secciones = (("/", "Diseño"), ("/lote", "Lotes"), ("/historial", "Historial"))
-        return rx.hstack(
-            rx.text("OrtesisLab", size="5", weight="bold", style={"letter_spacing": "-0.02em"}),
-            rx.el.nav(
-                *[
-                    rx.link(texto, href=ruta, custom_attrs={"aria-current": "page"} if ruta == activa else {})
-                    for ruta, texto in secciones
-                ],
-                class_name="ol-nav",
-                aria_label="Secciones",
-            ),
-            rx.hstack(
-                rx.icon_button(
-                    rx.color_mode_cond(rx.icon("moon", size=18), rx.icon("sun", size=18)),
-                    on_click=rx.toggle_color_mode,
-                    size="3",
-                    variant="outline",
-                    color_scheme="gray",
-                    aria_label="Cambiar entre modo claro y oscuro",
+        return rx.el.header(
+            rx.el.div(
+                rx.link("OrtesisLab", href="/", class_name="ol-brand", aria_label="OrtesisLab · inicio"),
+                rx.el.nav(
+                    *[
+                        rx.link(
+                            texto,
+                            href=ruta,
+                            custom_attrs={"aria-current": "page"} if ruta == activa else {},
+                        )
+                        for ruta, texto in secciones
+                    ],
+                    class_name="ol-nav",
+                    aria_label="Secciones",
                 ),
-                rx.cond(
-                    autenticado,
-                    rx.hstack(
-                        rx.box(
-                            rx.avatar(fallback=nombre.to(str)[:2].upper(), size="2", radius="full", variant="solid"),
-                            rx.text(nombre, size="2", weight="medium"),
-                            class_name="ol-chip",
+                rx.hstack(
+                    rx.icon_button(
+                        rx.color_mode_cond(rx.icon("moon", size=18), rx.icon("sun", size=18)),
+                        on_click=rx.toggle_color_mode,
+                        size="3",
+                        variant="outline",
+                        color_scheme="gray",
+                        aria_label="Cambiar entre modo claro y oscuro",
+                    ),
+                    rx.cond(
+                        autenticado,
+                        rx.hstack(
+                            rx.box(
+                                rx.avatar(
+                                    fallback=nombre.to(str)[:2].upper(),
+                                    size="2",
+                                    radius="full",
+                                    variant="solid",
+                                ),
+                                rx.text(nombre, size="2", weight="medium"),
+                                class_name="ol-chip",
+                            ),
+                            Sesion.Salir(),
+                            spacing="2",
+                            align="center",
                         ),
-                        Sesion.Salir(),
-                        spacing="2",
-                        align="center",
+                        rx.hstack(
+                            Sesion.Boton("Crear cuenta", "/auth/registro", "soft"),
+                            Sesion.Boton("Iniciar sesión", "/auth/login", "solid"),
+                            spacing="2",
+                        ),
                     ),
-                    rx.hstack(
-                        Sesion.Boton("Crear cuenta", "/auth/registro", "soft"),
-                        Sesion.Boton("Iniciar sesión", "/auth/login", "solid"),
-                        spacing="2",
-                    ),
+                    spacing="2",
+                    align="center",
                 ),
-                spacing="2",
-                align="center",
+                class_name="ol-navbar-inner",
             ),
-            width="100%",
-            align="center",
-            justify="between",
-            wrap="wrap",
-            spacing="4",
+            class_name="ol-navbar",
+            role="banner",
         )

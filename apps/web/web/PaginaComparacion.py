@@ -6,7 +6,9 @@ El lote se crea y se sigue en /lote (PaginaLote).
 from __future__ import annotations
 
 import reflex as rx
+from reflex_base.event import key_event
 from reflex_base.vars.base import Var
+from reflex_components_core.el.elements.typography import Div
 
 from .ConfiguracionBackend import ConfiguracionBackend
 from .EstadoApp import ID_SUBIDA_SUPERFICIE, EstadoApp
@@ -16,14 +18,21 @@ from .Sesion import Sesion
 
 AYUDAS = ConfiguracionBackend.Cargar("web")["ayudas"]
 
-# Trazos de los iconos de patrón del canvas «OrtesisLab Rediseño».
+
+class _GrupoTeclado(Div):
+    """``div`` HTML con ``on_key_down`` (el ``rx.el.div`` de fábrica no lo expone)."""
+
+    @classmethod
+    def get_event_triggers(cls):
+        return {**super().get_event_triggers(), "on_key_down": key_event}
+
+# Iconos Lucide (rx.icon) por código de patrón del núcleo.
 ICONOS_PATRON = {
-    "VORONOI": "M3 8l6-5 6 3 1 6-5 4-6-2z M15 6l6-1v8l-5-1 M16 12l5 1v8l-6-1-4-4 M5 14l-2 7h12",
-    "HEX": "M7 2.5l4 2.3v4.6L7 11.7 3 9.4V4.8z M17 2.5l4 2.3v4.6l-4 2.3-4-2.3V4.8z "
-    "M12 12.3l4 2.3v4.6l-4 2.3-4-2.3v-4.6z",
-    "DIAMOND": "M7 2l5 5-5 5-5-5z M17 2l5 5-5 5-5-5z M7 12l5 5-5 5-5-5z M17 12l5 5-5 5-5-5z",
-    "SQUARE": "M3 3h7.5v7.5H3z M13.5 3H21v7.5h-7.5z M3 13.5h7.5V21H3z M13.5 13.5H21V21h-7.5z",
-    "SOLID": "M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4z",
+    "VORONOI": "share-2",
+    "HEX": "hexagon",
+    "DIAMOND": "diamond",
+    "SQUARE": "layout-grid",
+    "SOLID": "box",
 }
 
 
@@ -31,47 +40,82 @@ class PaginaComparacion:
     """Escenario con el visor y la ficha, y columna con parámetros y superficie."""
 
     @staticmethod
-    def Pagina(activa: str, *contenido, autenticado=None, nombre=None) -> rx.Component:
+    def Pagina(
+        activa: str,
+        titulo: str,
+        *contenido,
+        autenticado=None,
+        nombre=None,
+        relleno: bool = True,
+    ) -> rx.Component:
+        if relleno:
+            cuerpo = rx.vstack(*contenido, spacing="5", width="100%")
+            clases_main = "ol-main ol-main-pad"
+        else:
+            cuerpo = rx.box(*contenido, class_name="ol-workspace-host")
+            clases_main = "ol-main"
         return rx.box(
-            rx.vstack(Sesion.Barra(activa, autenticado, nombre), *contenido, spacing="5", width="100%"),
-            background="var(--ol-bg)",
-            color="var(--ol-text)",
-            min_height="100vh",
-            padding="20px",
+            Sesion.Barra(activa, autenticado, nombre),
+            rx.el.main(
+                rx.el.h1(titulo, class_name="ol-sr-only"),
+                cuerpo,
+                class_name=clases_main,
+            ),
+            class_name="ol-shell",
         )
 
     @staticmethod
     def Index() -> rx.Component:
         return PaginaComparacion.Pagina(
             "/",
-            rx.flex(
+            "Diseño",
+            rx.el.div(
                 PaginaComparacion.Escenario(),
-                rx.vstack(
-                    PaginaComparacion.Formulario(),
-                    PaginaComparacion.Superficie(),
-                    spacing="4",
-                    flex="1 1 380px",
-                    min_width="0",
+                rx.el.aside(
+                    rx.el.div(
+                        PaginaComparacion.Formulario(),
+                        PaginaComparacion.Superficie(),
+                        class_name="ol-aside-scroll",
+                    ),
+                    class_name="ol-aside",
+                    aria_label="Parámetros y superficie",
                 ),
-                wrap="wrap",
-                gap="20px",
-                width="100%",
-                align="stretch",
+                class_name="ol-workspace",
             ),
+            relleno=False,
         )
 
     @staticmethod
     def Escenario() -> rx.Component:
         return rx.el.section(
-            rx.text("Una ortesis · previsualización", size="2", weight="medium", class_name="ol-muted"),
+            rx.el.div(
+                rx.el.p("Una ortesis · previsualización", class_name="ol-stage-title"),
+                class_name="ol-stage-head",
+            ),
             rx.cond(EstadoApp.archivo != "", PaginaComparacion.Resumen(), rx.fragment()),
             rx.cond(
                 EstadoApp.archivo != "",
-                PaginaComparacion.Visor(EstadoApp.archivo, "640px"),
-                rx.center(
-                    rx.text("La malla aparece aquí al pulsar Previsualizar.", size="2", class_name="ol-muted"),
-                    min_height="480px",
-                    width="100%",
+                rx.box(
+                    PaginaComparacion.Visor(EstadoApp.archivo, "100%"),
+                    class_name="ol-visor-slot",
+                ),
+                rx.box(
+                    rx.text("Aún no hay previsualización.", size="3", weight="bold"),
+                    rx.text(
+                        "Cargue una superficie o use la incluida y pulse Previsualizar.",
+                        size="2",
+                        class_name="ol-muted",
+                    ),
+                    rx.button(
+                        "Usar superficie incluida",
+                        on_click=EstadoApp.UsarSuperficieIncluida,
+                        disabled=EstadoApp.ocupado | EstadoApp.subiendo_superficie,
+                        radius="full",
+                        size="3",
+                        variant="outline",
+                        color_scheme="gray",
+                    ),
+                    class_name="ol-empty",
                 ),
             ),
             rx.cond(
@@ -79,17 +123,19 @@ class PaginaComparacion:
                 rx.text(EstadoApp.ficha_error, size="2", color_scheme="red"),
                 rx.fragment(),
             ),
-            rx.flex(
+            rx.el.div(
                 rx.vstack(
                     rx.text(EstadoApp.mensaje, size="2"),
                     rx.text(
-                        "PETG a 0,15 por gramo; la moneda no está declarada en el material. El volumen es el "
-                        "del cascarón, antes del voxel, y no predice el filamento ni la resistencia.",
+                        "Precio orientativo: 0,15 por gramo de PETG (moneda no fijada en el material). "
+                        "El volumen es del cascarón, antes del voxel; no estima filamento ni resistencia. "
+                        "Vista 3D: arrastre, rueda y flechas.",
                         size="1",
                         class_name="ol-muted",
                     ),
                     spacing="1",
-                    flex="1 1 280px",
+                    flex="1 1 240px",
+                    min_width="0",
                 ),
                 rx.hstack(
                     rx.button(
@@ -114,22 +160,10 @@ class PaginaComparacion:
                     spacing="3",
                     wrap="wrap",
                 ),
-                gap="16px",
-                align="end",
-                justify="between",
-                wrap="wrap",
-                width="100%",
+                class_name="ol-stage-actions",
             ),
             aria_label="Visor 3D",
-            style={
-                "flex": "999 1 640px",
-                "min_width": "0",
-                "position": "relative",
-                "display": "flex",
-                "flex_direction": "column",
-                "gap": "16px",
-                "background": "var(--ol-stage)",
-            },
+            class_name="ol-stage",
         )
 
     @staticmethod
@@ -156,7 +190,7 @@ class PaginaComparacion:
         return rx.el.section(
             rx.vstack(
                 rx.hstack(
-                    rx.heading("Parámetros", size="5", weight="medium"),
+                    rx.el.h2("Parámetros", class_name="ol-heading"),
                     rx.spacer(),
                     rx.button(
                         rx.icon("rotate-ccw", size=14),
@@ -173,21 +207,25 @@ class PaginaComparacion:
                 ),
                 rx.box(
                     PaginaComparacion.Etiqueta("Patrón", AYUDAS["pattern"]),
-                    rx.grid(
-                        *[
-                            PaginaComparacion.Mosaico(
-                                codigo,
-                                EstadoApp.pattern == codigo,
-                                EstadoApp.set_pattern(codigo),
-                                "radio",
-                            )
-                            for codigo in PATRONES
-                        ],
+                    _GrupoTeclado.create(
+                        rx.grid(
+                            *[
+                                PaginaComparacion.Mosaico(
+                                    codigo,
+                                    EstadoApp.pattern == codigo,
+                                    EstadoApp.set_pattern(codigo),
+                                    "radio",
+                                )
+                                for codigo in PATRONES
+                            ],
+                            columns="3",
+                            spacing="2",
+                        ),
                         role="radiogroup",
                         aria_label="Patrón",
-                        columns="3",
-                        spacing="2",
-                        margin_top="6px",
+                        tab_index=0,
+                        on_key_down=EstadoApp.TeclaPatron,
+                        style={"margin_top": "6px", "width": "100%"},
                     ),
                     width="100%",
                 ),
@@ -286,7 +324,7 @@ class PaginaComparacion:
                 width="100%",
             ),
             aria_label="Configuración",
-            class_name="ol-card",
+            class_name="ol-aside-block",
         )
 
     @staticmethod
@@ -335,18 +373,14 @@ class PaginaComparacion:
     def Superficie() -> rx.Component:
         return rx.el.section(
             rx.hstack(
-                rx.el.svg(
-                    rx.el.svg.path(
-                        d="M8 40C8 28 22 22 34 20L52 18C58 18 58 34 52 36L32 42C20 46 8 48 8 40Z",
-                        fill="var(--ol-meshfill)",
-                        stroke="var(--ol-mesh)",
-                        stroke_width="2",
-                    ),
-                    view_box="0 0 64 64",
-                    width="64",
-                    height="64",
-                    aria_hidden="true",
-                    style={"border_radius": "12px", "background": "var(--ol-panel2)", "flex": "none"},
+                rx.center(
+                    rx.icon("layers", size=28),
+                    width="56px",
+                    height="56px",
+                    border_radius="12px",
+                    background="var(--ol-meshfill)",
+                    color="var(--ol-mesh)",
+                    flex="none",
                 ),
                 rx.vstack(
                     rx.text("Superficie de entrada", class_name="ol-lbl"),
@@ -376,8 +410,8 @@ class PaginaComparacion:
                 rx.fragment(),
             ),
             aria_label="Superficie de entrada",
-            class_name="ol-card",
-            padding="18px",
+            class_name="ol-aside-block",
+            style={"border_top": "1px solid var(--ol-line)", "padding_top": "16px"},
         )
 
     @staticmethod
@@ -388,19 +422,7 @@ class PaginaComparacion:
                 rx.el.button(
                     "Cambiar archivo (STL o NPZ)",
                     type="button",
-                    style={
-                        "background": "none",
-                        "border": "none",
-                        "padding": "0",
-                        "min_height": "24px",
-                        "text_align": "left",
-                        "color": "var(--ol-accent)",
-                        "font": "inherit",
-                        "font_size": "13px",
-                        "font_weight": "600",
-                        "text_decoration": "underline",
-                        "cursor": "pointer",
-                    },
+                    class_name="ol-link-cta",
                 )
             ),
             rx.dialog.content(
@@ -436,7 +458,8 @@ class PaginaComparacion:
                                 height="56px",
                                 border_radius="50%",
                                 background="var(--ol-strong)",
-                                color="#F3EDE6",
+                                color="var(--ol-onaccent)",
+                                style={"color": "#F3EDE6"},
                             ),
                             rx.text("Arrastre un archivo aquí", size="3", weight="bold"),
                             rx.text("o haga clic para elegirlo · STL o NPZ", size="2", class_name="ol-muted"),
@@ -501,22 +524,10 @@ class PaginaComparacion:
 
     @staticmethod
     def Mosaico(codigo: str, elegido, al_pulsar, rol: str) -> rx.Component:
-        # Botón de patrón con icono; ``rol`` es "radio" (Diseño) o "pressed" (Lotes, varios a la vez).
+        # Botón de patrón con Lucide; ``rol`` es "radio" (Diseño) o "pressed" (Lotes, varios a la vez).
         estado = {"aria-checked": elegido, "role": "radio"} if rol == "radio" else {"aria-pressed": elegido}
         return rx.el.button(
-            rx.el.svg(
-                rx.el.svg.path(d=ICONOS_PATRON[codigo]),
-                view_box="0 0 24 24",
-                width="30",
-                height="30",
-                fill="currentColor" if codigo == "SOLID" else "none",
-                fill_opacity="0.35" if codigo == "SOLID" else "1",
-                stroke="currentColor",
-                stroke_width="1.6",
-                stroke_linecap="round",
-                stroke_linejoin="round",
-                aria_hidden="true",
-            ),
+            rx.icon(ICONOS_PATRON[codigo], size=22),
             rx.el.span(PATRONES[codigo]),
             type="button",
             on_click=al_pulsar,
@@ -536,8 +547,7 @@ class PaginaComparacion:
             title="Miniatura de la ortesis" if miniatura else "Vista previa de la ortesis",
             width="100%",
             height=alto,
-            border_radius="12px",
-            border="0",
+            style={"border": "0", "border_radius": "16px", "display": "block"},
             custom_attrs={"loading": "lazy"},
             tab_index=-1 if miniatura else 0,
         )
@@ -559,13 +569,14 @@ class PaginaComparacion:
             rx.text(texto, class_name="ol-lbl"),
             rx.tooltip(
                 rx.icon_button(
-                    rx.icon("circle-help", size=14),
-                    size="1",
+                    rx.icon("circle-help", size=16),
+                    size="2",
                     variant="ghost",
                     radius="full",
                     color_scheme="gray",
                     aria_label=f"Ayuda: {ayuda}",
                     type="button",
+                    style={"min_width": "40px", "min_height": "40px"},
                 ),
                 content=ayuda,
             ),

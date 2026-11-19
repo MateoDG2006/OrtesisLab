@@ -282,3 +282,13 @@ class Preferencias:
     display_currency: str | None
     default_parameters: dict[str, Any]
     revision: int
+
+
+@dataclass(frozen=True)
+class PlantillaLoteDTO:
+    id: UUID
+    user_id: UUID
+    nombre: str
+    payload: dict[str, Any]
+    created_at: datetime
+    updated_at: datetime

@@ -1,6 +1,6 @@
 # Visor 3D: código, datos e interacción
 
-Fuente única: [`assets/visor.html`](../../apps/web/assets/visor.html). Cada vista es un documento HTML autónomo dentro de un iframe, con su propio contexto WebGL, escena, cámara y bucle de dibujo. No comparte cámara ni geometría cargada con otros iframes.
+Cáscara: [`assets/visor.html`](../../apps/web/assets/visor.html). Lógica reutilizable en [`assets/visor/`](../../apps/web/assets/visor/): `tema.js`, `stl.js`, `camara.js`, `controles.js`, `main.js` y `visor.css`. Cada vista es un documento dentro de un iframe, con su propio contexto WebGL, escena, cámara y bucle de dibujo. No comparte cámara ni geometría cargada con otros iframes.
 
 ## Carga y representación
 
@@ -27,9 +27,13 @@ flowchart TD
 
 `src` es la `object_url` del STL en el bucket S3. La política del bucket permite su lectura anónima (`RIESGO_ACEPTADO` en [RES-2026-11-12-ISSUE-2](../Audit/resolves/2026-11-12-issue-2-riesgo-stl-anonimo.md)). El iframe descarga sin cookie ni proxy. Three.js 0.169.0 se sirve desde `/vendor/three-0.169.0.module.js`. Antes de reservar el `Float32Array` se comprueban longitud del buffer, cantidad de caras y finitud; hay límite de descarga, `AbortController`, órbita/zoom por teclado y mensajes de error de red o HTTP.
 
+## Tema
+
+El documento define tokens `--ol-stage`, `--ol-scene`, `--ol-text`, etc. alineados a `ortesislab.css`. Si el `html` del host tiene clase `dark` (same-origin), el iframe la copia; si no, usa `prefers-color-scheme`. El color de fondo de la escena Three.js y el material se leen de `--ol-scene` / `--ol-mesh-mat` tras aplicar el tema.
+
 ## Escena y cámara
 
-Renderer antialias; pixel ratio máximo 2; fondo `0xeef1f4`. Tres luces: ambiente 0.55, hemisférica 0.45 y direccional 1.15. Material gris `0xd5dbe3`, metalness 0.04, roughness 0.62, `DoubleSide`. La apariencia no expresa material mecánico ni densidad; PETG se calcula en backend.
+Renderer antialias; pixel ratio máximo 2; fondo desde `--ol-scene` (claro ≈ `#eef1f4`, oscuro ≈ `#0D1E21`). Tres luces: ambiente 0.55, hemisférica 0.45 y direccional 1.15. Material desde `--ol-mesh-mat`, metalness 0.04, roughness 0.62, `DoubleSide`. La apariencia no expresa material mecánico ni densidad; PETG se calcula en backend.
 
 Perspectiva de 35°. Objetivo en centro de esfera; radio inicial `max(2.4*r,1)`, near=`r/100`, far=`30*r`. `encuadrar()` transforma radio/theta/phi a posición cartesiana y mira al objetivo. No hay grilla milimétrica, cotas ni medidor; comparar dos figuras autoencuadradas no conserva una escala visual común.
 
@@ -39,6 +43,8 @@ Perspectiva de 35°. Objetivo en centro de esfera; radio inicial `max(2.4*r,1)`,
 | Pointer move mientras arrastra | Delta X/Y ×0.008 cambia theta/phi; phi acotado a `[0.15, pi-0.15]` |
 | Pointer up global | Desactiva arrastre |
 | Rueda | Multiplica radio por 1.08/0.92, acotado a `[0.4*r,12*r]`; evita scroll por defecto |
+| Flechas / `+` `-` / `Home` | Órbita, zoom y reinicio de cámara |
+| Toolbar en pantalla | Ninguna; solo pista de ayuda en esquina |
 | Resize | Actualiza aspect, matriz de proyección y tamaño renderer |
 | requestAnimationFrame | Dibuja continuamente aunque no cambie cámara |
 
@@ -46,7 +52,7 @@ Perspectiva de 35°. Objetivo en centro de esfera; radio inicial `max(2.4*r,1)`,
 
 Con `miniatura=1` en la URL (lo añade `PaginaComparacion.Enlace(..., miniatura=True)` para las tarjetas de `/lote`), el visor dibuja un solo fotograma con el encuadre inicial, lo convierte en una imagen PNG (`toDataURL`), sustituye el canvas por esa imagen, llama a `renderer.dispose()` y `forceContextLoss()` y no inicia `requestAnimationFrame` ni reacciona a resize. Así cada tarjeta de `/lote` no mantiene un contexto WebGL abierto. Las listas de eventos de puntero y teclado siguen registradas pero no dibujan. El iframe de la miniatura usa `loading=lazy` y `tabindex=-1`.
 
-No implementa OrbitControls, pan, selección de caras, teclado, exportación de imagen ni resaltado de errores. Tampoco libera explícitamente buffers/materiales ni maneja pérdida de contexto dentro del documento; al quitar iframe el navegador gestiona su ciclo de vida. Hasta tres comparaciones en `/lote` o la vista principal en `/` pueden estar renderizando simultáneamente; las miniaturas no.
+No implementa OrbitControls ni pan libre, selección de caras, exportación de imagen ni resaltado de errores. Sí implementa órbita por arrastre, zoom por rueda y teclado (`+`/`-`), órbita con flechas y reinicio con `Home`. Tampoco libera explícitamente buffers/materiales ni maneja pérdida de contexto dentro del documento; al quitar iframe el navegador gestiona su ciclo de vida. Hasta tres comparaciones en `/lote` o la vista principal en `/` pueden estar renderizando simultáneamente; las miniaturas no.
 
 ## Relación con el núcleo
 

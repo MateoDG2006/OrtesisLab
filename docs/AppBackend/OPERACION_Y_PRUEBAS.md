@@ -44,6 +44,16 @@ Los límites, tiempos y tamaños del backend no van en el entorno ni en el códi
 
 `generation_batches.total_items` solo exige al menos una variante. `latido_s` debe ser bastante menor que `lease_s`, o el trabajador pierde la reserva mientras construye; el código no lo comprueba.
 
+### GPU opcional en el trabajador
+
+El núcleo usa NumPy. Para acelerar distancias de patrón con CUDA:
+
+1. Instalar el extra `gpu` (`uv sync --extra gpu` o `cupy-cuda12x` acorde al driver).
+2. Definir `ORTESISLAB_ARRAY=cupy` en el proceso del `worker`.
+3. En Docker, hace falta imagen/runtime NVIDIA (`nvidia-container-toolkit`) y GPU visible.
+
+Si CuPy no carga o no hay dispositivo, el backend vuelve a NumPy y deja un aviso en el log. Sin esa variable el comportamiento es el histórico (CPU).
+
 Los JSON de geometría están en `core/config/`. El ZIP de Blender los copia a `OrtesisLabPlugin/config/`, porque el complemento instalado no ve el monorepo. El Python de Blender no incluye PyYAML, así que esa configuración no pasa a YAML.
 
 En desarrollo, `/auth/registro` y `/auth/login` responden en el backend Reflex (puerto 8000). Con `reflex run --env prod`, la aplicación sirve frontend y backend en un único puerto (3000). Blender no es requisito web ni del trabajador. El visor descarga Three.js desde unpkg.
@@ -58,7 +68,7 @@ Antes de crear/modificar código Reflex o iniciar/depurar procesos, aplicar las 
 
 ```powershell
 copy deploy\env.prod.example deploy\.env
-# Complete APP_HOST, S3_HOST, claves y ORTESISLAB_*
+# Complete claves y ORTESISLAB_*
 make prod
 ```
 
@@ -71,11 +81,8 @@ make prod
 | `migrate` | `alembic upgrade head` y termina |
 | `web` | `reflex run --env prod --single-port`; host `3000:3000` |
 | `worker` | `scripts/EjecutarTrabajador.py` |
-| `caddy` | TLS (Let's Encrypt) en 80/443; `APP_HOST` → web, `S3_HOST` → MinIO |
 
-URLs: el proceso usa hostnames internos (`postgres`, `minio`, `redis`). El navegador usa `ORTESISLAB_APP_URL` y `ORTESISLAB_S3_PUBLIC_URL` (HTTPS). `ORTESISLAB_COOKIE_SECURE=true`. `ORTESISLAB_S3_CORS_ORIGINS` debe ser el origen de la app (`https://APP_HOST`). Secretos en `deploy/.env` (no versionado); plantilla en [`deploy/env.prod.example`](../../deploy/env.prod.example).
-
-Prerrequisitos: DNS de `APP_HOST` y `S3_HOST` al servidor; 80 y 443 abiertos hacia Caddy. Sin dominios reales Let's Encrypt no emite certificados.
+URLs: el proceso usa hostnames internos (`postgres`, `minio`, `redis`). El navegador usa `ORTESISLAB_APP_URL` y `ORTESISLAB_S3_PUBLIC_URL` (p. ej. `http://localhost:3000` y `http://localhost:9000`). `ORTESISLAB_S3_CORS_ORIGINS` debe coincidir con el origen de la app. Secretos en `deploy/.env` (no versionado); plantilla en [`deploy/env.prod.example`](../../deploy/env.prod.example).
 
 ## Base de datos
 
@@ -133,7 +140,7 @@ El detalle de cada carpeta está en [tests/README.md](../../tests/README.md).
 | `tests/geometria/test_escala_malla.py` | 12 casos: factores decimales, desactivación, selección por paso y conservación de tamaño ante presupuesto |
 | `tests/nucleo/test_nucleo.py` | 14 casos: equivalencia algorítmica con referencia, catálogo, validación, importación sin Blender, volumen/material |
 | `tests/geometria/test_refinador_malla.py` | 3 casos: subdivisión, rejilla recortada y escala/paso |
-| `tests/geometria/test_suavizado_borde.py` | 4 casos: dientes, tramo recto, borde corto e integración del marco |
+| `tests/geometria/test_suavizado_borde.py` | 5 casos: dientes táctiles, estabilidad tras dos pasadas, tramo recto, borde corto e integración del marco |
 | `tests/geometria/test_superficie_abierta.py` | 5 casos: cierre local del espesor, inversión, rechazo de capas/duplicados/sueltos/orientación |
 
 Línea base con SQLAlchemy: **73 pruebas, 50 aprobadas y 23 omitidas, el 2026-10-13** con `.venv\Scripts\python.exe -B -m unittest discover -s tests`. Se omitieron todas las de `tests/persistencia/` porque no existían `ortesislab_dev` ni `ortesislab_test` ni migraciones. La persistencia SQLAlchemy no se ha probado contra PostgreSQL. Sí se compilaron con el dialecto PostgreSQL las sentencias de los 59 métodos de repositorio. La comprobación funcional 1–9 y las 73 pruebas sin omisiones se ejecutaron antes, con la implementación Psycopg/dbmate: no validan la versión actual. Ver [registro](../Agents/REGISTRO_CAMBIOS.md).

@@ -17,6 +17,7 @@ from ..Modelos import (
     IntentoGeneracion,
     ItemLoteGeneracion,
     LoteGeneracion,
+    PlantillaLote,
     PreferenciaUsuario,
     Proyecto,
     ResultadoGeneracion,
@@ -28,6 +29,7 @@ from ..Modelos import (
 USUARIOS = Usuario.__table__
 SESIONES = SesionAutenticacion.__table__
 PREFERENCIAS = PreferenciaUsuario.__table__
+PLANTILLAS_LOTE = PlantillaLote.__table__
 ASSETS = ArchivoAlmacenado.__table__
 PROYECTOS = Proyecto.__table__
 IMPORTS = Importacion.__table__

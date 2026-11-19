@@ -87,7 +87,11 @@ Valores exactos actualizados en [CONFIGURACION_GENERADA.md](CONFIGURACION_GENERA
 | `surface_subdivision_iterations` | 16 | Máximo de rondas y cota de alcance de paso; aumentar admite más mitades |
 | `clip_snap_mm` | 0.0001 | Cuantización de coincidencias STL web; aumentar fusiona más coordenadas cercanas |
 | `clip_connect_mm` | 0.005 | Margen positivo alrededor del cero del campo; aumentar ensancha uniones casi puntuales |
-| `border_smooth_wavelength_mm` | 8.0 | Ondas cortas a filtrar; aumentar suaviza variaciones más largas; ≤0 desactiva filtrado |
-| `border_smooth_max_mm` | 3.0 | Desplazamiento máximo del borde; aumentar permite más cambio; ≤0 no actúa como tope |
+| `border_smooth_wavelength_mm` | 24.0 | Ondas cortas a filtrar (dos pasadas); aumentar suaviza variaciones más largas; ≤0 desactiva filtrado. Muescas clínicas más cortas que este valor se redondean más |
+| `border_smooth_max_mm` | 8.0 | Desplazamiento máximo del borde por pasada; aumentar permite más cambio; ≤0 no actúa como tope |
+| `surface_smooth_iterations` | 5 | Pares Taubin λ/μ sobre el interior; aumentar suaviza más ruido; ≤0 desactiva (vía código/prueba) |
+| `surface_smooth_lambda` | 0.5 | Factor positivo Taubin; en (0, 1]; ≤0 desactiva |
+| `surface_smooth_mu` | -0.53 | Factor negativo Taubin; evita el encogimiento del Laplacian puro |
+| `surface_smooth_max_mm` | 0.4 | Tope de desplazamiento acumulado por vértice interior; aumentar permite más cambio |
 
 Los límites son configuración técnica, no resultados clínicos ni tolerancias de impresora. No modificar `comprobacion_geometrica.json` para intentar aprobar una malla: contiene referencias históricas.

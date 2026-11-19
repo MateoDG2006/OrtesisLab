@@ -1,10 +1,130 @@
 # Registro de cambios documentales
 
-## 2026-11-18 — Puertos de web y MinIO en compose.prod
+## 2026-11-18 — Suavizado de ruido en el interior
 
-`compose.prod.yaml` publica `3000` (web), `9000`/`9001` (MinIO) además de 80/443 de Caddy. Postgres y Redis siguen sin puerto en el host. Autorización en [RES-2026-11-18-001](../Audit/resolves/2026-11-18-resolve-docker-prod.md).
+Taubin λ/μ (`SuavizadoSuperficie`) sobre vértices interiores antes del suavizado
+de borde; contorno fijado; tope 0,4 mm. Defaults en `limites.json`. Autorización
+en [RES-2026-11-18-RUIDO-INTERIOR](../Audit/resolves/2026-11-18-resolve-suavizado-ruido-interior.md).
 
-Pruebas ejecutadas: revisión del YAML; el usuario debe volver a `make prod`.
+Pruebas ejecutadas:
+- `python -m unittest tests.geometria.test_suavizado_superficie tests.geometria.test_suavizado_borde tests.geometria.test_normales_topologia -v`: 14 OK.
+
+## 2026-11-18 — Normales de la plantilla para lotes
+
+`superficie_interior_mm.npz` tenía 35 vértices con normal &gt; 60° respecto a las
+caras; `AsegurarPlantilla` lanzaba `NormalesInvalidas` y bloqueaba la generación
+en masa. Se reescribieron las normales del NPZ y `PrepararPlantilla` vuelve a
+calcularlas con `NormalesDeCaras` antes de `Preparar`. A-04 en `Malla.py` no se
+modifica. Autorización en
+[RES-2026-11-18-NORMALES-PLANTILLA](../Audit/resolves/2026-11-18-resolve-normales-plantilla.md).
+
+Pruebas ejecutadas:
+- Diagnóstico: 0 vértices con acuerdo &lt; 0,5; `Preparar` OK (52125 vértices).
+- `PrepararPlantilla` sobre el NPZ incluido: OK (52125 / 102878).
+- `python -m unittest tests.geometria.test_normales_topologia -v`: 5 OK.
+
+## 2026-11-18 — Borde superior continuo al tacto
+
+`border_smooth_wavelength_mm` 24 y `border_smooth_max_mm` 8; `SuavizadoBorde.Aplicar`
+ejecuta dos pasadas del filtro FFT. Criterio táctil residual &lt; 0,15 mm en el
+abanico dentado. Autorización en
+[RES-2026-11-18-BORDE-TACTIL](../Audit/resolves/2026-11-18-resolve-borde-tactil.md).
+
+Pruebas ejecutadas:
+- `python -m unittest tests.geometria.test_suavizado_borde -v`: 5 OK.
+
+## 2026-11-18 — Conteo de variantes sin materializar
+
+`resumen_lote`, `lote_valido` y `GuardarPlantilla` usan `ContarCombinaciones`
+en lugar de expandir el producto cartesiano (provocaba picos de CPU/RAM).
+Autorización en [RES-2026-11-18-EFIC](../Audit/resolves/2026-11-18-resolve-eficiencia-variantes.md).
+
+Pruebas: `test_contar_coincide_con_combinaciones_sin_materializar` y suite generador.
+
+## 2026-11-18 — Plantillas de lote, generación desatendida y GPU
+
+Tabla `lote_plantillas`, CRUD en `/lote`, encolado sin `_Seguir` bloqueante,
+multi-plantilla hasta `maximo_pendientes`, backend `Arrays` (CuPy opcional).
+Autorización en [RES-2026-11-18-PLANTILLAS](../Audit/resolves/2026-11-18-resolve-plantillas-lote-gpu.md).
+
+Pruebas ejecutadas:
+- `reflex compile --dry`: OK.
+- `unittest` arrays + generador web; plantillas de persistencia si hay base de prueba.
+- Migración Alembic `a1b2c3d4e5f6` pendiente de aplicar en cada entorno (`make migrar`).
+
+## 2026-11-18 — Lotes con N características variables
+
+`GeneradorWeb.Combinaciones` acepta una lista de barridos (producto cartesiano con
+patrones y liner). `/lote` permite añadir/quitar filas (`EstadoApp.barridos`).
+Autorización en [RES-2026-11-18-LOTES-N](../Audit/resolves/2026-11-18-resolve-lotes-multi-eje.md).
+
+Pruebas ejecutadas:
+- `reflex compile --dry` en `apps/web`: OK.
+- `python -m unittest tests.aplicacion_web.test_generador_web`: 14 OK (1 omitida),
+  incluidos producto de 2 barridos y rechazo de clave duplicada.
+
+## 2026-11-18 — Visor sin botones de cámara
+
+Se elimina la toolbar Izquierda/Derecha/Arriba/Abajo/Reiniciar del iframe; quedan
+arrastre, rueda y teclado. Autorización en
+[RES-2026-11-18-VISOR-BTNS](../Audit/resolves/2026-11-18-resolve-quitar-botones-visor.md).
+
+Pruebas ejecutadas: archivos del visor actualizados; comprobar en el iframe tras
+recargar (o rebuild del contenedor si sirve assets embebidos).
+
+## 2026-11-18 — Shell UI: navbar, aside, tipografía e iconos
+
+Navbar (`Sesion.Barra`), workspace Diseño a altura completa con aside 440px,
+escala tipográfica Manrope en CSS, patrones con Lucide (`rx.icon`), zoom del
+visor solo por rueda/teclado. Autorización en
+[RES-2026-11-18-SHELL](../Audit/resolves/2026-11-18-resolve-refactor-shell-ui.md).
+
+Pruebas ejecutadas:
+- `reflex compile --dry` en `apps/web`: OK.
+- `python -m unittest discover -s tests/aplicacion_web -t .`: 18 OK (1 omitida).
+- Imagen `ortesislab-web` reconstruida; `GET /` incluye `ol-navbar` / `ol-workspace` / `ol-aside`; sin botones Acercar/Alejar en `controles.js`.
+
+## 2026-11-18 — Contenedor web: `div is not defined`
+
+`_GrupoTeclado` dejó de ser `rx.Component` con `tag="div"` (emitía `jsx(div)` y
+rompía el prerender/export) y pasa a subclase de `Div` HTML con `on_key_down`.
+Autorización en [RES-2026-11-18-WEB](../Audit/resolves/2026-11-18-resolve-fix-web-div.md).
+
+Pruebas ejecutadas:
+- `reflex compile --dry` en `apps/web`: OK.
+- Contenedor `ortesislab-web-1` en marcha; `GET /` → 200 sin el error de `div`.
+
+## 2026-11-18 — HTML a plantillas y módulos del visor
+
+Se saca el HTML/CSS de auth de `Autenticacion.py` a `assets/auth/` + `PlantillaAuth`. El visor pasa a cáscara `visor.html` y módulos en `assets/visor/` (`tema`, `stl`, `camara`, `controles`, `main`). Autorización en [RES-2026-11-18-HTML](../Audit/resolves/2026-11-18-resolve-extraer-html-plantillas.md).
+
+Pruebas ejecutadas:
+- `PlantillaAuth.Pagina` genera HTML con Manrope/`ol-card` y `new-password` en registro.
+- `reflex compile --dry` en `apps/web`: OK.
+- `python -m unittest discover -s tests/aplicacion_web -t .`: 18 pruebas, 1 omitida, OK.
+- Navegador: no ejercido en esta sesión (recargar assets del visor tras deploy).
+
+## 2026-11-18 — Roadmap de mejora UI
+
+Implementación de `design-plans/00-ROADMAP_MEJORA_UI.md`: auth con tokens OrtesisLab; visor con tema claro/oscuro y botones de cámara; `<main>`/`h1` por ruta; Historial responsive (cards ≤768px) y empty states; radiogroup con flechas (`TeclaPatron` + `_GrupoTeclado`); hit areas de ayuda/carga; copy de precio y controles 3D; `DESIGN.md` en la raíz. Autorización en [RES-2026-11-18-UI](../Audit/resolves/2026-11-18-resolve-roadmap-mejora-ui.md).
+
+Pruebas ejecutadas:
+- `reflex compile --dry` en `apps/web`: OK.
+- `python -m unittest discover -s tests/aplicacion_web -t .`: 18 pruebas, 1 omitida, OK.
+- Comprobación HTML de `_Pagina` (Manrope, `ol-card`, `new-password` en registro).
+- No se validó en navegador en esta sesión.
+
+## 2026-11-18 — Descarga STL por bytes
+
+`rx.download(url=…)` de Reflex 0.9 exige una ruta que empiece por `/`. Las `object_url` de MinIO son absolutas y fallaban. `EstadoApp.Descargar` y `EstadoHistorial.Descargar` registran el evento, leen el objeto del bucket y usan `rx.download(data=…)`. Autorización en [RES-2026-11-18-004](../Audit/resolves/2026-11-18-resolve-descarga-stl.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas: el log de `web` mostraba `ValueError: The URL argument should start with a /`. Tras el cambio, hace falta reconstruir el contenedor (`make prod` o `docker compose -f compose.prod.yaml --env-file deploy/.env up -d --build web`).
+
+## 2026-11-18 — Sin Caddy en la pila Docker
+
+Se elimina Caddy y `deploy/Caddyfile`. La app y MinIO se exponen en 3000 y 9000/9001. Autorización en [RES-2026-11-18-003](../Audit/resolves/2026-11-18-resolve-quitar-caddy.md). Los hallazgos siguen abiertos.
+
+Pruebas ejecutadas: recrear web/worker/minio con `deploy/.env` en localhost; `up -d --remove-orphans` para retirar Caddy; config OK.
 
 ## 2026-11-18 — Imágenes MinIO de forks públicos
 

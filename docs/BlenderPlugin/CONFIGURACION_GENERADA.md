@@ -60,8 +60,12 @@
   "surface_subdivision_iterations": 16,
   "clip_snap_mm": 0.0001,
   "clip_connect_mm": 0.005,
-  "border_smooth_wavelength_mm": 8.0,
-  "border_smooth_max_mm": 3.0
+  "border_smooth_wavelength_mm": 24.0,
+  "border_smooth_max_mm": 8.0,
+  "surface_smooth_iterations": 5,
+  "surface_smooth_lambda": 0.5,
+  "surface_smooth_mu": -0.53,
+  "surface_smooth_max_mm": 0.4
 }
 ```
 

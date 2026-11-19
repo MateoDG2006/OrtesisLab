@@ -1,6 +1,118 @@
 {
   "version": 2,
   "skills": {
+    "baseline-ui": {
+      "source": "ibelick/ui-skills",
+      "commit": "347d3189830f8ec3c4c041421bce19182a79dc7a",
+      "sourceType": "github",
+      "skillPath": "skills/baseline-ui/SKILL.md",
+      "computedHash": "a7336b9eab7479fb012abc59030fcd9736a31fc6c7cffc0dd9f90b36e34861aa",
+      "installMode": "copy"
+    },
+    "better-accessibility": {
+      "source": "jakubkrehel/skills",
+      "commit": "547d415dc10a23e66088eba5aa6664e6e772432c",
+      "sourceType": "github",
+      "skillPath": "skills/better-accessibility/SKILL.md",
+      "computedHash": "52f710d167c6244377a7ddab4d3ec39668bd0980d7975bcf7b5004e98fa0c09f",
+      "installMode": "copy"
+    },
+    "better-colors": {
+      "source": "jakubkrehel/skills",
+      "commit": "547d415dc10a23e66088eba5aa6664e6e772432c",
+      "sourceType": "github",
+      "skillPath": "skills/better-colors/SKILL.md",
+      "computedHash": "6bd97cb922230031c416da89e3e30f31856e7c397d4595c951cced9350a2e0c6",
+      "installMode": "copy"
+    },
+    "better-interface": {
+      "source": "jakubkrehel/skills",
+      "commit": "547d415dc10a23e66088eba5aa6664e6e772432c",
+      "sourceType": "github",
+      "skillPath": "skills/better-interface/SKILL.md",
+      "computedHash": "b9752ca6ad3fb856aed9f66159e73494eba05fbe8e8db68b4b72d0f19ee69f86",
+      "installMode": "copy"
+    },
+    "better-layout": {
+      "source": "jakubkrehel/skills",
+      "commit": "547d415dc10a23e66088eba5aa6664e6e772432c",
+      "sourceType": "github",
+      "skillPath": "skills/better-layout/SKILL.md",
+      "computedHash": "132862dbdc0ca8cc2016257f2db6f0845bc13d0f66cd715b57a62f8529e9bc4c",
+      "installMode": "copy"
+    },
+    "better-typography": {
+      "source": "jakubkrehel/skills",
+      "commit": "547d415dc10a23e66088eba5aa6664e6e772432c",
+      "sourceType": "github",
+      "skillPath": "skills/better-typography/SKILL.md",
+      "computedHash": "46b9c3a581e240b1e3e9f2a34469bfd8fceb075149cadb6ff670e4ee74ab7622",
+      "installMode": "copy"
+    },
+    "better-ui": {
+      "source": "jakubkrehel/skills",
+      "commit": "547d415dc10a23e66088eba5aa6664e6e772432c",
+      "sourceType": "github",
+      "skillPath": "skills/better-ui/SKILL.md",
+      "computedHash": "1b0a17b7b2675ed2bf79ca7120fbc3c37b0f3955d1750293b215ebb6edb5bab3",
+      "installMode": "copy"
+    },
+    "better-writing": {
+      "source": "jakubkrehel/skills",
+      "commit": "547d415dc10a23e66088eba5aa6664e6e772432c",
+      "sourceType": "github",
+      "skillPath": "skills/better-writing/SKILL.md",
+      "computedHash": "2a1272ec964d55720f0aa7b95bf198aa488099950f52f4dbd975906438b955af",
+      "installMode": "copy"
+    },
+    "create-design-md": {
+      "source": "ibelick/ui-skills",
+      "commit": "347d3189830f8ec3c4c041421bce19182a79dc7a",
+      "sourceType": "github",
+      "skillPath": "skills/create-design-md/SKILL.md",
+      "computedHash": "2fd65eb377fb0081ae1eb9217856f1dbe5de0f0b5607c6df8f3349708a664ecb",
+      "installMode": "copy"
+    },
+    "fixing-accessibility": {
+      "source": "ibelick/ui-skills",
+      "commit": "347d3189830f8ec3c4c041421bce19182a79dc7a",
+      "sourceType": "github",
+      "skillPath": "skills/fixing-accessibility/SKILL.md",
+      "computedHash": "50fe52aae0661c5aef2d1ed868bbfcda877ce96a6ec16ffa1c8a77dc83ea9695",
+      "installMode": "copy"
+    },
+    "fixing-motion-performance": {
+      "source": "ibelick/ui-skills",
+      "commit": "347d3189830f8ec3c4c041421bce19182a79dc7a",
+      "sourceType": "github",
+      "skillPath": "skills/fixing-motion-performance/SKILL.md",
+      "computedHash": "f9d9c68f117fdf33701fc8b103bfefda48903aa68bef70e157ae8f455c954daa",
+      "installMode": "copy"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "commit": "b49177d32788f2dc585c42831d845dacf1ebed2c",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "08bd5bf141cb507f46bd8347890cd985865606f15adf88295ed3a73bc9ad5d96",
+      "installMode": "copy"
+    },
+    "improve-ui": {
+      "source": "ibelick/ui-skills",
+      "commit": "347d3189830f8ec3c4c041421bce19182a79dc7a",
+      "sourceType": "github",
+      "skillPath": "skills/improve-ui/SKILL.md",
+      "computedHash": "7f913010ca7e6b5c224d928d4f2500438d7daacebb25f00e2f4df3bed513d51d",
+      "installMode": "copy"
+    },
+    "interface-review": {
+      "source": "jakubkrehel/skills",
+      "commit": "547d415dc10a23e66088eba5aa6664e6e772432c",
+      "sourceType": "github",
+      "skillPath": "skills/interface-review/SKILL.md",
+      "computedHash": "7a7f252460de0a466482dc9ee101d6e1c9556d865ffc476877be2053ec0931ac",
+      "installMode": "copy"
+    },
     "reflex-docs": {
       "source": "reflex-dev/agent-skills",
       "sourceType": "github",
@@ -19,11 +131,27 @@
       "skillPath": "skills/setup-python-env/SKILL.md",
       "computedHash": "33ce3d41f642721b53715f53d2c696696f50571284dbaab1138da04f49d56632"
     },
+    "ui-skills-root": {
+      "source": "ibelick/ui-skills",
+      "commit": "347d3189830f8ec3c4c041421bce19182a79dc7a",
+      "sourceType": "github",
+      "skillPath": "skills/ui-skills-root/SKILL.md",
+      "computedHash": "1eb4241459d13315bb10930554de1ad20bf74568bd5d0f10f4cc0edee1b72439",
+      "installMode": "copy"
+    },
     "untangle-codebase": {
       "source": "caldoai/skills",
       "sourceType": "github",
       "skillPath": "skills/untangle-codebase/SKILL.md",
       "computedHash": "73791c30d4da2e001bc095732771966338b764e2e7b57bb30a81439cff85aef4"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "commit": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "4f68ae07187fb0d1fb78c88b503d089da4cf5a9d9625d1f2e425b1590bf96d92",
+      "installMode": "copy"
     }
   }
 }

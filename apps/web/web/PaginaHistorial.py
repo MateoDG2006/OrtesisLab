@@ -16,6 +16,7 @@ class PaginaHistorial:
     def Index() -> rx.Component:
         return PaginaComparacion.Pagina(
             "/historial",
+            "Historial",
             PaginaHistorial.Filtros(),
             rx.cond(EstadoHistorial.mensaje != "", rx.callout(EstadoHistorial.mensaje, size="1"), rx.fragment()),
             PaginaHistorial.Tabla(),
@@ -76,65 +77,90 @@ class PaginaHistorial:
 
     @staticmethod
     def Tabla() -> rx.Component:
+        vacio = rx.box(
+            rx.text("No hay versiones con estos filtros.", size="3", weight="bold"),
+            rx.text("Genere una previsualización o un lote, o amplíe el rango de fechas.", size="2", class_name="ol-muted"),
+            rx.link(
+                rx.button("Ir a Diseño", radius="full", size="3"),
+                href="/",
+            ),
+            class_name="ol-empty",
+        )
         return rx.box(
-            rx.vstack(
-                rx.box(
-                    rx.table.root(
-                        rx.table.header(
-                            rx.table.row(
-                                rx.table.column_header_cell("Versión"),
-                                rx.table.column_header_cell("Fecha"),
-                                rx.table.column_header_cell("Patrón"),
-                                rx.table.column_header_cell("Parámetros"),
-                                rx.table.column_header_cell("Estado"),
-                                rx.table.column_header_cell("Volumen"),
-                                rx.table.column_header_cell("Peso"),
-                                rx.table.column_header_cell("Precio"),
-                                rx.table.column_header_cell(""),
+            rx.cond(
+                EstadoHistorial.filas.length() == 0,
+                vacio,
+                rx.vstack(
+                    rx.box(
+                        rx.table.root(
+                            rx.table.header(
+                                rx.table.row(
+                                    rx.table.column_header_cell("Versión"),
+                                    rx.table.column_header_cell("Fecha"),
+                                    rx.table.column_header_cell("Patrón"),
+                                    rx.table.column_header_cell("Parámetros"),
+                                    rx.table.column_header_cell("Estado"),
+                                    rx.table.column_header_cell("Volumen"),
+                                    rx.table.column_header_cell("Peso"),
+                                    rx.table.column_header_cell("Precio"),
+                                    rx.table.column_header_cell("Acciones"),
+                                ),
                             ),
+                            rx.table.body(rx.foreach(EstadoHistorial.filas, PaginaHistorial.Fila)),
+                            width="100%",
+                            min_width="960px",
+                            class_name="ol-tabla",
                         ),
-                        rx.table.body(rx.foreach(EstadoHistorial.filas, PaginaHistorial.Fila)),
+                        overflow_x="auto",
                         width="100%",
-                        min_width="960px",
-                        class_name="ol-tabla",
+                        class_name="ol-solo-escritorio",
                     ),
-                    overflow_x="auto",
-                    width="100%",
-                ),
-                rx.flex(
-                    rx.text("Restaurar crea una versión nueva; la original no cambia.", size="2", class_name="ol-muted"),
-                    rx.hstack(
-                        rx.button(
-                            "Anterior",
-                            size="2",
-                            radius="full",
-                            variant="outline",
-                            color_scheme="gray",
-                            on_click=EstadoHistorial.Anterior,
-                            disabled=EstadoHistorial.pagina <= 1,
-                        ),
-                        rx.text("Página ", EstadoHistorial.pagina, size="2", weight="medium"),
-                        rx.button(
-                            "Siguiente",
-                            size="2",
-                            radius="full",
-                            variant="outline",
-                            color_scheme="gray",
-                            on_click=EstadoHistorial.Siguiente,
-                            disabled=~EstadoHistorial.hay_siguiente,
-                        ),
-                        align="center",
+                    rx.vstack(
+                        rx.foreach(EstadoHistorial.filas, PaginaHistorial.TarjetaMovil),
                         spacing="3",
+                        width="100%",
+                        class_name="ol-solo-movil",
+                        style={"padding": "14px"},
                     ),
-                    justify="between",
-                    align="center",
-                    wrap="wrap",
-                    gap="12px",
-                    padding="14px 18px",
+                    rx.flex(
+                        rx.text(
+                            "Restaurar crea una versión nueva; la original no cambia.",
+                            size="2",
+                            class_name="ol-muted",
+                        ),
+                        rx.hstack(
+                            rx.button(
+                                "Anterior",
+                                size="2",
+                                radius="full",
+                                variant="outline",
+                                color_scheme="gray",
+                                on_click=EstadoHistorial.Anterior,
+                                disabled=EstadoHistorial.pagina <= 1,
+                            ),
+                            rx.text("Página ", EstadoHistorial.pagina, size="2", weight="medium"),
+                            rx.button(
+                                "Siguiente",
+                                size="2",
+                                radius="full",
+                                variant="outline",
+                                color_scheme="gray",
+                                on_click=EstadoHistorial.Siguiente,
+                                disabled=~EstadoHistorial.hay_siguiente,
+                            ),
+                            align="center",
+                            spacing="3",
+                        ),
+                        justify="between",
+                        align="center",
+                        wrap="wrap",
+                        gap="12px",
+                        padding="14px 18px",
+                        width="100%",
+                    ),
+                    spacing="0",
                     width="100%",
                 ),
-                spacing="0",
-                width="100%",
             ),
             class_name="ol-card",
             padding="0",
@@ -159,28 +185,69 @@ class PaginaHistorial:
             rx.table.cell(fila["volumen"]),
             rx.table.cell(fila["peso"]),
             rx.table.cell(fila["precio"]),
-            rx.table.cell(
+            rx.table.cell(PaginaHistorial.AccionesFila(fila, elegida)),
+        )
+
+    @staticmethod
+    def TarjetaMovil(fila) -> rx.Component:
+        elegida = EstadoHistorial.seleccion.contains(fila["version_id"])
+        return rx.el.article(
+            rx.vstack(
                 rx.hstack(
-                    rx.button(
-                        rx.cond(elegida, "Quitar", "Comparar"),
-                        size="2",
-                        radius="full",
-                        variant=rx.cond(elegida, "solid", "outline"),
-                        color_scheme=rx.cond(elegida, "teal", "gray"),
-                        aria_pressed=elegida,
-                        on_click=EstadoHistorial.Seleccionar(fila["version_id"]),
-                    ),
-                    PaginaHistorial.Accion(
-                        "rotate-ccw", "Restaurar como versión nueva", EstadoHistorial.Restaurar(fila["version_id"])
-                    ),
-                    PaginaHistorial.Accion("rotate-cw", "Reintentar", EstadoHistorial.Reintentar(fila["version_id"])),
-                    PaginaHistorial.Accion(
-                        "download", "Descargar STL", EstadoHistorial.Descargar(fila["item_id"]), fila["url"] == ""
-                    ),
+                    rx.text(fila["version"], size="3", weight="bold"),
+                    rx.spacer(),
+                    rx.el.span(fila["estado"], class_name="ol-badge ol-b-" + fila["estado_codigo"]),
+                    width="100%",
+                    align="center",
+                ),
+                rx.text(fila["fecha"], size="1", class_name="ol-muted"),
+                rx.text(fila["patron"], size="2", weight="medium"),
+                rx.text(fila["detalle"], size="1", class_name="ol-muted"),
+                rx.cond(
+                    fila["aviso"] != "",
+                    rx.text(fila["aviso"], size="1", color="var(--ol-coral)"),
+                    rx.fragment(),
+                ),
+                rx.grid(
+                    PaginaComparacion.Medida("Volumen", fila["volumen"]),
+                    PaginaComparacion.Medida("Peso", fila["peso"]),
+                    PaginaComparacion.Medida("Precio", fila["precio"]),
+                    columns="3",
                     spacing="2",
-                    justify="end",
-                )
+                    width="100%",
+                    border_top="1px solid var(--ol-line)",
+                    padding_top="10px",
+                ),
+                PaginaHistorial.AccionesFila(fila, elegida),
+                spacing="2",
+                width="100%",
             ),
+            class_name="ol-card",
+            style={"padding": "14px", "border_radius": "20px"},
+        )
+
+    @staticmethod
+    def AccionesFila(fila, elegida) -> rx.Component:
+        return rx.hstack(
+            rx.button(
+                rx.cond(elegida, "Quitar", "Comparar"),
+                size="2",
+                radius="full",
+                variant=rx.cond(elegida, "solid", "outline"),
+                color_scheme=rx.cond(elegida, "teal", "gray"),
+                aria_pressed=elegida,
+                on_click=EstadoHistorial.Seleccionar(fila["version_id"]),
+            ),
+            PaginaHistorial.Accion(
+                "rotate-ccw", "Restaurar como versión nueva", EstadoHistorial.Restaurar(fila["version_id"])
+            ),
+            PaginaHistorial.Accion("rotate-cw", "Reintentar", EstadoHistorial.Reintentar(fila["version_id"])),
+            PaginaHistorial.Accion(
+                "download", "Descargar STL", EstadoHistorial.Descargar(fila["item_id"]), fila["url"] == ""
+            ),
+            spacing="2",
+            wrap="wrap",
+            justify="end",
         )
 
     @staticmethod
@@ -247,6 +314,7 @@ class PaginaHistorial:
                 aria_label=etiqueta,
                 on_click=al_pulsar,
                 disabled=deshabilitado,
+                style={"min_width": "40px", "min_height": "40px"},
             ),
             content=etiqueta,
         )

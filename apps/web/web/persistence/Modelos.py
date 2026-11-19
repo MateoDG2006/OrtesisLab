@@ -156,6 +156,26 @@ class PreferenciaUsuario(Base):
     updated_at: Mapped[datetime] = mapped_column(server_default=AHORA)
 
 
+class PlantillaLote(Base):
+    """Configuración con nombre para armar un lote (patrones, barridos, parámetros)."""
+
+    __tablename__ = "lote_plantillas"
+    __table_args__ = (
+        UniqueConstraint("user_id", "nombre", name="lote_plantillas_user_nombre_key"),
+        UniqueConstraint("user_id", "id", name="lote_plantillas_user_id_uk"),
+        _Check("lote_plantillas", "nombre", "char_length(nombre) BETWEEN 1 AND 120"),
+        _Objeto("payload", "lote_plantillas"),
+        Index("lote_plantillas_user_updated_idx", "user_id", text("updated_at DESC")),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("app_users.id"))
+    nombre: Mapped[str]
+    payload: Mapped[dict[str, Any]] = mapped_column(server_default=OBJETO_VACIO)
+    created_at: Mapped[datetime] = mapped_column(server_default=AHORA)
+    updated_at: Mapped[datetime] = mapped_column(server_default=AHORA)
+
+
 class ArchivoAlmacenado(Base):
     __tablename__ = "file_assets"
     __table_args__ = (

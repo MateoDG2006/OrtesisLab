@@ -11,7 +11,6 @@ import uuid
 from datetime import date, datetime, time, timezone
 
 import reflex as rx
-
 from OrtesisLabPlugin.util.Utilidades import Registro
 
 from .ConfiguracionBackend import ConfiguracionBackend
@@ -26,7 +25,7 @@ from .persistence.Contratos import (
 )
 from .services.ContextoUsuario import ContextoUsuario
 from .services.ServicioHistorial import MAXIMO_COMPARACION, ServicioHistorial
-from .storage.AlmacenamientoPrivado import PATRON_CLAVE
+from .storage.AlmacenamientoPrivado import PATRON_CLAVE, Almacen, AlmacenamientoNoDisponible
 
 ESTADOS_VISIBLES = ConfiguracionBackend.Cargar("web")["estados_visibles"]
 TODOS = "todos"
@@ -119,12 +118,20 @@ class EstadoHistorial(rx.State):
         usuario = await self._Usuario()
         if usuario is None:
             return
+        asset_id = uuid.UUID(fila["asset_id"])
         try:
-            url = await asyncio.to_thread(ServicioHistorial.RegistrarDescarga, usuario, uuid.UUID(fila["asset_id"]))
-        except ErrorPersistencia as exc:
+            await asyncio.to_thread(ServicioHistorial.RegistrarDescarga, usuario, asset_id)
+            # rx.download(url=…) solo admite rutas que empiezan por /; MinIO es URL absoluta.
+            clave = Almacen.Clave(usuario.user_id, asset_id, stl_publico=True)
+            datos = await asyncio.to_thread(Almacen.Actual().Leer, clave)
+        except (ErrorPersistencia, AlmacenamientoNoDisponible) as exc:
             self.mensaje = str(exc)
             return
-        return rx.download(url=url, filename=f"ortesis-v{fila['version']}.stl")
+        return rx.download(
+            data=datos,
+            filename=f"ortesis-v{fila['version']}.stl",
+            mime_type="application/octet-stream",
+        )
 
     async def _Usuario(self) -> UsuarioAutenticado | None:
         try:

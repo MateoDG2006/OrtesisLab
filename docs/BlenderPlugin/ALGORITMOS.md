@@ -8,7 +8,8 @@ Entrada: superficie triangular abierta con posiciones `p_i`, normales unitarias 
 flowchart TD
   A[Superficie abierta sin espesor] --> B[Validación y escala decimal]
   B --> C[Refinamiento por aristas largas]
-  C --> D[Suavizado de contorno y distancia de borde]
+  C --> R[Suavizado Taubin del ruido interior]
+  R --> D[Suavizado de contorno y distancia de borde]
   D --> E[Distancia de patrón en XY]
   E --> F[Unión de patrón, marco y banda]
   F --> G{Modo}
@@ -54,17 +55,23 @@ Se extraen aristas únicas y se marcan las de longitud `>1.001*h`. Se crea un pu
 
 Límites: 16 rondas y presupuesto de 500 000 vértices para añadir nuevos puntos. Si la próxima ronda excede ese presupuesto, se detiene y devuelve una malla que puede no alcanzar `h`. No es una garantía de que toda entrada ya tenga menos de 500 000 vértices, ni de que el cascarón final permanezca bajo ese número. Si agota rondas sin alcanzar paso y sin detenerse por presupuesto, lanza error. El usuario debe revisar el detalle logrado.
 
-## 4. Suavizado del contorno exterior
+## 4. Suavizado del ruido interior
+
+Fuente: [`SuavizadoSuperficie`](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoSuperficie.py).
+
+Antes del contorno, `Model3DForPrinting.ConstruirGeometria` aplica **Taubin λ/μ** sobre vértices que no pertenecen al borde. El contorno queda fijado. Cada par de pasadas usa `surface_smooth_lambda` (positivo) y `surface_smooth_mu` (negativo) sobre el laplaciano discreto por aristas. El desplazamiento acumulado por vértice se limita a `surface_smooth_max_mm` (0,4 mm por defecto) y se reduce si invertiría o degeneraría caras. Al terminar se recalculan las normales desde las caras. Con `surface_smooth_iterations ≤ 0` o `λ ≤ 0` no actúa. Objetivo: quitar ruido de escaneo sin aplanar la curvatura anatómica principal.
+
+## 5. Suavizado del contorno exterior
 
 Fuente: [`SuavizadoBorde`](../../apps/ortesis-plugin/OrtesisLabPlugin/SuavizadoBorde.py).
 
 Se recorren aristas de contorno en bucles de al menos ocho vértices. Cada bucle se remuestrea uniformemente por longitud de arco, se transforma con `rfft` y recibe un filtro pasabajos: empieza la transición en `0.5/longitud_mm` y anula desde `1/longitud_mm`, usando transición cúbica. Se conservan los modos 0, 1 y 2 para no borrar la forma global. Después se aplica `irfft` y se interpola a la parametrización original.
 
-La longitud de corte predeterminada es 8 mm y el desplazamiento máximo 3 mm. Se comprueba que no invierta ni degenere caras; los desplazamientos responsables se reducen a la mitad hasta 12 intentos y se anulan localmente si siguen fallando. Solo se mueven vértices de borde. Las normales del borde se filtran si conservan acuerdo de signo. Si hubo desplazamiento se recalcula `b_i` para que el marco siga el nuevo contorno.
+La longitud de corte predeterminada es 24 mm y el desplazamiento máximo 8 mm por pasada. El filtro se aplica **dos veces** sobre el mismo contorno para limpiar el residuo cuando el tope o el back-off recortaron la primera pasada. Se comprueba que no invierta ni degenere caras; los desplazamientos responsables se reducen a la mitad hasta 12 intentos y se anulan localmente si siguen fallando. Solo se mueven vértices de borde. Las normales del borde se filtran si conservan acuerdo de signo. Si hubo desplazamiento se recalcula `b_i` para que el marco siga el nuevo contorno.
 
 Consecuencia: preservar la base original no implica que la copia de generación conserve exactamente sus coordenadas de borde. La mejora de dientes puede modificar esquinas y contornos dentro de esos límites. Coste espectral por bucle de longitud `L`: aproximadamente `O(L log L)`, más comprobaciones de caras.
 
-## 5. Proyección y algoritmos de patrón
+## 6. Proyección y algoritmos de patrón
 
 Fuente: [`Patron`](../../apps/ortesis-plugin/OrtesisLabPlugin/constants/Paterns.py). Se rota `p[:, :2]` con la matriz del código. La distancia `d_i` se mide en **XY**, en mm de esa proyección. No se desenrolla la superficie ni se mantiene ancho geodésico uniforme: paredes casi verticales y zonas superpuestas en XY pueden repetir/comprimir el patrón.
 
@@ -87,7 +94,7 @@ No basta usar diferencia de distancias entre las dos semillas más próximas: el
 
 Coste peor de evaluación: `O(P*S)` con `P` puntos y `S` semillas; la memoria temporal se acota por lotes, aunque puede seguir crecer con muchas semillas. Reducir `cell_mm` aumenta tanto el número de celdas como el trabajo. La semilla no afecta HEX. Igual semilla no garantiza idéntico dibujo al cambiar el bounding box, porque cambia la retícula de partida.
 
-## 6. Campo de material: patrón, marco y banda
+## 7. Campo de material: patrón, marco y banda
 
 Fuente: `Model3DForPrinting.ConstruirGeometria` en [`Modeling.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Modeling.py).
 
@@ -112,7 +119,7 @@ t_i = skin_mm + rib_height_mm * H(u_i)
 
 En celdas el espesor nominal es `skin_mm`; en nervaduras plenamente desarrolladas, `skin_mm+rib_height_mm`. `rounding_mm` controla el ancho de transición del campo, **no un radio de bevel**. Sin capa, se conserva `s>=0` y el espesor restante es constante `rib_height_mm`.
 
-## 7. Recorte triangular sin capa
+## 8. Recorte triangular sin capa
 
 Fuente: `Cascaron.Recortar` en [`Cascaron.py`](../../apps/ortesis-plugin/OrtesisLabPlugin/Cascaron.py).
 
@@ -128,13 +135,13 @@ Se reutilizan vértices originales y cruces mediante diccionarios por índice y 
 
 El campo se interpola sobre los triángulos existentes, de modo que la precisión de los huecos depende del refinamiento. Sin una capa continua, una retícula puede fragmentarse según la forma; el generador no garantiza conectividad final por mera construcción del campo.
 
-## 8. Engrosado y aberturas
+## 9. Engrosado y aberturas
 
 `Cascaron.Engrosar` duplica posiciones con `q_i=p_i+n_i*t_i`. Añade una piel con el orden original y otra con orden inverso; por cada arista libre `(a,b)` añade el cuadrilátero `(b,a,a+N,b+N)`. **Cada borde se une exclusivamente con su copia**. No triangula el espacio interior de un canal ni crea tapas anatómicas.
 
 `flip_normals` cambia `n` por `-n` y revierte caras antes del proceso, conservando orientación consistente. `Cerrar` es un alias de `Engrosar`. Para `N` vértices quedan `2N` posiciones, dos copias de las caras y un muro por arista libre. Curvatura fuerte y desplazamientos grandes pueden producir autointersecciones; volumen cerrado topológicamente no equivale a resultado geométrico válido.
 
-## 9. Reconstrucción y reparación de Blender
+## 10. Reconstrucción y reparación de Blender
 
 No confundir las dos operaciones:
 
@@ -147,7 +154,7 @@ Espesor mínimo `m`: macizo → `solid_mm`; con capa → `skin_mm`; rejilla abie
 
 Tras voxel se agrupan vértices por conectividad. Se conserva el mayor grupo; suma de vértices en otros grupos debe ser ≤`max(50,0.005*total)`. Si excede, error `GeometriaFragmentada`; si no, se retiran residuos y se aplica SMOOTH factor 0.3 durante dos iteraciones. El voxel concreto lo implementa Blender; el repositorio configura el modificador, no contiene un solver voxel propio.
 
-## 10. Validación, exportación y métricas
+## 11. Validación, exportación y métricas
 
 `ValidadorMalla.Comprobar` triangula una copia BMesh, cuenta aristas abiertas/no manifold, caras con área <1e-8, componentes y cruces. Construye BVH y revisa pares solapados; excluye pares que compartan vértices y prueba intersección segmento-triángulo con parámetro interior `(1e-6,1-1e-6)`. No cubre todos los solapes coplanares ni garantiza ajuste/resistencia. Con `intersections=False` se omiten cruces y el informe refleja cero; no interpretar ese informe como examen completo.
 

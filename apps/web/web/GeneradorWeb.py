@@ -9,6 +9,7 @@ su ``object_url``.
 
 from __future__ import annotations
 
+import itertools
 import math
 import uuid
 from decimal import Decimal
@@ -221,57 +222,124 @@ class GeneradorWeb:
         return " · ".join(partes)
 
     @staticmethod
-    def Combinaciones(
-        base: dict,
-        patrones: list[str],
-        eje: str,
-        desde: float,
-        hasta: float,
-        paso: float,
-        ambos_revestimientos: bool,
-    ) -> list[dict]:
+    def _CantidadBarrido(clave: str, desde: float, hasta: float, paso: float) -> int:
+        if clave not in EJES:
+            raise ValueError("Ese parámetro no forma parte del complemento.")
+        if not all(math.isfinite(valor) for valor in (desde, hasta, paso)):
+            raise ValueError("El barrido requiere números finitos.")
+        if paso <= 0:
+            raise ValueError("El paso del barrido tiene que ser mayor que cero.")
+        if desde > hasta:
+            raise ValueError("El valor inicial no puede ser mayor que el final.")
+        if clave == "seed":
+            if desde < 0 or not all(valor.is_integer() for valor in (desde, hasta, paso)):
+                raise ValueError("El barrido de semillas requiere enteros no negativos y paso entero.")
+        inicio = Decimal(str(desde))
+        final = Decimal(str(hasta))
+        incremento = Decimal(str(paso))
+        return int((final - inicio) // incremento) + 1
+
+    @staticmethod
+    def _ValoresBarrido(clave: str, desde: float, hasta: float, paso: float) -> list[float | int]:
+        cantidad = GeneradorWeb._CantidadBarrido(clave, desde, hasta, paso)
+        inicio = Decimal(str(desde))
+        incremento = Decimal(str(paso))
+        return [
+            int(inicio + indice * incremento) if clave == "seed" else float(inicio + indice * incremento)
+            for indice in range(cantidad)
+        ]
+
+    @staticmethod
+    def _PrepararBarridos(patrones: list[str], barridos: list[dict]) -> tuple[list[str], list[list[float | int]]]:
         if not patrones:
             raise ValueError("Elija al menos un patrón.")
         desconocidos = [patron for patron in patrones if patron not in PATRONES]
         if desconocidos:
             raise ValueError("Hay un patrón que el complemento no construye.")
-        if eje and eje != "ninguno" and eje not in EJES:
-            raise ValueError("Ese parámetro no forma parte del complemento.")
+        ejes: list[str] = []
+        listas: list[list[float | int]] = []
+        vistos: set[str] = set()
+        for barrido in barridos:
+            clave = str(barrido.get("clave", ""))
+            if clave in vistos:
+                raise ValueError("No repita la misma característica en dos barridos.")
+            vistos.add(clave)
+            ejes.append(clave)
+            listas.append(
+                GeneradorWeb._ValoresBarrido(
+                    clave,
+                    float(barrido["desde"]),
+                    float(barrido["hasta"]),
+                    float(barrido["paso"]),
+                )
+            )
+        return ejes, listas
 
-        valores: list[float | int] | None = None
-        if eje and eje != "ninguno":
-            if not all(math.isfinite(valor) for valor in (desde, hasta, paso)):
-                raise ValueError("El barrido requiere números finitos.")
-            if paso <= 0:
-                raise ValueError("El paso del barrido tiene que ser mayor que cero.")
-            if desde > hasta:
-                raise ValueError("El valor inicial no puede ser mayor que el final.")
-            if eje == "seed":
-                if desde < 0 or not all(valor.is_integer() for valor in (desde, hasta, paso)):
-                    raise ValueError("El barrido de semillas requiere enteros no negativos y paso entero.")
-            inicio = Decimal(str(desde))
-            final = Decimal(str(hasta))
-            incremento = Decimal(str(paso))
-            cantidad = int((final - inicio) // incremento) + 1
-            valores = [
-                int(inicio + indice * incremento) if eje == "seed"
-                else float(inicio + indice * incremento)
-                for indice in range(cantidad)
-            ]
+    @staticmethod
+    def ContarCombinaciones(
+        base: dict,
+        patrones: list[str],
+        barridos: list[dict],
+        ambos_revestimientos: bool,
+    ) -> int:
+        """Valida y cuenta el producto sin crear dicts de variantes."""
+        if not patrones:
+            raise ValueError("Elija al menos un patrón.")
+        desconocidos = [patron for patron in patrones if patron not in PATRONES]
+        if desconocidos:
+            raise ValueError("Hay un patrón que el complemento no construye.")
+        producto_barridos = 1
+        vistos: set[str] = set()
+        for barrido in barridos:
+            clave = str(barrido.get("clave", ""))
+            if clave in vistos:
+                raise ValueError("No repita la misma característica en dos barridos.")
+            vistos.add(clave)
+            producto_barridos *= GeneradorWeb._CantidadBarrido(
+                clave,
+                float(barrido["desde"]),
+                float(barrido["hasta"]),
+                float(barrido["paso"]),
+            )
+        total = 0
+        for patron in patrones:
+            if ambos_revestimientos and Patron.Celosia(patron):
+                capas = 2
+            else:
+                capas = 1
+            total += producto_barridos * capas
+        if total < 1:
+            raise ValueError("No hay variantes con esos parámetros.")
+        # ``base`` se exige para el mismo contrato que Combinaciones (liner implícito).
+        _ = bool(base.get("liner", False))
+        return total
 
+    @staticmethod
+    def Combinaciones(
+        base: dict,
+        patrones: list[str],
+        barridos: list[dict],
+        ambos_revestimientos: bool,
+    ) -> list[dict]:
+        """Producto de patrones × barridos numéricos × revestimientos.
+
+        Cada elemento de ``barridos`` es ``{clave, desde, hasta, paso}``. Lista vacía:
+        no se barre ningún número (equivalente al antiguo ``eje=ninguno``).
+        """
+        ejes, listas = GeneradorWeb._PrepararBarridos(patrones, barridos)
         revestimientos = [True, False] if ambos_revestimientos else [bool(base["liner"])]
         variantes = []
         for patron in patrones:
             capas = revestimientos if Patron.Celosia(patron) else [bool(base["liner"])]
-            numeros = valores if valores is not None else [None]
-            for numero in numeros:
+            numeros_iter = itertools.product(*listas) if listas else ((),)
+            for numeros in numeros_iter:
                 for capa in capas:
                     opciones = dict(base)
                     opciones["pattern"] = patron
                     if Patron.Celosia(patron):
                         opciones["liner"] = capa
-                    if numero is not None:
-                        opciones[eje] = numero
+                    for clave, numero in zip(ejes, numeros, strict=True):
+                        opciones[clave] = numero
                     variantes.append(opciones)
         if not variantes:
             raise ValueError("No hay variantes con esos parámetros.")

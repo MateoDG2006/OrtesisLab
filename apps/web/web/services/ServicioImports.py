@@ -84,11 +84,16 @@ class ServicioImports:
 
     @staticmethod
     def PrepararPlantilla(contenido: bytes) -> tuple:
-        # Misma preparación que la plantilla incluida tuvo siempre: sin suavizar normales.
+        # Sin suavizar; las normales se recalculan desde las caras (el NPZ incluido
+        # llegó a guardar vértices cuya normal no coincidía con la orientación).
         try:
             with np.load(io.BytesIO(contenido), allow_pickle=False) as datos:
-                vertices, caras, normales = datos["vertices"], datos["faces"], datos["normals"]
-                return AnalizadorMalla.Preparar(vertices, caras, normales, suavizarNormales=False)
+                vertices = np.asarray(datos["vertices"], dtype=np.float64)
+                caras = np.asarray(datos["faces"])
+                normales = AnalizadorMalla.NormalesDeCaras(vertices, caras)
+                return AnalizadorMalla.Preparar(
+                    vertices, caras, normales, suavizarNormales=False
+                )
         except (OSError, ValueError, KeyError) as exc:
             raise ArchivoSuperficieIlegible(ARCHIVO_SUPERFICIE, str(exc)) from exc
 
